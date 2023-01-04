@@ -1,11 +1,9 @@
-// ignore_for_file: must_be_immutable
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:sarf/resources/resources.dart';
 
+import '../../resources/images.dart';
 import 'base_controller.dart';
 
 //import '../controllers/my_bottom_navigation_controller.dart';
@@ -26,17 +24,31 @@ class _BaseViewState extends State<BaseView> {
         () => BottomNavigationBar(
           onTap: bNavCon.changeTabIndex,
           currentIndex: bNavCon.tabIndex.value,
+           selectedItemColor: R.colors.themeColor,
+           unselectedItemColor: R.colors.grey,
+           showUnselectedLabels: true,
+           selectedFontSize: 14,
+           unselectedFontSize: 14,
+           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/arrow.png',color: bNavCon.tabIndex.value == 0 ? R.colors.bgGrey : Colors.green ),
-              label: 'Home',
+              icon: Image.asset(R.images.bottomReceive,color: bNavCon.tabIndex.value == 0 ? R.colors.themeColor : R.colors.grey,width: 24,height: 24, ),
+              label: 'Receive',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.menu),
-              label: 'Orders',
+              icon: Image.asset(R.images.bottomMembers,color: bNavCon.tabIndex.value == 1 ? R.colors.themeColor : R.colors.grey,width: 24,height: 24, ),
+              label: 'Members',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.more_vert),
+              icon: Image.asset(R.images.bottomsend,color: bNavCon.tabIndex.value == 2 ? R.colors.themeColor : R.colors.grey,width: 24,height: 24, ),
+              label: 'Send',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(R.images.bottominvoice,color: bNavCon.tabIndex.value == 3 ? R.colors.themeColor : R.colors.grey,width: 24,height: 24, ),
+              label: 'Invoices',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(R.images.bottommore,color: bNavCon.tabIndex.value == 4 ? R.colors.themeColor : R.colors.grey,width: 24,height: 24, ),
               label: 'More',
             ),
             // BottomNavigationBarItem(

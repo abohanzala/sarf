@@ -15,4 +15,8 @@ class RoutesName{
   static const String Faith='faith_screen';
   static const String Subtopic='subtopics_screen';
 
+
+  static const String base='base_screen';
+  static const String homeView='home_screen';
+
 }

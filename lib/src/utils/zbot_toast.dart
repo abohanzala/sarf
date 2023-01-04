@@ -4,11 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:ui';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../resources/resources.dart';
 import '../../resources/resources.dart';
 
 class ZBotToast {

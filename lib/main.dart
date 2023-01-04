@@ -2,10 +2,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:sarf/src/baseview/home/home.dart';
-import 'package:sarf/src/baseview/base_view.dart';
-
-import 'src/Auth/LoginScreen.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/routes_name.dart';
 
@@ -33,6 +29,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
               ),
               initialRoute: RoutesName.LogIn,
+
               onGenerateRoute: Routes.generateRoute);
         },
       );

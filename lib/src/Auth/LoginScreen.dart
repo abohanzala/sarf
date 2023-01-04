@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Scaffold(
-            backgroundColor: Color(0xFFF2F2F9),
+            backgroundColor: const Color(0xFFF2F2F9),
             body: Stack(
               children: [
                 buildBackGroundImage(),
@@ -405,7 +405,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: R.colors.themePink),
+                  color: R.colors.buttonColor),
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Image.asset(R.images.cross),
@@ -420,7 +420,7 @@ class _LoginScreenState extends State<LoginScreen> {
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
       height: 50,
       decoration: BoxDecoration(
-        color: R.colors.pink2,
+        color: R.colors.buttonColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
