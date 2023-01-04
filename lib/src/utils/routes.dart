@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sarf/src/baseview/home/home_view.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 
 import '../baseview/base_view.dart';
@@ -6,9 +7,12 @@ import '../baseview/base_view.dart';
 class Routes {
   static MaterialPageRoute generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case RoutesName.Base:
+      case RoutesName.base:
         return MaterialPageRoute(
             builder: (BuildContext context) => const BaseView());
+      case RoutesName.homeView:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const HomeScreen());      
       // case RoutesName.Splash:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());
