@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Scaffold(
-            backgroundColor: Color(0xFFF2F2F9),
+            backgroundColor: const Color(0xFFF2F2F9),
             body: Stack(
               children: [
                 buildBackGroundImage(),

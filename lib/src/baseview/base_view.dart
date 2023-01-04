@@ -1,6 +1,3 @@
-// ignore_for_file: must_be_immutable
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -28,7 +25,7 @@ class _BaseViewState extends State<BaseView> {
           currentIndex: bNavCon.tabIndex.value,
           items: [
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/arrow.png',color: bNavCon.tabIndex.value == 0 ? R.colors.bgGrey : Colors.green ),
+              icon: Image.asset('assets/images/arrow.png',color: bNavCon.tabIndex.value == 0 ? R.colors.grey : Colors.green ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
