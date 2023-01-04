@@ -17,7 +17,4 @@ class AppColors {
   Color blueOrangeGradient1 = const Color(0xffFB7B57);
   Color blueOrangeGradient2 = const Color(0xff5BB1F4);
 
-  
- 
- 
 }

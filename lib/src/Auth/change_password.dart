@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sarf/resources/resources.dart';
 
+import '../../resources/text_style.dart';
+import '../widgets/custom_textfield.dart';
+
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
 
@@ -113,7 +116,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildDivider() {
     return Container(
-      margin: EdgeInsets.only(top: 5.0, bottom: 15.0, right: 15, left: 15),
+      margin: EdgeInsets.only(top: 20.0, bottom: 15.0, right: 15, left: 15),
       color: Color(0xFFEDEEEF),
       height: 1.0,
     );
@@ -121,132 +124,14 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildOtpField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-      height: 50,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
-      child: TextField(
-        textAlign: TextAlign.center,
-        focusNode: otpFieldNode,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-            hintText: 'example 1234',
-            hintStyle: TextStyle(
-                fontSize: 10,
-                fontFamily: 'medium',
-                color: Color(0xFF9A9A9A).withOpacity(0.8)),
-            border: InputBorder.none),
-      ),
+      margin: EdgeInsets.only(left: 15, right: 15),
+      child: customTextField(
+          color: R.colors.lightGrey,
+          height: 45.toString(),
+          borderColour: R.colors.transparent,
+          controller: otp,
+          hintText: 'ex 1234',
+          hintStyle: TextStyle(color: R.colors.black)),
     );
-  }
-
-  Widget buildPasswordField() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: getHeightAccordingToScreen(2.5),
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                'Passsword',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15.0,
-                  fontFamily: 'bold',
-                ),
-              ),
-              Text(
-                '*',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 15,
-                  fontFamily: 'bold',
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: () {
-              FocusScope.of(context).requestFocus(passwordNode);
-            },
-            child: Container(
-              height: getHeightAccordingToScreen(7.5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white),
-              //padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      //controller: controller,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      focusNode: passwordNode,
-                      keyboardType: TextInputType.text,
-                      obscureText: isPasswordObscureText,
-                      decoration: InputDecoration(
-                        hintText: '••••••••',
-                        hintStyle: TextStyle(
-                          fontSize: 13.0,
-                          fontFamily: 'medium',
-                          color: Color(0xFFA3A3A3),
-                        ),
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        contentPadding: EdgeInsets.all(0.0),
-                      ),
-                      style: TextStyle(
-                        fontSize: 13.0,
-                        fontFamily: 'medium',
-                        color: Color(0xFF666666),
-                      ),
-                      maxLines: 1,
-                      onChanged: (value) {
-                        password = value;
-                      },
-                    ),
-                  ),
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () {},
-                    child: Container(
-                      height: 37,
-                      width: 37,
-                      padding: EdgeInsets.all(12),
-                      child: Image.asset(
-                        isPasswordObscureText
-                            ? 'assets/images/closeeye.png'
-                            : 'assets/images/openeye.png',
-                        color: Color(0xFF999999),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  double getHeightAccordingToScreen(double height) {
-    return (height / 100) * bodyHeight;
   }
 }
