@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
+
+import '../../resources/resources.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -184,15 +189,14 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: IntlPhoneField(
+            showDropdownIcon: false,
+            flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) => phone.text = number.completeNumber,
             initialCountryCode: 'SA',
             onCountryChanged: (country) =>
                 setState(() => countryName = country.code),
             decoration: InputDecoration(
-              // focusedBorder: const OutlineInputBorder(
-              //   borderSide:
-              //       const BorderSide(color: Color(0xFF9A9A9A), width: 0.0),
-              // ),
+              border: InputBorder.none,
               label: Container(
                 margin: EdgeInsets.symmetric(horizontal: 0),
                 child: Text(' Enter Mobile Number',
@@ -204,9 +208,9 @@ class _LoginScreenState extends State<LoginScreen> {
               isDense: true,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
+              // border: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(5.0),
+              // ),
               filled: true,
               //  fillColor: const Color(0xffF0F0F0)
             ),
@@ -248,17 +252,24 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   buildForgotPassword() {
-    return Container(
-      margin: EdgeInsets.only(top: 30, bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Forgot Password?',
-            style: TextStyle(
-                fontSize: 14, fontFamily: 'semibold', color: Color(0xFFFB7B57)),
-          )
-        ],
+    return InkWell(
+      onTap: () {
+        openForgotPasswordDialog();
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 30, bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'Forgot Password?',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'semibold',
+                  color: Color(0xFFFB7B57)),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -315,6 +326,114 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  void openForgotPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height - 100,
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0),
+                          bottomLeft: Radius.circular(8.0),
+                          bottomRight: Radius.circular(8.0)),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        buildCrossIcon(),
+                        buildForgotPasswordText(),
+                        buildPhonefield(),
+                        buildGetCodeButton()
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildForgotPasswordText() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: Text(
+        'Forgot Password',
+        style:
+            TextStyle(fontSize: 16, fontFamily: 'bold', color: R.colors.black),
+      ),
+    );
+  }
+
+  Widget buildCrossIcon() {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Stack(
+        children: [
+          Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: R.colors.themePink),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Image.asset(R.images.cross),
+              ))
+        ],
+      ),
+    );
+  }
+
+  buildGetCodeButton() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      height: 50,
+      decoration: BoxDecoration(
+        color: R.colors.pink2,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: InkWell(
+        onTap: () {
+          Get.toNamed('change_password');
+        },
+        child: Center(
+          child: Text(
+            'Get Code',
+            style: TextStyle(
+                color: Colors.white, fontSize: 13, fontFamily: 'medium'),
+          ),
+        ),
       ),
     );
   }

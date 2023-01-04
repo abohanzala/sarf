@@ -3,7 +3,8 @@ class RoutesName{
   static const String TestingScreen='testing_screen';
   static const String Base='base_screen';
   static const String Boarding='onboarding_screen';
-  static const String SignIn='signin_screen';
+  static const String LogIn='login';
+  static const String ChangePassword='change_password';
   static const String PhoneVerificaion='phone_screen';
   static const String Human='human_screen';
   static const String Verb='verb_screen';
@@ -13,4 +14,5 @@ class RoutesName{
   static const String Place='place_screen';
   static const String Faith='faith_screen';
   static const String Subtopic='subtopics_screen';
+
 }

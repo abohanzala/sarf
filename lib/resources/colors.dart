@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class AppColors {
+  Color buttonColor = const Color(0xFFFB7B57);
   Color transparent = const Color(0x00000000);
   Color white = const Color(0xffFFFFFF);
   Color black = const Color(0xff000000);

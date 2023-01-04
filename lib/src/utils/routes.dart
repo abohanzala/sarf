@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sarf/src/Auth/LoginScreen.dart';
+import 'package:sarf/src/Auth/change_password.dart';
 import 'package:sarf/src/utils/routes_name.dart';
-
 import '../baseview/base_view.dart';
 
 class Routes {
@@ -9,6 +10,12 @@ class Routes {
       case RoutesName.Base:
         return MaterialPageRoute(
             builder: (BuildContext context) => const BaseView());
+      case RoutesName.LogIn:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const LoginScreen());
+      case RoutesName.ChangePassword:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const ChangePassword());
       // case RoutesName.Splash:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());

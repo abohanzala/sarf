@@ -16,6 +16,9 @@ class AppImages {
   String discount4= "assets/images/discount4.png";
   String discount5= "assets/images/discount5.png";
   String loader = "assets/images/loader.gif";
+  String cross = "assets/images/cross.png";
+  String backgroundImageChangePassword = "assets/images/backgroundChangePassword.png";
+  String arrowBlue = "assets/images/arrowblue.png";
 
 
 }
