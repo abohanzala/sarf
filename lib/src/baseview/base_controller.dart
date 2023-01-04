@@ -1,8 +1,8 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:sarf/src/baseview/Send/simple_invoice.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
 // import 'package:warid_container_admin/app/modules/More/views/more_view.dart';
 // import 'package:warid_container_admin/app/modules/Orders/controllers/orders_controller.dart';
@@ -19,10 +19,16 @@ class MyBottomNavigationController extends GetxController {
     tabIndex.value = index;
   }
 
-  List<Widget> listWidgets = [const HomeScreen(), Container(color: Colors.blue), Container(
-    color: Colors.black),Container(color: Colors.blue),Container(color: Colors.blue)];
+  List<Widget> listWidgets = [
+    const HomeScreen(),
+    Container(color: Colors.blue),
+    SimpleInvoice(),
+    Container(color: Colors.blue),
+    Container(color: Colors.blue)
+  ];
 
   @override
+  // ignore: unnecessary_overrides
   void onInit() {
     super.onInit();
     // currentPage == 1
