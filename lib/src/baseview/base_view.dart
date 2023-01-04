@@ -30,6 +30,7 @@ class _BaseViewState extends State<BaseView> {
            selectedFontSize: 14,
            unselectedFontSize: 14,
            type: BottomNavigationBarType.fixed,
+           elevation: 5,
           items: [
             BottomNavigationBarItem(
               icon: Image.asset(R.images.bottomReceive,color: bNavCon.tabIndex.value == 0 ? R.colors.themeColor : R.colors.grey,width: 24,height: 24, ),
