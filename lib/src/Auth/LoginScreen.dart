@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 
 import '../../resources/resources.dart';
 
@@ -283,7 +284,9 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.toNamed(RoutesName.Base);
+        },
         child: Center(
           child: Text(
             'Next',
