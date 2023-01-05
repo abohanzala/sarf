@@ -20,7 +20,7 @@ class _MembersScreenState extends State<MembersScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Members List',false),
+          customAppBar('Members List',false,false,''),
           appbarSearch(),
          // const SizedBox(height: 10,),
           Expanded(child: GridView.builder(

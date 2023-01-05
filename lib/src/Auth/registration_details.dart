@@ -130,36 +130,41 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   }
 
   Widget buildUploadImage() {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 20),
-          height: 80,
-          width: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                100,
+    return InkWell(
+      onTap: () {
+        openPopUpOptions('In Process Development');
+      },
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            height: 80,
+            width: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  100,
+                ),
+                color: R.colors.grey),
+            child: Center(
+              child: Text(
+                'Upload Image',
+                style: TextStyle(
+                    fontFamily: 'regular', color: Colors.white, fontSize: 10),
               ),
-              color: R.colors.grey),
-          child: Center(
-            child: Text(
-              'Upload Image',
-              style: TextStyle(
-                  fontFamily: 'regular', color: Colors.white, fontSize: 10),
             ),
           ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Center(
-          child: Text(
-            '(Optional)',
-            style: TextStyle(
-                fontFamily: 'regular', color: Colors.grey, fontSize: 10),
+          SizedBox(
+            height: 10,
           ),
-        ),
-      ],
+          Center(
+            child: Text(
+              '(Optional)',
+              style: TextStyle(
+                  fontFamily: 'regular', color: Colors.grey, fontSize: 10),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

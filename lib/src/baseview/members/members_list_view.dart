@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../resources/resources.dart';
 import '../../widgets/custom_appbar.dart';
@@ -18,9 +19,39 @@ class _MembersListScreenState extends State<MembersListScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Member List',true),
+          customAppBar('Member List',true,true,'(01)'),
           appbarSearch(),
-         // const SizedBox(height: 10,),
+          const SizedBox(height: 10,),
+          Expanded(child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: 5,
+            shrinkWrap: true,
+            itemBuilder: (context,index){
+            return Container(
+              width: Get.width,
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              margin: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: R.colors.white,
+              ),
+              child: Row(
+                children:  [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: R.colors.blackSecondery,width: 1)
+                    ),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage(R.images.bottomReceive),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }))
           // Expanded(child: GridView.builder(
           //           padding: const EdgeInsets.symmetric(horizontal: 12),
           //           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

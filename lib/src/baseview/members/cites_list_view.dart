@@ -21,7 +21,7 @@ class _CityListScreenState extends State<CityListScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Cites',true),
+          customAppBar('Cites',true,false,''),
           appbarSearch(),
          // const SizedBox(height: 10,),
           Expanded(child: GridView.builder(
