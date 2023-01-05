@@ -5,6 +5,8 @@ class RoutesName{
   static const String Boarding='onboarding_screen';
   static const String LogIn='login';
   static const String ChangePassword='change_password';
+  static const String OtpScreen='otp_screen';
+  static const String RegistrationDetails='registration_details';
   static const String PhoneVerificaion='phone_screen';
   static const String Human='human_screen';
   static const String Verb='verb_screen';
@@ -14,8 +16,6 @@ class RoutesName{
   static const String Place='place_screen';
   static const String Faith='faith_screen';
   static const String Subtopic='subtopics_screen';
-
-
   static const String base='base_screen';
   static const String homeView='home_screen';
   static const String cityList='city_list_screen';
