@@ -28,6 +28,12 @@ class AppImages {
    String icon2 = "assets/images/icon2.png";
    String icon3 = "assets/images/icon3.png";
    String cross = "assets/images/cross.png";
+   String pharmacy = "assets/images/pharmacy.png";
+   String whatsapp = "assets/images/whatsapp.png";
+   String twitter = "assets/images/twitter.png";
+   String insta = "assets/images/insta.png";
+   String call = "assets/images/call.png";
+   String web = "assets/images/web.png";
   // String splashIcon = "assets/images/icon.jpeg";
   // String icOnBoard2 = "assets/images/ic_onboard2.png";
   // String onBoard2 = "assets/images/onboard2.png";
