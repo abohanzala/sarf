@@ -30,7 +30,7 @@ class _RegistrationState extends State<Registration> {
               ],
             ),
           ),
-          buildLoginCard(),
+          buildRegistrationCard(),
         ],
       ),
     );
@@ -65,7 +65,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  buildLoginCard() {
+  buildRegistrationCard() {
     return Positioned(
       top: 250,
       child: Container(

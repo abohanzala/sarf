@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../../resources/resources.dart';
 
 
 Container customAppBar(String title,bool back,bool braket,String? braketText) {
+
     return Container(
           padding: EdgeInsets.only(left: 16.w, top: 20.h),
           height: 100,
