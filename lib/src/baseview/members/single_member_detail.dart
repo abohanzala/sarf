@@ -135,6 +135,60 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                   ),
                 ),
          ),
+         const SizedBox(height: 10,),
+         Padding(
+           padding: const EdgeInsets.symmetric(horizontal: 12),
+           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Title for the list below',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+              Row(children: [
+                Image.asset(R.images.listStack,width: 20,height: 20,),
+                const SizedBox(width: 20,),
+                Image.asset('assets/images/data.png',width: 20,height: 20,color: R.colors.black,),
+              ],),
+            ],
+           ),
+         ),
+         const SizedBox(height: 15,),
+         Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+         child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: R.colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Invoice No',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                  Text('12-04-2021',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                ],
+              ),
+              const SizedBox(height: 5,),
+              Text('00',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+              const SizedBox(height: 10,),
+              Text('Amount',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+              const SizedBox(height: 5,),
+               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('00000',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                  Text('Details',style: TextStyle(color: R.colors.themeColor,fontSize: 14,
+                  decoration: TextDecoration.underline,fontWeight: FontWeight.w500,
+                  ),
+                  
+                  ),
+                ],
+              ),
+
+            ],
+          ),
+         ),
+         )
         ],
       ),
     );
