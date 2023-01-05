@@ -109,7 +109,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             buildDivider(),
             buildNewPasswordField(),
             buildConfirmNewPasswordField(),
-            buildGoButton()
+            buildUpdateButton()
             //buildUpdateButton()
           ],
         ),
@@ -117,9 +117,9 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
   }
 
- Widget buildGoButton() {
+  Widget buildUpdateButton() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
       height: 50,
       decoration: BoxDecoration(
         color: Color(0xFFFB7B57),
@@ -162,6 +162,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
       child: customTextField(
+          hintTextSize: 12,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent,
@@ -177,18 +178,21 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: Column(
         children: [
           Container(
-            child: customTitle(
-              textAlign: TextAlign.start,
-              text: 'New Password',
-              color: R.colors.grey,
-              size: 12,
-            ),
-          ),
+              child: Row(
+            children: [
+              Text(
+                'New Password',
+                style: TextStyle(
+                    fontFamily: 'medium', color: R.colors.grey, fontSize: 12),
+              ),
+            ],
+          )),
           Container(
             margin: EdgeInsets.only(
               top: 10,
             ),
             child: customTextField(
+                hintTextSize: 12,
                 hintText: 'Password',
                 controller: newPassword,
                 color: R.colors.lightGrey,
@@ -206,18 +210,21 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: Column(
         children: [
           Container(
-            child: customTitle(
-              textAlign: TextAlign.start,
-              text: 'Confirm New Password',
-              color: R.colors.grey,
-              size: 12,
-            ),
-          ),
+              child: Row(
+            children: [
+              Text(
+                'New Password',
+                style: TextStyle(
+                    fontFamily: 'medium', color: R.colors.grey, fontSize: 12),
+              ),
+            ],
+          )),
           Container(
             margin: EdgeInsets.only(
               top: 10,
             ),
             child: customTextField(
+                hintTextSize: 12,
                 hintText: 'Password',
                 controller: newPassword,
                 color: R.colors.lightGrey,
@@ -229,20 +236,20 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
   }
 
-  Widget buildUpdateButton() {
-    return InkWell(
-      onTap: () {
-        Get.toNamed(RoutesName.OtpScreen);
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 20, bottom: 20),
-        child: customButton(
-            title: 'Update',
-            color: R.colors.buttonColor,
-            height: 45,
-            borderColour: R.colors.transparent,
-            textColor: R.colors.white),
-      ),
-    );
-  }
+  // Widget buildUpdateButton() {
+  //   return InkWell(
+  //     onTap: () {
+  //       Get.toNamed(RoutesName.OtpScreen);
+  //     },
+  //     child: Container(
+  //       margin: EdgeInsets.only(top: 20, bottom: 20),
+  //       child: customButton(
+  //           title: 'Update',
+  //           color: R.colors.buttonColor,
+  //           height: 45,
+  //           borderColour: R.colors.transparent,
+  //           textColor: R.colors.white),
+  //     ),
+  //   );
+  // }
 }

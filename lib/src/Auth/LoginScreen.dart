@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  buildPhonefield() {
+  Widget buildPhonefield() {
     return Row(
       children: [
         Expanded(
@@ -276,8 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   buildNextButton() {
-    return
-      Container(
+    return Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
       height: 50,
       decoration: BoxDecoration(
@@ -404,16 +403,13 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Stack(
         children: [
-          Container(
-              width: 30,
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Image.asset(
+              R.images.cross,
               height: 30,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: R.colors.buttonColor),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Image.asset(R.images.cross),
-              ))
+            ),
+          )
         ],
       ),
     );

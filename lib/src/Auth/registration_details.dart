@@ -55,7 +55,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       top: 50,
       left: 30,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pop(context);
+        },
         child: Container(
           width: 30,
           height: 30,
@@ -109,18 +111,18 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         children: [
           buildUserTypeText(),
           buildUserTypeOptions(),
-          buildCompanyNameField(),
+          business ? buildCompanyNameField() : buildFullNameField(),
           buildSelectCityDropDown(),
-          buildTypeDropDown(),
-          buildInstagramField(),
-          buildTwitterField(),
-          buildContactNoField(),
-          buildWhatsappField(),
-          buildBusinessTypeText(),
-          buildBusinessTypeOptions(),
-          buildWebsiteField(),
+          business ? buildTypeDropDown() : Container(),
+          business ? buildInstagramField() : Container(),
+          business ? buildTwitterField() : Container(),
+          business ? buildContactNoField() : Container(),
+          business ? buildWhatsappField() : Container(),
+          business ? buildBusinessTypeText() : Container(),
+          business ? buildBusinessTypeOptions() : Container(),
+          business ? buildWebsiteField() : Container(),
           offlineBusiness ? buildLocationButton() : Container(),
-          buildUploadImage(),
+          business ? buildUploadImage() : Container(),
           buildSubmitButton()
         ],
       ),
@@ -445,6 +447,19 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     );
   }
 
+  Widget buildFullNameField() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: customTextField(
+          hintTextSize: 12,
+          hintText: 'Full Name *',
+          controller: companyNameController,
+          color: R.colors.lightGrey,
+          height: 45,
+          borderColour: R.colors.transparent),
+    );
+  }
+
   Widget buildInstagramField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -510,6 +525,58 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     );
   }
 
+  void openPopUpOptions(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2,
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0),
+                          bottomLeft: Radius.circular(8.0),
+                          bottomRight: Radius.circular(8.0)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          message,
+                          style: TextStyle(
+                              fontFamily: 'regular', color: R.colors.grey),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget buildSelectCityDropDown() {
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -519,7 +586,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          openPopUpOptions('No Cities Available');
+        },
         child: Container(
           margin: EdgeInsets.only(left: 15, right: 15),
           child: Row(
@@ -547,7 +616,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          openPopUpOptions('No Types Available');
+        },
         child: Container(
           margin: EdgeInsets.only(left: 15, right: 15),
           child: Row(
