@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:sarf/src/Auth/LoginScreen.dart';
 import 'package:sarf/src/Auth/change_password.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
+import 'package:sarf/src/baseview/members/cites_list_view.dart';
+import 'package:sarf/src/baseview/members/members_list_view.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import '../baseview/base_view.dart';
 
@@ -21,6 +23,12 @@ class Routes {
       case RoutesName.homeView:
         return MaterialPageRoute(
             builder: (BuildContext context) => const HomeScreen());
+      case RoutesName.cityList:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const CityListScreen());
+      case RoutesName.membersList:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const MembersListScreen());      
       // case RoutesName.Splash:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());

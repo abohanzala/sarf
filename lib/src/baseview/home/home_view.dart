@@ -26,7 +26,34 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.more_vert, color: R.colors.black),
+                GestureDetector(
+                  onTap: (){
+                    Get.bottomSheet(
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 40),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: R.colors.white,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Delete this budget',style: TextStyle(color: R.colors.blackSecondery),),
+                            const SizedBox(height: 10,),
+                            Divider(
+                              color: R.colors.grey,
+                              thickness: 1,
+                              
+                            ),
+                            const SizedBox(height: 10,),
+                            Text('Reset this budget',style: TextStyle(color: R.colors.blackSecondery),),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Icon(Icons.more_vert, color: R.colors.black)),
                Row(
                 children:  [
                   const Text('Office'),
