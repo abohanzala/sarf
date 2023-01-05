@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sarf/src/baseview/Invoices/invoice_list.dart';
 import 'package:sarf/src/baseview/Send/simple_invoice.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
 // import 'package:warid_container_admin/app/modules/More/views/more_view.dart';
@@ -22,8 +23,8 @@ class MyBottomNavigationController extends GetxController {
   List<Widget> listWidgets = [
     const HomeScreen(),
     Container(color: Colors.blue),
-    SimpleInvoice(),
-    Container(color: Colors.blue),
+    const SimpleInvoice(),
+    const InvoiceListScreen(),
     Container(color: Colors.blue)
   ];
 
