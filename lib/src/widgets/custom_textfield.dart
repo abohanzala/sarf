@@ -59,7 +59,7 @@ Widget customTitle({
   );
 }
 
-Widget customButton({
+Container customButton({
   required String title,
   required Color color,
   required Color textColor,
@@ -74,7 +74,6 @@ Widget customButton({
       borderRadius: BorderRadius.circular(10),
     ),
     child: InkWell(
-      onTap: () {},
       child: Center(
         child: Text(
           title,
