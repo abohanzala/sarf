@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../resources/resources.dart';
 
 
-Container customAppBar(String title,bool back) {
+Container customAppBar(String title,bool back,bool braket,String? braketText) {
     return Container(
           padding: EdgeInsets.only(left: 16.w, top: 20.h),
           height: 100,
@@ -50,6 +50,14 @@ Container customAppBar(String title,bool back) {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                if(braket) ...[
+                  const SizedBox(width: 5,),
+                  Text(braketText!,style:TextStyle(
+                    color: R.colors.black,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),)
+                ],
               ],
             ),
           ),
