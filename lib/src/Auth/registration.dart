@@ -193,6 +193,8 @@ class _RegistrationState extends State<Registration> {
               child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: IntlPhoneField(
+              showDropdownIcon: false,
+              flagsButtonPadding: EdgeInsets.only(left: 10),
               onChanged: (number) => phone.text = number.completeNumber,
               initialCountryCode: 'SA',
               onCountryChanged: (country) =>
