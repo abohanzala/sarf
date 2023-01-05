@@ -50,7 +50,9 @@ class _OtpScreenState extends State<OtpScreen> {
       top: 50,
       left: 30,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pop(context);
+        },
         child: Container(
           width: 30,
           height: 30,
@@ -157,7 +159,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
       child: InkWell(
         onTap: () {
-          //   Get.toNamed(RoutesName.Base);
+          Get.toNamed(RoutesName.RegistrationDetails);
         },
         child: Center(
           child: Text(

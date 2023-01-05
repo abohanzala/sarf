@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sarf/resources/resources.dart';
+import 'package:sarf/src/Auth/otp.dart';
 import '../../resources/text_style.dart';
 import '../utils/routes_name.dart';
 import '../widgets/custom_textfield.dart';
@@ -127,7 +128,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed(RoutesName.RegistrationDetails);
+          Get.toNamed(RoutesName.OtpScreen);
         },
         child: Center(
           child: Text(
@@ -237,19 +238,14 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   // Widget buildUpdateButton() {
-  //   return InkWell(
-  //     onTap: () {
-  //       Get.toNamed(RoutesName.OtpScreen);
-  //     },
-  //     child: Container(
-  //       margin: EdgeInsets.only(top: 20, bottom: 20),
-  //       child: customButton(
-  //           title: 'Update',
-  //           color: R.colors.buttonColor,
-  //           height: 45,
-  //           borderColour: R.colors.transparent,
-  //           textColor: R.colors.white),
-  //     ),
+  //   return Container(
+  //     margin: EdgeInsets.only(top: 20, bottom: 20),
+  //     child: customButton(
+  //         title: 'Update',
+  //         color: R.colors.buttonColor,
+  //         height: 45,
+  //         borderColour: R.colors.transparent,
+  //         textColor: R.colors.white),
   //   );
   // }
 }
