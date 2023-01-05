@@ -23,7 +23,7 @@ class MyBottomNavigationController extends GetxController {
 
   List<Widget> listWidgets = [
     const HomeScreen(),
-    Container(color: Colors.blue),
+    const MembersScreen(),
     const SimpleInvoice(),
     const InvoiceListScreen(),
     Container(color: Colors.blue)
