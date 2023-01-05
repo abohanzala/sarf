@@ -276,7 +276,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   buildNextButton() {
-    return Container(
+    return
+      Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
       height: 50,
       decoration: BoxDecoration(

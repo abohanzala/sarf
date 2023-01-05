@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:sarf/resources/resources.dart';
-
 import '../../resources/text_style.dart';
+import '../utils/routes_name.dart';
 import '../widgets/custom_textfield.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -14,6 +15,8 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController otp = TextEditingController();
+  TextEditingController newPassword = TextEditingController();
+  TextEditingController confirmNewPassword = TextEditingController();
   FocusNode otpFieldNode = FocusNode();
   FocusNode passwordNode = FocusNode();
   String password = '';
@@ -55,7 +58,9 @@ class _ChangePasswordState extends State<ChangePassword> {
       top: 50,
       left: 30,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pop(context);
+        },
         child: Row(
           children: [
             Container(
@@ -89,7 +94,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       left: 20,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Color(0xFFFFFFFF),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -98,7 +103,38 @@ class _ChangePasswordState extends State<ChangePassword> {
               bottomRight: Radius.circular(20),
             )),
         child: Column(
-          children: [buildOtpText(), buildOtpField(), buildDivider()],
+          children: [
+            buildOtpText(),
+            buildOtpField(),
+            buildDivider(),
+            buildNewPasswordField(),
+            buildConfirmNewPasswordField(),
+            buildGoButton()
+            //buildUpdateButton()
+          ],
+        ),
+      ),
+    );
+  }
+
+ Widget buildGoButton() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      height: 50,
+      decoration: BoxDecoration(
+        color: Color(0xFFFB7B57),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: InkWell(
+        onTap: () {
+          Get.toNamed(RoutesName.RegistrationDetails);
+        },
+        child: Center(
+          child: Text(
+            'Update',
+            style: TextStyle(
+                color: Colors.white, fontSize: 13, fontFamily: 'medium'),
+          ),
         ),
       ),
     );
@@ -116,9 +152,9 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildDivider() {
     return Container(
-      margin: EdgeInsets.only(top: 20.0, bottom: 15.0, right: 15, left: 15),
-      color: Color(0xFFEDEEEF),
-      height: 1.0,
+      margin: EdgeInsets.only(top: 20.0, right: 15, left: 15),
+      color: R.colors.lightGrey,
+      height: 2.0,
     );
   }
 
@@ -127,11 +163,86 @@ class _ChangePasswordState extends State<ChangePassword> {
       margin: EdgeInsets.only(left: 15, right: 15),
       child: customTextField(
           color: R.colors.lightGrey,
-          height: 45.toString(),
+          height: 45,
           borderColour: R.colors.transparent,
           controller: otp,
           hintText: 'ex 1234',
           hintStyle: TextStyle(color: R.colors.black)),
+    );
+  }
+
+  Widget buildNewPasswordField() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      child: Column(
+        children: [
+          Container(
+            child: customTitle(
+              textAlign: TextAlign.start,
+              text: 'New Password',
+              color: R.colors.grey,
+              size: 12,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: 10,
+            ),
+            child: customTextField(
+                hintText: 'Password',
+                controller: newPassword,
+                color: R.colors.lightGrey,
+                height: 45,
+                borderColour: R.colors.transparent),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildConfirmNewPasswordField() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      child: Column(
+        children: [
+          Container(
+            child: customTitle(
+              textAlign: TextAlign.start,
+              text: 'Confirm New Password',
+              color: R.colors.grey,
+              size: 12,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: 10,
+            ),
+            child: customTextField(
+                hintText: 'Password',
+                controller: newPassword,
+                color: R.colors.lightGrey,
+                height: 45,
+                borderColour: R.colors.transparent),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildUpdateButton() {
+    return InkWell(
+      onTap: () {
+        Get.toNamed(RoutesName.OtpScreen);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 20, bottom: 20),
+        child: customButton(
+            title: 'Update',
+            color: R.colors.buttonColor,
+            height: 45,
+            borderColour: R.colors.transparent,
+            textColor: R.colors.white),
+      ),
     );
   }
 }
