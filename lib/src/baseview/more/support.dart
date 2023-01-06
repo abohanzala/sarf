@@ -111,7 +111,7 @@ class _SupportState extends State<Support> {
 
   Widget buildStatusCard() {
     return Positioned(
-      top: 120,
+      top: 130,
       child: Container(
         margin: EdgeInsets.only(left: 15, right: 15),
         height: 50,
