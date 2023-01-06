@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sarf/src/Auth/LoginScreen.dart';
 import 'package:sarf/src/Auth/change_password.dart';
+import 'package:sarf/src/baseview/Invoices/invoice_details.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
 import 'package:sarf/src/baseview/members/cites_list_view.dart';
 import 'package:sarf/src/baseview/members/members_list_view.dart';
@@ -38,6 +39,10 @@ class Routes {
       case RoutesName.membersList:
         return MaterialPageRoute(
             builder: (BuildContext context) => const MembersListScreen());
+      case RoutesName.invoiceDetails:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const InvoiceDetails());      
+            // case RoutesName.Splash:
       case RoutesName.Support:
         return MaterialPageRoute(
             builder: (BuildContext context) =>

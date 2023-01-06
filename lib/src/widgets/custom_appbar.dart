@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../resources/resources.dart';
 
 
-Container customAppBar(String title,bool back,bool braket,String? braketText) {
+Container customAppBar(String title,bool back,bool braket,String? braketText,bool share) {
 
     return Container(
           padding: EdgeInsets.only(left: 16.w, top: 20.h),
@@ -24,8 +24,12 @@ Container customAppBar(String title,bool back,bool braket,String? braketText) {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if(back) ...[
+                
+                Row(
+                  children: [
+                    if(back) ...[
                   GestureDetector(
                     onTap: () => Get.back() ,
                     child: Container(
@@ -58,6 +62,15 @@ Container customAppBar(String title,bool back,bool braket,String? braketText) {
                     fontWeight: FontWeight.bold,
                   ),)
                 ],
+                  ],
+                ),
+
+                if(share)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Image.asset(R.images.icon3,width: 25,height: 25,color: R.colors.white,),
+                ),
+
               ],
             ),
           ),
