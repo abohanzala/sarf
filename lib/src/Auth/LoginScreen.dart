@@ -318,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: Container(
               margin: EdgeInsets.only(left: 10),
-              child: Text(
+              child: const Text(
                 'Register',
                 style: TextStyle(
                     color: Color(0xFFFB7B57),

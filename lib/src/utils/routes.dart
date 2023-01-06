@@ -10,6 +10,7 @@ import 'package:sarf/src/utils/routes_name.dart';
 import '../Auth/otp.dart';
 import '../Auth/registration_details.dart';
 import '../baseview/base_view.dart';
+import '../baseview/more/support.dart';
 
 class Routes {
   static MaterialPageRoute generateRoute(RouteSettings settings) {
@@ -42,6 +43,10 @@ class Routes {
         return MaterialPageRoute(
             builder: (BuildContext context) => const InvoiceDetails());      
             // case RoutesName.Splash:
+      case RoutesName.Support:
+        return MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const Support()); // case RoutesName.Splash:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());
       // case RoutesName.Boarding:

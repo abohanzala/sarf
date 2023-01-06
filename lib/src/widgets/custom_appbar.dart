@@ -92,7 +92,8 @@ Container customAppBar(String title,bool back,bool braket,String? braketText,boo
                                   padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 0),
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,
                                   border: Border.all(color: R.colors.lightBlue,width: 1) ),
-                                  child: TextFormField(
+                                  child:
+                                  TextFormField(
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(bottom: 5),
                                       hintText: 'Search here',
