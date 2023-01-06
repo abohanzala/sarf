@@ -20,5 +20,6 @@ class RoutesName{
   static const String homeView='home_screen';
   static const String cityList='city_list_screen';
   static const String membersList ='members_list_screen';
+  static const String invoiceDetails ='invoice_details';
 
 }

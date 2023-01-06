@@ -11,6 +11,7 @@ class AppColors {
   Color lightBlue = const Color(0xff84CCF2);
   Color lightBlue2 = const Color(0xffEAF8FF);
   Color lightBlue3 = const Color(0xff6DBDEA);
+  Color lightBlue4 = const Color(0xff28527A);
   Color darkBlue = const Color(0xff139DE6);
   Color grey = const Color(0xff9A9A9A);
   Color lightGrey = const Color(0xffEAEEF2);

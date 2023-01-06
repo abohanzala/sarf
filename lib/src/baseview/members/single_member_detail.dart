@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sarf/src/baseview/members/chat/view/chat_view.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 
 import '../../../resources/resources.dart';
 import '../../widgets/custom_appbar.dart';
@@ -20,7 +22,7 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar(widget.title,true,false,''),
+          customAppBar(widget.title,true,false,'',false),
           //appbarSearch(),
           //const SizedBox(height: 10,),
          Transform(
@@ -122,11 +124,14 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                                   const SizedBox(width: 5,),
                                 ],
                               ),
-                              Row(children: [
-                                Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
-                                const SizedBox(width: 4,),
-                                Icon(Icons.chat,color: R.colors.themeColor,size: 15,),
-                              ],)
+                              GestureDetector(
+                                onTap: () => Get.to(() => const ChatScreen(title: 'Name')),
+                                child: Row(children: [
+                                  Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
+                                  const SizedBox(width: 4,),
+                                  Icon(Icons.chat,color: R.colors.themeColor,size: 15,),
+                                ],),
+                              )
                               
                           ],)
                         ],
@@ -177,10 +182,13 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('00000',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                  Text('Details',style: TextStyle(color: R.colors.themeColor,fontSize: 14,
-                  decoration: TextDecoration.underline,fontWeight: FontWeight.w500,
-                  ),
-                  
+                  GestureDetector(
+                    onTap: () => Get.toNamed( RoutesName.invoiceDetails ),
+                    child: Text('Details',style: TextStyle(color: R.colors.themeColor,fontSize: 14,
+                    decoration: TextDecoration.underline,fontWeight: FontWeight.w500,
+                    ),
+                    
+                    ),
                   ),
                 ],
               ),
