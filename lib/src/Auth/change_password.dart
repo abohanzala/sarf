@@ -118,28 +118,28 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
   }
 
-  Widget buildUpdateButton() {
-    return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-      height: 50,
-      decoration: BoxDecoration(
-        color: Color(0xFFFB7B57),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: InkWell(
-        onTap: () {
-          Get.toNamed(RoutesName.OtpScreen);
-        },
-        child: Center(
-          child: Text(
-            'Update',
-            style: TextStyle(
-                color: Colors.white, fontSize: 13, fontFamily: 'medium'),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget buildUpdateButton() {
+  //   return Container(
+  //     margin: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
+  //     height: 50,
+  //     decoration: BoxDecoration(
+  //       color: Color(0xFFFB7B57),
+  //       borderRadius: BorderRadius.circular(10),
+  //     ),
+  //     child: InkWell(
+  //       onTap: () {
+  //         Get.toNamed(RoutesName.OtpScreen);
+  //       },
+  //       child: Center(
+  //         child: Text(
+  //           'Update',
+  //           style: TextStyle(
+  //               color: Colors.white, fontSize: 13, fontFamily: 'medium'),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget buildOtpText() {
     return Container(
@@ -237,15 +237,21 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
   }
 
-  // Widget buildUpdateButton() {
-  //   return Container(
-  //     margin: EdgeInsets.only(top: 20, bottom: 20),
-  //     child: customButton(
-  //         title: 'Update',
-  //         color: R.colors.buttonColor,
-  //         height: 45,
-  //         borderColour: R.colors.transparent,
-  //         textColor: R.colors.white),
-  //   );
-  // }
+  Widget buildUpdateButton() {
+    return Container(
+      margin: EdgeInsets.only(top: 20, bottom: 20),
+      child: customButton(
+        margin:20,
+        width: MediaQuery.of(context).size.width,
+        titleTextAlign: TextAlign.center,
+          onPress: (() {
+            Get.toNamed('otp_screen');
+          }),
+          title: 'Update',
+          color: R.colors.buttonColor,
+          height: 45,
+          borderColour: R.colors.transparent,
+          textColor: R.colors.white),
+    );
+  }
 }

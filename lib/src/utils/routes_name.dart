@@ -7,6 +7,7 @@ class RoutesName{
   static const String ChangePassword='change_password';
   static const String OtpScreen='otp_screen';
   static const String RegistrationDetails='registration_details';
+  static const String Support='Support';
   static const String PhoneVerificaion='phone_screen';
   static const String Human='human_screen';
   static const String Verb='verb_screen';

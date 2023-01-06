@@ -9,6 +9,7 @@ import 'package:sarf/src/utils/routes_name.dart';
 import '../Auth/otp.dart';
 import '../Auth/registration_details.dart';
 import '../baseview/base_view.dart';
+import '../baseview/more/support.dart';
 
 class Routes {
   static MaterialPageRoute generateRoute(RouteSettings settings) {
@@ -36,7 +37,11 @@ class Routes {
             builder: (BuildContext context) => const CityListScreen());
       case RoutesName.membersList:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const MembersListScreen());// case RoutesName.Splash:
+            builder: (BuildContext context) => const MembersListScreen());
+      case RoutesName.Support:
+        return MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const Support()); // case RoutesName.Splash:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());
       // case RoutesName.Boarding:
