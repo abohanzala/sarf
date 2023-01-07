@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sarf/resources/dummy.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 
 import '../../../resources/resources.dart';
@@ -391,10 +392,13 @@ class _MoreScreenState extends State<MoreScreen> {
         Stack(
           alignment: Alignment.topRight,
           children: [
-            Image.asset(
-              R.images.notificationIcon,
-              height: 20,
-              width: 20,
+            GestureDetector(
+              onTap: () => Get.toNamed(RoutesName.alerts),
+              child: Image.asset(
+                R.images.notificationIcon,
+                height: 20,
+                width: 20,
+              ),
             ),
             Container(
               decoration: BoxDecoration(
