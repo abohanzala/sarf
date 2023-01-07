@@ -35,61 +35,121 @@ class _SupportState extends State<Support> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: ListView.builder(
-              itemCount: 3,
-              shrinkWrap: true,
-              itemBuilder: (context,index){
-                return Container(
-                  width: Get.width,
-                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: R.colors.white
-                  ),
-                  child: IntrinsicHeight (
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('ID',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
-                            Text('000',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                            const SizedBox(height: 10,),
-                            Text('Type',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
-                            Text('Business',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                          ],
-                        ),
-                        const Spacer(flex: 3,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Date',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
-                            Text('17-5-2021',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                            const SizedBox(height: 10,),
-                            Text('Status',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
-                            const Text('Pending',style: TextStyle(color: Color(0XFFF4BD05),fontSize: 14,fontWeight: FontWeight.w700),),
-                          ],
-                        ),
-                        const Spacer(flex: 2,),
-                        
-                        VerticalDivider(color: R.colors.lightBlue4,thickness: 0.3,),
-                        const Spacer(),
-                        
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () => Get.to(() => const SingleSupport(title: 'Support ID  :  000')),
-                              child: Icon(Icons.remove_red_eye, color: R.colors.themeColor ,))
-                          ],
-                        ),
-                        const Spacer(),
-                      ],
-                      
+                itemCount: 3,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: Get.width,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: R.colors.white),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'ID',
+                                style: TextStyle(
+                                    color: R.colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                '000',
+                                style: TextStyle(
+                                    color: R.colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Type',
+                                style: TextStyle(
+                                    color: R.colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                'Business',
+                                style: TextStyle(
+                                    color: R.colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          const Spacer(
+                            flex: 3,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Date',
+                                style: TextStyle(
+                                    color: R.colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                '17-5-2021',
+                                style: TextStyle(
+                                    color: R.colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Status',
+                                style: TextStyle(
+                                    color: R.colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const Text(
+                                'Pending',
+                                style: TextStyle(
+                                    color: Color(0XFFF4BD05),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          const Spacer(
+                            flex: 2,
+                          ),
+                          VerticalDivider(
+                            color: R.colors.lightBlue4,
+                            thickness: 0.3,
+                          ),
+                          const Spacer(),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                  onTap: () => Get.to(() => const SingleSupport(
+                                      title: 'Support ID  :  000')),
+                                  child: Icon(
+                                    Icons.remove_red_eye,
+                                    color: R.colors.themeColor,
+                                  ))
+                            ],
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
           ),
         ],
       ),

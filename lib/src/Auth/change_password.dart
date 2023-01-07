@@ -239,11 +239,11 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildUpdateButton() {
     return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 20),
+      margin: EdgeInsets.only(top: 30, bottom: 20,left: 15,right: 15),
       child: customButton(
-        margin:20,
-        width: MediaQuery.of(context).size.width,
-        titleTextAlign: TextAlign.center,
+          margin: 20,
+          width: MediaQuery.of(context).size.width,
+          titleTextAlign: TextAlign.center,
           onPress: (() {
             Get.toNamed('otp_screen');
           }),

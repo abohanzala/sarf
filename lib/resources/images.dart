@@ -47,6 +47,9 @@ class AppImages {
   String call = "assets/images/call.png";
   String web = "assets/images/web.png";
   String listStack = "assets/images/liststack.png";
+  String profile = "assets/images/profile.png";
+  String privacyPolicyIconForSettings = "assets/images/privacyPolicyIconForSettings.png";
+  String languageIcon = "assets/images/languageIcon.png";
   // String splashIcon = "assets/images/icon.jpeg";
   // String icOnBoard2 = "assets/images/ic_onboard2.png";
   // String onBoard2 = "assets/images/onboard2.png";
