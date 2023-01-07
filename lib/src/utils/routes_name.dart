@@ -22,5 +22,6 @@ class RoutesName{
   static const String cityList='city_list_screen';
   static const String membersList ='members_list_screen';
   static const String invoiceDetails ='invoice_details';
+  static const String newSupport ='new_support';
 
 }

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:sarf/src/baseview/more/single_support.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 
 import '../../../resources/resources.dart';
 import '../../widgets/custom_appbar.dart';
@@ -30,6 +32,65 @@ class _SupportState extends State<Support> {
           const SizedBox(
             height: 10,
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: ListView.builder(
+              itemCount: 3,
+              shrinkWrap: true,
+              itemBuilder: (context,index){
+                return Container(
+                  width: Get.width,
+                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: R.colors.white
+                  ),
+                  child: IntrinsicHeight (
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ID',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
+                            Text('000',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            const SizedBox(height: 10,),
+                            Text('Type',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
+                            Text('Business',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                          ],
+                        ),
+                        const Spacer(flex: 3,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Date',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
+                            Text('17-5-2021',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            const SizedBox(height: 10,),
+                            Text('Status',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
+                            const Text('Pending',style: TextStyle(color: Color(0XFFF4BD05),fontSize: 14,fontWeight: FontWeight.w700),),
+                          ],
+                        ),
+                        const Spacer(flex: 2,),
+                        
+                        VerticalDivider(color: R.colors.lightBlue4,thickness: 0.3,),
+                        const Spacer(),
+                        
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () => Get.to(() => const SingleSupport(title: 'Support ID  :  000')),
+                              child: Icon(Icons.remove_red_eye, color: R.colors.themeColor ,))
+                          ],
+                        ),
+                        const Spacer(),
+                      ],
+                      
+                    ),
+                  ),
+                );
+              }),
+          ),
         ],
       ),
     );
@@ -38,7 +99,7 @@ class _SupportState extends State<Support> {
   Widget buildBackArrowAndSupportText() {
     return Positioned(
       top: 80,
-      left: 30,
+      left: 12,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -50,12 +111,12 @@ class _SupportState extends State<Support> {
               height: 30,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFFFFFFF)),
+                  color: const Color(0xFFFFFFFF)),
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(R.images.arrowBlue)),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text(
@@ -72,7 +133,7 @@ class _SupportState extends State<Support> {
   Widget buildAddNewButton() {
     return Positioned(
       top: 80,
-      right: 30,
+      right: 12,
       child: Container(
         child: customButton(
           optionalNavigateIcon: false,
@@ -82,10 +143,10 @@ class _SupportState extends State<Support> {
           title: 'Add New',
           color: R.colors.black,
           textColor: R.colors.white,
-          height: 30,
+          height: 35,
           borderColour: R.colors.transparent,
           onPress: (() {
-            Navigator.pop(context);
+            Get.toNamed(RoutesName.newSupport);
           }),
         ),
       ),
@@ -94,7 +155,7 @@ class _SupportState extends State<Support> {
 
   Widget buildBackGroundImage() {
     return Container(
-      height: MediaQuery.of(context).size.height / 3.5,
+      height: MediaQuery.of(context).size.height / 4.2,
       child: Stack(alignment: Alignment.topLeft, children: [
         Image.asset(
           R.images.backgroundImageChangePassword,
@@ -111,11 +172,11 @@ class _SupportState extends State<Support> {
 
   Widget buildStatusCard() {
     return Positioned(
-      right: 10,
-      left: 10,
+      right: 12,
+      left: 12,
       top: 130,
       child: Container(
-        margin: EdgeInsets.only(left: 15, right: 15),
+        //margin: EdgeInsets.only(left: 15, right: 15),
         height: 50,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -125,7 +186,7 @@ class _SupportState extends State<Support> {
           child: Row(
             children: [
               buildPendingOption(),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               buildSuccessOption()
