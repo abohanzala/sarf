@@ -7,6 +7,7 @@ import 'package:sarf/src/baseview/home/home_view.dart';
 import 'package:sarf/src/baseview/members/cites_list_view.dart';
 import 'package:sarf/src/baseview/members/members_list_view.dart';
 import 'package:sarf/src/baseview/more/alerts_view.dart';
+import 'package:sarf/src/baseview/more/delete_account.dart';
 import 'package:sarf/src/baseview/more/new_support.dart';
 import 'package:sarf/src/baseview/more/single_support.dart';
 import 'package:sarf/src/utils/routes_name.dart';
@@ -60,9 +61,9 @@ class Routes {
                 const AlertsScreen());                               // case RoutesName.Splash:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());
-      // case RoutesName.Boarding:
-      //   return MaterialPageRoute(
-      //       builder: (BuildContext context) => const BoardingScreen());
+      case RoutesName.deleteAccount:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const DeleteAccount());
       // case RoutesName.SignIn:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const Signin());

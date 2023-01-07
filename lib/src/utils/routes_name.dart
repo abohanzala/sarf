@@ -24,5 +24,6 @@ class RoutesName{
   static const String invoiceDetails ='invoice_details';
   static const String newSupport ='new_support';
   static const String alerts ='alerts';
+  static const String deleteAccount ='delete_account';
 
 }

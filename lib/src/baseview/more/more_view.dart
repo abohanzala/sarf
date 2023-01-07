@@ -206,11 +206,16 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildDeleteAccountText() {
-    return Container(
-      margin: EdgeInsets.only(left: 20),
-      child: Text(
-        'Delete Account',
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(RoutesName.deleteAccount);
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 20),
+        child: Text(
+          'Delete Account',
+          style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        ),
       ),
     );
   }
