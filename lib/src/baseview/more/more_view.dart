@@ -409,10 +409,15 @@ class _MoreScreenState extends State<MoreScreen> {
         SizedBox(
           width: 20,
         ),
-        Image.asset(
-          R.images.settingsIcon,
-          height: 20,
-          width: 20,
+        InkWell(
+          onTap: (){
+            Get.toNamed('settings');
+          },
+          child: Image.asset(
+            R.images.settingsIcon,
+            height: 20,
+            width: 20,
+          ),
         ),
       ],
     );

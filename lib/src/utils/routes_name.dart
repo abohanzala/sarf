@@ -23,5 +23,10 @@ class RoutesName{
   static const String membersList ='members_list_screen';
   static const String invoiceDetails ='invoice_details';
   static const String newSupport ='new_support';
+  static const String Settings ='settings';
+  static const String ChangeProfile ='change_profile';
+  static const String About ='about';
+  static const String TermsAndConditions ='terms_and_conditions';
+  static const String PrivacyPolicy ='privacy_policy';
 
 }
