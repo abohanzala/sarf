@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sarf/resources/dummy.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 
 import '../../../resources/resources.dart';
@@ -66,13 +67,18 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildTermsAndConditionsOption() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        children: [
-          buildTermsAndConditionsImage(),
-          buildTermsAndConditionsText()
-        ],
+    return InkWell(
+      onTap: () {
+        Get.toNamed('terms_and_conditions');
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          children: [
+            buildTermsAndConditionsImage(),
+            buildTermsAndConditionsText()
+          ],
+        ),
       ),
     );
   }
@@ -103,13 +109,18 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildPrivacyPolicyOption() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        children: [
-          buildPrivacyPolicyImage(),
-          buildPrivacyPolicyText(),
-        ],
+    return InkWell(
+      onTap: () {
+        Get.toNamed('privacy_policy');
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          children: [
+            buildPrivacyPolicyImage(),
+            buildPrivacyPolicyText(),
+          ],
+        ),
       ),
     );
   }
@@ -139,13 +150,18 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildAboutOption() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        children: [
-          buildAboutImage(),
-          buildAboutText(),
-        ],
+    return InkWell(
+      onTap: () {
+        Get.toNamed('about');
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          children: [
+            buildAboutImage(),
+            buildAboutText(),
+          ],
+        ),
       ),
     );
   }
@@ -391,10 +407,13 @@ class _MoreScreenState extends State<MoreScreen> {
         Stack(
           alignment: Alignment.topRight,
           children: [
-            Image.asset(
-              R.images.notificationIcon,
-              height: 20,
-              width: 20,
+            GestureDetector(
+              onTap: () => Get.toNamed(RoutesName.alerts),
+              child: Image.asset(
+                R.images.notificationIcon,
+                height: 20,
+                width: 20,
+              ),
             ),
             Container(
               decoration: BoxDecoration(
@@ -410,7 +429,7 @@ class _MoreScreenState extends State<MoreScreen> {
           width: 20,
         ),
         InkWell(
-          onTap: (){
+          onTap: () {
             Get.toNamed('settings');
           },
           child: Image.asset(

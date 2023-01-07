@@ -107,7 +107,6 @@ class _SettingsState extends State<Settings> {
             buildChangeProfileTextAndIcon(),
             buildDivider(),
             buildChangePrivacyPolicyTextAndIcon()
-            //buildUpdateButton()
           ],
         ),
       ),
@@ -159,13 +158,18 @@ class _SettingsState extends State<Settings> {
   }
 
   buildChangeProfileTextAndIcon() {
-    return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
-      child: Row(
-        children: [
-          buildProfileIcon(),
-          buildProfileText(),
-        ],
+    return InkWell(
+      onTap: () {
+        Get.toNamed('change_profile');
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+        child: Row(
+          children: [
+            buildProfileIcon(),
+            buildProfileText(),
+          ],
+        ),
       ),
     );
   }

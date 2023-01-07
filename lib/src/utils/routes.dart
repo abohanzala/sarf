@@ -6,6 +6,7 @@ import 'package:sarf/src/baseview/Invoices/invoice_details.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
 import 'package:sarf/src/baseview/members/cites_list_view.dart';
 import 'package:sarf/src/baseview/members/members_list_view.dart';
+import 'package:sarf/src/baseview/more/alerts_view.dart';
 import 'package:sarf/src/baseview/more/new_support.dart';
 import 'package:sarf/src/baseview/more/single_support.dart';
 import 'package:sarf/src/utils/routes_name.dart';
@@ -72,7 +73,11 @@ class Routes {
         return MaterialPageRoute(
             builder: (BuildContext context) => const PrivacyPolicy());
 
-      // case RoutesName.Splash:
+      case RoutesName.alerts:
+        return MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const AlertsScreen());                               // case RoutesName.Splash:
+
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());
       // case RoutesName.Boarding:
