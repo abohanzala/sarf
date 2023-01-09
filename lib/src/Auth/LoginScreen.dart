@@ -313,6 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //  Get.toNamed(RoutesName.Base);
           print(
               'This is my phoneNumber before apiCall===============${loginController.phone}');
+
           if (loginController.loginFormKey.currentState!.validate()) {
             loginController.login();
           }
