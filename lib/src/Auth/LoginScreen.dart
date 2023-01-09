@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: IntlPhoneField(
-            countries: ['SA'],
+            countries: ["SA"],
             showDropdownIcon: false,
             flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) => phone.text = number.completeNumber,
@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
               border: InputBorder.none,
               label: Container(
                 margin: EdgeInsets.symmetric(horizontal: 0),
-                child: Text(' Enter Mobile Number',
+                child: Text('Enter Mobile Number',
                     style: TextStyle(
                         color: Color(0xFF707070),
                         fontFamily: 'regular',
