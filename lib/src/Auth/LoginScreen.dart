@@ -189,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: IntlPhoneField(
+            countries: ['SA'],
             showDropdownIcon: false,
             flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) => phone.text = number.completeNumber,
