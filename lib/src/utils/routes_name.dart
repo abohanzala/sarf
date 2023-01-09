@@ -28,5 +28,6 @@ class RoutesName {
   static const String About = 'about';
   static const String TermsAndConditions = 'terms_and_conditions';
   static const String PrivacyPolicy = 'privacy_policy';
-  static const String alerts = 'alerts';
+  static const String alerts = 'alerts';  static const String deleteAccount ='delete_account';
+
 }
