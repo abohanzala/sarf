@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
   buildLoginText() {
     return Expanded(
       child: Text(
-        'Login',
+        'Login'.tr,
         style: TextStyle(
             color: Color(0xFF9A9A9A), fontFamily: 'bold', fontSize: 18),
       ),
@@ -189,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: IntlPhoneField(
+            countries: ["SA"],
             showDropdownIcon: false,
             flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) => phone.text = number.completeNumber,
