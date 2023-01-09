@@ -6,12 +6,12 @@ import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 
-class LoginController extends GetxController {
-  var loginFormKey = GlobalKey<FormState>();
+class RegisterController extends GetxController {
+  var registerFormKey = GlobalKey<FormState>();
   TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
 
   @override
   void onInit() {
@@ -19,7 +19,7 @@ class LoginController extends GetxController {
     super.onInit();
   }
 
-  Future login() async {
+  Future register() async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -32,17 +32,14 @@ class LoginController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phone.text,
-      'password': password.text,
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
     };
 
     //DialogBoxes.openLoadingDialog();
 
     var response =
-        await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
+        await DioClient().post(ApiLinks.register, request).catchError((error) {
+      Get.back();
       if (error is BadRequestException) {
-        Get.back();
         Get.snackbar(
           'Title',
           'Message',
@@ -64,7 +61,8 @@ class LoginController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
-      //   userInfo = UserInfo.fromMap(response);
+      Get.toNamed(RoutesName.OtpScreen);
+      //   userInfo = UserInfo.fromMap(response);S
       //  await  storage.write('user_token', userInfo.token);
       //  await storage.write('userId', userInfo.user!.id);
       //  await storage.write('name', userInfo.user!.name);
@@ -91,8 +89,6 @@ class LoginController extends GetxController {
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
-      // SnakeBars.showErrorSnake(description: response['message']);
-      // Navigator.of(Get.context!).pop();
     }
     return null;
     // return null;
