@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'controllers/auth/login_controller.dart';
 import 'locale/locale_strings.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/routes_name.dart';
@@ -10,6 +11,7 @@ import 'src/utils/routes_name.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  Get.put<LoginController>( LoginController());
   runApp(const MyApp());
 }
 
