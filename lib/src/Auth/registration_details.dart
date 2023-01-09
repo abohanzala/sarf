@@ -132,7 +132,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   Widget buildUploadImage() {
     return InkWell(
       onTap: () {
-        openPopUpOptions('In Process Development');
+        openPopUpOptions('In Process Development'.tr);
       },
       child: Column(
         children: [
@@ -147,7 +147,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                 color: R.colors.grey),
             child: Center(
               child: Text(
-                'Upload Image',
+                'Upload Image'.tr,
                 style: TextStyle(
                     fontFamily: 'regular', color: Colors.white, fontSize: 10),
               ),
@@ -158,7 +158,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           ),
           Center(
             child: Text(
-              '(Optional)',
+              '(Optional)'.tr,
               style: TextStyle(
                   fontFamily: 'regular', color: Colors.grey, fontSize: 10),
             ),
@@ -182,7 +182,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         },
         child: Center(
           child: Text(
-            'Submit',
+            'Submit'.tr,
             style: TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
@@ -227,7 +227,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: Row(
         children: [
           Text(
-            'Online',
+            'Online'.tr,
             style: TextStyle(
                 color: R.colors.grey, fontSize: 12, fontFamily: 'medium'),
           )
@@ -242,7 +242,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: Row(
         children: [
           Text(
-            'Offline',
+            'Offline'.tr,
             style: TextStyle(
                 color: R.colors.grey, fontSize: 12, fontFamily: 'medium'),
           )
@@ -395,7 +395,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: Row(
         children: [
           Text(
-            'Business',
+            'Business'.tr,
             style: TextStyle(
                 fontSize: 14, fontFamily: 'regular', color: Color(0xFF9A9A9A)),
           ),
@@ -443,7 +443,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
-        hysterik: true,
+          hysterik: true,
           hintTextSize: 12,
           hintText: 'Company Name *'.tr,
           controller: companyNameController,
@@ -471,7 +471,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Instagram Link (Optional)',
+          hintText: 'Instagram Link (Optional)'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
@@ -484,7 +484,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Website (Optional)',
+          hintText: 'Website (Optional)'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
@@ -523,7 +523,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Twitter Link (Optional)',
+          hintText: 'Twitter Link (Optional)'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
@@ -601,7 +601,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             children: [
               Expanded(
                   child: Text(
-                'Select City *',
+                'Select City'.tr,
                 style: TextStyle(
                     fontSize: 12, fontFamily: 'medium', color: R.colors.grey),
               )),
@@ -631,7 +631,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             children: [
               Expanded(
                   child: Text(
-                'Type *',
+                'Type'.tr,
                 style: TextStyle(
                     fontSize: 12, fontFamily: 'medium', color: R.colors.grey),
               )),
@@ -667,7 +667,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Text(
-                'Location',
+                'Location'.tr,
                 style: TextStyle(
                     color: Colors.white, fontSize: 13, fontFamily: 'medium'),
               ),

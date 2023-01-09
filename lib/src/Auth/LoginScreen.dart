@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:sarf/controllers/auth/login_controller.dart';
 import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
@@ -20,7 +21,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool arabic = false;
   String? countryName;
   TextEditingController phone = TextEditingController();
+  TextEditingController password = TextEditingController();
   FocusNode searchFieldNode = FocusNode();
+  LoginController loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +84,15 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             buildLoginTextAndLanguageOptions(),
-            buildPhonefield(),
-            buildPasswordField(),
+            Form(
+              key: loginController.loginFormKey,
+              child: Column(
+                children: [
+                  buildPhonefield(),
+                  buildPasswordField(),
+                ],
+              ),
+            ),
             buildForgotPassword(),
             buildNextButton(),
             buildDontHaveAnAccount()
@@ -194,8 +204,10 @@ class _LoginScreenState extends State<LoginScreen> {
             flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) => phone.text = number.completeNumber,
             initialCountryCode: 'SA',
-            onCountryChanged: (country) =>
-                setState(() => countryName = country.code),
+            onCountryChanged: (country) {
+              loginController.phone.text = phone.toString();
+              setState(() => countryName = country.code);
+            },
             decoration: InputDecoration(
               border: InputBorder.none,
               label: Container(
@@ -235,7 +247,14 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Image.asset('assets/images/passwordIcon.png',
                   height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
           Expanded(
-            child: TextField(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Required Field".tr;
+                }
+                return null;
+              },
+              controller: loginController.password,
               focusNode: searchFieldNode,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -285,7 +304,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed(RoutesName.Base);
+          if (loginController.loginFormKey.currentState!.validate()) {
+            loginController.login();
+          }
         },
         child: Center(
           child: Text(
@@ -318,7 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: Container(
               margin: EdgeInsets.only(left: 10),
-              child:  Text(
+              child: Text(
                 'Register'.tr,
                 style: TextStyle(
                     color: Color(0xFFFB7B57),
