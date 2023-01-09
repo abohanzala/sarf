@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+
+import '../utils/routes_name.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -284,7 +288,9 @@ class _RegistrationState extends State<Registration> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.toNamed(RoutesName.RegistrationDetails);
+        },
         child: Center(
           child: Text(
             'Next',

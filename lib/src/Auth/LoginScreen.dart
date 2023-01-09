@@ -32,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
             body: Stack(
               children: [
                 buildBackGroundImage(),
-                buildBackArrowContainer(),
               ],
             ),
           ),
