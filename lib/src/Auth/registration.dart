@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
+import '../../controllers/auth/register_controller.dart';
+import '../../resources/resources.dart';
 import '../utils/routes_name.dart';
 
 class Registration extends StatefulWidget {
@@ -19,6 +21,7 @@ class _RegistrationState extends State<Registration> {
   TextEditingController phone = TextEditingController();
   FocusNode searchFieldNode = FocusNode();
   bool checkBox = false;
+  RegisterController registerController = Get.find<RegisterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -188,45 +191,48 @@ class _RegistrationState extends State<Registration> {
   }
 
   buildPhonefield() {
-    return Form(
-      child: Row(
-        children: [
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: IntlPhoneField(
-              showDropdownIcon: false,
-              flagsButtonPadding: EdgeInsets.only(left: 10),
-              onChanged: (number) => phone.text = number.completeNumber,
-              initialCountryCode: 'SA',
-              onCountryChanged: (country) =>
-                  setState(() => countryName = country.code),
-              decoration: InputDecoration(
-                // focusedBorder: const OutlineInputBorder(
-                //   borderSide:
-                //       const BorderSide(color: Color(0xFF9A9A9A), width: 0.0),
-                // ),
-                label: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 0),
-                  child: Text(' Enter Mobile Number'.tr,
-                      style: TextStyle(
-                          color: Color(0xFF707070),
-                          fontFamily: 'regular',
-                          fontSize: 12)),
-                ),
-                isDense: true,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                filled: true,
-                //  fillColor: const Color(0xffF0F0F0)
+    return Row(
+      children: [
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: IntlPhoneField(
+            showDropdownIcon: false,
+            flagsButtonPadding: EdgeInsets.only(left: 10),
+            onChanged: (number) {
+              phone.text = number.completeNumber;
+              registerController.phone.text = phone.text;
+              print(
+                  'This is my phoneNumber===============${registerController.phone}');
+            },
+            initialCountryCode: 'SA',
+            onCountryChanged: (country) =>
+                setState(() => countryName = country.code),
+            decoration: InputDecoration(
+              // focusedBorder: const OutlineInputBorder(
+              //   borderSide:
+              //       const BorderSide(color: Color(0xFF9A9A9A), width: 0.0),
+              // ),
+              label: Container(
+                margin: EdgeInsets.symmetric(horizontal: 0),
+                child: Text(' Enter Mobile Number'.tr,
+                    style: TextStyle(
+                        color: Color(0xFF707070),
+                        fontFamily: 'regular',
+                        fontSize: 12)),
               ),
+              isDense: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              filled: true,
+              //  fillColor: const Color(0xffF0F0F0)
             ),
-          ))
-        ],
-      ),
+          ),
+        ))
+      ],
     );
   }
 
@@ -287,7 +293,19 @@ class _RegistrationState extends State<Registration> {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed(RoutesName.RegistrationDetails);
+          print(
+              'This is my phoneNumber===============${registerController.phone}');
+          if (registerController.phone.text.isEmpty) {
+            Get.snackbar(
+              'Title',
+              'Message',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+          }
+
+          registerController.register();
         },
         child: Center(
           child: Text(

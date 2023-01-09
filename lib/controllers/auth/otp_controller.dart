@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/auth/register_controller.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 
-class LoginController extends GetxController {
+class OtpController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
-  TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
+  TextEditingController otpControllerGet = TextEditingController();
+  RegisterController registerController = Get.find<RegisterController>();
 
   @override
   void onInit() {
@@ -19,7 +21,7 @@ class LoginController extends GetxController {
     super.onInit();
   }
 
-  Future login() async {
+  Future otp() async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -31,16 +33,18 @@ class LoginController extends GetxController {
 
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': phone.text,
-      'password': password.text,
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+      'mobile': registerController.phone.text,
+      'otp': otpControllerGet.text,
     };
+    print(registerController.phone.text);
+    print(otpControllerGet.text);
+    print("ppppppppppppppp");
 
     //DialogBoxes.openLoadingDialog();
 
-    var response =
-        await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
+    var response = await DioClient()
+        .post(ApiLinks.verify_otp, request)
+        .catchError((error) {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
@@ -64,6 +68,7 @@ class LoginController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
+      Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
       //  await storage.write('userId', userInfo.user!.id);

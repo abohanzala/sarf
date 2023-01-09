@@ -7,6 +7,7 @@ import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 
+import '../../controllers/auth/otp_controller.dart';
 import '../../resources/resources.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -17,7 +18,8 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  TextEditingController otpController = TextEditingController();
+  TextEditingController otpControllerText = TextEditingController();
+  OtpController otpController = Get.find<OtpController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +101,7 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
         child: customTextField(
             hintText: 'ex 1234',
-            controller: otpController,
+            controller: otpControllerText,
             color: R.colors.lightGrey,
             height: 45,
             borderColour: R.colors.transparent),
@@ -158,7 +160,24 @@ class _OtpScreenState extends State<OtpScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          print(
+              'This is my phoneNumber===============${otpControllerText.text.toString()}');
+          otpController.otpControllerGet.text = otpControllerText.text.toString();
+          print(
+              'This is my phoneNumber===============${otpController.otpControllerGet}');
+
+          if (otpControllerText.text.isEmpty) {
+            Get.snackbar(
+              'Title',
+              'Required Field',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+          }
+          otpController.otp();
+        },
         child: Center(
           child: Text(
             'Go'.tr,
