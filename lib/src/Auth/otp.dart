@@ -112,7 +112,7 @@ class _OtpScreenState extends State<OtpScreen> {
       margin: EdgeInsets.only(top: 20),
       child: customTitle(
         textAlign: TextAlign.center,
-        text: 'Enter OTP',
+        text: 'Enter OTP'.tr,
         color: R.colors.grey,
         size: 18,
         fontFamily: 'bold',
@@ -125,7 +125,7 @@ class _OtpScreenState extends State<OtpScreen> {
       margin: EdgeInsets.only(top: 30, bottom: 10),
       child: Center(
         child: Text(
-          'Resend',
+          'Resend'.tr,
           style: TextStyle(
               decoration: TextDecoration.underline,
               fontFamily: 'semibold',
@@ -141,7 +141,7 @@ class _OtpScreenState extends State<OtpScreen> {
       margin: EdgeInsets.only(top: 5),
       child: customTitle(
         textAlign: TextAlign.center,
-        text: '00:23',
+        text: 'timeDummy'.tr,
         color: R.colors.grey,
         size: 18,
         fontFamily: 'bold',
@@ -161,7 +161,7 @@ class _OtpScreenState extends State<OtpScreen> {
         onTap: () {},
         child: Center(
           child: Text(
-            'Go',
+            'Go'.tr,
             style: TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),

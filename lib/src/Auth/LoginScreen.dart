@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
   buildLoginText() {
     return Expanded(
       child: Text(
-        'Login',
+        'Login'.tr,
         style: TextStyle(
             color: Color(0xFF9A9A9A), fontFamily: 'bold', fontSize: 18),
       ),
@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
               border: InputBorder.none,
               label: Container(
                 margin: EdgeInsets.symmetric(horizontal: 0),
-                child: Text('Enter Mobile Number',
+                child: Text('Enter Mobile Number'.tr,
                     style: TextStyle(
                         color: Color(0xFF707070),
                         fontFamily: 'regular',
@@ -239,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
               focusNode: searchFieldNode,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                  hintText: 'Enter Password',
+                  hintText: 'Enter Password'.tr,
                   hintStyle: TextStyle(
                       fontSize: 10,
                       fontFamily: 'medium',
@@ -261,9 +261,9 @@ class _LoginScreenState extends State<LoginScreen> {
         margin: const EdgeInsets.only(top: 30, bottom: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
-              'Forgot Password?',
+              'Forgot Password?'.tr,
               style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'semibold',
@@ -289,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: Center(
           child: Text(
-            'Next',
+            'Next'.tr,
             style: TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
@@ -306,7 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Container(
             child: Text(
-              'Dont Have An Account',
+              'Dont Have An Account'.tr,
               style: TextStyle(
                   color: Colors.black, fontSize: 13, fontFamily: 'medium'),
             ),
@@ -318,8 +318,8 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: Container(
               margin: EdgeInsets.only(left: 10),
-              child: const Text(
-                'Register',
+              child:  Text(
+                'Register'.tr,
                 style: TextStyle(
                     color: Color(0xFFFB7B57),
                     fontWeight: FontWeight.bold,
@@ -389,7 +389,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Text(
-        'Forgot Password',
+        'Forgot Password'.tr,
         style:
             TextStyle(fontSize: 16, fontFamily: 'bold', color: R.colors.black),
       ),
@@ -429,7 +429,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: Center(
           child: Text(
-            'Get Code',
+            'Get Code'.tr,
             style: TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),

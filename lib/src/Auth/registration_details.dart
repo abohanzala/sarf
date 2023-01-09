@@ -96,7 +96,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: EdgeInsets.only(top: 20),
       child: Center(
         child: Text(
-          'Registration Details',
+          'Registration Details'.tr,
           style:
               TextStyle(color: R.colors.grey, fontFamily: 'bold', fontSize: 18),
         ),
@@ -197,7 +197,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: Row(
         children: [
           Text(
-            'User Type',
+            'User Type'.tr,
             style: TextStyle(
                 color: R.colors.grey, fontSize: 12, fontFamily: 'medium'),
           )
@@ -212,7 +212,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: Row(
         children: [
           Text(
-            'Business',
+            'Business'.tr,
             style: TextStyle(
                 color: R.colors.grey, fontSize: 12, fontFamily: 'medium'),
           )
@@ -382,7 +382,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: EdgeInsets.only(left: 10),
       child: Text(
-        'Personal',
+        'Personal'.tr,
         style: TextStyle(
             fontSize: 14, fontFamily: 'regular', color: Color(0xFF9A9A9A)),
       ),
@@ -443,8 +443,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
+        hysterik: true,
           hintTextSize: 12,
-          hintText: 'Company Name *',
+          hintText: 'Company Name *'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
