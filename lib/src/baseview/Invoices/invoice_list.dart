@@ -63,7 +63,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                       ),
                       SizedBox(width: 10.w),
                       Text(
-                        'Invoice List',
+                        'Invoice List'.tr,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 17.sp,
@@ -116,7 +116,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                       borderSide: BorderSide(color: R.colors.blueGradient1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    hintText: 'Search Here',
+                    hintText: 'Search here'.tr,
                     hintStyle: TextStyle(
                       color: R.colors.grey,
                       fontSize: 16.sp,
@@ -155,7 +155,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Invoice ID',
+                                  'Invoice ID'.tr,
                                   style: TextStyle(
                                     color: R.colors.grey,
                                     fontSize: 16.sp,
@@ -182,7 +182,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                               ),
                             ),
                             SizedBox(height: 8.h),
-                            Text('Customer Name',
+                            Text('Customer Name'.tr,
                                 style: TextStyle(
                                   color: R.colors.grey,
                                   fontSize: 16.sp,
@@ -208,7 +208,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                               child: Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    'Amount : 0000',
+                                    'Amount'.tr,
                                     style: TextStyle(
                                       color: R.colors.blueGradient1,
                                       fontSize: 16.sp,

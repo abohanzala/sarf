@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:sarf/resources/resources.dart';
 
 class SimpleInvoice extends StatefulWidget {
@@ -37,7 +38,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Simple Invoice',
+                'Simple Invoice'.tr,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.sp,
@@ -69,7 +70,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                         ),
                         fillColor: R.colors.lightGrey,
                         filled: true,
-                        labelText: 'Mobile Number',
+                        labelText: 'Mobile Number'.tr,
                         labelStyle: TextStyle(
                           color: R.colors.grey,
                           fontSize: 14.sp,
@@ -90,7 +91,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       height: 10.h,
                     ),
                     Text(
-                      'NAME',
+                      'NAME'.tr,
                       style: TextStyle(
                         color: R.colors.black,
                         fontSize: 14.sp,
@@ -104,7 +105,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
                         filled: true,
-                        labelText: 'Amount',
+                        labelText: 'Amount'.tr,
                         labelStyle: TextStyle(
                           color: R.colors.grey,
                           fontSize: 14.sp,
@@ -129,7 +130,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
                         filled: true,
-                        labelText: 'Description',
+                        labelText: 'Description'.tr,
                         labelStyle: TextStyle(
                           color: R.colors.grey,
                           fontSize: 14.sp,
@@ -256,7 +257,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                             ),
                             child: Center(
                               child: Text(
-                                'Send Invoice',
+                                'Send Invoice'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.sp,

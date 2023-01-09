@@ -20,7 +20,7 @@ class _MembersScreenState extends State<MembersScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Members List',false,false,'',false),
+          customAppBar('Members List'.tr,false,false,'',false),
           appbarSearch(),
          // const SizedBox(height: 10,),
           Expanded(child: GridView.builder(
@@ -50,7 +50,7 @@ class _MembersScreenState extends State<MembersScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Type',style: TextStyle(color: R.colors.grey,fontSize: 12),),
+                                Text('Type'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12),),
                                 const SizedBox(height: 5,),
                                 Text('مأكولات ومشروبات',style: TextStyle(color: R.colors.black,fontSize: 16),),
                                 const SizedBox(height: 5,),

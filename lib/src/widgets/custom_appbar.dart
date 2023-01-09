@@ -96,7 +96,7 @@ Container customAppBar(String title,bool back,bool braket,String? braketText,boo
                                   TextFormField(
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.only(bottom: 5),
-                                      hintText: 'Search here',
+                                      hintText: 'Search here'.tr,
                                       hintStyle: TextStyle(color: R.colors.grey),
                                       focusedBorder: InputBorder.none,
                                       border: InputBorder.none,
@@ -116,7 +116,7 @@ Container customAppBar(String title,bool back,bool braket,String? braketText,boo
                                             //size: 25.sp,
                                           ),
                                           const SizedBox(width: 5,),
-                                          Text('SCAN',style: TextStyle(color: R.colors.blue,
+                                          Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
                                           //fontSize: 25.sp
                                           ),)
                                     ],

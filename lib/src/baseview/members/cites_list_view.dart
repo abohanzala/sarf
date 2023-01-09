@@ -21,7 +21,7 @@ class _CityListScreenState extends State<CityListScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Cites',true,false,'',false),
+          customAppBar('Cites'.tr,true,false,'',false),
           appbarSearch(),
          // const SizedBox(height: 10,),
           Expanded(child: GridView.builder(
@@ -51,7 +51,7 @@ class _CityListScreenState extends State<CityListScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('City',style: TextStyle(color: R.colors.grey,fontSize: 12),),
+                                Text('City'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12),),
                                 const SizedBox(height: 5,),
                                 Text('Madinah',style: TextStyle(color: R.colors.black,fontSize: 16),),
                                 const SizedBox(height: 5,),

@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Delete this budget',
+                                'Delete this budget'.tr,
                                 style:
                                     TextStyle(color: R.colors.blackSecondery),
                               ),
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 10,
                               ),
                               Text(
-                                'Reset this budget',
+                                'Reset this budget'.tr,
                                 style:
                                     TextStyle(color: R.colors.blackSecondery),
                               ),
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Icon(Icons.more_vert, color: R.colors.black)),
                 Row(
                   children: [
-                    const Text('Office'),
+                     Text('Office'.tr),
                     GestureDetector(
                         onTap: () {},
                         child: Icon(
@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 15,
                               ),
                               Text(
-                                'Add new Project type',
+                                'Add new Project type'.tr,
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: R.colors.lightGrey),
                                 child: TextFormField(
                                   decoration: InputDecoration(
-                                    hintText: 'Project Name',
+                                    hintText: 'Project Name'.tr,
                                     hintStyle: TextStyle(color: R.colors.grey),
                                     focusedBorder: InputBorder.none,
                                     border: InputBorder.none,
@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 5,
                           ),
                           Text(
-                            'New\nbudget\n#3',
+                            'New budget'.tr,
                             style: TextStyle(
                               color: R.colors.white,
                               decoration: TextDecoration.underline,
@@ -328,14 +328,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               children: [
                                 Text(
-                                  'Total Invoices : 50',
+                                  'Total Invoices'.tr,
                                   style: TextStyle(color: R.colors.black),
                                 ),
                                 const SizedBox(
                                   height: 5,
                                 ),
                                 Text(
-                                  'Total Expenses : 24',
+                                  'Total Expenses'.tr,
                                   style: TextStyle(color: R.colors.black),
                                 ),
                               ],
@@ -364,16 +364,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               children: [
                                 Text(
-                                  'Total Invoices : 50',
+                                  'Share Report'.tr,
                                   style: TextStyle(color: R.colors.black),
                                 ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Total Expenses : 24',
-                                  style: TextStyle(color: R.colors.black),
-                                ),
+                                
                               ],
                             )
                           ],
@@ -399,15 +393,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Column(
                               children: [
+                               
                                 Text(
-                                  'Total Invoices : 50',
-                                  style: TextStyle(color: R.colors.black),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Total Expenses : 24',
+                                  'Share QR code'.tr,
                                   style: TextStyle(color: R.colors.black),
                                 ),
                               ],
@@ -437,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: R.colors.themeColor),
         child: Center(
             child: Text(
-          'Add',
+          'Add'.tr,
           style: TextStyle(color: R.colors.white),
         )),
       ),

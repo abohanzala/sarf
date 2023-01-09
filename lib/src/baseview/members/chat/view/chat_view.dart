@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         Icon(Icons.camera_alt,color: R.colors.white,),
                         const SizedBox(width: 5,),
-                        Text('Camera',style: TextStyle(color: R.colors.white,fontSize: 14),),
+                        Text('Camera'.tr,style: TextStyle(color: R.colors.white,fontSize: 14),),
 
                       ],
                     ),
@@ -76,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         Icon(Icons.camera,color: R.colors.white,),
                         const SizedBox(width: 5,),
-                        Text('Gallery',style: TextStyle(color: R.colors.white,fontSize: 14),),
+                        Text('Gallery'.tr,style: TextStyle(color: R.colors.white,fontSize: 14),),
 
                       ],
                     ),
@@ -102,8 +102,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(4) ,bottomLeft: Radius.circular(4))
                   ),
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Write something',
+                    decoration:  InputDecoration(
+                      hintText: 'Write something'.tr,
                       border: InputBorder.none,
                        ),
                   ),

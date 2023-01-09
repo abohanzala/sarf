@@ -21,7 +21,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Member List',true,true,'(01)',false),
+          customAppBar('Member List'.tr,true,true,'(01)',false),
           appbarSearch(),
           const SizedBox(height: 10,),
           Expanded(child: ListView.builder(

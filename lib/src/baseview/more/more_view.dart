@@ -182,7 +182,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       child: Text(
-        'Rate',
+        'Rate'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
@@ -228,7 +228,7 @@ class _MoreScreenState extends State<MoreScreen> {
       child: Container(
         margin: EdgeInsets.only(left: 20),
         child: Text(
-          'Delete Account',
+          'Delete Account'.tr,
           style: TextStyle(fontSize: 14, fontFamily: 'medium'),
         ),
       ),
@@ -247,7 +247,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       child: Text(
-        'About',
+        'About'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
@@ -273,7 +273,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       child: Text(
-        'Share',
+        'Share'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
@@ -283,7 +283,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       child: Text(
-        'Privacy Policy',
+        'Privacy Policy'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
@@ -293,7 +293,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       child: Text(
-        'Support',
+        'Support'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
@@ -303,7 +303,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       child: Text(
-        'Terms & Conditions',
+        'Terms & Conditions'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
@@ -316,7 +316,7 @@ class _MoreScreenState extends State<MoreScreen> {
         margin: 20,
         width: MediaQuery.of(context).size.width,
         titleTextAlign: TextAlign.start,
-        title: 'Subscribe',
+        title: 'Subscribe'.tr,
         color: R.colors.blue,
         textColor: R.colors.white,
         height: 45,
@@ -368,7 +368,7 @@ class _MoreScreenState extends State<MoreScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name',
+                  'Name'.tr,
                   style: TextStyle(
                       color: R.colors.white, fontFamily: 'bold', fontSize: 16),
                 ),
@@ -398,7 +398,7 @@ class _MoreScreenState extends State<MoreScreen> {
             width: 10,
           ),
           Text(
-            'Logout',
+            'Logout'.tr,
             style: TextStyle(fontFamily: 'semibold', fontSize: 12),
           )
         ],
@@ -461,7 +461,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildViewProfileLinkButton() {
     return Text(
-      'View Profile',
+      'View Profile'.tr,
       style: TextStyle(
           decoration: TextDecoration.underline,
           fontFamily: 'medium',
@@ -551,7 +551,7 @@ class _MoreScreenState extends State<MoreScreen> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Text(
-        'Subscription',
+        'Subscription'.tr,
         style: TextStyle(fontFamily: 'bold', fontSize: 18),
       ),
     );
@@ -583,7 +583,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 margin: 0,
                 width: MediaQuery.of(context).size.width,
                 titleTextAlign: TextAlign.center,
-                title: 'Subscribe Now',
+                title: 'Subscribe Now'.tr,
                 color: R.colors.buttonColor,
                 textColor: R.colors.white,
                 height: 45,
@@ -604,7 +604,7 @@ class _MoreScreenState extends State<MoreScreen> {
               margin: 0,
               width: MediaQuery.of(context).size.width / 3,
               titleTextAlign: TextAlign.center,
-              title: 'Skip',
+              title: 'Skip'.tr,
               color: Colors.grey[300]!,
               textColor: R.colors.black,
               height: 45,

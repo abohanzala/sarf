@@ -22,7 +22,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Invoice',true,false,'',true),
+          customAppBar('Invoice'.tr,true,false,'',true),
           //appbarSearch(),
           //const SizedBox(height: 10,),
          Transform(
@@ -41,18 +41,18 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Invoice No',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                          Text('Invoice No'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                           Text('12-04-2021',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                         ],
                       ),
                       const SizedBox(height: 5,),
                       Text('00',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       const SizedBox(height: 10,),
-                      Text('Customer Name',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                      Text('Customer Name'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                        const SizedBox(height: 5,),
                       Text('Zeeshan',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       const SizedBox(height: 10,),
-                      Text('Description',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                      Text('Description'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                        const SizedBox(height: 5,),
                       Text('Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut arcu libero, pulvinar non massa sed.',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       const SizedBox(height: 10,),
@@ -65,7 +65,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                            child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Net Total',style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
+                              Text('Net Total'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
                               Text('\$0.00',style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
                             ],
                            ),
@@ -81,7 +81,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
             children: [
               Padding(
            padding: const EdgeInsets.symmetric(horizontal: 12),
-           child: Text('Received Attachments',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+           child: Text('Received Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
          ),
          const SizedBox(height: 8,),
          Padding(
@@ -106,7 +106,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
          const SizedBox(height: 10,), 
           Padding(
            padding: const EdgeInsets.symmetric(horizontal: 12),
-           child: Text('Sent Attachments',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+           child: Text('Sent Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
          ),
          const SizedBox(height: 8,),
          Padding(
@@ -123,7 +123,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
          const SizedBox(height: 10,),
          Padding(
            padding: const EdgeInsets.symmetric(horizontal: 12),
-           child: Text('Attach',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+           child: Text('Attach'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
          ),
          const SizedBox(height: 5,),
 
@@ -218,7 +218,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                       color: R.colors.themeColor),
                   child: Center(
                       child: Text(
-                    'Send',
+                    'Send'.tr,
                     style: TextStyle(color: R.colors.white),
                   )),
                 ),

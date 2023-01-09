@@ -53,7 +53,7 @@ class _SupportState extends State<Support> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'ID',
+                                'ID'.tr,
                                 style: TextStyle(
                                     color: R.colors.grey,
                                     fontSize: 12,
@@ -70,7 +70,7 @@ class _SupportState extends State<Support> {
                                 height: 10,
                               ),
                               Text(
-                                'Type',
+                                'Type'.tr,
                                 style: TextStyle(
                                     color: R.colors.grey,
                                     fontSize: 12,
@@ -92,7 +92,7 @@ class _SupportState extends State<Support> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Date',
+                                'Date'.tr,
                                 style: TextStyle(
                                     color: R.colors.grey,
                                     fontSize: 12,
@@ -109,7 +109,7 @@ class _SupportState extends State<Support> {
                                 height: 10,
                               ),
                               Text(
-                                'Status',
+                                'Status'.tr,
                                 style: TextStyle(
                                     color: R.colors.grey,
                                     fontSize: 12,
@@ -180,7 +180,7 @@ class _SupportState extends State<Support> {
               width: 20,
             ),
             Text(
-              'Support',
+              'Support'.tr,
               style: TextStyle(
                   color: R.colors.white, fontFamily: 'bold', fontSize: 16),
             ),
@@ -200,7 +200,7 @@ class _SupportState extends State<Support> {
           margin: 0,
           width: MediaQuery.of(context).size.width / 3.5,
           titleTextAlign: TextAlign.center,
-          title: 'Add New',
+          title: 'Add New'.tr,
           color: R.colors.black,
           textColor: R.colors.white,
           height: 35,
@@ -275,7 +275,7 @@ class _SupportState extends State<Support> {
           height: 40,
           child: Center(
             child: Text(
-              'Pending',
+              'Pending'.tr,
               style: TextStyle(
                   fontSize: 10,
                   fontFamily: 'semibold',
@@ -305,7 +305,7 @@ class _SupportState extends State<Support> {
           height: 40,
           child: Center(
             child: Text(
-              'Success',
+              'Success'.tr,
               style: TextStyle(
                   fontSize: 10,
                   fontFamily: 'semibold,',
