@@ -2,10 +2,14 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'locale/locale_strings.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/routes_name.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -29,7 +33,11 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
             ),
             initialRoute: RoutesName.LogIn,
-            onGenerateRoute: Routes.generateRoute);
+            onGenerateRoute: Routes.generateRoute,
+            locale: const Locale('en', 'US'),
+            translations: LocaleString(),
+            fallbackLocale: const Locale('en', 'US'),
+            );
       },
     );
   }
