@@ -28,10 +28,12 @@ class LoginController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-
+    var a = phone.text;
+    final splitted = a.split('+');
+    print(splitted[1]);
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': phone.text,
+      'mobile': splitted,
       'password': password.text,
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
@@ -64,6 +66,12 @@ class LoginController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
+      Get.snackbar(
+        'Title',
+        'Login Successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: R.colors.themeColor,
+      );
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
       //  await storage.write('userId', userInfo.user!.id);
