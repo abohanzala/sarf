@@ -99,7 +99,7 @@ class _RegistrationState extends State<Registration> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Registration',
+            'Registration'.tr,
             style: TextStyle(
                 fontFamily: 'bold', fontSize: 18, color: Color(0xFF9A9A9A)),
           )
@@ -210,7 +210,7 @@ class _RegistrationState extends State<Registration> {
                 // ),
                 label: Container(
                   margin: EdgeInsets.symmetric(horizontal: 0),
-                  child: Text(' Enter Mobile Number',
+                  child: Text(' Enter Mobile Number'.tr,
                       style: TextStyle(
                           color: Color(0xFF707070),
                           fontFamily: 'regular',
@@ -250,7 +250,7 @@ class _RegistrationState extends State<Registration> {
               focusNode: searchFieldNode,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                  hintText: 'Enter Password',
+                  hintText: 'Enter Password'.tr,
                   hintStyle: TextStyle(
                       fontSize: 10,
                       fontFamily: 'medium',
@@ -293,7 +293,7 @@ class _RegistrationState extends State<Registration> {
         },
         child: Center(
           child: Text(
-            'Next',
+            'Next'.tr,
             style: TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
@@ -347,13 +347,13 @@ class _RegistrationState extends State<Registration> {
             },
           ),
           Text(
-            'I Accept',
+            'I Accept'.tr,
             style: TextStyle(fontSize: 17, color: Colors.grey),
           ),
           InkWell(
             onTap: () {},
             child: Text(
-              ' Terms & Conditions',
+              ' Terms & Conditions'.tr,
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 17,

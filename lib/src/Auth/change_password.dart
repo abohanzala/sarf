@@ -78,7 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               width: 20,
             ),
             Text(
-              'Change Password',
+              'Change Password'.tr,
               style: TextStyle(
                   color: R.colors.white, fontFamily: 'bold', fontSize: 16),
             )
@@ -144,8 +144,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget buildOtpText() {
     return Container(
         margin: EdgeInsets.only(top: 20, bottom: 20),
-        child: const Text(
-          'Enter OTP',
+        child: Text(
+          'Enter OTP'.tr,
           style: TextStyle(
               fontSize: 12, fontFamily: 'medium', color: Color(0xFF9A9A9A)),
         ));
@@ -168,7 +168,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           height: 45,
           borderColour: R.colors.transparent,
           controller: otp,
-          hintText: 'ex 1234',
+          hintText: 'ex 1234'.tr,
           hintStyle: TextStyle(color: R.colors.black)),
     );
   }
@@ -182,7 +182,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: Row(
             children: [
               Text(
-                'New Password',
+                'New Password'.tr,
                 style: TextStyle(
                     fontFamily: 'medium', color: R.colors.grey, fontSize: 12),
               ),
@@ -194,7 +194,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             child: customTextField(
                 hintTextSize: 12,
-                hintText: 'Password',
+                hintText: 'Password'.tr,
                 controller: newPassword,
                 color: R.colors.lightGrey,
                 height: 45,
@@ -214,7 +214,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: Row(
             children: [
               Text(
-                'New Password',
+                'Confirm New Password'.tr,
                 style: TextStyle(
                     fontFamily: 'medium', color: R.colors.grey, fontSize: 12),
               ),
@@ -226,7 +226,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             child: customTextField(
                 hintTextSize: 12,
-                hintText: 'Password',
+                hintText: 'Password'.tr,
                 controller: newPassword,
                 color: R.colors.lightGrey,
                 height: 45,
@@ -239,7 +239,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildUpdateButton() {
     return Container(
-      margin: EdgeInsets.only(top: 30, bottom: 20,left: 15,right: 15),
+      margin: EdgeInsets.only(top: 30, bottom: 20, left: 15, right: 15),
       child: customButton(
           margin: 20,
           width: MediaQuery.of(context).size.width,
@@ -247,7 +247,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           onPress: (() {
             Get.toNamed('otp_screen');
           }),
-          title: 'Update',
+          title: 'Update'.tr,
           color: R.colors.buttonColor,
           height: 45,
           borderColour: R.colors.transparent,

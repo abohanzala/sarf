@@ -10,7 +10,7 @@ Widget customTextField(
     required Color color,
     required double height,
     double? hintTextSize,
-    Icon? hysterik,
+    bool? hysterik,
     required Color borderColour,
     TextAlign? textAlign}) {
   return Container(
@@ -93,14 +93,16 @@ Container customButton({
               ),
             ),
           ),
-       optionalNavigateIcon==true ?   Container(
-            margin: EdgeInsets.only(right: 20),
-            child: Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 15,
-              color: R.colors.white,
-            ),
-          ) :Container()
+          optionalNavigateIcon == true
+              ? Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 15,
+                    color: R.colors.white,
+                  ),
+                )
+              : Container()
         ],
       ),
     ),
