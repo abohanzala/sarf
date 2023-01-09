@@ -105,6 +105,13 @@ class LocaleString extends Translations {
           "ID": "ID",
           "Date": "Date",
           "Status": "Status",
+          "Delete my account": "Delete my account",
+          "Type here": "Type here",
+          "Reason for deleting the account": "Reason for deleting the account",
+          "I accept the terms & conditions": "I accept the terms & conditions",
+          
+
+
           
           
           

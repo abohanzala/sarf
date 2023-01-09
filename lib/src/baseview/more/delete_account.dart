@@ -60,7 +60,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                 ),
                 SizedBox(width: 10.w),
                 Text(
-                  'Delete my account',
+                  'Delete my account'.tr,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -85,7 +85,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Reason for deleting the account',
+                      'Reason for deleting the account'.tr,
                       style: TextStyle(
                         color: R.colors.grey.withOpacity(1),
                         fontSize: 14.sp,
@@ -99,7 +99,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                         fillColor: R.colors.lightGrey,
                         filled: true,
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: 'Type here',
+                        hintText: 'Type here'.tr,
                         hintStyle: TextStyle(
                           color: R.colors.grey,
                           fontSize: 14.sp,
@@ -141,7 +141,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                           width: 7.w,
                         ),
                         Text(
-                          'I accept the terms & conditions',
+                          'I accept the terms & conditions'.tr,
                           style: TextStyle(
                             color: R.colors.grey,
                             fontSize: 13.sp,
@@ -166,7 +166,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
                         ),
                         child: Center(
                           child: Text(
-                            'Next',
+                            'Next'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14.sp,
