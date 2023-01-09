@@ -45,7 +45,8 @@ class LocaleString extends Translations {
           "In Process Development":"In Process Development",
           "Upload Image":"Upload Image",
           "(Optional)":"(Optional)",
-          "Submit":"Submit"
+          "Submit":"Submit",
+          "Full Name":"Full Name"
 
         },
         'ar_SA': {},

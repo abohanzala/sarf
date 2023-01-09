@@ -204,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
             flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) {
               phone.text = number.completeNumber;
-              loginController.phone.text=phone.text;
+              loginController.phone.text = phone.text;
               print(
                   'This is my phoneNumber===============${loginController.phone}');
             },
@@ -212,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onCountryChanged: (country) {
               // loginController.phone.text = phone.text.toString();
 
-            //  setState(() => countryName = country.code);
+              //  setState(() => countryName = country.code);
             },
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -310,8 +310,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: InkWell(
         onTap: () {
+          //  Get.toNamed(RoutesName.Base);
           print(
-              'This is my phoneNumber===============${loginController.phone}');
+              'This is my phoneNumber before apiCall===============${loginController.phone}');
           if (loginController.loginFormKey.currentState!.validate()) {
             loginController.login();
           }

@@ -83,8 +83,6 @@ class _RegistrationState extends State<Registration> {
           children: [
             buildRegisterText(),
             buildPhonefield(),
-            buildPasswordField(),
-            buildAgreeToTermsAndConditionsBox(),
             buildNextButton(),
           ],
         ),
@@ -190,7 +188,7 @@ class _RegistrationState extends State<Registration> {
   }
 
   buildPhonefield() {
-    return Material(
+    return Form(
       child: Row(
         children: [
           Expanded(

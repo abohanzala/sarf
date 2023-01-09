@@ -19,10 +19,13 @@ class RegistrationDetails extends StatefulWidget {
 
 class _RegistrationDetailsState extends State<RegistrationDetails> {
   TextEditingController companyNameController = TextEditingController();
+  FocusNode searchFieldNode = FocusNode();
   bool business = true;
   bool personal = false;
   bool onlineBusiness = true;
   bool offlineBusiness = false;
+  bool checkBox = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,6 +114,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         children: [
           buildUserTypeText(),
           buildUserTypeOptions(),
+          buildPasswordField(),
           business ? buildCompanyNameField() : buildFullNameField(),
           buildSelectCityDropDown(),
           business ? buildTypeDropDown() : Container(),
@@ -123,7 +127,73 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           business ? buildWebsiteField() : Container(),
           offlineBusiness ? buildLocationButton() : Container(),
           business ? buildUploadImage() : Container(),
+          buildAgreeToTermsAndConditionsBox(),
           buildSubmitButton()
+        ],
+      ),
+    );
+  }
+
+  buildAgreeToTermsAndConditionsBox() {
+    return Container(
+      margin: EdgeInsets.only(top: 30),
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            checkColor: Colors.white,
+            activeColor: Color(0xFF2C313E),
+            value: this.checkBox,
+            onChanged: (bool? value) {
+              setState(() {
+                this.checkBox = value!;
+              });
+            },
+          ),
+          Text(
+            'I Accept'.tr,
+            style: TextStyle(fontSize: 17, color: Colors.grey),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Text(
+              ' Terms & Conditions'.tr,
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 17,
+              ),
+            ),
+          ),
+        ], //<Widget>[]
+      ),
+    );
+  }
+
+  Widget buildPasswordField() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+      child: Row(
+        children: [
+          Container(
+              margin: EdgeInsets.only(left: 20, right: 10, top: 3),
+              child: Image.asset('assets/images/passwordIcon.png',
+                  height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
+          Expanded(
+            child: TextField(
+              focusNode: searchFieldNode,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: 'Enter Password'.tr,
+                  hintStyle: TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'medium',
+                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                  border: InputBorder.none),
+            ),
+          )
         ],
       ),
     );
@@ -458,7 +528,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Full Name *',
+          hintText: 'Full Name'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
