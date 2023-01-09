@@ -202,11 +202,17 @@ class _LoginScreenState extends State<LoginScreen> {
             countries: ["SA"],
             showDropdownIcon: false,
             flagsButtonPadding: EdgeInsets.only(left: 10),
-            onChanged: (number) => phone.text = number.completeNumber,
+            onChanged: (number) {
+              phone.text = number.completeNumber;
+              loginController.phone.text=phone.text;
+              print(
+                  'This is my phoneNumber===============${loginController.phone}');
+            },
             initialCountryCode: 'SA',
             onCountryChanged: (country) {
-              loginController.phone.text = phone.toString();
-              setState(() => countryName = country.code);
+              // loginController.phone.text = phone.text.toString();
+
+            //  setState(() => countryName = country.code);
             },
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -304,6 +310,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: InkWell(
         onTap: () {
+          print(
+              'This is my phoneNumber===============${loginController.phone}');
           if (loginController.loginFormKey.currentState!.validate()) {
             loginController.login();
           }
