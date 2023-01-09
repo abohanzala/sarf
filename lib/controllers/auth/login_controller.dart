@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../constant/api_links.dart';
+import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 
@@ -57,6 +58,9 @@ void onInit(){
     debugPrint("aaaaaaaaaaaa$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
+      Get.snackbar('Title', 'Message',
+      backgroundColor: R.colors.themeColor,
+      );
     //   userInfo = UserInfo.fromMap(response);
     //  await  storage.write('user_token', userInfo.token);
     //  await storage.write('userId', userInfo.user!.id);
