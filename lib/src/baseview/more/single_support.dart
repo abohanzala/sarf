@@ -113,8 +113,8 @@ class _SingleSupportState extends State<SingleSupport> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Type',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
-                                    Text('Status',style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
+                                    Text('Type'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
+                                    Text('Status'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12,fontWeight: FontWeight.w500),),
                                 ],),
                                 const SizedBox(height: 5,),
                                 Row(
@@ -143,7 +143,7 @@ class _SingleSupportState extends State<SingleSupport> {
                                     if(index == 0)
                                     Row(
                                       children: [
-                                        Text('You',style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w700),),
+                                        Text('You'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w700),),
                                         Text(' - ',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                                         Text('12-04-2021',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                                       ],
@@ -151,7 +151,7 @@ class _SingleSupportState extends State<SingleSupport> {
                                     if(index == 1)
                                      Row(
                                       children: [
-                                        Text('Reply by ',style: TextStyle(color: R.colors.blue,fontSize: 14,fontWeight: FontWeight.w700),),
+                                        Text('Reply by '.tr,style: TextStyle(color: R.colors.blue,fontSize: 14,fontWeight: FontWeight.w700),),
                                         Text('Azaz Khan',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                                         Text(' - ',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                                         Text('12-04-2021',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
@@ -247,8 +247,8 @@ class _SingleSupportState extends State<SingleSupport> {
               child: Row(
                 children: [
                   Expanded(child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Reply here',
+                    decoration:  InputDecoration(
+                      hintText: 'Reply here'.tr,
                       border: InputBorder.none,
                     ),
                   )),

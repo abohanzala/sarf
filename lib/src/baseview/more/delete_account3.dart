@@ -67,7 +67,7 @@ class _DeleteAccount3State extends State<DeleteAccount3> {
                               height: 20.h,
                             ),
                             Text(
-                              'Account Delete',
+                              'Account Delete'.tr,
                               style: TextStyle(
                                 color: R.colors.black,
                                 fontSize: 18.sp,
@@ -78,7 +78,7 @@ class _DeleteAccount3State extends State<DeleteAccount3> {
                               height: 5.h,
                             ),
                             Text(
-                              'Your account has been deleted successfully',
+                              'Your account has been deleted successfully'.tr,
                               style: TextStyle(
                                 color: R.colors.black,
                                 fontSize: 12.sp,
@@ -110,7 +110,7 @@ class _DeleteAccount3State extends State<DeleteAccount3> {
                         ),
                         child: Center(
                           child: Text(
-                            'Go to Login',
+                            'Go to Login'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14.sp,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../resources/resources.dart';
@@ -68,7 +69,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
               width: 20,
             ),
             Text(
-              'Change Profile',
+              'Change Profile'.tr,
               style: TextStyle(
                   color: R.colors.white, fontFamily: 'bold', fontSize: 16),
             )
@@ -178,7 +179,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Text(
-                'Location',
+                'Location'.tr,
                 style: TextStyle(
                     color: R.colors.black, fontSize: 13, fontFamily: 'medium'),
               ),
@@ -207,7 +208,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
             children: [
               Expanded(
                   child: Text(
-                'Crockery',
+                'Crockery'.tr,
                 style: TextStyle(
                     fontSize: 12, fontFamily: 'medium', color: R.colors.black),
               )),
@@ -232,7 +233,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
           onPress: (() {
             //Get.toNamed('otp_screen');
           }),
-          title: 'Update',
+          title: 'Update'.tr,
           color: R.colors.buttonColor,
           height: 45,
           borderColour: R.colors.transparent,

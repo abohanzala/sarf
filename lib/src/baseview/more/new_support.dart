@@ -20,7 +20,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Add New Support',true,false,'',false),
+          customAppBar('Add New Support'.tr,true,false,'',false),
           //appbarSearch(),
           //const SizedBox(height: 10,),
          Transform(
@@ -60,7 +60,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                 children: [
                                   Expanded(
                                       child: Text(
-                                    'Select type',
+                                    'Select type'.tr,
                                     style: TextStyle(
                                         fontSize: 14, color: R.colors.grey),
                                   )),
@@ -79,7 +79,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                 child: TextFormField(
                                   maxLines: 10,
                                   decoration: InputDecoration(
-                                    hintText: 'Message here',
+                                    hintText: 'Message here'.tr,
                                     hintStyle: TextStyle(color: R.colors.grey),
                                     focusedBorder: InputBorder.none,
                                     border: InputBorder.none,
@@ -108,7 +108,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                         ),
                                         const SizedBox(width: 5,),
                                         Text(
-                                          'Camera',
+                                          'Camera'.tr,
                                           style: TextStyle(
                                               fontSize: 14, color: R.colors.white),
                                         )
@@ -128,7 +128,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                         ),
                                         const SizedBox(width: 5,),
                                         Text(
-                                          'Gallery',
+                                          'Gallery'.tr,
                                           style: TextStyle(
                                               fontSize: 14, color: R.colors.white),
                                         )
@@ -212,7 +212,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                         color: R.colors.themeColor),
                                     child: Center(
                                         child: Text(
-                                      'Submit',
+                                      'Submit'.tr,
                                       style: TextStyle(color: R.colors.white),
                                     )),
                                   ),
