@@ -513,9 +513,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
-          hysterik: true,
+          makeCompulsoryField: true,
           hintTextSize: 12,
-          hintText: 'Company Name *'.tr,
+          hintText: 'Company Name'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
