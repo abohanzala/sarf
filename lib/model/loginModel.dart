@@ -13,17 +13,17 @@ class LoginModel {
     message = json['message'];
     redirect = json['redirect'];
     token = json['token'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    data['redirect'] = this.redirect;
-    data['token'] = this.token;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    data['redirect'] = redirect;
+    data['token'] = token;
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
     return data;
   }
@@ -36,9 +36,9 @@ class User {
   String? email;
   String? firebaseEmail;
   String? mobile;
-  Null? photo;
+  String? photo;
   int? role;
-  Null? thumbnail;
+  String? thumbnail;
   String? theme;
   String? locale;
   int? userType;
@@ -47,10 +47,10 @@ class User {
   int? status;
   String? androidDeviceId;
   String? iosDeviceId;
-  Null? webDeviceId;
+  String? webDeviceId;
   String? createdAt;
   String? updatedAt;
-  Null? reason;
+  String? reason;
 
   User(
       {this.id,
@@ -100,28 +100,28 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['username'] = this.username;
-    data['email'] = this.email;
-    data['firebase_email'] = this.firebaseEmail;
-    data['mobile'] = this.mobile;
-    data['photo'] = this.photo;
-    data['role'] = this.role;
-    data['thumbnail'] = this.thumbnail;
-    data['theme'] = this.theme;
-    data['locale'] = this.locale;
-    data['user_type'] = this.userType;
-    data['account_type'] = this.accountType;
-    data['is_online'] = this.isOnline;
-    data['status'] = this.status;
-    data['android_device_id'] = this.androidDeviceId;
-    data['ios_device_id'] = this.iosDeviceId;
-    data['web_device_id'] = this.webDeviceId;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['reason'] = this.reason;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['username'] = username;
+    data['email'] = email;
+    data['firebase_email'] = firebaseEmail;
+    data['mobile'] = mobile;
+    data['photo'] = photo;
+    data['role'] = role;
+    data['thumbnail'] = thumbnail;
+    data['theme'] = theme;
+    data['locale'] = locale;
+    data['user_type'] = userType;
+    data['account_type'] = accountType;
+    data['is_online'] = isOnline;
+    data['status'] = status;
+    data['android_device_id'] = androidDeviceId;
+    data['ios_device_id'] = iosDeviceId;
+    data['web_device_id'] = webDeviceId;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['reason'] = reason;
     return data;
   }
 }

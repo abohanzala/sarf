@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 import '../../constant/api_links.dart';
+import '../../model/loginModel.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
@@ -21,16 +23,8 @@ class LoginController extends GetxController {
 
   Future login() async {
     openLoader();
-    //check validation
-    // final isValid = loginFormKey.currentState!.validate();
-    // if (!isValid) {
-    //   return;
-    // }
-    // loginFormKey.currentState!.save();
-    // validation ends
     var a = phone.text;
     final splitted = a.split('+');
-    print(splitted[1]);
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': splitted,
@@ -38,71 +32,76 @@ class LoginController extends GetxController {
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
     };
-
-    //DialogBoxes.openLoadingDialog();
-
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
       if (error is BadRequestException) {
         Get.back();
+        var apiError = json.decode(error.message!);
         Get.snackbar(
-          'Title',
-          'Message',
+          'Error'.tr,
+          apiError["reason"].toString(),
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
-        var apiError = json.decode(error.message!);
-        print(apiError.toString());
-
-        // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
-        //HandlingErrors().handleError(error);
+    if (error is BadRequestException) {
+      var message = error.message;
+      Get.snackbar(
+          'Error'.tr,
+          message.toString(),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+    } else if (error is FetchDataException) {
+      var message = error.message;
+      Get.snackbar(
+          'Error'.tr,
+          message.toString(),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+    } else if (error is ApiNotRespondingException) {
+      
+      Get.snackbar(
+          'Error'.tr,
+          'Oops! It took longer to respond.'.tr,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+    }
+
       }
-    });
-    // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    }); 
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
       Get.snackbar(
-        'Title',
-        'Login Successfully',
+        'Success'.tr,
+        'Login Successfully'.tr,
         snackPosition: SnackPosition.TOP,
-        backgroundColor: R.colors.themeColor,
+        backgroundColor: R.colors.blue,
       );
-      //   userInfo = UserInfo.fromMap(response);
-      //  await  storage.write('user_token', userInfo.token);
-      //  await storage.write('userId', userInfo.user!.id);
-      //  await storage.write('name', userInfo.user!.name);
-      //  await storage.write('username', userInfo.user!.username);
-      //  await storage.write('email', userInfo.user!.email);
-      //  await storage.write('firebase_email', userInfo.user!.firebaseEmail);
-      //  await storage.write('mobile', userInfo.user!.mobile);
-      //  await storage.write('photo', userInfo.user!.photo);
-      //  await storage.write('status', userInfo.user!.status);
-      //   Navigator.of(Get.context!).pop();
-
-      //  await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile')).then((value){
-      //     SnakeBars.showSuccessSnake(description: userInfo.message);
-      //     Get.offNamed(Routes.BOTTOM_NAVIGATION);
-      //   }).catchError((error){
-      //     SnakeBars.showErrorSnake(description: error.toString());
-      //   });
-
+        var userInfo = LoginModel.fromJson(response);
+       await GetStorage().write('user_token', userInfo.token);
+       await GetStorage().write('userId', userInfo.user!.id);
+       await GetStorage().write('name', userInfo.user!.name);
+       await GetStorage().write('username', userInfo.user!.username);
+       await GetStorage().write('email', userInfo.user!.email);
+       await GetStorage().write('firebase_email', userInfo.user!.firebaseEmail);
+       await GetStorage().write('mobile', userInfo.user!.mobile);
+       await GetStorage().write('photo', userInfo.user!.photo);
+       await GetStorage().write('status', userInfo.user!.status);
+       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();
       Get.snackbar(
-        'Title',
-        'Message',
+        'Error'.tr,
+        'Something wnet wrong try later'.tr,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
-      // SnakeBars.showErrorSnake(description: response['message']);
-      // Navigator.of(Get.context!).pop();
     }
     return null;
-    // return null;
   }
 }
