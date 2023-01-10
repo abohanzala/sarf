@@ -58,7 +58,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                 
                 
                 Text(
-                  'Alerts' ,
+                  'Alerts'.tr ,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.sp,
@@ -93,7 +93,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                         child: Icon(Icons.close,color: R.colors.lightBlue3,size: 12,),
                       ),
                       const SizedBox(width: 8,),
-                      Text('Clear All',style: TextStyle(color: R.colors.white,fontSize: 12.sp,fontWeight: FontWeight.w500),),
+                      Text('Clear All'.tr,style: TextStyle(color: R.colors.white,fontSize: 12.sp,fontWeight: FontWeight.w500),),
                     ],
                   ),
                 ),

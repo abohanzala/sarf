@@ -60,7 +60,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                 ),
                 SizedBox(width: 10.w),
                 Text(
-                  'Delete my account',
+                  'Delete my account'.tr,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -85,7 +85,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Enter OTP',
+                      'Enter OTP'.tr,
                       style: TextStyle(
                         color: R.colors.grey.withOpacity(1),
                         fontSize: 14.sp,
@@ -134,7 +134,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                         ),
                         child: Center(
                           child: Text(
-                            'Confirm & Delete',
+                            'Confirm & Delete'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14.sp,

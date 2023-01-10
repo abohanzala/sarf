@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../resources/dummy.dart';
 import '../../resources/resources.dart';
@@ -124,7 +125,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
               width: 20,
             ),
             Text(
-              'Privacy Policy',
+              'Privacy Policy'.tr,
               style: TextStyle(
                   color: R.colors.white, fontFamily: 'bold', fontSize: 16),
             )
@@ -252,7 +253,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           width: 10,
         ),
         Text(
-          'Share',
+          'Share'.tr,
           style: TextStyle(fontSize: 15, color: R.colors.white),
         )
       ],

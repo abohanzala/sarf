@@ -75,7 +75,7 @@ class _SettingsState extends State<Settings> {
               width: 20,
             ),
             Text(
-              'Settings',
+              'Settings'.tr,
               style: TextStyle(
                   color: R.colors.white, fontFamily: 'bold', fontSize: 16),
             )
@@ -135,7 +135,7 @@ class _SettingsState extends State<Settings> {
           onPress: (() {
             //   Get.toNamed('otp_screen');
           }),
-          title: 'Update',
+          title: 'Update'.tr,
           color: R.colors.buttonColor,
           height: 45,
           borderColour: R.colors.transparent,
@@ -223,7 +223,7 @@ class _SettingsState extends State<Settings> {
   buildChangePasswordText() {
     return Expanded(
       child: Text(
-        'Change Password',
+        'Change Password'.tr,
         style: TextStyle(
             color: R.colors.black, fontFamily: 'medium', fontSize: 14),
       ),
@@ -233,7 +233,7 @@ class _SettingsState extends State<Settings> {
   buildProfileText() {
     return Expanded(
       child: Text(
-        'Profile',
+        'Profile'.tr,
         style: TextStyle(
             color: R.colors.black, fontFamily: 'medium', fontSize: 14),
       ),
@@ -243,7 +243,7 @@ class _SettingsState extends State<Settings> {
   buildLanguageText() {
     return Expanded(
       child: Text(
-        'Language',
+        'Language'.tr,
         style: TextStyle(
             color: R.colors.black, fontFamily: 'medium', fontSize: 14),
       ),
@@ -378,7 +378,7 @@ class _SettingsState extends State<Settings> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Text(
-        'Change Password',
+        'Change Password'.tr,
         style:
             TextStyle(fontSize: 16, fontFamily: 'bold', color: R.colors.black),
       ),
@@ -413,7 +413,7 @@ class _SettingsState extends State<Settings> {
           height: 45,
           borderColour: R.colors.transparent,
           controller: newPassword,
-          hintText: 'Enter New Password',
+          hintText: 'Enter New Password'.tr,
           hintStyle: TextStyle(color: R.colors.black)),
     );
   }
@@ -427,7 +427,7 @@ class _SettingsState extends State<Settings> {
           height: 45,
           borderColour: R.colors.transparent,
           controller: confirmNewPassword,
-          hintText: 'Confirm New Password',
+          hintText: 'Confirm New Password'.tr,
           hintStyle: TextStyle(color: R.colors.black)),
     );
   }
