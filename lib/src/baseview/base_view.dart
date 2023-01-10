@@ -27,8 +27,8 @@ class _BaseViewState extends State<BaseView> {
            selectedItemColor: R.colors.themeColor,
            unselectedItemColor: R.colors.grey,
            showUnselectedLabels: true,
-           selectedFontSize: 14,
-           unselectedFontSize: 14,
+           selectedFontSize: 12,
+           unselectedFontSize: 12,
            type: BottomNavigationBarType.fixed,
            elevation: 5,
           items: [

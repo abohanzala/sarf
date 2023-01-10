@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          initialRoute: RoutesName.LogIn,
+          initialRoute: GetStorage().read('user_token') == null ?  RoutesName.LogIn : RoutesName.base,
           onGenerateRoute: Routes.generateRoute,
           locale: const Locale('en', 'US'),
           translations: LocaleString(),

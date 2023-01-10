@@ -8,4 +8,8 @@ class ApiLinks {
   static const String loginUser = '$base/login';
   static const String register = '$base/register';
   static const String verify_otp = '$base/verify_otp';
+  static const String membersList = '$base/member_list?language=';
+  static const String cityList = '$base/cities_members?language=';
+  static const String getHome = '$base/user';
+  static const String addBudget = '$base/budget/add';
 }
