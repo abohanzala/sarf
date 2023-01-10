@@ -10,12 +10,12 @@ import 'locale/locale_strings.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/routes_name.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  Get.put<LoginController>( LoginController());
-  Get.put<RegisterController>( RegisterController());
-  Get.put<OtpController>( OtpController());
+  Get.put<LoginController>(LoginController());
+  Get.put<RegisterController>(RegisterController());
+  Get.put<OtpController>(OtpController());
   runApp(const MyApp());
 }
 
@@ -31,19 +31,19 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
-            builder: BotToastInit(),
-            navigatorObservers: [BotToastNavigatorObserver()],
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            initialRoute: RoutesName.LogIn,
-            onGenerateRoute: Routes.generateRoute,
-            locale: const Locale('en', 'US'),
-            translations: LocaleString(),
-            fallbackLocale: const Locale('en', 'US'),
-            );
+          builder: BotToastInit(),
+          navigatorObservers: [BotToastNavigatorObserver()],
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: RoutesName.LogIn,
+          onGenerateRoute: Routes.generateRoute,
+          locale: const Locale('en', 'US'),
+          translations: LocaleString(),
+          fallbackLocale: const Locale('en', 'US'),
+        );
       },
     );
   }
