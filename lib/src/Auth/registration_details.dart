@@ -8,6 +8,7 @@ import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 
+import '../../controllers/auth/data_collection_controller.dart';
 import '../../resources/resources.dart';
 
 class RegistrationDetails extends StatefulWidget {
@@ -18,6 +19,8 @@ class RegistrationDetails extends StatefulWidget {
 }
 
 class _RegistrationDetailsState extends State<RegistrationDetails> {
+  DataCollectionController dataCollectionController =
+      Get.find<DataCollectionController>();
   TextEditingController companyNameController = TextEditingController();
   FocusNode searchFieldNode = FocusNode();
   bool business = true;
@@ -25,6 +28,19 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   bool onlineBusiness = true;
   bool offlineBusiness = false;
   bool checkBox = false;
+  bool citySelected = false;
+  int selectedCityIndex = -1;
+  String finalSelectedCity = '';
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() async {
+    await dataCollectionController.dataCollection();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +217,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildUploadImage() {
     return InkWell(
-      onTap: () {
-        openPopUpOptions('In Process Development'.tr);
-      },
+      onTap: () {},
       child: Column(
         children: [
           Container(
@@ -513,9 +527,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
-          hysterik: true,
+          makeCompulsoryField: true,
           hintTextSize: 12,
-          hintText: 'Company Name *'.tr,
+          hintText: 'Company Name'.tr,
           controller: companyNameController,
           color: R.colors.lightGrey,
           height: 45,
@@ -601,7 +615,119 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     );
   }
 
-  void openPopUpOptions(String message) {
+  void openPopUpOptionsForCities() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width,
+                        //  margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15.0),
+                              topRight: Radius.circular(12.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0)),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'Select City',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'bold',
+                                  color: R.colors.buttonColor),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(top: 10, bottom: 10),
+                                //  height: MediaQuery.of(context).size.height / 4,
+                                color: R.colors.lightGrey,
+                                width: MediaQuery.of(context).size.width,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount:
+                                        dataCollectionController.cities!.length,
+                                    itemBuilder: (BuildContext, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          selectedCityIndex = index;
+                                          print(selectedCityIndex);
+                                          finalSelectedCity =
+                                              dataCollectionController
+                                                  .cities![selectedCityIndex]
+                                                  .name
+                                                  .toString();
+                                          print(finalSelectedCity.tr);
+                                          setState(() {});
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Container(
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    selectedCityIndex == index
+                                                        ? R.colors.buttonColor
+                                                        : Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                border: Border.all(
+                                                    color: Colors.grey)),
+                                            margin: EdgeInsets.only(top: 2),
+                                            child: Center(
+                                              child: Text(
+                                                dataCollectionController
+                                                    .cities![index].name!.en
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: R.colors.black),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ));
+        });
+      },
+    );
+  }
+
+  void openPopUpOptionsForTypes() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -623,24 +749,76 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   child: Container(
                     height: MediaQuery.of(context).size.height / 2,
                     width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                    //  margin: const EdgeInsets.symmetric(horizontal: 15.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(12.0),
+                          topLeft: Radius.circular(15.0),
                           topRight: Radius.circular(12.0),
                           bottomLeft: Radius.circular(8.0),
                           bottomRight: Radius.circular(8.0)),
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
                         Text(
-                          message,
+                          'Select Type',
                           style: TextStyle(
-                              fontFamily: 'regular', color: R.colors.grey),
-                        )
+                              fontSize: 18,
+                              fontFamily: 'bold',
+                              color: R.colors.buttonColor),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(top: 10, bottom: 10),
+                            //  height: MediaQuery.of(context).size.height / 4,
+                            color: R.colors.lightGrey,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount:
+                                    dataCollectionController.types!.length,
+                                itemBuilder: (BuildContext, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      selectedCityIndex = index;
+                                      print(selectedCityIndex);
+                                      setState(() {});
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: selectedCityIndex == index
+                                                ? R.colors.buttonColor
+                                                : Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        margin: EdgeInsets.only(top: 2),
+                                        child: Center(
+                                          child: Text(
+                                            dataCollectionController
+                                                .types![index].expenseName
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: R.colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -663,7 +841,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          openPopUpOptions('No Cities Available');
+          openPopUpOptionsForCities();
         },
         child: Container(
           margin: EdgeInsets.only(left: 15, right: 15),
@@ -693,7 +871,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          openPopUpOptions('No Types Available');
+          openPopUpOptionsForTypes();
         },
         child: Container(
           margin: EdgeInsets.only(left: 15, right: 15),

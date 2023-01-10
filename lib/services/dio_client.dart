@@ -32,9 +32,10 @@ class DioClient {
   }
 
   //POST
-  Future<dynamic> post([String api = '', dynamic payloadObj,bool? multiForm]) async {
+  Future<dynamic> post(
+      [String api = '', dynamic payloadObj, bool? multiForm]) async {
     var uri = Uri.parse(api);
-    var payload = multiForm == true? payloadObj : json.encode(payloadObj);
+    var payload = multiForm == true ? payloadObj : json.encode(payloadObj);
     try {
       Dio dio = Dio();
       var token = storage.read('user_token');

@@ -10,7 +10,7 @@ Widget customTextField(
     required Color color,
     required double height,
     double? hintTextSize,
-    bool? hysterik,
+    bool? makeCompulsoryField,
     required Color borderColour,
     TextAlign? textAlign}) {
   return Container(
@@ -27,13 +27,12 @@ Widget customTextField(
             textAlign: textAlign ?? TextAlign.start,
             controller: controller,
             decoration: InputDecoration(
-              hintStyle: TextStyle(fontSize: hintTextSize),
-              contentPadding: const EdgeInsets.only(left: 15, right: 15),
-              enabledBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: hintText.tr,
-            ),
+                hintStyle: TextStyle(fontSize: hintTextSize),
+                contentPadding: const EdgeInsets.only(left: 15, right: 15),
+                enabledBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                hintText: hintText.tr),
           ),
         ),
       ],
