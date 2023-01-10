@@ -127,6 +127,10 @@ class LocaleString extends Translations {
           "Enter New Password": "Enter New Password", 
           "Alerts": "Alerts", 
           "Clear All": "Clear All", 
+          "Oops! It took longer to respond.": "Oops! It took longer to respond.", 
+          "Login Successfully": "Login Successfully",
+          "Error": "Error",
+          "Something wnet wrong try later": "Something wnet wrong try later",
         },
         'ar_SA': {
           "Login": "Login",
@@ -252,6 +256,11 @@ class LocaleString extends Translations {
           "Enter New Password": "Enter New Password", 
           "Alerts": "Alerts", 
           "Clear All": "Clear All", 
+          "Oops! It took longer to respond.": "Oops! It took longer to respond.",
+          "Login Successfully": "Login Successfully",
+          "Error": "Error",
+          "Something wnet wrong try later": "Something wnet wrong try later",
+
         },
       };
 }
