@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/support/support_controller.dart';
 
 import '../../../resources/resources.dart';
@@ -16,6 +20,24 @@ class NewSupportScreen extends StatefulWidget {
 class _NewSupportScreenState extends State<NewSupportScreen> {
   SupportController ctr = Get.find<SupportController>();
   TextEditingController txt = TextEditingController();
+
+  Future pickImage(ImageSource source) async {
+    
+    try {
+     final pickedImage = await ImagePicker().pickImage(source: source);
+      
+      if(pickedImage == null) return;
+
+        ctr.uploadImages.add(File(pickedImage.path));
+      // setState(() {
+      //   image = File(pickedImage.path);
+      // });
+
+    } on PlatformException catch(e) {
+      debugPrint('Failed to pick image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,13 +78,13 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                   Get.bottomSheet(Container(
                                           decoration: BoxDecoration(
                                             color: R.colors.white,
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)) 
+                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)) 
                                             ),
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             child: ListView.separated(
                                               itemBuilder: (context, index) {
                                                var singleSupportType = ctr.supportTypes[index];
-                                               print(singleSupportType.name?.en);
+                                               //print(singleSupportType.name?.en);
                                                 return Container(
                                                   decoration: BoxDecoration(
                                                     color: R.colors.white,
@@ -74,6 +96,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                                       ctr.selectedTypeName.value = GetStorage().read("lang") == 'en'? singleSupportType.name?.en ?? "" : singleSupportType.name?.ar ?? "";
                                                       ctr.selectedTypeId.value =  singleSupportType.id.toString();
                                                       ctr.selectedTypeIndex.value = index + 1;
+                                                      Get.back();
                                                     },
                                                     child: Obx(
                                                       () => Row(
@@ -81,7 +104,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                                           Container(
                                                             width: 20,
                                                             height: 20,
-                                                            padding: EdgeInsets.all(2),
+                                                            padding: const EdgeInsets.all(2),
                                                             decoration: BoxDecoration(
                                                               color: R.colors.white,
                                                               shape: BoxShape.circle,
@@ -96,8 +119,8 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          SizedBox(width: 8,),
-                                                          Text(GetStorage().read("lang") == 'en'? singleSupportType.name?.en ?? "" : singleSupportType.name?.ar ?? "",style:  TextStyle(fontSize: 16),),
+                                                          const SizedBox(width: 8,),
+                                                          Text(GetStorage().read("lang") == 'en'? singleSupportType.name?.en ?? "" : singleSupportType.name?.ar ?? "",style:  const TextStyle(fontSize: 16),),
                                                         ],
                                                       ),
                                                     )),
@@ -160,44 +183,54 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: R.colors.lightBlue,
+                                      GestureDetector(
+                                        onTap: (){
+                                          pickImage(ImageSource.camera);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: R.colors.lightBlue,
+                                              ),
+                                              padding: const EdgeInsets.all(10),
+                                              child: Icon(Icons.camera_alt,color: R.colors.white,size: 20,),
                                             ),
-                                            padding: const EdgeInsets.all(10),
-                                            child: Icon(Icons.camera_alt,color: R.colors.white,size: 20,),
-                                          ),
-                                          const SizedBox(width: 5,),
-                                          Text(
-                                            'Camera'.tr,
-                                            style: TextStyle(
-                                                fontSize: 14, color: R.colors.white),
-                                          )
-      
-                                        ],
+                                            const SizedBox(width: 5,),
+                                            Text(
+                                              'Camera'.tr,
+                                              style: TextStyle(
+                                                  fontSize: 14, color: R.colors.white),
+                                            )
+                                            
+                                          ],
+                                        ),
                                       ),
                                       const SizedBox(width: 16,),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: R.colors.lightBlue,
+                                      GestureDetector(
+                                        onTap: (){
+                                          pickImage(ImageSource.gallery);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: R.colors.lightBlue,
+                                              ),
+                                              padding: const EdgeInsets.all(10),
+                                              child: Icon(Icons.camera,color: R.colors.white,size: 20,),
                                             ),
-                                            padding: const EdgeInsets.all(10),
-                                            child: Icon(Icons.camera,color: R.colors.white,size: 20,),
-                                          ),
-                                          const SizedBox(width: 5,),
-                                          Text(
-                                            'Gallery'.tr,
-                                            style: TextStyle(
-                                                fontSize: 14, color: R.colors.white),
-                                          )
-      
-                                        ],
+                                            const SizedBox(width: 5,),
+                                            Text(
+                                              'Gallery'.tr,
+                                              style: TextStyle(
+                                                  fontSize: 14, color: R.colors.white),
+                                            )
+                                            
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -205,82 +238,105 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                 ),
                                 const SizedBox(height: 20,),
       
-                                Container(
-                                  width: Get.width,
-                                  padding: const EdgeInsets.symmetric(vertical: 0),
-                                  height: 80,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                                      
-                                  
-                                                          Expanded(
-                                                            child: ListView.builder(
-                                                              scrollDirection: Axis.horizontal,
-                                                              shrinkWrap: true,
-                                                              itemCount: 2,
-                                                              itemBuilder: (context,index){
-                                                              return Stack(
-                                                              //alignment: Alignment.topRight,
-                                                              children: [
-                                                                Container(
-                                                                  
-                                                                  width: 80,
-                                                                  height: 80,
-                                                                  margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                  padding: const EdgeInsets.all(8),
-                                                                  decoration: BoxDecoration(
-                                                                    color: R.colors.grey,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(10),
+                                Obx(
+                                  () => ctr.uploadImages.isEmpty ? const SizedBox() : Container(
+                                    width: Get.width,
+                                    padding: const EdgeInsets.symmetric(vertical: 0),
+                                    height: 80,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                                        
+                                    
+                                                            Expanded(
+                                                              child: ListView.builder(
+                                                                scrollDirection: Axis.horizontal,
+                                                                shrinkWrap: true,
+                                                                itemCount: ctr.uploadImages.length,
+                                                                itemBuilder: (context,index){
+                                                                  var singleImage = ctr.uploadImages[index];
+                                                                return Stack(
+                                                                //alignment: Alignment.topRight,
+                                                                children: [
+                                                                  Container(
+                                                                    
+                                                                    width: 80,
+                                                                    height: 80,
+                                                                    margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                    padding: const EdgeInsets.all(8),
+                                                                    decoration: BoxDecoration(
+                                                                     // image: DecorationImage(image: Image.file(singleImage.path) ,fit: BoxFit.cover),
+                                                                      //color: R.colors.grey,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(10),
+                                                                    ),
+                                                                    child: Image.file(singleImage,fit: BoxFit.cover,width: 80,height: 80,),
                                                                   ),
-                                                                ),
-                                                                Positioned(
-                                                                  top: 0,
-                                                                  right: 5,
-                                                                  child: Container(
-                                                                    height: 20,
-                                                                    width: 20,
-                                                                    //padding: const EdgeInsets.all(5),
-                                                                    decoration: const BoxDecoration(
-                                                                        color: Colors.red,
-                                                                        shape: BoxShape.circle),
-                                                                    child: Align(
-                                                                      alignment: Alignment.center,
-                                                                      child: Icon(
-                                                                        Icons.close,
-                                                                        size: 12,
-                                                                        color: R.colors.white,
+                                                                  Positioned(
+                                                                    top: 0,
+                                                                    right: 5,
+                                                                    child: GestureDetector(
+                                                                      onTap: (){
+                                                                        ctr.uploadImages.removeAt(index);
+                                                                      },
+                                                                      child: Container(
+                                                                        height: 30,
+                                                                        width: 30,
+                                                                        //padding: const EdgeInsets.all(5),
+                                                                        decoration: const BoxDecoration(
+                                                                            color: Colors.red,
+                                                                            shape: BoxShape.circle),
+                                                                        child: Align(
+                                                                          alignment: Alignment.center,
+                                                                          child: Icon(
+                                                                            Icons.close,
+                                                                            size: 12,
+                                                                            color: R.colors.white,
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            );
-                                                            
-                                                            }),
-                                                          ),
-                                    ],
+                                                                  )
+                                                                ],
+                                                              );
+                                                              
+                                                              }),
+                                                            ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 25,),
-                                InkWell(
-                                    onTap: (){
-      
-                                    },
-                                    child: Container(
-                                      width: Get.width,
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: R.colors.themeColor),
-                                      child: Center(
-                                          child: Text(
-                                        'Submit'.tr,
-                                        style: TextStyle(color: R.colors.white),
-                                      )),
+                                 InkWell(
+                                      onTap: (){
+                                        if(ctr.selectedTypeName.value == ''){
+                                          Get.snackbar('Error'.tr, 'Select type'.tr);
+                                          return;
+                                        }
+                                        if(txt.text.isEmpty){
+                                          Get.snackbar('Error'.tr, 'Message required'.tr);
+                                          return;
+                                        }
+                                        if(ctr.uploadImages.isEmpty){
+                                          Get.snackbar('Error'.tr, 'Image required'.tr);
+                                          return;
+                                        }
+                                        debugPrint('addddddddddddddddddddddddddddddd');
+                                      },
+                                      child: Container(
+                                        width: Get.width,
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: R.colors.themeColor),
+                                        child: Center(
+                                            child: Text(
+                                          'Submit'.tr,
+                                          style: TextStyle(color: R.colors.white),
+                                        )),
+                                      ),
                                     ),
-                                  ),
+                                
                                   const SizedBox(height: 10,),
       
                       ],

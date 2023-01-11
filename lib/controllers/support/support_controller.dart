@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ class SupportController extends GetxController{
   var selectedTypeName = ''.obs;
   var selectedTypeIndex = 0.obs;
   var selectedTypeId = ''.obs;
+  List<File> uploadImages = <File>[].obs;
 
   @override
   void onInit() async{
