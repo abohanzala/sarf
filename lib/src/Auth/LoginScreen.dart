@@ -8,6 +8,7 @@ import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 
+import '../../controllers/auth/forgot_password_controller.dart';
 import '../../resources/resources.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,6 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController password = TextEditingController();
   FocusNode searchFieldNode = FocusNode();
   LoginController loginController = Get.find<LoginController>();
+  ForgotPasswordController forgotPasswordController =
+      Get.find<ForgotPasswordController>();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  buildLoginCard() {
+  Widget buildLoginCard() {
     return Positioned(
       top: 250,
       child: Container(
@@ -211,16 +214,12 @@ class _LoginScreenState extends State<LoginScreen> {
             flagsButtonPadding: EdgeInsets.only(left: 10),
             onChanged: (number) {
               phone.text = number.completeNumber;
-              loginController.phone.text = phone.text;
+              forgotPasswordController.phone.text = phone.text;
               print(
-                  'This is my phoneNumber===============${loginController.phone}');
+                  'This is my phoneNumber===============${forgotPasswordController.phone}');
             },
             initialCountryCode: 'SA',
-            onCountryChanged: (country) {
-              // loginController.phone.text = phone.text.toString();
-
-              //  setState(() => countryName = country.code);
-            },
+            onCountryChanged: (country) {},
             decoration: InputDecoration(
               border: InputBorder.none,
               label: Container(
@@ -284,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  buildForgotPassword() {
+  Widget buildForgotPassword() {
     return InkWell(
       onTap: () {
         openForgotPasswordDialog();
@@ -463,7 +462,19 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed('change_password');
+          print(
+              'This is my phoneNumber===============${forgotPasswordController.phone}');
+          if (forgotPasswordController.phone.text.isEmpty ||
+              forgotPasswordController.phone.text == "+966") {
+            Get.snackbar(
+              'Alert',
+              'Enter Mobile Number',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+          } else {
+            forgotPasswordController.forgotPassword();
+          }
         },
         child: Center(
           child: Text(
