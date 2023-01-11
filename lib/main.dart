@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'controllers/auth/data_collection_controller.dart';
+import 'controllers/auth/forgot_password_controller.dart';
 import 'controllers/auth/login_controller.dart';
 import 'controllers/auth/otp_controller.dart';
 import 'controllers/auth/register_controller.dart';
@@ -20,6 +21,7 @@ void main() async {
   Get.put<OtpController>(OtpController());
   Get.put<DataCollectionController>(DataCollectionController());
   Get.put<RegistrationController>(RegistrationController());
+  Get.put<ForgotPasswordController>(ForgotPasswordController());
   runApp(const MyApp());
 }
 
