@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/support/support_controller.dart';
 
 import '../../../resources/resources.dart';
 import '../../widgets/custom_appbar.dart';
@@ -12,218 +14,281 @@ class NewSupportScreen extends StatefulWidget {
 }
 
 class _NewSupportScreenState extends State<NewSupportScreen> {
+  SupportController ctr = Get.find<SupportController>();
+  TextEditingController txt = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: R.colors.lightGrey,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          customAppBar('Add New Support'.tr,true,false,'',false),
-          //appbarSearch(),
-          //const SizedBox(height: 10,),
-         Transform(
-          transform: Matrix4.translationValues(0, -10, 0),
-           child: Container(
-                  width: Get.width,
-                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: R.colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text('Invoice No',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-                      //     Text('12-04-2021',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-                      //   ],
-                      // ),
-                      Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: R.colors.lightGrey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              //openPopUpOptions('No Types Available');
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 15, right: 15),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: Text(
-                                    'Select type'.tr,
-                                    style: TextStyle(
-                                        fontSize: 14, color: R.colors.grey),
-                                  )),
-                                  const Icon(Icons.arrow_drop_down),
-                                ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            customAppBar('Add New Support'.tr,true,false,'',false),
+            //appbarSearch(),
+            //const SizedBox(height: 10,),
+           Transform(
+            transform: Matrix4.translationValues(0, -10, 0),
+             child: Container(
+                    width: Get.width,
+                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: R.colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        
+                        Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: R.colors.lightGrey,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Obx(
+                              () => InkWell(
+                                onTap: () {
+                                  //openPopUpOptions('No Types Available');
+                                  Get.bottomSheet(Container(
+                                          decoration: BoxDecoration(
+                                            color: R.colors.white,
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)) 
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            child: ListView.separated(
+                                              itemBuilder: (context, index) {
+                                               var singleSupportType = ctr.supportTypes[index];
+                                               print(singleSupportType.name?.en);
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: R.colors.white,
+                                                  ),
+                                                  padding: const EdgeInsets.all(10),
+                                                  margin: const EdgeInsets.symmetric(vertical: 5),
+                                                  child: GestureDetector(
+                                                    onTap: (){
+                                                      ctr.selectedTypeName.value = GetStorage().read("lang") == 'en'? singleSupportType.name?.en ?? "" : singleSupportType.name?.ar ?? "";
+                                                      ctr.selectedTypeId.value =  singleSupportType.id.toString();
+                                                      ctr.selectedTypeIndex.value = index + 1;
+                                                    },
+                                                    child: Obx(
+                                                      () => Row(
+                                                        children: [
+                                                          Container(
+                                                            width: 20,
+                                                            height: 20,
+                                                            padding: EdgeInsets.all(2),
+                                                            decoration: BoxDecoration(
+                                                              color: R.colors.white,
+                                                              shape: BoxShape.circle,
+                                                              border: Border.all(color: R.colors.black,width: 1),
+                                                            ),
+                                                            child: Container(
+                                                              width: 20,
+                                                              height: 20,
+                                                              decoration: BoxDecoration(
+                                                                shape: BoxShape.circle,
+                                                                color: ctr.selectedTypeIndex.value - 1 == index ? R.colors.themeColor : R.colors.white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 8,),
+                                                          Text(GetStorage().read("lang") == 'en'? singleSupportType.name?.en ?? "" : singleSupportType.name?.ar ?? "",style:  TextStyle(fontSize: 16),),
+                                                        ],
+                                                      ),
+                                                    )),
+                                                );
+                                              }, separatorBuilder: (context, index){
+                                                return Divider(
+                                                  color: R.colors.lightBlue4,
+                                                  thickness: 0.2,
+                                                );
+                                              } , itemCount:ctr.supportTypes.length ),
+                                        ),
+                                        
+                                        
+                                        );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 15, right: 15),
+                                  child: Row(
+                                      children: [
+                                        Expanded(
+                                            child:  Text( ctr.selectedTypeName.value != '' ? ctr.selectedTypeName.value : "Select type".tr,
+                                                  style: TextStyle(
+                                                  fontSize: 14, color: R.colors.grey
+                                                  ),
+                                              ),
+                                            
+                                            ),
+                                        const Icon(Icons.arrow_drop_down),
+                                      ],
+                                    ),
+                                  
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16,),
-                        Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: R.colors.lightGrey),
-                                child: TextFormField(
-                                  maxLines: 10,
-                                  decoration: InputDecoration(
-                                    hintText: 'Message here'.tr,
-                                    hintStyle: TextStyle(color: R.colors.grey),
-                                    focusedBorder: InputBorder.none,
-                                    border: InputBorder.none,
+                          const SizedBox(height: 16,),
+                          Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: R.colors.lightGrey),
+                                  child: TextFormField(
+                                    maxLines: 10,
+                                    controller: txt,
+                                    decoration: InputDecoration(
+                                      hintText: 'Message here'.tr,
+                                      hintStyle: TextStyle(color: R.colors.grey),
+                                      focusedBorder: InputBorder.none,
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 16,),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: R.colors.blue,
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: R.colors.lightBlue,
+                                const SizedBox(height: 16,),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: R.colors.blue,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: R.colors.lightBlue,
+                                            ),
+                                            padding: const EdgeInsets.all(10),
+                                            child: Icon(Icons.camera_alt,color: R.colors.white,size: 20,),
                                           ),
-                                          padding: const EdgeInsets.all(10),
-                                          child: Icon(Icons.camera_alt,color: R.colors.white,size: 20,),
-                                        ),
-                                        const SizedBox(width: 5,),
-                                        Text(
-                                          'Camera'.tr,
-                                          style: TextStyle(
-                                              fontSize: 14, color: R.colors.white),
-                                        )
-
-                                      ],
-                                    ),
-                                    const SizedBox(width: 16,),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: R.colors.lightBlue,
+                                          const SizedBox(width: 5,),
+                                          Text(
+                                            'Camera'.tr,
+                                            style: TextStyle(
+                                                fontSize: 14, color: R.colors.white),
+                                          )
+      
+                                        ],
+                                      ),
+                                      const SizedBox(width: 16,),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: R.colors.lightBlue,
+                                            ),
+                                            padding: const EdgeInsets.all(10),
+                                            child: Icon(Icons.camera,color: R.colors.white,size: 20,),
                                           ),
-                                          padding: const EdgeInsets.all(10),
-                                          child: Icon(Icons.camera,color: R.colors.white,size: 20,),
-                                        ),
-                                        const SizedBox(width: 5,),
-                                        Text(
-                                          'Gallery'.tr,
-                                          style: TextStyle(
-                                              fontSize: 14, color: R.colors.white),
-                                        )
-
-                                      ],
-                                    ),
-                                  ],
+                                          const SizedBox(width: 5,),
+                                          Text(
+                                            'Gallery'.tr,
+                                            style: TextStyle(
+                                                fontSize: 14, color: R.colors.white),
+                                          )
+      
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+      
                                 ),
-
-                              ),
-                              const SizedBox(height: 20,),
-
-                              Container(
-                                width: Get.width,
-                                padding: const EdgeInsets.symmetric(vertical: 0),
-                                height: 80,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                                    
-                                
-                                                        Expanded(
-                                                          child: ListView.builder(
-                                                            scrollDirection: Axis.horizontal,
-                                                            shrinkWrap: true,
-                                                            itemCount: 2,
-                                                            itemBuilder: (context,index){
-                                                            return Stack(
-                                                            //alignment: Alignment.topRight,
-                                                            children: [
-                                                              Container(
-                                                                
-                                                                width: 80,
-                                                                height: 80,
-                                                                margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                padding: const EdgeInsets.all(8),
-                                                                decoration: BoxDecoration(
-                                                                  color: R.colors.grey,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(10),
-                                                                ),
-                                                              ),
-                                                              Positioned(
-                                                                top: 0,
-                                                                right: 5,
-                                                                child: Container(
-                                                                  height: 20,
-                                                                  width: 20,
-                                                                  //padding: const EdgeInsets.all(5),
-                                                                  decoration: const BoxDecoration(
-                                                                      color: Colors.red,
-                                                                      shape: BoxShape.circle),
-                                                                  child: Align(
-                                                                    alignment: Alignment.center,
-                                                                    child: Icon(
-                                                                      Icons.close,
-                                                                      size: 12,
-                                                                      color: R.colors.white,
-                                                                    ),
+                                const SizedBox(height: 20,),
+      
+                                Container(
+                                  width: Get.width,
+                                  padding: const EdgeInsets.symmetric(vertical: 0),
+                                  height: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                                      
+                                  
+                                                          Expanded(
+                                                            child: ListView.builder(
+                                                              scrollDirection: Axis.horizontal,
+                                                              shrinkWrap: true,
+                                                              itemCount: 2,
+                                                              itemBuilder: (context,index){
+                                                              return Stack(
+                                                              //alignment: Alignment.topRight,
+                                                              children: [
+                                                                Container(
+                                                                  
+                                                                  width: 80,
+                                                                  height: 80,
+                                                                  margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                  padding: const EdgeInsets.all(8),
+                                                                  decoration: BoxDecoration(
+                                                                    color: R.colors.grey,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(10),
                                                                   ),
                                                                 ),
-                                                              )
-                                                            ],
-                                                          );
-                                                          
-                                                          }),
-                                                        ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 25,),
-                              InkWell(
-                                  onTap: (){
-
-                                  },
-                                  child: Container(
-                                    width: Get.width,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: R.colors.themeColor),
-                                    child: Center(
-                                        child: Text(
-                                      'Submit'.tr,
-                                      style: TextStyle(color: R.colors.white),
-                                    )),
+                                                                Positioned(
+                                                                  top: 0,
+                                                                  right: 5,
+                                                                  child: Container(
+                                                                    height: 20,
+                                                                    width: 20,
+                                                                    //padding: const EdgeInsets.all(5),
+                                                                    decoration: const BoxDecoration(
+                                                                        color: Colors.red,
+                                                                        shape: BoxShape.circle),
+                                                                    child: Align(
+                                                                      alignment: Alignment.center,
+                                                                      child: Icon(
+                                                                        Icons.close,
+                                                                        size: 12,
+                                                                        color: R.colors.white,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            );
+                                                            
+                                                            }),
+                                                          ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(height: 10,),
-
-                    ],
+                                const SizedBox(height: 25,),
+                                InkWell(
+                                    onTap: (){
+      
+                                    },
+                                    child: Container(
+                                      width: Get.width,
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: R.colors.themeColor),
+                                      child: Center(
+                                          child: Text(
+                                        'Submit'.tr,
+                                        style: TextStyle(color: R.colors.white),
+                                      )),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10,),
+      
+                      ],
+                    ),
                   ),
-                ),
-         ),
-        ],
+           ),
+          ],
+        ),
       ),
     );
   }

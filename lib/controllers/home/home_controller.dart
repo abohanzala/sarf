@@ -14,25 +14,29 @@ import '../../src/widgets/loader.dart';
 class HomeController extends GetxController{
 
 var loading = false.obs; 
-List budgets = <Budgets>[].obs;
+List<Budgets> budgets = <Budgets>[].obs;
+List<ExpenseTypes> expenseTypes = <ExpenseTypes>[].obs;
 var selectedBudgetIndex = 0.obs;
+var selectedBudgetId = 0.obs;
+var currency = ''.obs;
 var totalInvoices = ''.obs;
 var totalExpanses = ''.obs;
 
 @override
 void onInit() async{
-  await getHome();
+  await getHome(null);
   super.onInit();
 
   
 }
 
-Future getHome() async {
+Future getHome(String? id) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
    // openLoader();
    loading.value = true;
    var request = {
     "language": GetStorage().read('lang'),
+    "budget_id": id,
    };
     var response =
         await DioClient().post(ApiLinks.getHome, request).catchError((error) {
@@ -75,18 +79,26 @@ Future getHome() async {
     }
 
       }
-    }); 
+    });
+    if(response == null) return; 
     if (response['success'] == true) {
       loading.value = false;
       budgets.clear();
+      expenseTypes.clear();
       debugPrint(response.toString());
         var data = HomeData.fromJson(response);
-        print( " asasasasasas ${data.data?.budgets?.length.toString()}" );
+        //print( " asasasasasas ${data.data?.budgets?.length.toString()}" );
         if(data.data != null){
           for (var budget in data.data!.budgets!) {
           budgets.add(budget);
         }
         }
+        if(data.data != null){
+          for (var expanse in data.data!.expenseTypes!) {
+          expenseTypes.add(expanse);
+        }
+        }
+        currency.value = data.data!.currency.toString();
         totalInvoices.value = data.data!.totalInvoices.toString();
         totalExpanses.value = data.data!.totalExpenses.toString();
         //print(budgets.first.name);
@@ -153,7 +165,7 @@ Future getHome() async {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
-      getHome();
+      getHome(null);
       Get.back();
 
     } else {
