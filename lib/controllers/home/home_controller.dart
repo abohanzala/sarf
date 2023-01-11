@@ -17,7 +17,7 @@ var loading = false.obs;
 List<Budgets> budgets = <Budgets>[].obs;
 List<ExpenseTypes> expenseTypes = <ExpenseTypes>[].obs;
 var selectedBudgetIndex = 0.obs;
-var selectedBudgetId = 0.obs;
+var selectedBudgetId = ''.obs;
 var currency = ''.obs;
 var totalInvoices = ''.obs;
 var totalExpanses = ''.obs;
@@ -170,6 +170,151 @@ Future getHome(String? id) async {
 
     } else {
       Get.back();
+      debugPrint('here');
+    }
+    return null;
+  }
+
+
+  Future deleteBudget() async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    //openLoader();
+   
+   var request = {
+    "language": GetStorage().read('lang'),
+    "budget_id": selectedBudgetId.value,
+   };
+    var response =
+        await DioClient().post(ApiLinks.budgetDelete, request).catchError((error) {
+          debugPrint(error.toString());
+    //   if (error is BadRequestException) {
+    //     Get.back();
+       
+    //      var apiError = json.decode(error.message!);
+    //     Get.snackbar(
+    //       'Error'.tr,
+    //       apiError["reason"].toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    //    // print(error.toString());
+    //   } else {
+    //     Get.back();
+        
+    //   if (error is BadRequestException) {
+    //   var message = error.message;
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       message.toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // } else if (error is FetchDataException) {
+    //   var message = error.message;
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       message.toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // } else if (error is ApiNotRespondingException) {
+      
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       'Oops! It took longer to respond.'.tr,
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // }
+
+    //   }
+    }); 
+    if(response == null) return;
+    if (response['success'] == true) {
+      //Get.back();
+      //debugPrint(response.toString());
+      selectedBudgetId.value = '';
+      selectedBudgetIndex.value = 0;
+      Get.back();
+      getHome(null);
+      //Get.back();
+
+    } else {
+      // Get.back();
+      Get.back();
+       Get.snackbar('Error'.tr, response['message']);
+      debugPrint('here');
+    }
+    return null;
+  }
+
+  Future resetBudget() async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    //openLoader();
+   
+   var request = {
+    "language": GetStorage().read('lang'),
+    "budget_id": selectedBudgetId.value,
+   };
+    var response =
+        await DioClient().post(ApiLinks.resetBudget, request).catchError((error) {
+          debugPrint(error.toString());
+    //   if (error is BadRequestException) {
+    //     Get.back();
+       
+    //      var apiError = json.decode(error.message!);
+    //     Get.snackbar(
+    //       'Error'.tr,
+    //       apiError["reason"].toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    //    // print(error.toString());
+    //   } else {
+    //     Get.back();
+        
+    //   if (error is BadRequestException) {
+    //   var message = error.message;
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       message.toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // } else if (error is FetchDataException) {
+    //   var message = error.message;
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       message.toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // } else if (error is ApiNotRespondingException) {
+      
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       'Oops! It took longer to respond.'.tr,
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // }
+
+    //   }
+    }); 
+    debugPrint(response.toString());
+    if(response == null) return;
+    if (response['success'] == true) {
+      //Get.back();
+      //debugPrint(response.toString());
+      selectedBudgetId.value = '';
+      selectedBudgetIndex.value = 0;
+      Get.back();
+      getHome(null);
+      //Get.back();
+
+    } else {
+       Get.back();
+       Get.snackbar('Error'.tr, response['message']);
       debugPrint('here');
     }
     return null;

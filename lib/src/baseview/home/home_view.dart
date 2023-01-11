@@ -50,10 +50,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Delete this budget'.tr,
-                                  style:
-                                      TextStyle(color: R.colors.blackSecondery),
+                                GestureDetector(
+                                  onTap: (){
+                                    if(ctr.selectedBudgetId.value == ''){
+                                      Get.snackbar('Error'.tr, 'Select a budget');
+                                      return;
+                                    }
+                                    ctr.deleteBudget();
+                                  },
+                                  child: Text(
+                                    'Delete this budget'.tr,
+                                    style:
+                                        TextStyle(color: R.colors.blackSecondery),
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -65,10 +74,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text(
-                                  'Reset this budget'.tr,
-                                  style:
-                                      TextStyle(color: R.colors.blackSecondery),
+                                GestureDetector(
+                                  onTap: (){
+                                    if(ctr.selectedBudgetId.value == ''){
+                                      Get.snackbar('Error'.tr, 'Select a budget');
+                                      return;
+                                    }
+                                    ctr.resetBudget();
+                                  },
+                                  child: Text(
+                                    'Reset this budget'.tr,
+                                    style:
+                                        TextStyle(color: R.colors.blackSecondery),
+                                  ),
                                 ),
                               ],
                             ),
@@ -225,6 +243,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: GestureDetector(
                                   onTap: (){
                                     ctr.selectedBudgetIndex.value = (index + 1);
+                                    ctr.selectedBudgetId.value = singleData.id.toString();
+                                    debugPrint(ctr.selectedBudgetId.value);
                                     ctr.getHome(singleData.id.toString());
                                   },
                                   child: Container(

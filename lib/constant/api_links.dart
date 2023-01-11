@@ -16,4 +16,11 @@ class ApiLinks {
   static const String registration = '$base/user/registration';
   static const String getSupportTypes = '$base/app_support/type?language=';
   static const String forgotPassword = '$base/forget_password';
+  static const String addSupport = '$base/app_support/add';
+  static const String getSupport = '$base/app_support';
+  static const String getSupportDetails = '$base/app_support/detail';
+  static const String assetBasePath = 'https://sarfapp.sharpvisions.cloud/public/';
+  static const String supportReply = '$base/app_support/reply';
+  static const String budgetDelete = '$base/budget/destroy';
+  static const String resetBudget = '$base/budget/reset';
 }

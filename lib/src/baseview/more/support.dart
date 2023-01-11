@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/support/support_controller.dart';
 import 'package:sarf/src/baseview/more/single_support.dart';
 import 'package:sarf/src/utils/routes_name.dart';
@@ -24,6 +25,12 @@ class _SupportState extends State<Support> {
   SupportController ctr = Get.put<SupportController>(SupportController());
 
   @override
+  void initState() {
+    ctr.getSupport(ctr.supportStatus.value);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: R.colors.lightGrey,
@@ -34,124 +41,134 @@ class _SupportState extends State<Support> {
           const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: ListView.builder(
-                itemCount: 3,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: Get.width,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: R.colors.white),
-                    child: IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'ID'.tr,
-                                style: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                '000',
-                                style: TextStyle(
-                                    color: R.colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Type'.tr,
-                                style: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                'Business',
-                                style: TextStyle(
-                                    color: R.colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                          const Spacer(
-                            flex: 3,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Date'.tr,
-                                style: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                '17-5-2021',
-                                style: TextStyle(
-                                    color: R.colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Status'.tr,
-                                style: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const Text(
-                                'Pending',
-                                style: TextStyle(
-                                    color: Color(0XFFF4BD05),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                          const Spacer(
-                            flex: 2,
-                          ),
-                          VerticalDivider(
-                            color: R.colors.lightBlue4,
-                            thickness: 0.3,
-                          ),
-                          const Spacer(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                  onTap: () => Get.to(() => const SingleSupport(
-                                      title: 'Support ID  :  000')),
-                                  child: Icon(
-                                    Icons.remove_red_eye,
-                                    color: R.colors.themeColor,
-                                  ))
-                            ],
-                          ),
-                          const Spacer(),
-                        ],
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: ctr.isLoadingSupport.value == true ?  SizedBox(
+      width: 50,
+      height: 50,
+      child: CircularProgressIndicator(
+        //backgroundColor: AppColors.whiteClr,
+        color: R.colors.blue,
+      ),
+    ) : ctr.supportList.isEmpty? Padding(padding: const EdgeInsets.symmetric(vertical: 10),child: Text('No Data'.tr),) :  ListView.builder(
+                  itemCount: ctr.supportList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    var singleData = ctr.supportList[index];
+                    return Container(
+                      width: Get.width,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: R.colors.white),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ID'.tr,
+                                  style: TextStyle(
+                                      color: R.colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  singleData.id.toString(),
+                                  style: TextStyle(
+                                      color: R.colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Type'.tr,
+                                  style: TextStyle(
+                                      color: R.colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                 singleData.type == "0" ? "Business".tr : "Personal".tr  ,
+                                  style: TextStyle(
+                                      color: R.colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                            const Spacer(
+                              flex: 2,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Date'.tr,
+                                  style: TextStyle(
+                                      color: R.colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  singleData.createdDate.toString(),
+                                  style: TextStyle(
+                                      color: R.colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Status'.tr,
+                                  style: TextStyle(
+                                      color: R.colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                 Text(
+                                  singleData.status == "0" ? "Pending".tr : "Success".tr ,
+                                  style: const TextStyle(
+                                      color: Color(0XFFF4BD05),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                            const Spacer(
+                              
+                            ),
+                            VerticalDivider(
+                              color: R.colors.lightBlue4,
+                              thickness: 0.3,
+                            ),
+                            const Spacer(),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                    onTap: () => Get.to(() => SingleSupport(
+                                        title: 'Support ID  :  ${singleData.id.toString()}',id: singleData.id.toString(),date: singleData.createdDate.toString(),)),
+                                    child: Icon(
+                                      Icons.remove_red_eye,
+                                      color: R.colors.themeColor,
+                                    ))
+                              ],
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+            ),
           ),
         ],
       ),
@@ -267,7 +284,9 @@ class _SupportState extends State<Support> {
         onTap: () {
           pending = true;
           success = false;
+          ctr.supportStatus.value = '1';
           setState(() {});
+          ctr.getSupport(ctr.supportStatus.value);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -297,7 +316,9 @@ class _SupportState extends State<Support> {
         onTap: () {
           pending = false;
           success = true;
+          ctr.supportStatus.value = '2';
           setState(() {});
+          ctr.getSupport(ctr.supportStatus.value);
         },
         child: Container(
           decoration: BoxDecoration(

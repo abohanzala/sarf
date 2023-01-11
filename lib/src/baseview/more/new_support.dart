@@ -321,7 +321,11 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                           Get.snackbar('Error'.tr, 'Image required'.tr);
                                           return;
                                         }
-                                        debugPrint('addddddddddddddddddddddddddddddd');
+                                        ctr.postNewSupport(txt.text).then((value){
+                                          txt.clear();
+                                          Get.back();
+                                        });
+                                        
                                       },
                                       child: Container(
                                         width: Get.width,
