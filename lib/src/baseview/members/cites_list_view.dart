@@ -42,7 +42,7 @@ class _CityListScreenState extends State<CityListScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
-                      childAspectRatio: 2,
+                      childAspectRatio: 1.8,
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 10,
                       
