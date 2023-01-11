@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:sarf/controllers/support/support_controller.dart';
 import 'package:sarf/src/baseview/more/single_support.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 
@@ -20,6 +21,7 @@ class Support extends StatefulWidget {
 class _SupportState extends State<Support> {
   bool pending = true;
   bool success = false;
+  SupportController ctr = Get.put<SupportController>(SupportController());
 
   @override
   Widget build(BuildContext context) {

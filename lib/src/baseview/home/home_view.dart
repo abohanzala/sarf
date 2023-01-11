@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/home/home_controller.dart';
 
 import '../../../resources/resources.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeController ctr = Get.put<HomeController>(HomeController());
   TextEditingController txt = TextEditingController();
+  //ScrollController scrollCtr = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,7 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                     return;
                                   }
-                                  ctr.addBudget(txt.text);
+                                  ctr.addBudget(txt.text).then((value){
+                                    txt.clear();
+                                  });
                                 })
                               ],
                             ),
@@ -221,6 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: GestureDetector(
                                   onTap: (){
                                     ctr.selectedBudgetIndex.value = (index + 1);
+                                    ctr.getHome(singleData.id.toString());
                                   },
                                   child: Container(
                                     height: 80,
@@ -237,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children:  [
-                                        Text(singleData.name ?? '',style: TextStyle(fontSize: 14),),
+                                        Text(singleData.name ?? '',style: const TextStyle(fontSize: 14),),
                                       ],
                                     ),
                                   ),
@@ -261,8 +266,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisSpacing: 5,
                         crossAxisSpacing: 10,
                       ),
-                      itemCount: 30,
+                      itemCount: ctr.expenseTypes.length,
                       itemBuilder: (context, index) {
+                       var  singleExpanse = ctr.expenseTypes[index];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -275,17 +281,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: R.colors.white),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
-                              child: Center(
-                                  child: Text(
-                                '\$1413',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text( ctr.currency.value,
                                 style: TextStyle(color: R.colors.blue),
-                              )),
+                              ),
+                              const SizedBox(width: 5,),
+                              Text( "${singleExpanse.invoiceSumAmount ?? 0}",
+                                style: TextStyle(color: R.colors.blue),
+                              ),
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Text(
-                              'مأكولات ومشروبات',
+                              "${ GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr }",
                               style: TextStyle(color: R.colors.blackSecondery),
                             )
                           ],
