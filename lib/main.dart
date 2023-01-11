@@ -7,6 +7,7 @@ import 'controllers/auth/data_collection_controller.dart';
 import 'controllers/auth/login_controller.dart';
 import 'controllers/auth/otp_controller.dart';
 import 'controllers/auth/register_controller.dart';
+import 'controllers/auth/registration_controller.dart';
 import 'locale/locale_strings.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/routes_name.dart';
@@ -18,6 +19,7 @@ void main() async {
   Get.put<RegisterController>(RegisterController());
   Get.put<OtpController>(OtpController());
   Get.put<DataCollectionController>(DataCollectionController());
+  Get.put<RegistrationController>(RegistrationController());
   runApp(const MyApp());
 }
 

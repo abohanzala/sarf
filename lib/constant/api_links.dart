@@ -13,4 +13,5 @@ class ApiLinks {
   static const String getHome = '$base/user';
   static const String addBudget = '$base/budget/add';
   static const String data_collection = '$base/data_collection?language=';
+  static const String registration = '$base/user/registration';
 }
