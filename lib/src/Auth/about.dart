@@ -69,15 +69,27 @@ class _AboutState extends State<About> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 20),
-                      child: HtmlWidget(
-                          aboutController.userInfo!.data!.title!.ar ?? ''),
+                      child:
+                      GetBuilder<AboutController>(
+                          builder: (AboutController) {
+                            return HtmlWidget(aboutController
+                                .userInfo?.data!.title!.ar ??
+                                '');
+                          }
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                HtmlWidget(aboutController.userInfo!.data!.content!.ar ?? ''),
+                GetBuilder<AboutController>(
+                    builder: (AboutController) {
+                      return HtmlWidget(aboutController
+                          .userInfo?.data!.content!.ar ??
+                          '');
+                    }
+                ),
               ],
             ),
           ),

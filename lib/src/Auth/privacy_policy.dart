@@ -69,15 +69,27 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 20),
-                      child: HtmlWidget(
-                          privacyController.userInfo!.data!.title!.ar ?? ''),
+                      child:
+                      GetBuilder<PrivacyController>(
+                          builder: (PrivacyController) {
+                            return HtmlWidget(privacyController
+                                .userInfo?.data!.title!.ar ??
+                                '');
+                          }
                     ),
+                    )
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                HtmlWidget(privacyController.userInfo!.data!.content!.ar ?? ''),
+                GetBuilder<PrivacyController>(
+                    builder: (PrivacyController) {
+                      return HtmlWidget(privacyController
+                          .userInfo?.data!.content!.ar ??
+                          '');
+                    }
+                ),
               ],
             ),
           ),

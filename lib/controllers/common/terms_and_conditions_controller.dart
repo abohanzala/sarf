@@ -40,7 +40,7 @@ class TermsAndConditionsController extends GetxController {
     //DialogBoxes.openLoadingDialog();
 
     var response =
-    await DioClient().post(ApiLinks.about, request).catchError((error) {
+        await DioClient().post(ApiLinks.about, request).catchError((error) {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
@@ -65,7 +65,9 @@ class TermsAndConditionsController extends GetxController {
     if (response['success'] == true) {
       debugPrint(response.toString());
       userInfo = moreModel.fromJson(response);
-      print('This is COntent===================${userInfo}');
+      print('This is userInfo===================${userInfo}');
+      update();
+
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);

@@ -59,32 +59,37 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               bottomRight: Radius.circular(20),
             )),
         child: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-                color: R.colors.white, borderRadius: BorderRadius.circular(20)),
-            margin: EdgeInsets.only(left: 15, right: 15),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: HtmlWidget(termsAndConditionsController
-                                .userInfo!.data!.title!.ar ??
-                            '')),
-                  ],
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                HtmlWidget(
-                    termsAndConditionsController.userInfo!.data!.content!.ar ??
-                        '')
-              ],
-            ),
+            child: Container(
+          decoration: BoxDecoration(
+              color: R.colors.white, borderRadius: BorderRadius.circular(20)),
+          margin: EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: GetBuilder<TermsAndConditionsController>(
+                          builder: (TermsAndConditionsController) {
+                        return HtmlWidget(termsAndConditionsController
+                                .userInfo?.data!.title!.ar ??
+                            '');
+                      }))
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              GetBuilder<TermsAndConditionsController>(
+                  builder: (TermsAndConditionsController) {
+                return HtmlWidget(
+                    termsAndConditionsController.userInfo?.data!.content!.ar ??
+                        '');
+              })
+            ],
           ),
-        ),
+        )),
       ),
     );
   }

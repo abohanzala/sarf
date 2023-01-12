@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../controllers/auth/reset_password_controller.dart';
@@ -296,6 +297,10 @@ class _SettingsState extends State<Settings> {
       onTap: () {
         english = true;
         arabic = false;
+        GetStorage().write('lang', 'en');
+        var locale = const Locale('en', 'US');
+        Get.updateLocale(locale);
+
         setState(() {});
       },
       child: Container(
@@ -325,6 +330,9 @@ class _SettingsState extends State<Settings> {
         onTap: () {
           english = false;
           arabic = true;
+          GetStorage().write('lang', 'ar');
+          var locale = const Locale('ar', 'SA');
+          Get.updateLocale(locale);
           setState(() {});
         },
         child: Container(

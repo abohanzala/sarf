@@ -28,12 +28,13 @@ class RegisterController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-
+    var a = phone.text;
+    final splitted = a.split('+');
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': phone.text,
+      'mobile': splitted[1],
     };
-
+    print("This is my request====================${request}");
     //DialogBoxes.openLoadingDialog();
 
     var response =

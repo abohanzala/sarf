@@ -65,6 +65,7 @@ class AboutController extends GetxController {
       debugPrint(response.toString());
       userInfo = moreModel.fromJson(response);
       print('This is COntent===================${userInfo}');
+      update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
