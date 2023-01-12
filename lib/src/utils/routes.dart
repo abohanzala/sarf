@@ -49,9 +49,6 @@ class Routes {
       case RoutesName.membersList:
         return MaterialPageRoute(
             builder: (BuildContext context) => const MembersListScreen());
-      case RoutesName.invoiceDetails:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const InvoiceDetails());
       // case RoutesName.Splash:
       case RoutesName.Support:
         return MaterialPageRoute(

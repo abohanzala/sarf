@@ -28,4 +28,9 @@ class ApiLinks {
   static const String alerts = '$base/alerts';
   static const String alertsClear = '$base/alerts/clear';
   static const String simpleInvoice = '$base/generate_simple_invoice';
+  static const String memberNewList= '$base/members';
+  static const String memberDetails = '$base/members_detail';
+  static const String invoiceDetails = '$base/invoice_detail';
+  static const String invoiceAttach = '$base/send_attachment_to_invoice';
+  static const String invoiceList = '$base/invoices?language=';
 }

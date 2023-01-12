@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/resources/resources.dart';
 
 class SimpleInvoice extends StatefulWidget {
@@ -13,6 +18,27 @@ class SimpleInvoice extends StatefulWidget {
 }
 
 class _SimpleInvoiceState extends State<SimpleInvoice> {
+  InvoiceController ctr = Get.find<InvoiceController>();
+  TextEditingController mobile = TextEditingController();
+  TextEditingController amount = TextEditingController();
+  TextEditingController note = TextEditingController();
+  Future pickImage(ImageSource source) async {
+    
+    try {
+      var pickedFile = await ImagePicker().pickMultiImage(imageQuality: 35);
+      // var pickedFile = await picker.pickImage(source: source, imageQuality: 35);
+      // ignore: unnecessary_null_comparison
+      if (pickedFile == null) return;
+      for (var item in pickedFile) {
+        ctr.uploadImages.add(File(item.path))  ;
+        
+        
+      }
+
+    } on PlatformException catch(e) {
+      debugPrint('Failed to pick image: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +88,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
+                      controller: mobile,
                       decoration: InputDecoration(
                         suffixIcon: Icon(
                           Icons.qr_code,
@@ -102,6 +129,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       height: 10.h,
                     ),
                     TextFormField(
+                      controller: amount,
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
                         filled: true,
@@ -126,6 +154,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       height: 10.h,
                     ),
                     TextFormField(
+                      controller: note,
                       maxLines: 7,
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
@@ -159,31 +188,41 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  margin: EdgeInsets.only(top: 12.h),
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: R.colors.grey,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/attach.png',
-                                    height: 25.h,
-                                    width: 25.w,
-                                  ),
-                                ),
-                                Container(
+                                GestureDetector(
+                                  onTap: (){
+                                    pickImage(ImageSource.gallery);
+                                  },
+                                  child: Container(
                                     margin: EdgeInsets.only(top: 12.h),
                                     padding: const EdgeInsets.all(20),
                                     decoration: BoxDecoration(
                                       color: R.colors.grey,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Icon(
-                                      Icons.qr_code_scanner_rounded,
-                                      size: 28.sp,
-                                      color: R.colors.white,
-                                    ))
+                                    child: Image.asset(
+                                      'assets/images/attach.png',
+                                      height: 25.h,
+                                      width: 25.w,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                    pickImage(ImageSource.gallery);
+                                  },
+                                  child: Container(
+                                      margin: EdgeInsets.only(top: 12.h),
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        color: R.colors.grey,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Icon(
+                                        Icons.qr_code_scanner_rounded,
+                                        size: 28.sp,
+                                        color: R.colors.white,
+                                      )),
+                                )
                               ],
                             ),
                           ),
@@ -192,51 +231,59 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                           ),
                           Expanded(
                             flex: 9,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: List.generate(3, (index) {
-                                  return Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            left: 10.w, top: 12.h, right: 5.w),
-                                        padding: const EdgeInsets.all(20),
-                                        decoration: BoxDecoration(
-                                          color: R.colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/attach.png',
-                                          height: 25.h,
-                                          width: 25.w,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 3,
-                                        right: 0,
-                                        child: Container(
-                                          height: 20.h,
-                                          width: 20.w,
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: const BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Icon(
-                                              Icons.close,
-                                              size: 13.sp,
-                                              color: R.colors.white,
-                                            ),
+                            child: Obx(
+                              () => SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: List.generate(ctr.uploadImages.length, (index) {
+                                    var singleFile = ctr.uploadImages[index];
+                                    return Stack(
+                                      alignment: Alignment.topRight,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 10.w, top: 12.h, right: 5.w),
+                                          padding: const EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            color: R.colors.grey,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Image.file(
+                                            singleFile,
+                                            height: 25.h,
+                                            width: 25.w,
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  );
-                                }),
+                                        GestureDetector(
+                                          onTap: (){
+                                            ctr.uploadImages.removeAt(index);
+                                          },
+                                          child: Positioned(
+                                            top: 3,
+                                            right: 0,
+                                            child: Container(
+                                              height: 20.h,
+                                              width: 20.w,
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  shape: BoxShape.circle),
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  size: 13.sp,
+                                                  color: R.colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }),
+                                ),
                               ),
                             ),
                           )
@@ -249,19 +296,41 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            height: 50.h,
-                            decoration: BoxDecoration(
-                              color: R.colors.themeColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Send Invoice'.tr,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
+                          child: GestureDetector(
+                            onTap: (){
+                              if(mobile.text.isEmpty){
+                                Get.snackbar('Error'.tr, "mobile is required");
+                                return;
+                              }
+                              if(amount.text.isEmpty){
+                                Get.snackbar('Error'.tr, "amount is required");
+                                return;
+                              }
+                              if(note.text.isEmpty){
+                                Get.snackbar('Error'.tr, "note is required");
+                                return;
+                              }
+                              FocusScope.of(context).unfocus();
+                              ctr.postNewInvoice(mobile.text, amount.text, note.text).then((value){
+                                mobile.clear();
+                                amount.clear();
+                                note.clear();
+                              });
+                            },
+                            child: Container(
+                              height: 50.h,
+                              decoration: BoxDecoration(
+                                color: R.colors.themeColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Send Invoice'.tr,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),

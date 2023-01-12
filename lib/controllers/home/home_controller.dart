@@ -18,6 +18,7 @@ List<Budgets> budgets = <Budgets>[].obs;
 List<ExpenseTypes> expenseTypes = <ExpenseTypes>[].obs;
 var selectedBudgetIndex = 0.obs;
 var selectedBudgetId = ''.obs;
+var expansetype = ''.obs;
 var currency = ''.obs;
 var totalInvoices = ''.obs;
 var totalExpanses = ''.obs;

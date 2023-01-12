@@ -321,9 +321,9 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                           Get.snackbar('Error'.tr, 'Image required'.tr);
                                           return;
                                         }
+                                        FocusScope.of(context).unfocus();
                                         ctr.postNewSupport(txt.text).then((value){
                                           txt.clear();
-                                          Get.back();
                                         });
                                         
                                       },
