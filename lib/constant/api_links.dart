@@ -23,4 +23,8 @@ class ApiLinks {
   static const String supportReply = '$base/app_support/reply';
   static const String budgetDelete = '$base/budget/destroy';
   static const String resetBudget = '$base/budget/reset';
+  static const String logout = '$base/logout';
+  static const String alerts = '$base/alerts';
+  static const String alertsClear = '$base/alerts/clear';
+  static const String simpleInvoice = '$base/generate_simple_invoice';
 }

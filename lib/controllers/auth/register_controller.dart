@@ -58,6 +58,7 @@ class RegisterController extends GetxController {
     });
     // if (response == null) return;
     debugPrint("This is my response==================$response");
+    debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());

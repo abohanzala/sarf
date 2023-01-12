@@ -1,11 +1,13 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/resources/dummy.dart';
+import 'package:sarf/services/dio_client.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 
+import '../../../constant/api_links.dart';
 import '../../../resources/resources.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -15,7 +17,43 @@ class MoreScreen extends StatefulWidget {
   State<MoreScreen> createState() => _MoreScreenState();
 }
 
+Future logout() async {
+    
+   // openLoader();
+   
+   
+    var response =
+        await DioClient().get(ApiLinks.logout).catchError((error) async{
+          //debugPrint(error.toString());
+      await GetStorage().remove('user_token');
+      await GetStorage().remove('userId');
+      await GetStorage().remove('name',);
+      await GetStorage().remove('username',);
+      await GetStorage().remove('email',);
+      await GetStorage().remove('firebase_email',);
+      await GetStorage().remove('mobile',);
+      await GetStorage().remove('photo',);
+      await GetStorage().remove('status',);
+      Get.offAllNamed(RoutesName.LogIn);
+     
+    });
+   // print(response);
+
+      await GetStorage().remove('user_token');
+      await GetStorage().remove('userId');
+      await GetStorage().remove('name',);
+      await GetStorage().remove('username',);
+      await GetStorage().remove('email',);
+      await GetStorage().remove('firebase_email',);
+      await GetStorage().remove('mobile',);
+      await GetStorage().remove('photo',);
+      await GetStorage().remove('status',);
+      Get.offAllNamed(RoutesName.LogIn);
+    
+  }
+
 class _MoreScreenState extends State<MoreScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -385,23 +423,26 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildLogoutIconAndText() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: Row(
-        children: [
-          Image.asset(
-            R.images.logoutIcon,
-            height: 20,
-            width: 20,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            'Logout'.tr,
-            style: TextStyle(fontFamily: 'semibold', fontSize: 12),
-          )
-        ],
+    return GestureDetector(
+      onTap: logout,
+      child: Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Row(
+          children: [
+            Image.asset(
+              R.images.logoutIcon,
+              height: 20,
+              width: 20,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Logout'.tr,
+              style: TextStyle(fontFamily: 'semibold', fontSize: 12),
+            )
+          ],
+        ),
       ),
     );
   }
