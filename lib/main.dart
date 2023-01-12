@@ -33,6 +33,10 @@ void main() async {
   Get.put<OtpForgotPasswordController>(OtpForgotPasswordController());
   Get.put<ChangePasswordController>(ChangePasswordController());
   Get.put<InvoiceController>(InvoiceController());
+  Get.put<ResetPasswordController>(ResetPasswordController());
+  Get.put<TermsAndConditionsController>(TermsAndConditionsController());
+  Get.put<PrivacyController>(PrivacyController());
+  Get.put<AboutController>(AboutController());
   runApp(const MyApp());
 }
 
@@ -55,7 +59,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          initialRoute: GetStorage().read('user_token') == null ?  RoutesName.LogIn : RoutesName.base,
+          initialRoute: GetStorage().read('user_token') == null
+              ? RoutesName.LogIn
+              : RoutesName.base,
           onGenerateRoute: Routes.generateRoute,
           locale: const Locale('en', 'US'),
           translations: LocaleString(),
