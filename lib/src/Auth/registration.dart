@@ -294,18 +294,20 @@ class _RegistrationState extends State<Registration> {
       child: InkWell(
         onTap: () {
           print(
-              'This is my phoneNumber===============${registerController.phone}');
-          if (registerController.phone.text.isEmpty) {
+              'This is my phoneNumber===============${registerController.phone.text}');
+          print(
+              'This is my phoneNumber===============${registerController.phone.text}');
+          if (registerController.phone.text.isEmpty ||
+              registerController.phone.text == "+966") {
             Get.snackbar(
-              'Title',
-              'Message',
+              'Alert',
+              'Enter Mobile Number',
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
-            return;
+          } else {
+            registerController.register();
           }
-
-          registerController.register();
         },
         child: Center(
           child: Text(

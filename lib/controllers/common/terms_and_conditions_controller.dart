@@ -5,20 +5,17 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import 'package:sarf/src/Auth/change_password.dart';
 import '../../constant/api_links.dart';
+import '../../model/moreModel/about.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
-import 'forgot_password_controller.dart';
 
-class ChangePasswordController extends GetxController {
-  TextEditingController otp = TextEditingController();
-  TextEditingController newPassword = TextEditingController();
-  TextEditingController confirmNewPassword = TextEditingController();
-  ForgotPasswordController forgotPasswordController =
-      Get.find<ForgotPasswordController>();
+class TermsAndConditionsController extends GetxController {
   var message;
+  moreModel? userInfo;
+  var isLoadingSupport = false.obs;
 
   @override
   void onInit() {
@@ -26,8 +23,7 @@ class ChangePasswordController extends GetxController {
     super.onInit();
   }
 
-  Future changePassword() async {
-    openLoader();
+  Future terms() async {
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
     // if (!isValid) {
@@ -35,23 +31,16 @@ class ChangePasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = forgotPasswordController.phone.text;
-    final splitted = a.split('+');
+    // var a = forgotPasswordController.phone.text;
+    // final splitted = a.split('+');
 
-    var request = {
-      'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
-      'otp': otp.text,
-      'new_password': newPassword.text,
-      'confirm_password': confirmNewPassword.text,
-    };
+    var request = {'language': GetStorage().read('lang'), 'id': 3};
     print("This is my request====================${request}");
 
     //DialogBoxes.openLoadingDialog();
 
-    var response = await DioClient()
-        .post(ApiLinks.reset_password, request)
-        .catchError((error) {
+    var response =
+    await DioClient().post(ApiLinks.about, request).catchError((error) {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
@@ -74,8 +63,9 @@ class ChangePasswordController extends GetxController {
     // if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
-      Get.toNamed(RoutesName.LogIn);
       debugPrint(response.toString());
+      userInfo = moreModel.fromJson(response);
+      print('This is COntent===================${userInfo}');
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);

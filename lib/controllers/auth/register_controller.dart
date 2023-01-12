@@ -12,7 +12,7 @@ import '../../src/widgets/loader.dart';
 class RegisterController extends GetxController {
   var registerFormKey = GlobalKey<FormState>();
   TextEditingController phone = TextEditingController();
-
+  var message;
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
@@ -41,8 +41,8 @@ class RegisterController extends GetxController {
       Get.back();
       if (error is BadRequestException) {
         Get.snackbar(
-          'Title',
-          'Message',
+          'Error',
+          '${message}',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
@@ -56,6 +56,7 @@ class RegisterController extends GetxController {
         //HandlingErrors().handleError(error);
       }
     });
+    message = response['message'];
     // if (response == null) return;
     debugPrint("This is my response==================$response");
     debugPrint(response.toString());
@@ -85,8 +86,8 @@ class RegisterController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Title',
-        'Message',
+        'Error',
+        '${message.toString()}',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

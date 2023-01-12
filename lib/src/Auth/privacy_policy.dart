@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-
+import '../../controllers/common/privacy_policy_controller.dart';
 import '../../resources/dummy.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
@@ -14,6 +14,17 @@ class PrivacyPolicy extends StatefulWidget {
 }
 
 class _PrivacyPolicyState extends State<PrivacyPolicy> {
+  PrivacyController privacyController = Get.find<PrivacyController>();
+
+  @override
+  // ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    privacyController.privacy();
+
+    print("initState Called");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,20 +69,15 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Title',
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: R.colors.black,
-                            fontFamily: 'bold'),
-                      ),
+                      child: HtmlWidget(
+                          privacyController.userInfo!.data!.title!.ar ?? ''),
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                Text(DummyData.longText),
+                HtmlWidget(privacyController.userInfo!.data!.content!.ar ?? ''),
               ],
             ),
           ),

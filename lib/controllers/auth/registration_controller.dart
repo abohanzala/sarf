@@ -46,19 +46,19 @@ class RegistrationController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': registerController.phone.text,
-      'account_type': accountType == true ? '0' : '1',
+      'account_type': accountType == true ? 0 : 1,
       'password': passwordController.text,
       'name': accountType == true
           ? companyNameController.text
           : fullNameController.text,
-      'city_id': cityId.toString(),
-      'expense_type_id': expense_typeId.toString(),
+      'city_id': cityId,
+      'expense_type_id': expense_typeId,
       'insta_link': instagramController.text,
       'twitter_link': twitterController.text,
       'contact_no': contactController.text,
       'whatsapp': whatsappController.text,
       'website': websiteController.text,
-      'is_online': isOnline == true ? "0" : "1",
+      'is_online': isOnline == true ? 0 : 1,
       'location': 'abc',
       'location_lat': '36.87655',
       'location_lng': '72.77876',

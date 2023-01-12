@@ -9,6 +9,8 @@ class ApiLinks {
   static const String register = '$base/register';
   static const String verify_otp = '$base/verify_otp';
   static const String reset_password = '$base/reset_password';
+  static const String about = '$base/page';
+  static const String change_password = '$base/change_password';
   static const String membersList = '$base/member_list?language=';
   static const String cityList = '$base/cities_members?language=';
   static const String getHome = '$base/user';

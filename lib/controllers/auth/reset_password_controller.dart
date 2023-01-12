@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/auth/login_controller.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import 'package:sarf/src/Auth/change_password.dart';
 import '../../constant/api_links.dart';
@@ -12,12 +13,11 @@ import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 import 'forgot_password_controller.dart';
 
-class ChangePasswordController extends GetxController {
-  TextEditingController otp = TextEditingController();
+class ResetPasswordController extends GetxController {
+  TextEditingController currentPassword = TextEditingController();
   TextEditingController newPassword = TextEditingController();
   TextEditingController confirmNewPassword = TextEditingController();
-  ForgotPasswordController forgotPasswordController =
-      Get.find<ForgotPasswordController>();
+  LoginController loginController = Get.find<LoginController>();
   var message;
 
   @override
@@ -26,7 +26,7 @@ class ChangePasswordController extends GetxController {
     super.onInit();
   }
 
-  Future changePassword() async {
+  Future resetPassword() async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -35,13 +35,13 @@ class ChangePasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = forgotPasswordController.phone.text;
+    var a = loginController.phone.text;
     final splitted = a.split('+');
 
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
-      'otp': otp.text,
+      'mobile': loginController.phone.text,
+      'current_password': currentPassword.text,
       'new_password': newPassword.text,
       'confirm_password': confirmNewPassword.text,
     };
@@ -50,7 +50,7 @@ class ChangePasswordController extends GetxController {
     //DialogBoxes.openLoadingDialog();
 
     var response = await DioClient()
-        .post(ApiLinks.reset_password, request)
+        .post(ApiLinks.change_password, request)
         .catchError((error) {
       if (error is BadRequestException) {
         Get.back();
