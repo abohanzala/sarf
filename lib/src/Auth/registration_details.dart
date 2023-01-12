@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -764,7 +763,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       onTap: () {
         business = true;
         personal = false;
-        registrationController.accountType =true;
+        registrationController.accountType = true;
         setState(() {});
       },
       child: Container(

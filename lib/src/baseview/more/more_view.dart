@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -18,42 +17,65 @@ class MoreScreen extends StatefulWidget {
 }
 
 Future logout() async {
-    
-   // openLoader();
-   
-   
-    var response =
-        await DioClient().get(ApiLinks.logout).catchError((error) async{
-          //debugPrint(error.toString());
-      await GetStorage().remove('user_token');
-      await GetStorage().remove('userId');
-      await GetStorage().remove('name',);
-      await GetStorage().remove('username',);
-      await GetStorage().remove('email',);
-      await GetStorage().remove('firebase_email',);
-      await GetStorage().remove('mobile',);
-      await GetStorage().remove('photo',);
-      await GetStorage().remove('status',);
-      Get.offAllNamed(RoutesName.LogIn);
-     
-    });
-   // print(response);
+  // openLoader();
 
-      await GetStorage().remove('user_token');
-      await GetStorage().remove('userId');
-      await GetStorage().remove('name',);
-      await GetStorage().remove('username',);
-      await GetStorage().remove('email',);
-      await GetStorage().remove('firebase_email',);
-      await GetStorage().remove('mobile',);
-      await GetStorage().remove('photo',);
-      await GetStorage().remove('status',);
-      Get.offAllNamed(RoutesName.LogIn);
-    
-  }
+  var response =
+      await DioClient().get(ApiLinks.logout).catchError((error) async {
+    //debugPrint(error.toString());
+    await GetStorage().remove('user_token');
+    await GetStorage().remove('userId');
+    await GetStorage().remove(
+      'name',
+    );
+    await GetStorage().remove(
+      'username',
+    );
+    await GetStorage().remove(
+      'email',
+    );
+    await GetStorage().remove(
+      'firebase_email',
+    );
+    await GetStorage().remove(
+      'mobile',
+    );
+    await GetStorage().remove(
+      'photo',
+    );
+    await GetStorage().remove(
+      'status',
+    );
+    Get.offAllNamed(RoutesName.LogIn);
+  });
+  // print(response);
+
+  await GetStorage().remove('user_token');
+  await GetStorage().remove('userId');
+  await GetStorage().remove(
+    'name',
+  );
+  await GetStorage().remove(
+    'username',
+  );
+  await GetStorage().remove(
+    'email',
+  );
+  await GetStorage().remove(
+    'firebase_email',
+  );
+  await GetStorage().remove(
+    'mobile',
+  );
+  await GetStorage().remove(
+    'photo',
+  );
+  await GetStorage().remove(
+    'status',
+  );
+  Get.offAllNamed(RoutesName.LogIn);
+}
 
 class _MoreScreenState extends State<MoreScreen> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

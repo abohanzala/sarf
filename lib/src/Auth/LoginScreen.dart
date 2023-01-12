@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
               key: loginController.loginFormKey,
               child: Column(
                 children: [
-                  buildPhonefield(),
+                  buildPhoneFieldForLogin(),
                   buildPasswordField(),
                 ],
               ),
@@ -199,6 +199,49 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildPhoneFieldForLogin() {
+    return Row(
+      children: [
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: IntlPhoneField(
+            countries: ["SA"],
+            showDropdownIcon: false,
+            flagsButtonPadding: EdgeInsets.only(left: 10),
+            onChanged: (number) {
+              phone.text = number.completeNumber;
+              loginController.phone.text = phone.text;
+              print(
+                  'This is my phoneNumber===============${loginController.phone.text}');
+            },
+            initialCountryCode: 'SA',
+            onCountryChanged: (country) {},
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              label: Container(
+                margin: EdgeInsets.symmetric(horizontal: 0),
+                child: Text('Enter Mobile Number'.tr,
+                    style: TextStyle(
+                        color: Color(0xFF707070),
+                        fontFamily: 'regular',
+                        fontSize: 12)),
+              ),
+              isDense: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+              // border: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(5.0),
+              // ),
+              filled: true,
+              //  fillColor: const Color(0xffF0F0F0)
+            ),
+          ),
+        ))
+      ],
     );
   }
 

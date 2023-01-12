@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
@@ -13,6 +12,10 @@ import 'controllers/auth/otp_controller.dart';
 import 'controllers/auth/otp_forgot_password_controller.dart';
 import 'controllers/auth/register_controller.dart';
 import 'controllers/auth/registration_controller.dart';
+import 'controllers/auth/reset_password_controller.dart';
+import 'controllers/common/about_controller.dart';
+import 'controllers/common/privacy_policy_controller.dart';
+import 'controllers/common/terms_and_conditions_controller.dart';
 import 'locale/locale_strings.dart';
 import 'src/utils/routes.dart';
 import 'src/utils/routes_name.dart';
@@ -28,7 +31,6 @@ void main() async {
   Get.put<ForgotPasswordController>(ForgotPasswordController());
   Get.put<OtpForgotPasswordController>(OtpForgotPasswordController());
   Get.put<ChangePasswordController>(ChangePasswordController());
-  Get.put<InvoiceController>(InvoiceController());
   runApp(const MyApp());
 }
 

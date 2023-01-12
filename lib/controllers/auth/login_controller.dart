@@ -27,11 +27,12 @@ class LoginController extends GetxController {
     final splitted = a.split('+');
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted,
+      'mobile': splitted[1],
       'password': password.text,
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
     };
+    print("This is my request====================${request}");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
       if (error is BadRequestException) {
@@ -71,7 +72,7 @@ class LoginController extends GetxController {
         }
       }
     });
-     debugPrint(response.toString());
+    debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());

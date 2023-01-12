@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
+import '../../controllers/auth/reset_password_controller.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
 
@@ -15,8 +16,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  TextEditingController newPassword = TextEditingController();
-  TextEditingController confirmNewPassword = TextEditingController();
+  ResetPasswordController resetPasswordController =
+      Get.find<ResetPasswordController>();
   bool english = true;
   bool arabic = false;
   String? countryName;
@@ -133,7 +134,34 @@ class _SettingsState extends State<Settings> {
           width: MediaQuery.of(context).size.width,
           titleTextAlign: TextAlign.center,
           onPress: (() {
-            //   Get.toNamed('otp_screen');
+            if (resetPasswordController.currentPassword.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Enter Current Password',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            } else if (resetPasswordController.newPassword.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Enter New Password',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            } else if (resetPasswordController
+                .confirmNewPassword.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Enter Confirm New Password',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            } else {
+              resetPasswordController.resetPassword();
+            }
           }),
           title: 'Update'.tr,
           color: R.colors.buttonColor,
@@ -359,6 +387,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         buildCrossIcon(),
                         buildChangePasswordext(),
+                        buildCurrentPasswordField(),
                         buildNewPasswordField(),
                         buildConfirmNewPasswordField(),
                         buildUpdateButton()
@@ -404,6 +433,20 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  Widget buildCurrentPasswordField() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      child: customTextField(
+          hintTextSize: 12,
+          color: Colors.grey[300]!,
+          height: 45,
+          borderColour: R.colors.transparent,
+          controller: resetPasswordController.currentPassword,
+          hintText: 'Enter Current Password'.tr,
+          hintStyle: TextStyle(color: R.colors.black)),
+    );
+  }
+
   Widget buildNewPasswordField() {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
@@ -412,7 +455,7 @@ class _SettingsState extends State<Settings> {
           color: Colors.grey[300]!,
           height: 45,
           borderColour: R.colors.transparent,
-          controller: newPassword,
+          controller: resetPasswordController.newPassword,
           hintText: 'Enter New Password'.tr,
           hintStyle: TextStyle(color: R.colors.black)),
     );
@@ -426,7 +469,7 @@ class _SettingsState extends State<Settings> {
           color: Colors.grey[300]!,
           height: 45,
           borderColour: R.colors.transparent,
-          controller: confirmNewPassword,
+          controller: resetPasswordController.confirmNewPassword,
           hintText: 'Confirm New Password'.tr,
           hintStyle: TextStyle(color: R.colors.black)),
     );

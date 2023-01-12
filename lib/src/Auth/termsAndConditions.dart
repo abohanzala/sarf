@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-
+import '../../controllers/common/terms_and_conditions_controller.dart';
 import '../../resources/dummy.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
+import '../widgets/loader.dart';
 
 class TermsAndConditions extends StatefulWidget {
   const TermsAndConditions({Key? key}) : super(key: key);
@@ -14,6 +15,17 @@ class TermsAndConditions extends StatefulWidget {
 }
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
+  TermsAndConditionsController termsAndConditionsController =
+      Get.find<TermsAndConditionsController>();
+
+  @override
+  // ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    termsAndConditionsController.terms();
+    print("initState Called");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,21 +69,18 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Title',
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: R.colors.black,
-                            fontFamily: 'bold'),
-                      ),
-                    ),
+                        margin: EdgeInsets.only(top: 20),
+                        child: HtmlWidget(termsAndConditionsController
+                                .userInfo!.data!.title!.ar ??
+                            '')),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                Text(DummyData.longText),
+                HtmlWidget(
+                    termsAndConditionsController.userInfo!.data!.content!.ar ??
+                        '')
               ],
             ),
           ),

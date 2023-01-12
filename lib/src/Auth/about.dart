@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-
+import '../../controllers/common/about_controller.dart';
 import '../../resources/dummy.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
@@ -14,6 +14,17 @@ class About extends StatefulWidget {
 }
 
 class _AboutState extends State<About> {
+  AboutController aboutController = Get.find<AboutController>();
+
+  @override
+  // ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    aboutController.about();
+
+    print("initState Called");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,20 +69,15 @@ class _AboutState extends State<About> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Title',
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: R.colors.black,
-                            fontFamily: 'bold'),
-                      ),
+                      child: HtmlWidget(
+                          aboutController.userInfo!.data!.title!.ar ?? ''),
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                Text(DummyData.longText),
+                HtmlWidget(aboutController.userInfo!.data!.content!.ar ?? ''),
               ],
             ),
           ),
