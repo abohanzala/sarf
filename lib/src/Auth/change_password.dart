@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:sarf/resources/resources.dart';
 import 'package:sarf/src/Auth/otp.dart';
+import '../../controllers/auth/change_password_controller.dart';
 import '../../resources/text_style.dart';
 import '../utils/routes_name.dart';
 import '../widgets/custom_textfield.dart';
@@ -15,9 +16,8 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-  TextEditingController otp = TextEditingController();
-  TextEditingController newPassword = TextEditingController();
-  TextEditingController confirmNewPassword = TextEditingController();
+  ChangePasswordController changePasswordController =
+      Get.find<ChangePasswordController>();
   FocusNode otpFieldNode = FocusNode();
   FocusNode passwordNode = FocusNode();
   String password = '';
@@ -167,7 +167,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent,
-          controller: otp,
+          controller: changePasswordController.otp,
           hintText: 'ex 1234'.tr,
           hintStyle: TextStyle(color: R.colors.black)),
     );
@@ -195,7 +195,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             child: customTextField(
                 hintTextSize: 12,
                 hintText: 'Password'.tr,
-                controller: newPassword,
+                controller: changePasswordController.newPassword,
                 color: R.colors.lightGrey,
                 height: 45,
                 borderColour: R.colors.transparent),
@@ -227,7 +227,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             child: customTextField(
                 hintTextSize: 12,
                 hintText: 'Password'.tr,
-                controller: newPassword,
+                controller: changePasswordController.confirmNewPassword,
                 color: R.colors.lightGrey,
                 height: 45,
                 borderColour: R.colors.transparent),
@@ -245,7 +245,33 @@ class _ChangePasswordState extends State<ChangePassword> {
           width: MediaQuery.of(context).size.width,
           titleTextAlign: TextAlign.center,
           onPress: (() {
-            Get.toNamed('otp_screen');
+            if (changePasswordController.otp.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Required Field',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            } else if (changePasswordController.newPassword.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Required Field',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            } else if (changePasswordController
+                .confirmNewPassword.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Required Field',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            }
+            changePasswordController.changePassword();
           }),
           title: 'Update'.tr,
           color: R.colors.buttonColor,

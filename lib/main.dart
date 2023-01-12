@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
+import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
 import 'controllers/auth/forgot_password_controller.dart';
 import 'controllers/auth/login_controller.dart';
 import 'controllers/auth/otp_controller.dart';
+import 'controllers/auth/otp_forgot_password_controller.dart';
 import 'controllers/auth/register_controller.dart';
 import 'controllers/auth/registration_controller.dart';
 import 'locale/locale_strings.dart';
@@ -22,6 +25,8 @@ void main() async {
   Get.put<DataCollectionController>(DataCollectionController());
   Get.put<RegistrationController>(RegistrationController());
   Get.put<ForgotPasswordController>(ForgotPasswordController());
+  Get.put<OtpForgotPasswordController>(OtpForgotPasswordController());
+  Get.put<ChangePasswordController>(ChangePasswordController());
   runApp(const MyApp());
 }
 
