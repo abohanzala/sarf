@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sarf/src/Auth/about.dart';
+import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
@@ -32,10 +32,7 @@ void main() async {
   Get.put<ForgotPasswordController>(ForgotPasswordController());
   Get.put<OtpForgotPasswordController>(OtpForgotPasswordController());
   Get.put<ChangePasswordController>(ChangePasswordController());
-  Get.put<ResetPasswordController>(ResetPasswordController());
-  Get.put<AboutController>(AboutController());
-  Get.put<TermsAndConditionsController>(TermsAndConditionsController());
-  Get.put<PrivacyController>(PrivacyController());
+  Get.put<InvoiceController>(InvoiceController());
   runApp(const MyApp());
 }
 

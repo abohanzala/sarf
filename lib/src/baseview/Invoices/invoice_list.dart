@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sarf/controllers/invoice/invoice_controller.dart';
+import 'package:sarf/model/members/invoice_list_model.dart';
 
 import '../../../resources/resources.dart';
 
@@ -13,6 +15,7 @@ class InvoiceListScreen extends StatefulWidget {
 }
 
 class _InvoiceListScreenState extends State<InvoiceListScreen> {
+  InvoiceController ctr = Get.find<InvoiceController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,14 +74,14 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                         ),
                       ),
                       SizedBox(width: 2.w),
-                      Text(
-                        '(23)',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      // Text(
+                      //   '(23)',
+                      //   style: TextStyle(
+                      //     color: Colors.black,
+                      //     fontSize: 16.sp,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
                     ],
                   ),
                   Row(
@@ -131,98 +134,206 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
             fit: FlexFit.loose,
             child: Transform(
               transform: Matrix4.translationValues(0, -25.h, 0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(8, (index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      margin: EdgeInsets.only(
-                          left: 20.w, right: 20.w, bottom: 20.h),
-                      child: Container(
-                        padding: EdgeInsets.all(16.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child:  SingleChildScrollView(
+                  child: FutureBuilder<InvoiceList?>(
+                          future: ctr.getInvoiceList(),
+                          builder: (contaxt,snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
+                }
+                if(snapshot.hasData){
+                  
+                  List<Data?> data = snapshot.data!.data!;
+                  if(data.isNotEmpty){
+
+                   return Column(
+                      children: List.generate(data.length, (index) {
+                        var singleData = data[index];
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          margin: EdgeInsets.only(
+                              left: 20.w, right: 20.w, bottom: 20.h),
+                          child: Container(
+                            padding: EdgeInsets.all(16.w),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Invoice ID'.tr,
+                                      style: TextStyle(
+                                        color: R.colors.grey,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      singleData?.createdDate ?? '',
+                                      style: TextStyle(
+                                        color: R.colors.grey,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5.h),
                                 Text(
-                                  'Invoice ID'.tr,
+                                  singleData!.id.toString(),
                                   style: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 16.sp,
+                                    color: R.colors.black,
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+                                SizedBox(height: 8.h),
+                                Text('Customer Name'.tr,
+                                    style: TextStyle(
+                                      color: R.colors.grey,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                SizedBox(height: 5.h),
                                 Text(
-                                  ' ${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
+                                  singleData.customer?.name ?? '',
                                   style: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 16.sp,
+                                    color: R.colors.black,
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+                                SizedBox(height: 10.h),
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10.w),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: R.colors.lightGrey,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '${"Amount".tr} ${singleData.amount}',
+                                        style: TextStyle(
+                                          color: R.colors.blueGradient1,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
+                                )
                               ],
                             ),
-                            SizedBox(height: 5.h),
-                            Text(
-                              '21',
-                              style: TextStyle(
-                                color: R.colors.black,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 8.h),
-                            Text('Customer Name'.tr,
-                                style: TextStyle(
-                                  color: R.colors.grey,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                            SizedBox(height: 5.h),
-                            Text(
-                              'John Doe',
-                              style: TextStyle(
-                                color: R.colors.black,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 10.w),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: R.colors.lightGrey,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Amount'.tr,
-                                    style: TextStyle(
-                                      color: R.colors.blueGradient1,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                            )
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      }),
                     );
-                  }),
+                  }
+                }
+                return Center(child:Text('No Data'));
+                          }),
+                  // child:  Column(
+                  //     children: List.generate(8, (index) {
+                  //       return Container(
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.white,
+                  //           borderRadius: BorderRadius.circular(10),
+                  //         ),
+                  //         margin: EdgeInsets.only(
+                  //             left: 20.w, right: 20.w, bottom: 20.h),
+                  //         child: Container(
+                  //           padding: EdgeInsets.all(16.w),
+                  //           decoration: BoxDecoration(
+                  //             color: Colors.white,
+                  //             borderRadius: BorderRadius.circular(10),
+                  //           ),
+                  //           child: Column(
+                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                  //             mainAxisAlignment: MainAxisAlignment.start,
+                  //             children: [
+                  //               Row(
+                  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //                 children: [
+                  //                   Text(
+                  //                     'Invoice ID'.tr,
+                  //                     style: TextStyle(
+                  //                       color: R.colors.grey,
+                  //                       fontSize: 16.sp,
+                  //                       fontWeight: FontWeight.w600,
+                  //                     ),
+                  //                   ),
+                  //                   Text(
+                  //                     ' ${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
+                  //                     style: TextStyle(
+                  //                       color: R.colors.grey,
+                  //                       fontSize: 16.sp,
+                  //                       fontWeight: FontWeight.w600,
+                  //                     ),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //               SizedBox(height: 5.h),
+                  //               Text(
+                  //                 '21',
+                  //                 style: TextStyle(
+                  //                   color: R.colors.black,
+                  //                   fontSize: 18.sp,
+                  //                   fontWeight: FontWeight.w600,
+                  //                 ),
+                  //               ),
+                  //               SizedBox(height: 8.h),
+                  //               Text('Customer Name'.tr,
+                  //                   style: TextStyle(
+                  //                     color: R.colors.grey,
+                  //                     fontSize: 16.sp,
+                  //                     fontWeight: FontWeight.w600,
+                  //                   )),
+                  //               SizedBox(height: 5.h),
+                  //               Text(
+                  //                 'John Doe',
+                  //                 style: TextStyle(
+                  //                   color: R.colors.black,
+                  //                   fontSize: 18.sp,
+                  //                   fontWeight: FontWeight.w600,
+                  //                 ),
+                  //               ),
+                  //               SizedBox(height: 10.h),
+                  //               Container(
+                  //                 padding: EdgeInsets.symmetric(vertical: 10.w),
+                  //                 width: double.infinity,
+                  //                 decoration: BoxDecoration(
+                  //                   color: R.colors.lightGrey,
+                  //                   borderRadius: BorderRadius.circular(10),
+                  //                 ),
+                  //                 child: Align(
+                  //                     alignment: Alignment.center,
+                  //                     child: Text(
+                  //                       'Amount'.tr,
+                  //                       style: TextStyle(
+                  //                         color: R.colors.blueGradient1,
+                  //                         fontSize: 16.sp,
+                  //                         fontWeight: FontWeight.bold,
+                  //                       ),
+                  //                     )),
+                  //               )
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       );
+                  //     }),
+                  //   ),
+                  
                 ),
-              ),
+              
             ),
           )
         ],
@@ -239,6 +350,7 @@ class InvoiceBottomSheet extends StatefulWidget {
 }
 
 class _InvoiceBottomSheetState extends State<InvoiceBottomSheet> {
+  InvoiceController ctr = Get.find<InvoiceController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
