@@ -10,16 +10,13 @@ import '../../controllers/auth/otp_controller.dart';
 import '../../controllers/auth/otp_forgot_password_controller.dart';
 import '../../resources/resources.dart';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({Key? key}) : super(key: key);
-
+class OtpForgotPasswordScreen extends StatefulWidget {
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  State<OtpForgotPasswordScreen> createState() =>
+      _OtpForgotPasswordScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
-  TextEditingController otpControllerText = TextEditingController();
-  OtpController otpController = Get.find<OtpController>();
+class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
   OtpForgotPasswordController otpForgotPasswordController =
       Get.find<OtpForgotPasswordController>();
   @override
@@ -103,7 +100,7 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
         child: customTextField(
             hintText: 'ex 1234',
-            controller: otpControllerText,
+            controller: otpForgotPasswordController.otpControllerGet,
             color: R.colors.lightGrey,
             height: 45,
             borderColour: R.colors.transparent),
@@ -164,13 +161,13 @@ class _OtpScreenState extends State<OtpScreen> {
       child: InkWell(
         onTap: () {
           print(
-              'This is my phoneNumber===============${otpControllerText.text.toString()}');
-          otpController.otpControllerGet.text =
-              otpControllerText.text.toString();
+              'This is my phoneNumber===============${otpForgotPasswordController.otpControllerGet.text.toString()}');
+          otpForgotPasswordController.otpControllerGet.text =
+              otpForgotPasswordController.otpControllerGet.text.toString();
           print(
-              'This is my phoneNumber===============${otpController.otpControllerGet}');
+              'This is my phoneNumber===============${otpForgotPasswordController.otpControllerGet}');
 
-          if (otpControllerText.text.isEmpty) {
+          if (otpForgotPasswordController.otpControllerGet.text.isEmpty) {
             Get.snackbar(
               'Title',
               'Required Field',
@@ -179,7 +176,7 @@ class _OtpScreenState extends State<OtpScreen> {
             );
             return;
           }
-          otpController.otp();
+          otpForgotPasswordController.otp();
         },
         child: Center(
           child: Text(

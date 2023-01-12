@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/auth/forgot_password_controller.dart';
+import 'package:sarf/controllers/auth/register_controller.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -9,10 +11,11 @@ import '../../services/dio_client.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 
-class ForgotPasswordController extends GetxController {
-  var registerFormKey = GlobalKey<FormState>();
-  TextEditingController phone = TextEditingController();
-  var message;
+class OtpForgotPasswordController extends GetxController {
+  TextEditingController otpControllerGet = TextEditingController();
+  RegisterController registerController = Get.find<RegisterController>();
+  ForgotPasswordController forgotPasswordController =
+      Get.find<ForgotPasswordController>();
 
   @override
   void onInit() {
@@ -20,7 +23,7 @@ class ForgotPasswordController extends GetxController {
     super.onInit();
   }
 
-  Future forgotPassword() async {
+  Future otp() async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -29,24 +32,24 @@ class ForgotPasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = phone.text;
+    var a = forgotPasswordController.phone.text;
     final splitted = a.split('+');
-
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': splitted[1],
+      'otp': otpControllerGet.text,
     };
-
+    print("This is my request====================${request}");
     //DialogBoxes.openLoadingDialog();
 
     var response = await DioClient()
-        .post(ApiLinks.forgotPassword, request)
+        .post(ApiLinks.verify_otp, request)
         .catchError((error) {
-      Get.back();
       if (error is BadRequestException) {
+        Get.back();
         Get.snackbar(
-          'Error',
-          '${message}',
+          'Title',
+          'Message',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
@@ -56,17 +59,17 @@ class ForgotPasswordController extends GetxController {
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('///////////////////${message}');
+        debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
-    message = response['message'];
     // if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
+      Get.back();
       debugPrint(response.toString());
       Get.toNamed(RoutesName.ChangePassword);
-      //   userInfo = UserInfo.fromMap(response);S
+      //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
       //  await storage.write('userId', userInfo.user!.id);
       //  await storage.write('name', userInfo.user!.name);
@@ -88,11 +91,13 @@ class ForgotPasswordController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
+        'Title',
         'Message',
-        message,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
+      // SnakeBars.showErrorSnake(description: response['message']);
+      // Navigator.of(Get.context!).pop();
     }
     return null;
     // return null;

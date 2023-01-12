@@ -14,6 +14,7 @@ import 'package:sarf/src/utils/routes_name.dart';
 import '../Auth/about.dart';
 import '../Auth/change_profile.dart';
 import '../Auth/otp.dart';
+import '../Auth/otp_Forgot_Password.dart';
 import '../Auth/privacy_policy.dart';
 import '../Auth/registration_details.dart';
 import '../Auth/settings.dart';
@@ -77,13 +78,16 @@ class Routes {
       case RoutesName.alerts:
         return MaterialPageRoute(
             builder: (BuildContext context) =>
-                const AlertsScreen());                               // case RoutesName.Splash:
+                const AlertsScreen()); // case RoutesName.Splash:
 
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const SplashScreen());
       case RoutesName.deleteAccount:
         return MaterialPageRoute(
             builder: (BuildContext context) => const DeleteAccount());
+      case RoutesName.OtpScreenForgotPassword:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => OtpForgotPasswordScreen());
       // case RoutesName.SignIn:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const Signin());
