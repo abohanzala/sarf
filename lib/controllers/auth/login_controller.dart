@@ -71,6 +71,7 @@ class LoginController extends GetxController {
         }
       }
     });
+     debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
@@ -95,7 +96,7 @@ class LoginController extends GetxController {
       Get.back();
       Get.snackbar(
         'Error'.tr,
-        'Something wnet wrong try later'.tr,
+        response['message'].toString(),
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
