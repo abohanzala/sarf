@@ -33,6 +33,7 @@ class MyBottomNavigationController extends GetxController {
   @override
   // ignore: unnecessary_overrides
   void onInit() {
+    tabIndex.value = 0;
     super.onInit();
     // currentPage == 1
     //     ? tabIndex.value = 1

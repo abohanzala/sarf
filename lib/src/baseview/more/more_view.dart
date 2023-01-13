@@ -8,6 +8,7 @@ import 'package:sarf/src/widgets/custom_textfield.dart';
 
 import '../../../constant/api_links.dart';
 import '../../../resources/resources.dart';
+import '../base_controller.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({Key? key}) : super(key: key);
@@ -18,7 +19,8 @@ class MoreScreen extends StatefulWidget {
 
 Future logout() async {
   // openLoader();
-
+  
+  
   var response =
       await DioClient().get(ApiLinks.logout).catchError((error) async {
     //debugPrint(error.toString());
@@ -45,7 +47,12 @@ Future logout() async {
     await GetStorage().remove(
       'status',
     );
-    Get.offAllNamed(RoutesName.LogIn);
+     MyBottomNavigationController ctr = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      ctr.tabIndex.value = 0;
+    Get.offAllNamed(RoutesName.LogIn)?.then((value){
+      MyBottomNavigationController ctr = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      ctr.tabIndex.value = 0;
+    });
   });
   // print(response);
 
@@ -72,7 +79,11 @@ Future logout() async {
   await GetStorage().remove(
     'status',
   );
-  Get.offAllNamed(RoutesName.LogIn);
+   MyBottomNavigationController ctr = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      ctr.tabIndex.value = 0;
+  Get.offAllNamed(RoutesName.LogIn)?.then((value){
+   
+  });
 }
 
 class _MoreScreenState extends State<MoreScreen> {
