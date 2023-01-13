@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sarf/src/baseview/more/delete_account3.dart';
 
+import '../../../controllers/common/delete_account_controller.dart';
 import '../../../resources/resources.dart';
 
 class DeleteAccount2 extends StatefulWidget {
@@ -15,6 +16,9 @@ class DeleteAccount2 extends StatefulWidget {
 
 class _DeleteAccount2State extends State<DeleteAccount2> {
   bool isChecked = false;
+  DeleteAccountController deleteAccountController =
+      Get.find<DeleteAccountController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +89,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Enter OTP'.tr,
+                      'Enter Password'.tr,
                       style: TextStyle(
                         color: R.colors.grey.withOpacity(1),
                         fontSize: 14.sp,
@@ -94,6 +98,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                     ),
                     SizedBox(height: 15.h),
                     TextFormField(
+                      controller: deleteAccountController.passwordController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
@@ -121,9 +126,21 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(
-                          () => DeleteAccount3(),
-                        );
+                        if (deleteAccountController
+                            .passwordController.text.isEmpty) {
+                          Get.snackbar(
+                            'Alert',
+                            'Please Enter Password',
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: R.colors.themeColor,
+                          );
+                          return;
+                        }
+
+                        deleteAccountController.deleteAccount();
+                        // Get.to(
+                        //   () => DeleteAccount3(),
+                        // );
                       },
                       child: Container(
                         height: 40.h,

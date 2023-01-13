@@ -31,5 +31,6 @@ class RoutesName {
   static const String PrivacyPolicy = 'privacy_policy';
   static const String alerts = 'alerts';
   static const String deleteAccount ='delete_account';
+  static const String deleteAccount3 ='delete_account3';
 
 }

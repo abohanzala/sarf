@@ -15,6 +15,7 @@ import 'controllers/auth/register_controller.dart';
 import 'controllers/auth/registration_controller.dart';
 import 'controllers/auth/reset_password_controller.dart';
 import 'controllers/common/about_controller.dart';
+import 'controllers/common/delete_account_controller.dart';
 import 'controllers/common/privacy_policy_controller.dart';
 import 'controllers/common/profile_controller.dart';
 import 'controllers/common/terms_and_conditions_controller.dart';
@@ -39,6 +40,7 @@ void main() async {
   Get.put<PrivacyController>(PrivacyController());
   Get.put<AboutController>(AboutController());
   Get.put<ProfileController>(ProfileController());
+  Get.put<DeleteAccountController>(DeleteAccountController());
   runApp(const MyApp());
 }
 
