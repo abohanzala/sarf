@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sarf/src/baseview/more/delete_account2.dart';
 
+import '../../../controllers/common/delete_account_controller.dart';
 import '../../../resources/resources.dart';
 
 class DeleteAccount extends StatefulWidget {
@@ -15,6 +16,9 @@ class DeleteAccount extends StatefulWidget {
 
 class _DeleteAccountState extends State<DeleteAccount> {
   bool isChecked = false;
+  DeleteAccountController deleteAccountController =
+      Get.find<DeleteAccountController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,6 +98,8 @@ class _DeleteAccountState extends State<DeleteAccount> {
                     ),
                     SizedBox(height: 20.h),
                     TextFormField(
+                      controller: deleteAccountController
+                          .reasonForDeletingAccountController,
                       maxLines: 10,
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
@@ -155,6 +161,26 @@ class _DeleteAccountState extends State<DeleteAccount> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        if (deleteAccountController
+                            .reasonForDeletingAccountController.text.isEmpty) {
+                          Get.snackbar(
+                            'Alert',
+                            'Please Enter Reason for Deleting Account',
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: R.colors.themeColor,
+                          );
+                          return;
+                        }
+                        if (isChecked == false) {
+                          Get.snackbar(
+                            'Alert',
+                            'Please Accept Terms And Conditions',
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: R.colors.themeColor,
+                          );
+                          return;
+                        }
+
                         Get.to(DeleteAccount2());
                       },
                       child: Container(

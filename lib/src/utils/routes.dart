@@ -20,6 +20,7 @@ import '../Auth/registration_details.dart';
 import '../Auth/settings.dart';
 import '../Auth/termsAndConditions.dart';
 import '../baseview/base_view.dart';
+import '../baseview/more/delete_account3.dart';
 import '../baseview/more/support.dart';
 
 class Routes {
@@ -85,6 +86,10 @@ class Routes {
       case RoutesName.OtpScreenForgotPassword:
         return MaterialPageRoute(
             builder: (BuildContext context) => OtpForgotPasswordScreen());
+      case RoutesName.deleteAccount3:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => DeleteAccount3());
+       // DeleteAccount3(),
       // case RoutesName.SignIn:
       //   return MaterialPageRoute(
       //       builder: (BuildContext context) => const Signin());
