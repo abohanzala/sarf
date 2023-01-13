@@ -19,8 +19,7 @@ class MoreScreen extends StatefulWidget {
 
 Future logout() async {
   // openLoader();
-  
-  
+
   var response =
       await DioClient().get(ApiLinks.logout).catchError((error) async {
     //debugPrint(error.toString());
@@ -47,10 +46,12 @@ Future logout() async {
     await GetStorage().remove(
       'status',
     );
-     MyBottomNavigationController ctr = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-      ctr.tabIndex.value = 0;
-    Get.offAllNamed(RoutesName.LogIn)?.then((value){
-      MyBottomNavigationController ctr = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+    MyBottomNavigationController ctr =
+        Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+    ctr.tabIndex.value = 0;
+    Get.offAllNamed(RoutesName.LogIn)?.then((value) {
+      MyBottomNavigationController ctr =
+          Get.put<MyBottomNavigationController>(MyBottomNavigationController());
       ctr.tabIndex.value = 0;
     });
   });
@@ -79,11 +80,10 @@ Future logout() async {
   await GetStorage().remove(
     'status',
   );
-   MyBottomNavigationController ctr = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-      ctr.tabIndex.value = 0;
-  Get.offAllNamed(RoutesName.LogIn)?.then((value){
-   
-  });
+  MyBottomNavigationController ctr =
+      Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+  ctr.tabIndex.value = 0;
+  Get.offAllNamed(RoutesName.LogIn)?.then((value) {});
 }
 
 class _MoreScreenState extends State<MoreScreen> {

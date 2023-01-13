@@ -71,6 +71,7 @@ class DeleteAccountController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
+      await GetStorage().remove('user_token');
       Get.toNamed(RoutesName.deleteAccount3);
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
