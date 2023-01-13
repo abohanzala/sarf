@@ -42,10 +42,11 @@ class RegistrationController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-
+    var a = registerController.phone.text;
+    final splitted = a.split('+');
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': registerController.phone.text,
+      'mobile': splitted[1],
       'account_type': accountType == true ? 0 : 1,
       'password': passwordController.text,
       'name': accountType == true
