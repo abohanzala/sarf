@@ -22,9 +22,12 @@ class MembersController extends GetxController{
 
   var loadingMemDetails = false.obs;
   var loadingInvoiceDetails = false.obs;
+  var selectExpanseTypeID = '';
+  var selectCityID = '';
   Rx<MemberDetails> memDetails = MemberDetails().obs;
   Rx<SingleInvoiceDetails> inVoiceDetails = SingleInvoiceDetails().obs;
   List<File> uploadImages = <File>[].obs;
+  
 
 @override
 void onInit(){
@@ -71,11 +74,16 @@ void onInit(){
     return null;
   }
 
-  Future<CityList?> getCityList() async {
+  Future<CityList?> getCityList(String id) async {
    // print("${ApiLinks.cityList}${GetStorage().read('lang')}");
+
    // openLoader();
+    var request = {
+      "language": GetStorage().read('lang'),
+      "expense_type_id": id,
+    };
     var response =
-        await DioClient().get("${ApiLinks.cityList}${GetStorage().read('lang')}").catchError((error) {
+        await DioClient().post(ApiLinks.cityList,request).catchError((error) {
       if (error is BadRequestException) {
         
         
@@ -108,12 +116,13 @@ void onInit(){
     return null;
   }
 
-  Future<ListMembersNewList?> getMembersNewList(String id) async {
+  Future<ListMembersNewList?> getMembersNewList(String id,String city) async {
    // print("${ApiLinks.cityList}${GetStorage().read('lang')}");
    // openLoader();
    var request = {
     "language": GetStorage().read('lang'),
     "expense_type_id": id,
+    "city_id": city
    };
    debugPrint(request.toString());
     var response =
@@ -251,23 +260,6 @@ Future getMemberDetails(String id) async {
 
 Future postInvoiceAttach(String id) async {
   openLoader();
-    // Map<String,dynamic> request = {
-    //   'language': storage.read('lang'),
-    //   'category_id': homeController.myCategories[categoryIndex.value].id,
-    //   'sub_category_id': homeController.myCategories[categoryIndex.value]
-    //       .subCategories![subCategoryIndex.value].id,
-    //   'title': titleCtrl.text,
-    //   'price': priceCtrl.text,
-    //   'country_id': storage.read('country_id'),
-    //   'city_id': storage.read('city_id'),
-    //   'description': descCtrl.text,
-    //   'images': images,
-    // };
-    // for(int i=0;i<images.length;i++){
-    //     request.addAll({"images[$i]":images[i]});
-    //   }
-    //  print(request);
-   
     deo.FormData formData = deo.FormData();
     
 for (var i = 0; i < uploadImages.length; i++) {

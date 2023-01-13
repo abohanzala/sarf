@@ -12,7 +12,7 @@ class ApiLinks {
   static const String about = '$base/page';
   static const String change_password = '$base/change_password';
   static const String membersList = '$base/member_list?language=';
-  static const String cityList = '$base/cities_members?language=';
+  static const String cityList = '$base/cities_members';
   static const String getHome = '$base/user';
   static const String addBudget = '$base/budget/add';
   static const String data_collection = '$base/data_collection?language=';
