@@ -42,7 +42,7 @@ class Data {
   int? status;
   String? createdDate;
   String? createdTime;
-  String? invoiceFiles;
+  List<InvoiceFiles>? invoiceFiles;
   Customer? customer;
 
   Data(
@@ -71,12 +71,7 @@ class Data {
     memberId = json['member_id'];
     amount = json['amount'];
     note = json['note'];
-    if (json['attachments'] != null) {
-      attachments = <String>[];
-      json['attachments'].forEach((v) {
-        attachments!.add(v);
-      });
-    }
+    attachments = json['attachments'].cast<String>();
     expenseTypeId = json['expense_type_id'];
     budgetId = json['budget_id'];
     paymentType = json['payment_type'];
@@ -87,7 +82,12 @@ class Data {
     status = json['status'];
     createdDate = json['created_date'];
     createdTime = json['created_time'];
-    invoiceFiles = json['invoice_files'];
+    if (json['invoice_files'] != null ) {
+      invoiceFiles = <InvoiceFiles>[];
+      json['invoice_files'].forEach((v) {
+        invoiceFiles!.add(new InvoiceFiles.fromJson(v));
+      });
+    }
     customer = json['customer'] != null
         ? new Customer.fromJson(json['customer'])
         : null;
@@ -100,9 +100,7 @@ class Data {
     data['member_id'] = this.memberId;
     data['amount'] = this.amount;
     data['note'] = this.note;
-    if (this.attachments != null) {
-      data['attachments'] = this.attachments!.map((v) => v).toList();
-    }
+    data['attachments'] = this.attachments;
     data['expense_type_id'] = this.expenseTypeId;
     data['budget_id'] = this.budgetId;
     data['payment_type'] = this.paymentType;
@@ -113,10 +111,41 @@ class Data {
     data['status'] = this.status;
     data['created_date'] = this.createdDate;
     data['created_time'] = this.createdTime;
-    data['invoice_files'] = this.invoiceFiles;
+    if (this.invoiceFiles != null) {
+      data['invoice_files'] =
+          this.invoiceFiles!.map((v) => v.toJson()).toList();
+    }
     if (this.customer != null) {
       data['customer'] = this.customer!.toJson();
     }
+    return data;
+  }
+}
+
+class InvoiceFiles {
+  int? id;
+  int? invoiceId;
+  int? userId;
+  List<String>? files;
+  int? status;
+
+  InvoiceFiles({this.id, this.invoiceId, this.userId, this.files, this.status});
+
+  InvoiceFiles.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    invoiceId = json['invoice_id'];
+    userId = json['user_id'];
+    files = json['files'] != null ? json['files'].cast<String>() : null ;
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['invoice_id'] = this.invoiceId;
+    data['user_id'] = this.userId;
+    data['files'] = this.files;
+    data['status'] = this.status;
     return data;
   }
 }
