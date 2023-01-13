@@ -75,6 +75,11 @@ class ChangePasswordController extends GetxController {
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       Get.toNamed(RoutesName.LogIn);
+      otp.clear();
+      newPassword.clear();
+      confirmNewPassword.clear();
+      forgotPasswordController.toString();
+
       debugPrint(response.toString());
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);

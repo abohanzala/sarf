@@ -595,21 +595,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
-          } else if (selectedCityIndex == -1) {
-            Get.snackbar(
-              'Alert',
-              'Please Select City',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: R.colors.themeColor,
-            );
-          } else if (selectedTypeIndex == -1) {
-            Get.snackbar(
-              'Alert',
-              'Please Select Type',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: R.colors.themeColor,
-            );
-          } else if (registrationController.accountType == true) {
+            return;
+          }
+          if (registrationController.accountType == true) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(
                 'Alert',
@@ -617,8 +605,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
+              return;
             }
-          } else if (registrationController.accountType == false) {
+          }
+          if (registrationController.accountType == false) {
             if (registrationController.fullNameController.text.isEmpty) {
               print(
                   "This is fullName =============${registrationController.fullNameController.text}");
@@ -628,19 +618,63 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
+              return;
             }
+          }
+          if (selectedCityIndex == -1) {
+            Get.snackbar(
+              'Alert',
+              'Please Select City',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
             return;
-          } else if (checkBox == false) {
+          }
+          if (selectedTypeIndex == -1) {
+            Get.snackbar(
+              'Alert',
+              'Please Select Type',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+          }
+          if (checkBox == false) {
             Get.snackbar(
               'Alert',
               'Please Agree to Terms And Conditions',
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
-          } else {
-            registrationController.registration();
+            return;
           }
-
+          if (registrationController.accountType == true) {
+            if (registrationController.companyNameController.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Please Enter Name',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            }
+          }
+          if (registrationController.accountType == false) {
+            print(
+                "This is fullName =============${registrationController.fullNameController.text}");
+            if (registrationController.fullNameController.text.isEmpty) {
+              print(
+                  "This is fullName =============${registrationController.fullNameController.text}");
+              Get.snackbar(
+                'Alert',
+                'Please Enter Name',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            }
+          }
+          registrationController.registration();
         },
         child: Center(
           child: Text(

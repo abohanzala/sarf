@@ -22,8 +22,6 @@ import '../../src/widgets/loader.dart';
 
 class DataCollectionController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
-  TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
   List<Cities>? cities = [];
   List<ExpenseType>? types = [];
 

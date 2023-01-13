@@ -78,6 +78,22 @@ class ProfileController extends GetxController {
       debugPrint(response.toString());
       profileModel = ProfileModel.fromJson(response);
       print('This is ===================${profileModel}');
+      nameController.text = profileModel!.user!.name.toString();
+      userNameController.text = profileModel!.user!.username.toString();
+      emailController.text = profileModel!.user!.email.toString();
+      mobileController.text = profileModel!.user!.mobile.toString();
+      instaController.text =
+          profileModel!.user!.userDetail!.instaLink.toString();
+      twitterController.text =
+          profileModel!.user!.userDetail!.twitterLink.toString();
+      contactController.text =
+          profileModel!.user!.userDetail!.contactNo.toString();
+      whatsappController.text =
+          profileModel!.user!.userDetail!.whatsapp.toString();
+      websiteController.text =
+          profileModel!.user!.userDetail!.website.toString();
+      locationController.text =
+          profileModel!.user!.userDetail!.location.toString();
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);

@@ -24,8 +24,6 @@ class _ChangeProfileState extends State<ChangeProfile> {
     // ignore: avoid_print
     profileController.getProfile();
 
-
-
     print("initState Called");
   }
 
@@ -184,8 +182,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
         child: Row(
           children: [
             Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Icon(
+                margin: const EdgeInsets.only(left: 10),
+                child: const Icon(
                   Icons.pin_drop,
                   size: 20,
                   color: Colors.blue,
@@ -193,7 +191,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Text(
-                'Location'.tr,
+                profileController.locationController.text.tr,
                 style: TextStyle(
                     color: R.colors.black, fontSize: 13, fontFamily: 'medium'),
               ),

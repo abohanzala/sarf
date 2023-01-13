@@ -97,7 +97,13 @@ class RegistrationController extends GetxController {
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
-
+      passwordController.clear();
+      fullNameController.clear();
+      companyNameController.clear();
+      twitterController.clear();
+      contactController.clear();
+      websiteController.clear();
+      whatsappController.clear();
       var userInfo = LoginModel.fromJson(response);
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);

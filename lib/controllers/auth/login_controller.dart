@@ -83,6 +83,8 @@ class LoginController extends GetxController {
         backgroundColor: R.colors.blue,
       );
       var userInfo = LoginModel.fromJson(response);
+      phone.clear();
+      password.clear();
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);
       await GetStorage().write('name', userInfo.user!.name);
