@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sarf/controllers/home/home_controller.dart';
 
 import '../../../resources/resources.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
+  
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -16,6 +17,28 @@ class _HomeScreenState extends State<HomeScreen> {
   HomeController ctr = Get.put<HomeController>(HomeController());
   TextEditingController txt = TextEditingController();
   //ScrollController scrollCtr = ScrollController();
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+  getData() async{
+    await ctr.getHome(null).then((value) async{
+      //print(ctr.budgets.first.id);
+      if(ctr.budgets.isNotEmpty){
+        ctr.getHome(ctr.budgets.first.id.toString()).then((value){
+        if(ctr.budgets.isNotEmpty){
+          ctr.selectedBudgetIndex.value = 1;
+          ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
+          ctr.selectedBudgetNumbder.value = "#1";    
+          ctr.selectedBudgetName.value = ctr.budgets.first.name.toString();
+          ctr.qrCode.value = "${GetStorage().read('mobile')}#1";
+        }
+      });
+      }
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Icon(Icons.more_vert, color: R.colors.black)),
                         Row(
                           children: [
-                            Text('Office'.tr),
+                            Obx(() => Text(ctr.selectedBudgetName.value)),
                             GestureDetector(
                                 onTap: () {},
                                 child: Icon(
@@ -231,6 +254,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    "${ctr.budgets.length + 1 }",
+                                    style: TextStyle(
+                                      color: R.colors.white,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ],
                               ),
                             ),
@@ -266,6 +300,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               (index + 1);
                                           ctr.selectedBudgetId.value =
                                               singleData.id.toString();
+                                          ctr.selectedBudgetNumbder.value = "#${index + 1}";    
+                                          ctr.selectedBudgetName.value = singleData.name ?? '' ;    
                                           debugPrint(
                                               ctr.selectedBudgetId.value);
                                           ctr.getHome(singleData.id.toString());
@@ -285,11 +321,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                singleData.name ?? '',
+                                                "${singleData.name ?? ''}\n#${index + 1}",
                                                 style: const TextStyle(
                                                     fontSize: 14),
+                                                textAlign: TextAlign.center,    
                                               ),
                                             ],
                                           ),
@@ -378,29 +416,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Border.all(color: R.colors.grey, width: 1)),
                           child: Column(
                             children: [
-                              const SizedBox(
+                               SizedBox(
                                 width: 100,
                                 height: 100,
+                                child: QrImage(
+                                          data: ctr.qrCode.value,
+                                          version: QrVersions.auto,
+                                          size: 100.0,
+                                        ),
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                'Office - QR code',
+                                '${ctr.selectedBudgetName} - QR code',
                                 style: TextStyle(color: R.colors.grey),
                               ),
+                              // const SizedBox(
+                              //   height: 5,
+                              // ),
+                              // Text(
+                              //   'Username #1',
+                              //   style: TextStyle(color: R.colors.black),
+                              // ),
                               const SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                'Username #1',
-                                style: TextStyle(color: R.colors.black),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '053677443 #1',
+                                ctr.qrCode.value,
                                 style: TextStyle(color: R.colors.black),
                               ),
                             ],

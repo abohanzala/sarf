@@ -29,7 +29,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
             appbarSearch(),
             const SizedBox(height: 10,),
             Expanded(child: FutureBuilder<ListMembersNewList?>(
-            future: ctr.getMembersNewList(1.toString()),
+            future: ctr.getMembersNewList(ctr.selectExpanseTypeID,ctr.selectCityID),
             builder: (contaxt,snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
                 return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));

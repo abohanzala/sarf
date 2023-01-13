@@ -54,6 +54,7 @@ class _MembersScreenState extends State<MembersScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: GestureDetector(
                           onTap: (){
+                            ctr.selectExpanseTypeID = singleData.id.toString() ; 
                             Get.toNamed(RoutesName.cityList);
                           },
                           child: Container(

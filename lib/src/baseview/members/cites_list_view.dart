@@ -29,7 +29,7 @@ class _CityListScreenState extends State<CityListScreen> {
           appbarSearch(),
          // const SizedBox(height: 10,),
           Expanded(child: FutureBuilder<CityList?>(
-            future: ctr.getCityList(),
+            future: ctr.getCityList(ctr.selectExpanseTypeID),
             builder: (contaxt,snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
                 return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
@@ -54,6 +54,7 @@ class _CityListScreenState extends State<CityListScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: GestureDetector(
                           onTap: (){
+                            ctr.selectCityID = singleCity.id.toString();
                             Get.toNamed(RoutesName.membersList);
                           },
                           child: Container(

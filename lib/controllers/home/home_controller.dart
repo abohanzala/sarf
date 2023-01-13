@@ -18,14 +18,17 @@ List<Budgets> budgets = <Budgets>[].obs;
 List<ExpenseTypes> expenseTypes = <ExpenseTypes>[].obs;
 var selectedBudgetIndex = 0.obs;
 var selectedBudgetId = ''.obs;
-var expansetype = ''.obs;
+var selectedBudgetNumbder = "".obs;
+var selectedBudgetName = "".obs;
+var qrCode = "".obs;
+//var expansetype = ''.obs;
 var currency = ''.obs;
 var totalInvoices = ''.obs;
 var totalExpanses = ''.obs;
 
 @override
 void onInit() async{
-  await getHome(null);
+ // await getHome(null);
   super.onInit();
 
   
@@ -102,6 +105,7 @@ Future getHome(String? id) async {
         currency.value = data.data!.currency.toString();
         totalInvoices.value = data.data!.totalInvoices.toString();
         totalExpanses.value = data.data!.totalExpenses.toString();
+        qrCode.value = "${GetStorage().read('mobile')}$selectedBudgetNumbder";
         //print(budgets.first.name);
         
        // return data;
@@ -236,6 +240,8 @@ Future getHome(String? id) async {
       //debugPrint(response.toString());
       selectedBudgetId.value = '';
       selectedBudgetIndex.value = 0;
+      selectedBudgetNumbder = "".obs;
+      selectedBudgetName = "".obs;
       Get.back();
       getHome(null);
       //Get.back();
