@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 2,
                                   ),
                                   Text(
-                                    "${ctr.budgets.length + 1 }",
+                                    "${ctr.budgets.length}",
                                     style: TextStyle(
                                       color: R.colors.white,
                                       decoration: TextDecoration.underline,

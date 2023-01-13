@@ -242,6 +242,7 @@ Future getHome(String? id) async {
       selectedBudgetIndex.value = 0;
       selectedBudgetNumbder = "".obs;
       selectedBudgetName = "".obs;
+      qrCode.value = '';
       Get.back();
       getHome(null);
       //Get.back();
@@ -313,8 +314,12 @@ Future getHome(String? id) async {
     if (response['success'] == true) {
       //Get.back();
       //debugPrint(response.toString());
+      
       selectedBudgetId.value = '';
       selectedBudgetIndex.value = 0;
+      selectedBudgetNumbder = "".obs;
+      selectedBudgetName = "".obs;
+      qrCode.value = '';
       Get.back();
       getHome(null);
       //Get.back();
