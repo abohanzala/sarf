@@ -94,9 +94,7 @@ class _DeleteAccount3State extends State<DeleteAccount3> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(
-                          () => LoginScreen(),
-                        );
+                        Get.offAll(LoginScreen());
                       },
                       child: Container(
                         height: 40.h,
