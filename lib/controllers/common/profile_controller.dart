@@ -3,30 +3,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
+import 'package:sarf/src/Auth/change_password.dart';
 import '../../constant/api_links.dart';
-import '../../model/loginModel.dart';
+import '../../model/moreModel/about.dart';
+import '../../model/moreModel/profile.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 
-class RegistrationController extends GetxController {
-  var registerFormKey = GlobalKey<FormState>();
-  RegisterController registerController = Get.find<RegisterController>();
-  TextEditingController companyNameController = TextEditingController();
-  TextEditingController fullNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController instagramController = TextEditingController();
+class ProfileController extends GetxController {
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController instaController = TextEditingController();
   TextEditingController twitterController = TextEditingController();
   TextEditingController contactController = TextEditingController();
   TextEditingController whatsappController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
-  bool accountType = true;
-  bool isOnline = false;
-  var cityId;
-  var expense_typeId;
+  TextEditingController locationController = TextEditingController();
   var message;
+  ProfileModel? profileModel;
 
   @override
   void onInit() {
@@ -34,8 +33,7 @@ class RegistrationController extends GetxController {
     super.onInit();
   }
 
-  Future registration() async {
-    openLoader();
+  Future getProfile() async {
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
     // if (!isValid) {
@@ -43,38 +41,20 @@ class RegistrationController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = registerController.phone.text;
-    final splitted = a.split('+');
+    // var a = forgotPasswordController.phone.text;
+    // final splitted = a.split('+');
+
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
-      'account_type': accountType == true ? 0 : 1,
-      'password': passwordController.text,
-      'name': accountType == true
-          ? companyNameController.text
-          : fullNameController.text,
-      'city_id': cityId,
-      'expense_type_id': expense_typeId,
-      'insta_link': instagramController.text,
-      'twitter_link': twitterController.text,
-      'contact_no': contactController.text,
-      'whatsapp': whatsappController.text,
-      'website': websiteController.text,
-      'is_online': isOnline == true ? 0 : 1,
-      'location': 'abc',
-      'location_lat': '36.87655',
-      'location_lng': '72.77876',
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
     };
-    print("This is our request ==================${request}");
+    print("This is my request====================${request}");
 
     //DialogBoxes.openLoadingDialog();
 
-    var response = await DioClient()
-        .post(ApiLinks.registration, request)
-        .catchError((error) {
+    var response =
+        await DioClient().post(ApiLinks.profile, request).catchError((error) {
       if (error is BadRequestException) {
+        Get.back();
         Get.snackbar(
           'Error',
           '${message}',
@@ -87,8 +67,7 @@ class RegistrationController extends GetxController {
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something Went wrong');
-
+        debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
@@ -97,18 +76,21 @@ class RegistrationController extends GetxController {
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
-
-      var userInfo = LoginModel.fromJson(response);
-      await GetStorage().write('user_token', userInfo.token);
-      await GetStorage().write('userId', userInfo.user!.id);
-      await GetStorage().write('name', userInfo.user!.name);
-      await GetStorage().write('username', userInfo.user!.username);
-      await GetStorage().write('email', userInfo.user!.email);
-      await GetStorage().write('firebase_email', userInfo.user!.firebaseEmail);
-      await GetStorage().write('mobile', userInfo.user!.mobile);
-      await GetStorage().write('photo', userInfo.user!.photo);
-      await GetStorage().write('status', userInfo.user!.status);
-      Get.offAllNamed(RoutesName.base);
+      profileModel = ProfileModel.fromJson(response);
+      print('This is ===================${profileModel}');
+      update();
+      //   Get.toNamed(RoutesName.RegistrationDetails);
+      //   userInfo = UserInfo.fromMap(response);
+      //  await  storage.write('user_token', userInfo.token);
+      //  await storage.write('userId', userInfo.user!.id);
+      //  await storage.write('name', userInfo.user!.name);
+      //  await storage.write('username', userInfo.user!.username);
+      //  await storage.write('email', userInfo.user!.email);
+      //  await storage.write('firebase_email', userInfo.user!.firebaseEmail);
+      //  await storage.write('mobile', userInfo.user!.mobile);
+      //  await storage.write('photo', userInfo.user!.photo);
+      //  await storage.write('status', userInfo.user!.status);
+      //   Navigator.of(Get.context!).pop();
 
       //  await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile')).then((value){
       //     SnakeBars.showSuccessSnake(description: userInfo.message);
@@ -125,6 +107,8 @@ class RegistrationController extends GetxController {
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
+      // SnakeBars.showErrorSnake(description: response['message']);
+      // Navigator.of(Get.context!).pop();
     }
     return null;
     // return null;

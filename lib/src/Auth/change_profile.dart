@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../controllers/common/about_controller.dart';
+import '../../controllers/common/profile_controller.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
 
@@ -14,7 +16,19 @@ class ChangeProfile extends StatefulWidget {
 }
 
 class _ChangeProfileState extends State<ChangeProfile> {
-  TextEditingController companyNameController = TextEditingController();
+  ProfileController profileController = Get.find<ProfileController>();
+
+  @override
+  // ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    profileController.getProfile();
+
+
+
+    print("initState Called");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,12 +116,12 @@ class _ChangeProfileState extends State<ChangeProfile> {
               children: [
                 buildNameField(),
                 buildSelectCityDropDown(),
-                buildBField(),
-                buildCField(),
-                buildFField(),
-                buildGField(),
-                buildHField(),
-                buildIField(),
+                buildUserNameField(),
+                buildWhatsappField(),
+                buildTwitterField(),
+                buildInstaField(),
+                buildContactNoField(),
+                buildEmailField(),
                 buildLocationButton(),
                 buildUploadImage(),
                 buildUpdateButton()
@@ -247,111 +261,111 @@ class _ChangeProfileState extends State<ChangeProfile> {
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Full Name *',
-          controller: companyNameController,
+          controller: profileController.nameController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildBField() {
+  Widget buildUserNameField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '12321',
-          controller: companyNameController,
+          hintText: 'bdscdscb',
+          controller: profileController.userNameController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildCField() {
+  Widget buildEmailField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: '213412',
-          controller: companyNameController,
+          controller: profileController.emailController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildDField() {
+  Widget buildInstaField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Full Name *',
-          controller: companyNameController,
+          hintText: '@d cn',
+          controller: profileController.instaController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildEField() {
+  Widget buildWhatsappField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: '@dscd',
-          controller: companyNameController,
+          controller: profileController.whatsappController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildFField() {
+  Widget buildWebsiteField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: '@dsjnc',
-          controller: companyNameController,
+          controller: profileController.websiteController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildGField() {
+  Widget buildContactNoField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '@jdsnvd',
-          controller: companyNameController,
+          hintText: '+923313',
+          controller: profileController.contactController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildHField() {
+  Widget buildTwitterField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '12312',
-          controller: companyNameController,
+          hintText: '@adcsdc',
+          controller: profileController.twitterController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
     );
   }
 
-  Widget buildIField() {
+  Widget buildLocationField() {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '212132',
-          controller: companyNameController,
+          hintText: 'e.g oloasjxdjdn dhx',
+          controller: profileController.locationController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),

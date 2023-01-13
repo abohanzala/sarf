@@ -432,7 +432,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           buildPasswordField(),
           business ? buildCompanyNameField() : buildFullNameField(),
           buildSelectCityDropDown(),
-          business ? buildTypeDropDown() : Container(),
+          buildTypeDropDown(),
           business ? buildInstagramField() : Container(),
           business ? buildTwitterField() : Container(),
           business ? buildContactNoField() : Container(),
@@ -588,10 +588,59 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          // if (registrationController.registerFormKey.currentState!.validate()) {
-          //   registrationController.registration();
-          // }
-          registrationController.registration();
+          if (registrationController.passwordController.text.isEmpty) {
+            Get.snackbar(
+              'Alert',
+              'Enter Password',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+          } else if (selectedCityIndex == -1) {
+            Get.snackbar(
+              'Alert',
+              'Please Select City',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+          } else if (selectedTypeIndex == -1) {
+            Get.snackbar(
+              'Alert',
+              'Please Select Type',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+          } else if (registrationController.accountType == true) {
+            if (registrationController.companyNameController.text.isEmpty) {
+              Get.snackbar(
+                'Alert',
+                'Please Enter Name',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+            }
+          } else if (registrationController.accountType == false) {
+            if (registrationController.fullNameController.text.isEmpty) {
+              print(
+                  "This is fullName =============${registrationController.fullNameController.text}");
+              Get.snackbar(
+                'Alert',
+                'Please Enter Name',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+            }
+            return;
+          } else if (checkBox == false) {
+            Get.snackbar(
+              'Alert',
+              'Please Agree to Terms And Conditions',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+          } else {
+            registrationController.registration();
+          }
+
         },
         child: Center(
           child: Text(
@@ -1026,6 +1075,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                             registrationController.cityId =
                                                 cityId;
                                           });
+                                          Get.back();
                                         },
                                         child: Padding(
                                           padding: EdgeInsets.all(8.0),
@@ -1143,6 +1193,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           registrationController
                                               .expense_typeId = typeId;
                                         });
+                                        Get.back();
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.all(8.0),

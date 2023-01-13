@@ -16,6 +16,7 @@ import 'controllers/auth/registration_controller.dart';
 import 'controllers/auth/reset_password_controller.dart';
 import 'controllers/common/about_controller.dart';
 import 'controllers/common/privacy_policy_controller.dart';
+import 'controllers/common/profile_controller.dart';
 import 'controllers/common/terms_and_conditions_controller.dart';
 import 'locale/locale_strings.dart';
 import 'src/utils/routes.dart';
@@ -37,6 +38,7 @@ void main() async {
   Get.put<TermsAndConditionsController>(TermsAndConditionsController());
   Get.put<PrivacyController>(PrivacyController());
   Get.put<AboutController>(AboutController());
+  Get.put<ProfileController>(ProfileController());
   runApp(const MyApp());
 }
 
