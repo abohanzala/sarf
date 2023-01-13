@@ -26,11 +26,11 @@ var currency = ''.obs;
 var totalInvoices = ''.obs;
 var totalExpanses = ''.obs;
 
+
 @override
 void onInit() async{
  // await getHome(null);
   super.onInit();
-
   
 }
 

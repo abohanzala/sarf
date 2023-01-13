@@ -30,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
         if(ctr.budgets.isNotEmpty){
           ctr.selectedBudgetIndex.value = 1;
           ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
-          ctr.selectedBudgetNumbder.value = "#1";    
+          ctr.selectedBudgetNumbder.value = "";    
           ctr.selectedBudgetName.value = ctr.budgets.first.name.toString();
-          ctr.qrCode.value = "${GetStorage().read('mobile')}#1";
+          ctr.qrCode.value = "${GetStorage().read('mobile')}";
         }
       });
       }
@@ -300,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               (index + 1);
                                           ctr.selectedBudgetId.value =
                                               singleData.id.toString();
-                                          ctr.selectedBudgetNumbder.value = "#${index + 1}";    
+                                          ctr.selectedBudgetNumbder.value = singleData.number ?? '';    
                                           ctr.selectedBudgetName.value = singleData.name ?? '' ;    
                                           debugPrint(
                                               ctr.selectedBudgetId.value);
@@ -324,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "${singleData.name ?? ''}\n#${index + 1}",
+                                                "${singleData.name ?? ''}\n${singleData.number ?? ''}",
                                                 style: const TextStyle(
                                                     fontSize: 14),
                                                 textAlign: TextAlign.center,    
