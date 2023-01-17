@@ -329,6 +329,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   @override
   void initState() {
+    mapData.remove('location');
+    mapData.remove('latitude');
+    mapData.remove('longitude');
     getData();
     super.initState();
   }
@@ -472,7 +475,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   "This is mapData lat==================${mapData.read('latitude')}");
               print(
                   "This is mapData lng==================${mapData.read('longitude')}");
-              //  Get.toNamed('terms_and_conditions');
+              Get.toNamed('terms_and_conditions');
             },
             child: Container(
               margin: EdgeInsets.only(left: 5),
@@ -1374,7 +1377,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Text(
-                'Location'.tr,
+                mapData.read('location') != null
+                    ? mapData.read('location')
+                    : 'Location'.tr,
                 style: TextStyle(
                     color: Colors.white, fontSize: 13, fontFamily: 'medium'),
               ),
