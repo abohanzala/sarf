@@ -50,6 +50,7 @@ dependencies:
   flutter_widget_from_html: ^0.9.0+1
   qr_flutter: ^4.0.0
   flutter_launcher_icons: ^0.11.0
+  document_scanner_flutter: ^0.2.7
 
 dev_dependencies:
   flutter_test:
