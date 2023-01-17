@@ -2,7 +2,7 @@
     package="com.example.sarf">
    <uses-permission android:name="android.permission.INTERNET" /> 
    <application
-        android:label="sarf"
+        android:label="Sarf | صرف"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
