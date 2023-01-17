@@ -57,6 +57,7 @@ dependencies:
   google_maps_flutter: ^2.1.1
   location: ^4.2.0
   geolocator: '^5.1.1'
+  document_scanner_flutter: ^0.2.7
 
 dev_dependencies:
   flutter_test:

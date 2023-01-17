@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -18,27 +18,35 @@ class SimpleInvoice extends StatefulWidget {
 }
 
 class _SimpleInvoiceState extends State<SimpleInvoice> {
+  File? _scannedImage;
+
+  void _startScan(BuildContext context) async {
+    var image = await DocumentScannerFlutter.launch(context);
+    if (image != null) {
+      _scannedImage = image;
+      ctr.uploadImages.add(_scannedImage!);
+      setState(() {});
+    }
+  }
+
   InvoiceController ctr = Get.find<InvoiceController>();
   TextEditingController mobile = TextEditingController();
   TextEditingController amount = TextEditingController();
   TextEditingController note = TextEditingController();
   Future pickImage(ImageSource source) async {
-    
     try {
       var pickedFile = await ImagePicker().pickMultiImage(imageQuality: 35);
       // var pickedFile = await picker.pickImage(source: source, imageQuality: 35);
       // ignore: unnecessary_null_comparison
       if (pickedFile == null) return;
       for (var item in pickedFile) {
-        ctr.uploadImages.add(File(item.path))  ;
-        
-        
+        ctr.uploadImages.add(File(item.path));
       }
-
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,116 +189,118 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                     ),
                     Obx(
                       () => Container(
-                                width: Get.width,
-                                padding: const EdgeInsets.symmetric(vertical: 0),
-                                height: 70,
-                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                      pickImage(ImageSource.gallery);
-                                    },
-                                    child: Container(
-                                      
-                                            height: 60,
-                                            width: 60,
-                                            margin: const EdgeInsets.only(right: 10,top: 1),
-                                            padding: const EdgeInsets.all(18),
-                                            decoration: BoxDecoration(
-                                              color: R.colors.grey,
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                            child: Image.asset(
-                                              'assets/images/attach.png',
-                                              
-                                            ),
-                                        ),
+                        width: Get.width,
+                        padding: const EdgeInsets.symmetric(vertical: 0),
+                        height: 70,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                pickImage(ImageSource.gallery);
+                              },
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                margin:
+                                    const EdgeInsets.only(right: 10, top: 1),
+                                padding: const EdgeInsets.all(18),
+                                decoration: BoxDecoration(
+                                  color: R.colors.grey,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Image.asset(
+                                  'assets/images/attach.png',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _startScan(context);
+
+                                //  pickImage(ImageSource.gallery);
+                              },
+                              child: Container(
+                                  height: 60,
+                                  width: 60,
+                                  margin:
+                                      const EdgeInsets.only(right: 10, top: 1),
+                                  padding: const EdgeInsets.all(18),
+                                  decoration: BoxDecoration(
+                                    color: R.colors.grey,
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                      const SizedBox(width: 5,),
-                                      GestureDetector(
-                                        onTap: (){
-                                          pickImage(ImageSource.gallery);
-                                        },
-                                        child: Container(
-                                        
-                                              height: 60,
-                                              width: 60,
-                                              margin: const EdgeInsets.only(right: 10,top: 1),
-                                              padding: const EdgeInsets.all(18),
-                                              decoration: BoxDecoration(
-                                                color: R.colors.grey,
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              child: Icon(
-                                            Icons.qr_code_scanner_rounded,
-                                            //size: 28.sp,
-                                            color: R.colors.white,
-                                          )),
-                                      ),
-                                        
-                                      const SizedBox(width: 5,),
-                                 
-                                      Expanded(
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          shrinkWrap: true,
-                                          itemCount: ctr.uploadImages.length,
-                                          itemBuilder: (context,index){
-                                            var singleFile = ctr.uploadImages[index];
-                                           return Stack(
-                                          //alignment: Alignment.topRight,
-                                          children: [
-                                            Container(
-                                              
-                                              width: 60,
-                                              height: 60,
-                                              margin: const EdgeInsets.only(right: 10,top: 5),
-                                              padding: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                               // color: R.colors.grey,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: Image.file(
-                                              singleFile,
-                                              height: 25.h,
-                                              width: 25.w,
-                                            ),
-                                            ),
-                                            Positioned(
-                                              top: 0,
-                                              right: 5,
-                                              child: GestureDetector(
-                                                onTap: (){
-                                                  ctr.uploadImages.removeAt(index);
-                                                },
-                                                child: Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  //padding: const EdgeInsets.all(5),
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.red,
-                                                      shape: BoxShape.circle),
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: Icon(
-                                                      Icons.close,
-                                                      size: 12,
-                                                      color: R.colors.white,
-                                                    ),
-                                                  ),
+                                  child: Icon(
+                                    Icons.qr_code_scanner_rounded,
+                                    //size: 28.sp,
+                                    color: R.colors.white,
+                                  )),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: ctr.uploadImages.length,
+                                  itemBuilder: (context, index) {
+                                    var singleFile = ctr.uploadImages[index];
+                                    return Stack(
+                                      //alignment: Alignment.topRight,
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          margin: const EdgeInsets.only(
+                                              right: 10, top: 5),
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            // color: R.colors.grey,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Image.file(
+                                            singleFile,
+                                            height: 25.h,
+                                            width: 25.w,
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 5,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              ctr.uploadImages.removeAt(index);
+                                            },
+                                            child: Container(
+                                              height: 20,
+                                              width: 20,
+                                              //padding: const EdgeInsets.all(5),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  shape: BoxShape.circle),
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  size: 12,
+                                                  color: R.colors.white,
                                                 ),
                                               ),
-                                            )
-                                          ],
-                                        );
-                                        
-                                        }),
-                                      ),
-                                  ],
-                                 ),
-                               ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     // Flexible(
                     //   fit: FlexFit.loose,
@@ -409,21 +419,24 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: (){
-                              if(mobile.text.isEmpty){
+                            onTap: () {
+                              if (mobile.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "mobile is required");
                                 return;
                               }
-                              if(amount.text.isEmpty){
+                              if (amount.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "amount is required");
                                 return;
                               }
-                              if(note.text.isEmpty){
+                              if (note.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "note is required");
                                 return;
                               }
                               FocusScope.of(context).unfocus();
-                              ctr.postNewInvoice(mobile.text, amount.text, note.text).then((value){
+                              ctr
+                                  .postNewInvoice(
+                                      mobile.text, amount.text, note.text)
+                                  .then((value) {
                                 mobile.clear();
                                 amount.clear();
                                 note.clear();

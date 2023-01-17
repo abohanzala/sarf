@@ -132,7 +132,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 height: 32,
                                 width: 105,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF22A754),
+                                  color: R.colors.buttonColor,
                                 ),
                                 child: Center(
                                   child: Text(
@@ -163,7 +163,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 height: 32,
                                 width: 105,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF22A754),
+                                  color: R.colors.blue,
                                 ),
                                 child: Center(
                                   child: Text(
@@ -244,28 +244,22 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       });
     } else {
       print('singleImage///////');
-      await _displayPickImageDialog(context!,
-          (double? maxWidth, double? maxHeight, int? quality) async {
-        try {
-          final XFile? pickedFile = await _picker.pickImage(
-            source: source,
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-            imageQuality: quality,
-          );
-          setState(() {
-            print('SetStateCalling======================================');
-            _imageFileList = pickedFile!;
-            print(
-                "This is my ImagePath=====================${_imageFileList!.length}");
-            //    _setImageFileListFromFile(pickedFile);
-          });
-        } catch (e) {
-          setState(() {
-            _pickImageError = e;
-          });
-        }
-      });
+      try {
+        final XFile? pickedFile = await _picker.pickImage(
+          source: source,
+        );
+        setState(() {
+          print('SetStateCalling======================================');
+          _imageFileList = pickedFile!;
+          print(
+              "This is my ImagePath=====================${_imageFileList!.length}");
+          //    _setImageFileListFromFile(pickedFile);
+        });
+      } catch (e) {
+        setState(() {
+          _pickImageError = e;
+        });
+      }
     }
   }
 
@@ -1094,15 +1088,17 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         onTap: () {
                                           selectedCityIndex = index;
                                           print(selectedCityIndex);
-                                          finalSelectedCity =
-                                              dataCollectionController
-                                                  .cities![selectedCityIndex]
-                                                  .name
-                                                  .toString();
+                                          setState(() {
+                                            finalSelectedCity =
+                                                dataCollectionController
+                                                    .cities![selectedCityIndex]
+                                                    .name
+                                                    .toString();
+                                          });
                                           var cityId = dataCollectionController
                                               .cities![selectedCityIndex].id
                                               .toString();
-                                          print(finalSelectedCity.tr);
+                                          print(finalSelectedCity);
                                           print(
                                               "This is my selctedCity Id ============${cityId}");
 
@@ -1110,6 +1106,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                             registrationController.cityId =
                                                 cityId;
                                           });
+
                                           Get.back();
                                         },
                                         child: Padding(
@@ -1223,11 +1220,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         print(finalSelectedCity.tr);
                                         print(
                                             "This is my typeCity Id ============${typeId}");
-
-                                        setState(() {
-                                          registrationController
-                                              .expense_typeId = typeId;
-                                        });
+                                        registrationController.expense_typeId =
+                                            typeId;
+                                        setState(() {});
                                         Get.back();
                                       },
                                       child: Padding(
@@ -1290,7 +1285,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             children: [
               Expanded(
                   child: Text(
-                'Select City'.tr,
+                selectedCityIndex == -1
+                    ? 'Select City'.tr
+                    : dataCollectionController
+                        .cities![selectedCityIndex].name!.en
+                        .toString(),
                 style: TextStyle(
                     fontSize: 12, fontFamily: 'medium', color: R.colors.grey),
               )),
@@ -1320,7 +1319,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             children: [
               Expanded(
                   child: Text(
-                'Type'.tr,
+                selectedTypeIndex == -1
+                    ? 'Type'.tr
+                    : dataCollectionController
+                        .types![selectedTypeIndex].expenseName
+                        .toString(),
                 style: TextStyle(
                     fontSize: 12, fontFamily: 'medium', color: R.colors.grey),
               )),
