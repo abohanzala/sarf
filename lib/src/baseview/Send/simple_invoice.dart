@@ -259,7 +259,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                                               right: 10, top: 5),
                                           padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                            // color: R.colors.grey,
+                                            //  color: R.colors.grey,
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
@@ -267,6 +267,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                                             singleFile,
                                             height: 25.h,
                                             width: 25.w,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                         Positioned(
