@@ -179,117 +179,229 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 8,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: (){
-                                    pickImage(ImageSource.gallery);
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(top: 12.h),
-                                    padding: const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                      color: R.colors.grey,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/attach.png',
-                                      height: 25.h,
-                                      width: 25.w,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: (){
-                                    pickImage(ImageSource.gallery);
-                                  },
-                                  child: Container(
-                                      margin: EdgeInsets.only(top: 12.h),
-                                      padding: const EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                        color: R.colors.grey,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Icon(
-                                        Icons.qr_code_scanner_rounded,
-                                        size: 28.sp,
-                                        color: R.colors.white,
-                                      )),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          Expanded(
-                            flex: 9,
-                            child: Obx(
-                              () => SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: List.generate(ctr.uploadImages.length, (index) {
-                                    var singleFile = ctr.uploadImages[index];
-                                    return Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 10.w, top: 12.h, right: 5.w),
-                                          padding: const EdgeInsets.all(20),
-                                          decoration: BoxDecoration(
-                                            color: R.colors.grey,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Image.file(
-                                            singleFile,
-                                            height: 25.h,
-                                            width: 25.w,
-                                          ),
+                    Obx(
+                      () => Container(
+                                width: Get.width,
+                                padding: const EdgeInsets.symmetric(vertical: 0),
+                                height: 70,
+                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      pickImage(ImageSource.gallery);
+                                    },
+                                    child: Container(
+                                      
+                                            height: 60,
+                                            width: 60,
+                                            margin: const EdgeInsets.only(right: 10,top: 1),
+                                            padding: const EdgeInsets.all(18),
+                                            decoration: BoxDecoration(
+                                              color: R.colors.grey,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/attach.png',
+                                              
+                                            ),
                                         ),
-                                        GestureDetector(
-                                          onTap: (){
-                                            ctr.uploadImages.removeAt(index);
-                                          },
-                                          child: Positioned(
-                                            top: 3,
-                                            right: 0,
-                                            child: Container(
-                                              height: 20.h,
-                                              width: 20.w,
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.red,
-                                                  shape: BoxShape.circle),
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Icon(
-                                                  Icons.close,
-                                                  size: 13.sp,
-                                                  color: R.colors.white,
+                                  ),
+                                      const SizedBox(width: 5,),
+                                      GestureDetector(
+                                        onTap: (){
+                                          pickImage(ImageSource.gallery);
+                                        },
+                                        child: Container(
+                                        
+                                              height: 60,
+                                              width: 60,
+                                              margin: const EdgeInsets.only(right: 10,top: 1),
+                                              padding: const EdgeInsets.all(18),
+                                              decoration: BoxDecoration(
+                                                color: R.colors.grey,
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Icon(
+                                            Icons.qr_code_scanner_rounded,
+                                            //size: 28.sp,
+                                            color: R.colors.white,
+                                          )),
+                                      ),
+                                        
+                                      const SizedBox(width: 5,),
+                                 
+                                      Expanded(
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: ctr.uploadImages.length,
+                                          itemBuilder: (context,index){
+                                            var singleFile = ctr.uploadImages[index];
+                                           return Stack(
+                                          //alignment: Alignment.topRight,
+                                          children: [
+                                            Container(
+                                              
+                                              width: 60,
+                                              height: 60,
+                                              margin: const EdgeInsets.only(right: 10,top: 5),
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                               // color: R.colors.grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Image.file(
+                                              singleFile,
+                                              height: 25.h,
+                                              width: 25.w,
+                                            ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 5,
+                                              child: GestureDetector(
+                                                onTap: (){
+                                                  ctr.uploadImages.removeAt(index);
+                                                },
+                                                child: Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  //padding: const EdgeInsets.all(5),
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.red,
+                                                      shape: BoxShape.circle),
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      size: 12,
+                                                      color: R.colors.white,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  }),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                                            )
+                                          ],
+                                        );
+                                        
+                                        }),
+                                      ),
+                                  ],
+                                 ),
+                               ),
                     ),
+                    // Flexible(
+                    //   fit: FlexFit.loose,
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         flex: 8,
+                    //         child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             GestureDetector(
+                    //               onTap: (){
+                    //                 pickImage(ImageSource.gallery);
+                    //               },
+                    //               child: Container(
+                    //                 margin: EdgeInsets.only(top: 12.h),
+                    //                 padding: const EdgeInsets.all(20),
+                    //                 decoration: BoxDecoration(
+                    //                   color: R.colors.grey,
+                    //                   borderRadius: BorderRadius.circular(10),
+                    //                 ),
+                    //                 child: Image.asset(
+                    //                   'assets/images/attach.png',
+                    //                   height: 25.h,
+                    //                   width: 25.w,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             GestureDetector(
+                    //               onTap: (){
+                    //                 pickImage(ImageSource.gallery);
+                    //               },
+                    //               child: Container(
+                    //                   margin: EdgeInsets.only(top: 12.h),
+                    //                   padding: const EdgeInsets.all(20),
+                    //                   decoration: BoxDecoration(
+                    //                     color: R.colors.grey,
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                   ),
+                    //                   child: Icon(
+                    //                     Icons.qr_code_scanner_rounded,
+                    //                     size: 28.sp,
+                    //                     color: R.colors.white,
+                    //                   )),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       SizedBox(
+                    //         width: 5.w,
+                    //       ),
+                    //       Expanded(
+                    //         flex: 9,
+                    //         child: Obx(
+                    //           () => SingleChildScrollView(
+                    //             scrollDirection: Axis.horizontal,
+                    //             child: Row(
+                    //               children: List.generate(ctr.uploadImages.length, (index) {
+                    //                 var singleFile = ctr.uploadImages[index];
+                    //                 return Stack(
+                    //                   alignment: Alignment.topRight,
+                    //                   children: [
+                    //                     Container(
+                    //                       margin: EdgeInsets.only(
+                    //                           left: 10.w, top: 12.h, right: 5.w),
+                    //                       padding: const EdgeInsets.all(20),
+                    //                       decoration: BoxDecoration(
+                    //                         color: R.colors.grey,
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(10),
+                    //                       ),
+                    //                       child: Image.file(
+                    //                         singleFile,
+                    //                         fit: BoxFit.cover,
+                    //                       ),
+                    //                     ),
+                    //                     GestureDetector(
+                    //                       onTap: (){
+                    //                         ctr.uploadImages.removeAt(index);
+                    //                       },
+                    //                       child: Positioned(
+                    //                         top: 3,
+                    //                         right: 0,
+                    //                         child: Container(
+                    //                           height: 20.h,
+                    //                           width: 20.w,
+                    //                           padding: const EdgeInsets.all(5),
+                    //                           decoration: const BoxDecoration(
+                    //                               color: Colors.red,
+                    //                               shape: BoxShape.circle),
+                    //                           child: Align(
+                    //                             alignment: Alignment.center,
+                    //                             child: Icon(
+                    //                               Icons.close,
+                    //                               size: 13.sp,
+                    //                               color: R.colors.white,
+                    //                             ),
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                     )
+                    //                   ],
+                    //                 );
+                    //               }),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 10.h,
                     ),
