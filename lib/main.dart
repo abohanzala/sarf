@@ -1,9 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
+import 'package:sarf/firebase_options.dart';
 import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
@@ -26,6 +28,9 @@ import 'src/utils/routes_name.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Get.put<LoginController>(LoginController());
   Get.put<RegisterController>(RegisterController());
   Get.put<OtpController>(OtpController());
