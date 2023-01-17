@@ -16,6 +16,7 @@ import '../../controllers/auth/register_controller.dart';
 import '../../controllers/auth/registration_controller.dart';
 import '../../helper/aspect_ratio.dart';
 import '../../resources/resources.dart';
+import 'location_view.dart';
 
 class RegistrationDetails extends StatefulWidget {
   const RegistrationDetails({Key? key}) : super(key: key);
@@ -1344,6 +1345,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
+          Get.to(() => const LocationView() );
           //   Get.toNamed(RoutesName.RegistrationDetails);
         },
         child: Row(
