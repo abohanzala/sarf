@@ -85,7 +85,71 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 'Error'.tr, 'Select a budget');
                                             return;
                                           }
-                                          ctr.deleteBudget();
+                                          Get.dialog(Dialog(
+                                child: Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: R.colors.white),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                     Text("Are you sure you want to delete this budget"),
+                                     SizedBox(height: 10,),
+                                     Row(
+                                      children: [
+                                        Expanded(
+                                          child: InkWell(
+                                           onTap: (){
+                                            Get.back();
+                                             ctr.deleteBudget();
+                                           },
+                                           child: Container(
+                                            // width: Get.width,
+                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                             decoration: BoxDecoration(
+                                                 borderRadius: BorderRadius.circular(10),
+                                                 color: R.colors.themeColor),
+                                             child: Center(
+                                                 child: Text(
+                                               'Delete'.tr,
+                                               style: TextStyle(color: R.colors.white),
+                                             )),
+                                           ),
+                                                                               ),
+                                        ),
+                                       SizedBox(width: 10,),
+                                       Expanded(
+                                         child: InkWell(
+                                           onTap: (){
+                                             Get.back();
+                                           },
+                                           child: Container(
+                                            // width: Get.width,
+                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                             decoration: BoxDecoration(
+                                                 borderRadius: BorderRadius.circular(10),
+                                                 color: R.colors.blue),
+                                             child: Center(
+                                                 child: Text(
+                                               'Back'.tr,
+                                               style: TextStyle(color: R.colors.white),
+                                             )),
+                                           ),
+                                         ),
+                                       )
+                                     
+                                      ],
+                                     )
+
+                                    ],
+                                  ),
+                                ),
+                              ));
+                                          
                                         },
                                         child: Text(
                                           'Delete this budget'.tr,

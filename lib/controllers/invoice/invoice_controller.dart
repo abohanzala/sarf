@@ -14,6 +14,9 @@ import '../../src/widgets/loader.dart';
 
 class InvoiceController extends getpackage.GetxController {
   List<File> uploadImages = <File>[].obs;
+  TextEditingController mobile1 = TextEditingController();
+  TextEditingController amount2 = TextEditingController();
+  TextEditingController note3 = TextEditingController();
 
   Future postNewInvoice(String mobile, String amount, String note) async {
     openLoader();
@@ -62,13 +65,17 @@ class InvoiceController extends getpackage.GetxController {
     if (response['success']) {
       getpackage.Get.back();
       //SnakeBars.showSuccessSnake(description: response['message'].toString());
-      getpackage.Get.snackbar('Success', response['message'].toString());
+      
       uploadImages.clear();
+      mobile1.clear();
+      amount2.clear();
+      note3.clear();
       getpackage.Get.back();
+      getpackage.Get.snackbar('Success', response['message'].toString());
       //files.clear();
 
     } else {
-      uploadImages.clear();
+      //uploadImages.clear();
       debugPrint('here');
       (response.containsKey('validation_errors'))
           ? getpackage.Get.snackbar(response['message'].toString(),

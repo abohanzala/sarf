@@ -30,9 +30,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
   }
 
   InvoiceController ctr = Get.find<InvoiceController>();
-  TextEditingController mobile = TextEditingController();
-  TextEditingController amount = TextEditingController();
-  TextEditingController note = TextEditingController();
+  
   Future pickImage(ImageSource source) async {
     try {
       var pickedFile = await ImagePicker().pickMultiImage(imageQuality: 35);
@@ -96,7 +94,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      controller: mobile,
+                      controller: ctr.mobile1,
                       decoration: InputDecoration(
                         suffixIcon: Icon(
                           Icons.qr_code,
@@ -137,7 +135,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       height: 10.h,
                     ),
                     TextFormField(
-                      controller: amount,
+                      controller: ctr.amount2,
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
                         filled: true,
@@ -162,7 +160,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                       height: 10.h,
                     ),
                     TextFormField(
-                      controller: note,
+                      controller: ctr.note3,
                       maxLines: 7,
                       decoration: InputDecoration(
                         fillColor: R.colors.lightGrey,
@@ -424,26 +422,24 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              if (mobile.text.isEmpty) {
+                              if (ctr.mobile1.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "mobile is required");
                                 return;
                               }
-                              if (amount.text.isEmpty) {
+                              if (ctr.amount2.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "amount is required");
                                 return;
                               }
-                              if (note.text.isEmpty) {
+                              if (ctr.note3.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "note is required");
                                 return;
                               }
                               FocusScope.of(context).unfocus();
                               ctr
                                   .postNewInvoice(
-                                      mobile.text, amount.text, note.text)
+                                      ctr.mobile1.text, ctr.amount2.text, ctr.note3.text)
                                   .then((value) {
-                                mobile.clear();
-                                amount.clear();
-                                note.clear();
+                               
                               });
                             },
                             child: Container(

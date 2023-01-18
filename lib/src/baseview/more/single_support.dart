@@ -209,6 +209,7 @@ class _SingleSupportState extends State<SingleSupport> {
                             
                             Expanded(
                               child: ListView.separated(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
                               shrinkWrap: true,
                               itemBuilder: (context,index){
                                 var singleDetail = ctr.supportDetails.value.data!.detail?[index];
