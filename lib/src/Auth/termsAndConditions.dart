@@ -17,6 +17,9 @@ class TermsAndConditions extends StatefulWidget {
 class _TermsAndConditionsState extends State<TermsAndConditions> {
   TermsAndConditionsController termsAndConditionsController =
       Get.find<TermsAndConditionsController>();
+  bool english = true;
+  bool arabic = false;
+  var selectedLanguage = 'English'.obs;
 
   @override
   // ignore: must_call_super
@@ -42,6 +45,131 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         ],
       ),
     );
+  }
+
+  void openChangeLanguageDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      width: MediaQuery.of(context).size.width,
+                      margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12.0),
+                                topRight: Radius.circular(12.0),
+                                bottomLeft: Radius.circular(8.0),
+                                bottomRight: Radius.circular(8.0)),
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                'Select Language',
+                                style: TextStyle(
+                                    fontFamily: 'bold',
+                                    fontSize: 20,
+                                    color: R.colors.black),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  english = true;
+                                  arabic = false;
+                                  selectedLanguage.value = 'English';
+
+                                  Get.back();
+                                  setState(() {});
+                                },
+                                child: Container(
+                                    margin:
+                                        EdgeInsets.only(left: 15, right: 15),
+                                    decoration: BoxDecoration(
+                                        color: english
+                                            ? R.colors.buttonColor
+                                            : R.colors.transparent,
+                                        border:
+                                            Border.all(color: R.colors.grey)),
+                                    height: 45,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Center(
+                                      child: Text(
+                                        'English',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: english
+                                                ? R.colors.black
+                                                : R.colors.buttonColor),
+                                      ),
+                                    )),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  english = false;
+                                  arabic = true;
+                                  selectedLanguage.value = 'Arabic';
+                                  Get.back();
+                                  setState(() {});
+                                },
+                                child: Container(
+                                    margin:
+                                        EdgeInsets.only(left: 15, right: 15),
+                                    decoration: BoxDecoration(
+                                        color: arabic
+                                            ? R.colors.buttonColor
+                                            : R.colors.transparent,
+                                        border:
+                                            Border.all(color: R.colors.grey)),
+                                    height: 45,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Center(
+                                      child: Text(
+                                        'Arabic',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: arabic
+                                                ? R.colors.black
+                                                : R.colors.buttonColor),
+                                      ),
+                                    )),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        });
   }
 
   Widget buildProfileCard() {
@@ -72,9 +200,14 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                       margin: EdgeInsets.only(top: 20),
                       child: GetBuilder<TermsAndConditionsController>(
                           builder: (TermsAndConditionsController) {
-                        return HtmlWidget(termsAndConditionsController
-                                .userInfo?.data!.title!.ar ??
-                            '');
+                        return Obx(() => HtmlWidget(
+                            selectedLanguage.value == 'English'
+                                ? TermsAndConditionsController
+                                        .userInfo?.data!.title!.en ??
+                                    ''
+                                : TermsAndConditionsController
+                                        .userInfo?.data!.title!.ar ??
+                                    ''));
                       }))
                 ],
               ),
@@ -83,9 +216,13 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               ),
               GetBuilder<TermsAndConditionsController>(
                   builder: (TermsAndConditionsController) {
-                return HtmlWidget(
-                    termsAndConditionsController.userInfo?.data!.content!.ar ??
-                        '');
+                return Obx(() => HtmlWidget(selectedLanguage.value == 'English'
+                    ? TermsAndConditionsController
+                            .userInfo?.data!.content!.en ??
+                        ''
+                    : TermsAndConditionsController
+                            .userInfo?.data!.content!.ar ??
+                        ''));
               })
             ],
           ),
@@ -235,19 +372,21 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              openChangeLanguageDialog();
+            },
             child: Container(
               margin: EdgeInsets.only(left: 15, right: 15),
               child: Row(
                 children: [
                   Expanded(
-                      child: Text(
-                    'English',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'medium',
-                        color: R.colors.black),
-                  )),
+                      child: Obx(() => Text(
+                            selectedLanguage.value,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'medium',
+                                color: R.colors.black),
+                          ))),
                   Icon(Icons.arrow_drop_down),
                 ],
               ),
