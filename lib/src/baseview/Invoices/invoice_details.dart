@@ -170,16 +170,19 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                 var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
                                                               return Container(
                                                                 
-                                                                width: 80,
-                                                                height: 80,
+                                                                width: 60,
+                                                                height: 60,
                                                                 margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                padding: const EdgeInsets.all(8),
+                                                                //padding: const EdgeInsets.all(8),
                                                                 decoration: BoxDecoration(
-                                                                  //color: R.colors.grey,
+                                                                  color: R.colors.grey,
                                                                   borderRadius:
                                                                       BorderRadius.circular(10),
                                                                 ),
-                                                                child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.contain,width: 80,height: 80,),
+                                                                child: ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(10),
+                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,)),
                                                               );
                                                             
                                                             }),

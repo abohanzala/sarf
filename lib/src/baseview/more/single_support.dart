@@ -134,7 +134,7 @@ class _SingleSupportState extends State<SingleSupport> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(ctr.supportDetails.value.data?.type == "0" ? "Business".tr : "Personal".tr,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                                      Text(ctr.supportDetails.value.data?.status == "0" ? "Pending".tr : "Success".tr,style: const TextStyle(color: Color(0XFF2CC91F),fontSize: 14,fontWeight: FontWeight.w500),),
+                                      Text(ctr.supportDetails.value.data?.status == "0" ? "Pending".tr : "Success".tr,style:  TextStyle(color: ctr.supportDetails.value.data?.status == "0"? Color(0XFFF4BD05) : Color(0XFF2CC91F),fontSize: 14,fontWeight: FontWeight.w500),),
                                   ],),
       
                                   
@@ -188,7 +188,9 @@ class _SingleSupportState extends State<SingleSupport> {
                                                                   borderRadius:
                                                                       BorderRadius.circular(10),
                                                                 ),
-                                                                child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.contain,width: 80,height: 80,),
+                                                                child: ClipRRect(
+                                                                 borderRadius: BorderRadius.circular(10),
+                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,)),
                                                               );
                                                             
                                                             }),
@@ -219,7 +221,7 @@ class _SingleSupportState extends State<SingleSupport> {
                                        Row(
                                         children: [
                                           Text('Reply by '.tr,style: TextStyle(color: R.colors.blue,fontSize: 14,fontWeight: FontWeight.w700),),
-                                          Text( ctr.supportDetails.value.data?.userId == singleDetail?.userId  ? "You" : singleDetail?.users?.name ?? '',style: TextStyle(color: ctr.supportDetails.value.data?.userId == singleDetail?.userId ? R.colors.themeColor : R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                                          Text( singleDetail?.users?.name ?? '',style: TextStyle(color:  R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                                           Text(' - ',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                                           Text(singleDetail?.createdDate ?? '',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                                         ],
