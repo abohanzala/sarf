@@ -17,12 +17,9 @@ class _AboutState extends State<About> {
   AboutController aboutController = Get.find<AboutController>();
 
   @override
-  // ignore: must_call_super
   initState() {
     // ignore: avoid_print
     aboutController.about();
-
-    print("initState Called");
   }
 
   @override
@@ -69,27 +66,21 @@ class _AboutState extends State<About> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 20),
-                      child:
-                      GetBuilder<AboutController>(
+                      child: GetBuilder<AboutController>(
                           builder: (AboutController) {
-                            return HtmlWidget(aboutController
-                                .userInfo?.data!.title!.ar ??
-                                '');
-                          }
-                      ),
+                        return HtmlWidget(
+                            aboutController.userInfo?.data!.title!.ar ?? '');
+                      }),
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                GetBuilder<AboutController>(
-                    builder: (AboutController) {
-                      return HtmlWidget(aboutController
-                          .userInfo?.data!.content!.ar ??
-                          '');
-                    }
-                ),
+                GetBuilder<AboutController>(builder: (AboutController) {
+                  return HtmlWidget(
+                      aboutController.userInfo?.data!.content!.ar ?? '');
+                }),
               ],
             ),
           ),

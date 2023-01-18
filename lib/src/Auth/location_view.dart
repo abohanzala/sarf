@@ -12,6 +12,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 
 import '../../constant/global_constants.dart';
+import '../../controllers/auth/registration_controller.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_appbar.dart';
 
@@ -23,6 +24,8 @@ class LocationView extends StatefulWidget {
 }
 
 class _LocationViewState extends State<LocationView> {
+  RegistrationController registrationController =
+      Get.find<RegistrationController>();
   String label = '';
   String address = '';
   String lat = '';
@@ -139,17 +142,17 @@ class _LocationViewState extends State<LocationView> {
                           "This is selected Latitude====================${lat.toString()}");
                       print(
                           "This is selected Longitude====================${lng.toString()}");
-                      mapData.write('location', location);
-                      mapData.write('latitude', lat);
-                      mapData.write('longitude', lng);
+                      registrationController.location.value = location;
+                      registrationController.location_lat.value = lat;
+                      registrationController.location_lng.value = lng;
 
                       print(
-                          "This is mapData Location==================${mapData.read('location')}");
+                          "This is stored Location====================${registrationController.location.toString()}");
                       print(
-                          "This is mapData lat==================${mapData.read('latitude')}");
+                          "This is stored Location Lat====================${registrationController.location_lat.toString()}");
                       print(
-                          "This is mapData lng==================${mapData.read('longitude')}");
-                       Get.back();
+                          "This is stored Location Lng====================${registrationController.location_lng.toString()}");
+                      Get.back();
                     },
                     child: Container(
                       width: Get.width - 40,
