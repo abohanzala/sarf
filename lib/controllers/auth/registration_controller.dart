@@ -27,8 +27,7 @@ class RegistrationController extends GetxController {
   TextEditingController websiteController = TextEditingController();
   bool accountType = true;
   bool isOnline = false;
-  var cityId;
-  var expense_typeId;
+
   var message;
   var finalSelectedCity = ''.obs;
   var finalSelectedType = ''.obs;
@@ -61,20 +60,19 @@ class RegistrationController extends GetxController {
       'name': accountType == true
           ? companyNameController.text
           : fullNameController.text,
-      'city_id': cityId,
-      'expense_type_id': expense_typeId,
+      'city_id': cityId.toString(),
+      'expense_type_id': expense_typeId.toString(),
       'insta_link': instagramController.text,
       'twitter_link': twitterController.text,
       'contact_no': contactController.text,
       'whatsapp': whatsappController.text,
       'website': websiteController.text,
       'is_online': isOnline == true ? 0 : 1,
-      'location': location,
-      'location_lat': location_lat,
-      'location_lng': location_lng,
+      'location': '',
+      'location_lat': '',
+      'location_lng': '',
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
-      //   'image':profileImage
     };
     print("This is our request ==================${request}");
 
@@ -96,13 +94,13 @@ class RegistrationController extends GetxController {
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something Went wrong');
+        debugPrint("This is error==================${error.toString()}");
 
         //HandlingErrors().handleError(error);
       }
     });
-    message = response['message'];
-    // if (response == null) return;
+    // message = response['message'];
+    if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
@@ -152,3 +150,6 @@ class RegistrationController extends GetxController {
     });
   }
 }
+
+var cityId;
+var expense_typeId;
