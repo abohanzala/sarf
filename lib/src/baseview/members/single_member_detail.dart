@@ -177,10 +177,9 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
               ],
              ),
            ),
-           //const SizedBox(height: 15,),
            Expanded(
-             child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
              child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
               shrinkWrap: true,
               itemCount: ctr.memDetails.value.data?.invoices?.length,
               itemBuilder: (context,index){
@@ -225,8 +224,7 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                 ],
               ),
              );
-              })
-             ),
+              }),
            )
             ],
            

@@ -183,7 +183,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                         ? ctr.selectedTypeName.value
                                         : "Select type".tr,
                                     style: TextStyle(
-                                        fontSize: 14, color: R.colors.grey),
+                                        fontSize: 14, color: ctr.selectedTypeName.value != '' ? R.colors.black : R.colors.grey),
                                   ),
                                 ),
                                 const Icon(Icons.arrow_drop_down),
@@ -202,6 +202,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                           borderRadius: BorderRadius.circular(10),
                           color: R.colors.lightGrey),
                       child: TextFormField(
+                        
                         maxLines: 10,
                         controller: txt,
                         decoration: InputDecoration(
@@ -326,24 +327,28 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                 ),
-                                                child: Image.file(
-                                                  singleImage,
-                                                  fit: BoxFit.cover,
-                                                  width: 80,
-                                                  height: 80,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Image.file(
+                                                    singleImage,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 80,
+                                                  ),
                                                 ),
                                               ),
                                               Positioned(
-                                                top: 0,
-                                                right: 5,
+                                                top: 5,
+                                                right: 10,
                                                 child: GestureDetector(
                                                   onTap: () {
                                                     ctr.uploadImages
                                                         .removeAt(index);
                                                   },
                                                   child: Container(
-                                                    height: 30,
-                                                    width: 30,
+                                                    height: 20,
+                                                    width: 20,
                                                     //padding: const EdgeInsets.all(5),
                                                     decoration:
                                                         const BoxDecoration(

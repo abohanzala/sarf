@@ -29,8 +29,10 @@ class SupportController extends getpackage.GetxController {
 
   @override
   void onInit() async {
-    await getSupportTypes();
+    
     super.onInit();
+    await getSupportTypes();
+    await getSupport('1');
   }
 
   Future getSupportTypes() async {
@@ -160,12 +162,13 @@ class SupportController extends getpackage.GetxController {
     if (response['success']) {
       getpackage.Get.back();
       //SnakeBars.showSuccessSnake(description: response['message'].toString());
-      getpackage.Get.snackbar('Success', response['message'].toString());
+      
       uploadImages.clear();
       selectedTypeId.value = '';
       selectedTypeIndex.value = 0;
       selectedTypeName.value = '';
       getpackage.Get.back();
+      getpackage.Get.snackbar('Success', response['message'].toString());
       //files.clear();
 
     } else {
@@ -185,6 +188,7 @@ class SupportController extends getpackage.GetxController {
   Future getSupport(String id) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
+    print('here');
     isLoadingSupport.value = true;
     var request = {
       "language": GetStorage().read('lang'),
@@ -248,6 +252,7 @@ class SupportController extends getpackage.GetxController {
 
       // return data;
     } else {
+      isLoadingSupport.value = false;
       debugPrint('here');
     }
     return null;

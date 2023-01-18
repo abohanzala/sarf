@@ -133,7 +133,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
           Flexible(
             fit: FlexFit.loose,
             child: Transform(
-              transform: Matrix4.translationValues(0, -25.h, 0),
+              transform: Matrix4.translationValues(0, -40.h, 0),
               child:  SingleChildScrollView(
                   child: FutureBuilder<InvoiceList?>(
                           future: ctr.getInvoiceList(),

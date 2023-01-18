@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(50),
                                         color: R.colors.white),
-                                    padding: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
                                     child: const Center(
                                       child: Icon(
                                         Icons.add,
@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 5,
                                   ),
                                   Text(
-                                    'New budget'.tr,
+                                    'New\nbudget',
                                     style: TextStyle(
                                       color: R.colors.white,
                                       decoration: TextDecoration.underline,
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(
-                            width: 20,
+                            width: 0,
                           ),
                           Expanded(
                             child: ListView.builder(
@@ -453,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 5,
                         ),
                         SizedBox(
-                          width: Get.width * 0.46,
+                          width: Get.width * 0.47,
                           child: Column(
                             children: [
                               Container(
@@ -470,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 25,
                                     ),
                                     const SizedBox(
-                                      width: 10,
+                                      width: 5,
                                     ),
                                     Column(
                                       crossAxisAlignment:
@@ -533,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 25,
                                     ),
                                     const SizedBox(
-                                      width: 10,
+                                      width: 5,
                                     ),
                                     Column(
                                       children: [
@@ -565,7 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 25,
                                     ),
                                     const SizedBox(
-                                      width: 10,
+                                      width: 5,
                                     ),
                                     Column(
                                       children: [
