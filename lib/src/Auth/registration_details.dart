@@ -1098,9 +1098,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         onTap: () {
                                           selectedCityIndex = index;
                                           print(selectedCityIndex);
-
                                           setState(() {
-                                            // GetStorage().read('lang');
                                             registrationController
                                                     .finalSelectedCity.value =
                                                 dataCollectionController
@@ -1109,18 +1107,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                     .en
                                                     .toString();
                                           });
-                                          var cityId = dataCollectionController
-                                              .cities![selectedCityIndex].id
-                                              .toString();
+                                          var getCityId = dataCollectionController
+                                              .cities![selectedCityIndex].id;
 
                                           print(
-                                              "This is my selctedCity Id ============${cityId}");
+                                              "This is my selctedCity Id ============${getCityId}");
 
                                           setState(() {
-                                            registrationController.cityId =
-                                                cityId;
+                                            cityId=getCityId;
                                           });
-                                          setState(() {});
 
                                           Get.back();
                                         },
@@ -1235,14 +1230,14 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                 .expenseName
                                                 .toString();
 
-                                        var typeId = dataCollectionController
+                                        var getTypeId = dataCollectionController
                                             .types![index].id
                                             .toString();
                                         print(
-                                            "This is my typeCity Id ============${typeId}");
-                                        registrationController.expense_typeId =
-                                            typeId;
-                                        setState(() {});
+                                            "This is my typeCity Id ============${getTypeId}");
+                                        setState(() {
+                                          expense_typeId=getTypeId;
+                                        });
                                         Get.back();
                                       },
                                       child: Padding(
