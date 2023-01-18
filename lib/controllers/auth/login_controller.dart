@@ -9,6 +9,7 @@ import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 import '../../src/widgets/loader.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class LoginController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
@@ -94,6 +95,7 @@ class LoginController extends GetxController {
       await GetStorage().write('mobile', userInfo.user!.mobile);
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
+      await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile'));
       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();
@@ -105,5 +107,64 @@ class LoginController extends GetxController {
       );
     }
     return null;
+  }
+  Future createFirebaseUser(String email,String password) async {
+    await signIn(email,password);
+    // // final user = firebase_auth.FirebaseAuth.instance.currentUser;
+    // // print(user);
+    // if (user != null) {
+    //   print('firebaseUser');
+    //   signIn();
+    // } else {
+    //   signUp();
+    // }
+  }
+
+  Future signIn(String email,String password) async {
+    // try {
+      await firebase_auth.FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password).then((value){
+            // SnakeBars.showSuccessSnake(description: "FireBase signin");
+            Get.snackbar('FireBase signin', '');
+          }).catchError((error) async{
+            if (error.code == 'user-not-found' ) {
+              await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: email,
+              password: password).then((value){
+                //  SnakeBars.showSuccessSnake(description: "FireBase Created");
+                Get.snackbar('FireBase created', '');
+              }).catchError((error){
+                // DialogBoxes.showErroDialog(description: error.code);
+              });
+              
+            }
+            // DialogBoxes.showErroDialog(description: error.code);
+            debugPrint('Firebase signin ${error.code}');
+          });
+
+          //  final user = _auth.currentUser;
+          //   if (user != null) {
+          //     loggedInUser = user;
+          //     // print(loggedInUser?.email);
+          //   }
+      
+    // } catch (e) {
+    //   //var error =
+      
+    //    //debugPrint('Firebase signin ${e['code']}');
+    // }
+
+   
+  }
+
+  Future signUp() async {
+    try {
+      await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: GetStorage().read('mobile') + '@gmail.com',
+          password: GetStorage().read('mobile'));
+    } catch (e) {
+      debugPrint('Firebase signUp $e');
+    }
   }
 }

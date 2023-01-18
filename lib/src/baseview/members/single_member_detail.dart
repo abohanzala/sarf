@@ -147,7 +147,7 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                                   ],
                                 ),
                                 GestureDetector(
-                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '')),
+                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),)),
                                   child: Row(children: [
                                     Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                     const SizedBox(width: 4,),

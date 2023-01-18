@@ -113,7 +113,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
                               ],
                             ),
                             GestureDetector(
-                              onTap: () => Get.to(() => ChatScreen(title: 'Name')) ,
+                              onTap: () => Get.to(() => ChatScreen(title: singleData.name!,email: singleData.mobile.toString(),)) ,
                               child: Row(children: [
                                 Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                 const SizedBox(width: 4,),
