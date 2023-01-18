@@ -11,6 +11,7 @@ import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 import 'package:video_player/video_player.dart';
+import '../../constant/global_constants.dart';
 import '../../controllers/auth/data_collection_controller.dart';
 import '../../controllers/auth/register_controller.dart';
 import '../../controllers/auth/registration_controller.dart';
@@ -328,6 +329,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   @override
   void initState() {
+    mapData.remove('location');
+    mapData.remove('latitude');
+    mapData.remove('longitude');
     getData();
     super.initState();
   }
@@ -464,12 +468,24 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             style: TextStyle(fontSize: 17, color: Colors.grey),
           ),
           InkWell(
-            onTap: () {},
-            child: Text(
-              ' Terms & Conditions'.tr,
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 17,
+            onTap: () {
+              print(
+                  "This is mapData Location==================${mapData.read('location')}");
+              print(
+                  "This is mapData lat==================${mapData.read('latitude')}");
+              print(
+                  "This is mapData lng==================${mapData.read('longitude')}");
+              Get.toNamed('terms_and_conditions');
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 5),
+              child: Text(
+                'Terms & Conditions'.tr,
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Colors.grey,
+                  fontSize: 17,
+                ),
               ),
             ),
           ),
@@ -1106,6 +1122,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                             registrationController.cityId =
                                                 cityId;
                                           });
+                                          setState(() {});
 
                                           Get.back();
                                         },
@@ -1345,7 +1362,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => const LocationView() );
+          Get.to(() => const LocationView());
           //   Get.toNamed(RoutesName.RegistrationDetails);
         },
         child: Row(
@@ -1360,7 +1377,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Text(
-                'Location'.tr,
+                mapData.read('location') != null
+                    ? mapData.read('location')
+                    : 'Location'.tr,
                 style: TextStyle(
                     color: Colors.white, fontSize: 13, fontFamily: 'medium'),
               ),

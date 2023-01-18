@@ -257,16 +257,20 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                                           height: 60,
                                           margin: const EdgeInsets.only(
                                               right: 10, top: 5),
-                                          padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                            // color: R.colors.grey,
+                                            //  color: R.colors.grey,
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          child: Image.file(
-                                            singleFile,
-                                            height: 25.h,
-                                            width: 25.w,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            child: Image.file(
+                                              singleFile,
+                                              height: 25.h,
+                                              width: 25.w,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                         Positioned(
