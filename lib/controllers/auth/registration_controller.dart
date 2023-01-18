@@ -10,6 +10,7 @@ import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class RegistrationController extends GetxController {
   var registerFormKey = GlobalKey<FormState>();
@@ -114,14 +115,8 @@ class RegistrationController extends GetxController {
       await GetStorage().write('mobile', userInfo.user!.mobile);
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
+      await createFirebaseUser();
       Get.offAllNamed(RoutesName.base);
-
-      //  await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile')).then((value){
-      //     SnakeBars.showSuccessSnake(description: userInfo.message);
-      //     Get.offNamed(Routes.BOTTOM_NAVIGATION);
-      //   }).catchError((error){
-      //     SnakeBars.showErrorSnake(description: error.toString());
-      //   });
 
     } else {
       Get.back();
@@ -134,5 +129,20 @@ class RegistrationController extends GetxController {
     }
     return null;
     // return null;
+  }
+
+  Future createFirebaseUser() async {
+    
+      
+      await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: GetStorage().read('mobile') + '@gmail.com',
+          password: GetStorage().read('mobile')).then((value){
+            Get.snackbar("firebase-created", 'firebase-created');
+            //SnakeBars.showSuccessSnake(description: 'firebase reg');
+          }).catchError((error){
+            Get.snackbar("firebase-error", error.toString());
+            // SnakeBars.showErrorSnake(description: error.toString());
+          });
+    
   }
 }
