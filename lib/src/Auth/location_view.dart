@@ -149,7 +149,7 @@ class _LocationViewState extends State<LocationView> {
                           "This is mapData lat==================${mapData.read('latitude')}");
                       print(
                           "This is mapData lng==================${mapData.read('longitude')}");
-                       Get.back();
+                      Get.back();
                     },
                     child: Container(
                       width: Get.width - 40,
