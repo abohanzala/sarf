@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
@@ -28,7 +30,12 @@ class RegistrationController extends GetxController {
   var cityId;
   var expense_typeId;
   var message;
-
+  var finalSelectedCity = ''.obs;
+  var finalSelectedType = ''.obs;
+  var location = ''.obs;
+  var location_lat = ''.obs;
+  var location_lng = ''.obs;
+  List<File> profileImage = <File>[].obs;
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
@@ -62,11 +69,12 @@ class RegistrationController extends GetxController {
       'whatsapp': whatsappController.text,
       'website': websiteController.text,
       'is_online': isOnline == true ? 0 : 1,
-      'location': 'abc',
-      'location_lat': '36.87655',
-      'location_lng': '72.77876',
+      'location': location,
+      'location_lat': location_lat,
+      'location_lng': location_lng,
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+      //   'image':profileImage
     };
     print("This is our request ==================${request}");
 
@@ -117,7 +125,6 @@ class RegistrationController extends GetxController {
       await GetStorage().write('status', userInfo.user!.status);
       await createFirebaseUser();
       Get.offAllNamed(RoutesName.base);
-
     } else {
       Get.back();
       Get.snackbar(
@@ -132,17 +139,16 @@ class RegistrationController extends GetxController {
   }
 
   Future createFirebaseUser() async {
-    
-      
-      await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: GetStorage().read('mobile') + '@gmail.com',
-          password: GetStorage().read('mobile')).then((value){
-            Get.snackbar("firebase-created", 'firebase-created');
-            //SnakeBars.showSuccessSnake(description: 'firebase reg');
-          }).catchError((error){
-            Get.snackbar("firebase-error", error.toString());
-            // SnakeBars.showErrorSnake(description: error.toString());
-          });
-    
+    await firebase_auth.FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: GetStorage().read('mobile') + '@gmail.com',
+            password: GetStorage().read('mobile'))
+        .then((value) {
+      Get.snackbar("firebase-created", 'firebase-created');
+      //SnakeBars.showSuccessSnake(description: 'firebase reg');
+    }).catchError((error) {
+      Get.snackbar("firebase-error", error.toString());
+      // SnakeBars.showErrorSnake(description: error.toString());
+    });
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:sarf/resources/images.dart';
@@ -41,8 +43,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   bool citySelected = false;
   int selectedCityIndex = -1;
   int selectedTypeIndex = -1;
-  String finalSelectedCity = '';
-  XFile? _imageFileList;
+  XFile? _imageFile;
   String? _retrieveDataError;
   dynamic _pickImageError;
   bool isVideo = false;
@@ -233,8 +234,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           );
 
           setState(() {
-            if (_imageFileList != null) {
-              _imageFileList = pickedFileList.first;
+            if (_imageFile != null) {
+              _imageFile = pickedFileList.first;
             }
           });
         } catch (e) {
@@ -251,9 +252,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         );
         setState(() {
           print('SetStateCalling======================================');
-          _imageFileList = pickedFile!;
+          _imageFile = pickedFile!;
+          registrationController.profileImage.add(File(_imageFile!.path));
           print(
-              "This is my ImagePath=====================${_imageFileList!.length}");
+              "This is my ImagePath=====================${_imageFile!.length}");
           //    _setImageFileListFromFile(pickedFile);
         });
       } catch (e) {
@@ -342,28 +344,25 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Stack(
-        children: [
-          Scaffold(
-            backgroundColor: const Color(0xFFF2F2F9),
-            body: Stack(
-              children: [
-                buildBackGroundImage(),
-                buildBackArrowContainer(),
-              ],
-            ),
-          ),
-          buildRegistrationDetailsCard()
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [buildBackGroundImage(), buildRegistrationDetailsCard()],
+        ),
       ),
     );
   }
 
   buildBackGroundImage() {
-    return Image.asset(
-      'assets/images/backgroundImage.png',
-      width: MediaQuery.of(context).size.width,
+    return Stack(
+      children: [
+        Image.asset(
+          'assets/images/backgroundImage.png',
+          width: MediaQuery.of(context).size.width,
+        ),
+        buildBackArrowContainer()
+      ],
     );
   }
 
@@ -390,20 +389,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   }
 
   buildRegistrationDetailsCard() {
-    return Positioned(
-      top: 230,
-      child: Container(
-        height: MediaQuery.of(context).size.height - 250,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [buildRegistrationDetailsText(), buildForm()],
-          ),
-        ),
+    return Container(
+      //  height: MediaQuery.of(context).size.height - 250,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      child: Column(
+        children: [buildRegistrationDetailsText(), buildForm()],
       ),
     );
   }
@@ -540,14 +534,14 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       },
       child: Column(
         children: [
-          _imageFileList != null
+          _imageFile != null
               ? Container(
                   margin: EdgeInsets.only(top: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Image.file(
                       File(
-                        _imageFileList!.path,
+                        _imageFile!.path,
                       ),
                       height: 80,
                       width: 80,
@@ -1104,17 +1098,21 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         onTap: () {
                                           selectedCityIndex = index;
                                           print(selectedCityIndex);
+
                                           setState(() {
-                                            finalSelectedCity =
+                                            // GetStorage().read('lang');
+                                            registrationController
+                                                    .finalSelectedCity.value =
                                                 dataCollectionController
                                                     .cities![selectedCityIndex]
-                                                    .name
+                                                    .name!
+                                                    .en
                                                     .toString();
                                           });
                                           var cityId = dataCollectionController
                                               .cities![selectedCityIndex].id
                                               .toString();
-                                          print(finalSelectedCity);
+
                                           print(
                                               "This is my selctedCity Id ============${cityId}");
 
@@ -1230,11 +1228,16 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                       onTap: () {
                                         selectedTypeIndex = index;
                                         print(selectedTypeIndex);
+                                        registrationController
+                                                .finalSelectedType.value =
+                                            dataCollectionController
+                                                .types![selectedTypeIndex]
+                                                .expenseName
+                                                .toString();
 
                                         var typeId = dataCollectionController
                                             .types![index].id
                                             .toString();
-                                        print(finalSelectedCity.tr);
                                         print(
                                             "This is my typeCity Id ============${typeId}");
                                         registrationController.expense_typeId =
@@ -1301,15 +1304,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           child: Row(
             children: [
               Expanded(
-                  child: Text(
-                selectedCityIndex == -1
-                    ? 'Select City'.tr
-                    : dataCollectionController
-                        .cities![selectedCityIndex].name!.en
-                        .toString(),
-                style: TextStyle(
-                    fontSize: 12, fontFamily: 'medium', color: R.colors.grey),
-              )),
+                  child: Obx(() => Text(
+                        registrationController.finalSelectedCity.value != ''
+                            ? registrationController.finalSelectedCity.value
+                            : 'Select City',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'medium',
+                            color: R.colors.grey),
+                      ))),
               Icon(Icons.arrow_drop_down),
             ],
           ),
@@ -1335,15 +1338,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           child: Row(
             children: [
               Expanded(
-                  child: Text(
-                selectedTypeIndex == -1
-                    ? 'Type'.tr
-                    : dataCollectionController
-                        .types![selectedTypeIndex].expenseName
-                        .toString(),
-                style: TextStyle(
-                    fontSize: 12, fontFamily: 'medium', color: R.colors.grey),
-              )),
+                  child: Obx(() => Text(
+                        registrationController.finalSelectedType.value != ''
+                            ? registrationController.finalSelectedType.value
+                            : 'Select Type',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'medium',
+                            color: R.colors.grey),
+                      ))),
               Icon(Icons.arrow_drop_down),
             ],
           ),
@@ -1374,16 +1377,26 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   size: 20,
                   color: Colors.white,
                 )),
-            Container(
-              margin: EdgeInsets.only(left: 20),
-              child: Text(
-                mapData.read('location') != null
-                    ? mapData.read('location')
-                    : 'Location'.tr,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 13, fontFamily: 'medium'),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(0),
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(left: 20, top: 20),
+                      child: Obx(
+                        () => Text(
+                          registrationController.location.value != ''
+                              ? registrationController.location.value
+                              : 'Select Location',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontFamily: 'medium'),
+                        ),
+                      )),
+                ],
               ),
-            ),
+            )
           ],
         ),
       ),
