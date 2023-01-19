@@ -179,7 +179,7 @@ class SupportController extends getpackage.GetxController {
           // SnakeBars.showValidationErrorSnake(
           //     title: response['message'].toString(),
           //     description: response['validation_errors'].toString())
-          : getpackage.Get.snackbar('Success', response['message'].toString());
+          : getpackage.Get.snackbar('Error', response['message'].toString());
       //SnakeBars.showErrorSnake(description: response['message'].toString());
       Navigator.of(getpackage.Get.context!).pop();
     }

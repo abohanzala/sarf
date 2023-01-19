@@ -38,4 +38,6 @@ class ApiLinks {
   static const String invoiceDetails = '$base/invoice_detail';
   static const String invoiceAttach = '$base/send_attachment_to_invoice';
   static const String invoiceList = '$base/invoices?language=';
+  static const String mobileCheckInvoice = '$base/mobile_check';
+  static const String firebaseFileStorage = '$base/firebase_file_upload';
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -17,6 +19,46 @@ class MembersScreen extends StatefulWidget {
 
 class _MembersScreenState extends State<MembersScreen> {
   MembersController ctr = Get.put<MembersController>(MembersController());
+  TextEditingController searchValue = TextEditingController();
+  Timer? searchOnStoppedTyping;
+  Future<MembersList?>? membersList;
+
+  _onChangeHandler(value ) {
+        const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
+        if (searchOnStoppedTyping != null) {
+            setState(() => searchOnStoppedTyping?.cancel()); // clear timer
+        }
+        setState(() => searchOnStoppedTyping =  Timer(duration, () => search(value)));
+    }
+
+    search(value) {
+      FocusScope.of(context).unfocus();
+        //print('hello world from search . the value is $value');
+        if(value.isEmpty){
+          setState(() {
+            membersList = ctr.getMembersList('');
+          });
+        }
+
+        setState(() {
+            membersList = ctr.getMembersList(searchValue.text);
+          });
+        //print(ctr.mobile1.text);
+        
+    }
+@override
+void initState() {
+    loadMembers();
+    super.initState();
+  }
+  @override
+void dispose(){
+  searchOnStoppedTyping?.cancel();
+  super.dispose();
+}  
+loadMembers(){
+  membersList = ctr.getMembersList('');
+}
   @override
   Widget build(BuildContext context) {
         return Scaffold(
@@ -25,13 +67,66 @@ class _MembersScreenState extends State<MembersScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           customAppBar('Members List'.tr,false,false,'',false),
-          appbarSearch(),
+          //appbarSearch(),
+
+          Transform(
+          transform: Matrix4.translationValues(0, -20, 0),
+          child: Container(
+            //margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: Container(
+                                  height: 40,
+                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 0),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,
+                                  border: Border.all(color: R.colors.lightBlue,width: 1) ),
+                                  child:
+                                  TextFormField(
+                                    controller: searchValue,
+                                    onChanged: _onChangeHandler,
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.only(bottom: 5),
+                                      hintText: 'Search here'.tr,
+                                      hintStyle: TextStyle(color: R.colors.grey),
+                                      focusedBorder: InputBorder.none,
+                                      border: InputBorder.none,
+                  
+                                    ),
+                                  ),
+                                ),),
+                                const SizedBox(width: 10,),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
+                                  child: Center(child: Row(
+                                    children: [
+                                          Icon(
+                                            Icons.qr_code,
+                                            color: R.colors.blue,
+                                            //size: 25.sp,
+                                          ),
+                                          const SizedBox(width: 5,),
+                                          Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
+                                          //fontSize: 25.sp
+                                          ),)
+                                    ],
+                                  ),),
+                                )
+                ],
+              ),
+            ),
+          ),
+        ),
+          
          // const SizedBox(height: 10,),
           Expanded(child: 
           Transform(
             transform: Matrix4.translationValues(0, -15, 0),
             child: FutureBuilder<MembersList?>(
-              future: ctr.getMembersList(),
+              future: membersList,
               builder: (contaxt,snapshot){
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));

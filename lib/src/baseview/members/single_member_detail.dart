@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/src/baseview/members/chat/view/chat_view.dart';
 import 'package:sarf/src/utils/routes_name.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 
 import '../../../constant/api_links.dart';
 import '../../../resources/resources.dart';
@@ -22,6 +24,51 @@ class SingleMemberDetails extends StatefulWidget {
 
 class _SingleMemberDetailsState extends State<SingleMemberDetails> {
   MembersController ctr = Get.find<MembersController>();
+
+
+
+
+void launchWhatsApp(String phone) async {
+  String url() {
+    if (Platform.isAndroid) {
+      // add the [https]
+      return "https://wa.me/$phone/"; // new line
+    } else {
+      // add the [https]
+      return "https://api.whatsapp.com/send?phone=$phone"; // new line
+    }
+  }
+
+  if (await canLaunchUrl(Uri.parse(url()))) {
+    await canLaunchUrl(Uri.parse(url()));
+  } else {
+    // throw 'Could not launch ${url()}';
+    Get.snackbar('Error', 'Could not launch ${url()}');
+  }
+}
+
+
+void launchUrls(String url) async {
+  
+
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await canLaunchUrl(Uri.parse(url));
+  } else {
+    // throw 'Could not launch ${url()}';
+    Get.snackbar('Error', 'Could not launch $url');
+  }
+}
+
+launchPhone({required Uri u}) async {
+  if (await canLaunchUrl(u)) {
+    await launchUrl(u);
+  } else {
+    throw 'Could not launch $u';
+  }
+}
+
+
+
   @override
   void initState() {
     ctr.getMemberDetails(widget.id);
@@ -61,12 +108,12 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:  [
                         Container(
-                          padding: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: R.colors.blackSecondery,width: 1)
                           ),
-                           child: ctr.memDetails.value.data?.photo != null? Image.network("${ApiLinks.assetBasePath}${ctr.memDetails.value.data?.photo}") : Container(width: 40,height: 40,)
+                           child: ctr.memDetails.value.data?.photo != null? CircleAvatar(radius: 25,backgroundImage: NetworkImage("${ApiLinks.assetBasePath}${ctr.memDetails.value.data?.photo}"),) : Container(width: 40,height: 40,)
                           // CircleAvatar(
                           //   radius: 25,
                           //   backgroundImage: AssetImage(R.images.pharmacy),
@@ -134,20 +181,45 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
                               children: [
                                 Row(
                                   children: [
-                                    Image.asset(R.images.twitter,width: 30,height: 30,),
+                                    GestureDetector(
+                                      onTap: (){
+                                        launchUrls('//https://twitter.com/${ctr.memDetails.value.data?.userDetail?.twitterLink}');
+                                      },
+                                      child: Image.asset(R.images.twitter,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
-                                    Image.asset(R.images.insta,width: 30,height: 30,),
+                                    GestureDetector(
+                                      onTap: (){
+                                        launchUrls('https://instagram.com/${ctr.memDetails.value.data?.userDetail?.instaLink}');
+                                        //ctr.memDetails.value.data?.userDetail?.whatsapp
+                                      },
+                                      child: Image.asset(R.images.insta,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
-                                    Image.asset(R.images.web,width: 30,height: 30,),
+                                    GestureDetector(
+                                      onTap: (){
+                                        launchUrls('${ctr.memDetails.value.data?.userDetail?.website}');
+                                      },
+                                      child: Image.asset(R.images.web,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
-                                    Image.asset(R.images.whatsapp,width: 30,height: 30,),
+                                    GestureDetector(
+                                      onTap: (){
+                                        launchWhatsApp(ctr.memDetails.value.data?.userDetail?.whatsapp ?? '');
+                                      },
+                                      child: Image.asset(R.images.whatsapp,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
-                                    Image.asset(R.images.call,width: 30,height: 30,),
+                                    GestureDetector(
+                                      onTap: (){
+                                        final Uri teleLaunchUri = Uri(
+                                                                      scheme: 'tel',
+                                                                      path: "${ctr.memDetails.value.data?.userDetail?.contactNo}", // your number
+                                                                    );
+                                        launchPhone(u: teleLaunchUri);
+                                      },
+                                      child: Image.asset(R.images.call,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
                                   ],
                                 ),
                                 GestureDetector(
-                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),)),
+                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),otherUserPhoto: ctr.memDetails.value.data!.photo ?? '',)),
                                   child: Row(children: [
                                     Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                     const SizedBox(width: 4,),
