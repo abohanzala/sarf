@@ -37,6 +37,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
   String? _retrieveDataError;
   dynamic _pickImageError;
   final ImagePicker _picker = ImagePicker();
+  bool isLoading = true;
 
   @override
   // ignore: must_call_super
@@ -49,7 +50,9 @@ class _ChangeProfileState extends State<ChangeProfile> {
   }
 
   Future getData() async {
-    await profileController.getProfile();
+    await profileController.getProfile().then((value) => setState(() {
+          isLoading = false;
+        }));
   }
 
   Future getDataCollection() async {
@@ -59,20 +62,21 @@ class _ChangeProfileState extends State<ChangeProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Scaffold(
-            backgroundColor: Color(0xFFF2F2F9),
-            body: Stack(
+      body: isLoading == true
+          ? Center(child: CircularProgressIndicator())
+          : Stack(
               children: [
-                buildBackGroundImage(),
-                buildBackArrowContainerAndChangeProfileText(),
+                Scaffold(
+                    backgroundColor: Color(0xFFF2F2F9),
+                    body: Stack(
+                      children: [
+                        buildBackGroundImage(),
+                        buildBackArrowContainerAndChangeProfileText(),
+                      ],
+                    )),
+                buildProfileCard()
               ],
             ),
-          ),
-          buildProfileCard()
-        ],
-      ),
     );
   }
 
