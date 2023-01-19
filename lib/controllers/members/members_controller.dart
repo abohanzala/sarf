@@ -37,11 +37,24 @@ void onInit(){
 
 }
 
-  Future<MembersList?> getMembersList() async {
+  Future<MembersList?> getMembersList(String query) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
    // openLoader();
+   var request = {};
+   if(query == ''){
+    request = {
+      "language": GetStorage().read('lang'),
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "query_string": query,
+    };
+   }
     var response =
-        await DioClient().get("${ApiLinks.membersList}${GetStorage().read('lang')}").catchError((error) {
+        await DioClient().post("${ApiLinks.membersList}${GetStorage().read('lang')}",request).catchError((error) {
+      debugPrint(error.toString());
       if (error is BadRequestException) {
         
         
@@ -74,14 +87,28 @@ void onInit(){
     return null;
   }
 
-  Future<CityList?> getCityList(String id) async {
+  Future<CityList?> getCityList(String id,String query) async {
    // print("${ApiLinks.cityList}${GetStorage().read('lang')}");
 
    // openLoader();
-    var request = {
+    var request = {};
+   if(query == ''){
+    request = {
       "language": GetStorage().read('lang'),
       "expense_type_id": id,
+      
     };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "expense_type_id": id,
+      "query_string": query,
+    };
+   }
+    // var request = {
+    //   "language": GetStorage().read('lang'),
+    //   "expense_type_id": id,
+    // };
     var response =
         await DioClient().post(ApiLinks.cityList,request).catchError((error) {
       if (error is BadRequestException) {
@@ -116,14 +143,30 @@ void onInit(){
     return null;
   }
 
-  Future<ListMembersNewList?> getMembersNewList(String id,String city) async {
+  Future<ListMembersNewList?> getMembersNewList(String id,String city,String query) async {
    // print("${ApiLinks.cityList}${GetStorage().read('lang')}");
    // openLoader();
-   var request = {
+   var request = {};
+   if(query == ''){
+    request = {
     "language": GetStorage().read('lang'),
     "expense_type_id": id,
     "city_id": city
-   };
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "expense_type_id": id,
+      "city_id": city,
+      "query_string": query,
+    };
+   }
+  //  var request = {
+  //   "language": GetStorage().read('lang'),
+  //   "expense_type_id": id,
+  //   "city_id": city
+  //  };
    debugPrint(request.toString());
     var response =
         await DioClient().post(ApiLinks.memberNewList,request).catchError((error) {

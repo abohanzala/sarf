@@ -83,7 +83,7 @@ class InvoiceController extends getpackage.GetxController {
           // SnakeBars.showValidationErrorSnake(
           //     title: response['message'].toString(),
           //     description: response['validation_errors'].toString())
-          : getpackage.Get.snackbar('Success', response['message'].toString());
+          : getpackage.Get.snackbar('Error', response['message'].toString());
       //SnakeBars.showErrorSnake(description: response['message'].toString());
       Navigator.of(getpackage.Get.context!).pop();
     }
@@ -120,5 +120,82 @@ class InvoiceController extends getpackage.GetxController {
       debugPrint('here');
     }
     return null;
+  }
+
+  Future mobileCheck(String number) async {
+    var data;
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    // openLoader();
+    //  isLoadingSupportDetails.value = true;
+    var request = {
+      "language": GetStorage().read('lang'),
+      "mobile": number,
+      "is_invoice": true,
+    };
+    var response = await DioClient()
+        .post(ApiLinks.mobileCheckInvoice, request)
+        .catchError((error) {
+      debugPrint(error.toString());
+      //   if (error is BadRequestException) {
+      //     isLoadingSupportDetails.value = false;
+      //      var apiError = json.decode(error.message!);
+      //     getpackage.Get.snackbar(
+      //       'Error'.tr,
+      //       apiError["reason"].toString(),
+      //       snackPosition: getpackage.SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      //    // print(error.toString());
+      //   } else {
+      //     isLoadingSupportDetails.value = false;
+      //   if (error is BadRequestException) {
+      //   var message = error.message;
+      //   getpackage.Get.snackbar(
+      //       'Error'.tr,
+      //       message.toString(),
+      //       snackPosition: getpackage.SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      // } else if (error is FetchDataException) {
+      //   var message = error.message;
+      //   getpackage.Get.snackbar(
+      //       'Error'.tr,
+      //       message.toString(),
+      //       snackPosition: getpackage.SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      // } else if (error is ApiNotRespondingException) {
+
+      //   getpackage.Get.snackbar(
+      //       'Error'.tr,
+      //       'Oops! It took longer to respond.'.tr,
+      //       snackPosition: getpackage.SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      // }
+
+      //   }
+    });
+    debugPrint(response.toString());
+    if (response == null) return;
+    if (response['success'] == true) {
+      // print(response['message']);
+      // print(response['user']['name']);
+      data = response;
+      //getSupportDetails(id);
+      // supportList.clear();
+      // isLoadingSupportDetails.value = false;
+      // debugPrint(response.toString());
+      //   var data = SupportDetails.fromJson(response);
+      //   supportDetails.value = data;
+
+      //print(budgets.first.name);
+
+      // return data;
+    } else {
+      data = response;
+      debugPrint('here');
+    }
+    return data;
   }
 }

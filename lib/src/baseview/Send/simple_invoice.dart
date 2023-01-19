@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class SimpleInvoice extends StatefulWidget {
 
 class _SimpleInvoiceState extends State<SimpleInvoice> {
   File? _scannedImage;
+  Timer? searchOnStoppedTyping;
+  String name = "";
 
   void _startScan(BuildContext context) async {
     var image = await DocumentScannerFlutter.launch(context);
@@ -43,6 +46,43 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
     } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');
     }
+  }
+
+
+   
+
+    _onChangeHandler(value ) {
+        const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
+        if (searchOnStoppedTyping != null) {
+            setState(() => searchOnStoppedTyping?.cancel()); // clear timer
+        }
+        setState(() => searchOnStoppedTyping =  Timer(duration, () => search(value)));
+    }
+
+    search(value) {
+        //print('hello world from search . the value is $value');
+        if(value.isEmpty){
+          return;
+        }
+        //print(ctr.mobile1.text);
+        ctr.mobileCheck(ctr.mobile1.text).then((value){
+          if(value['message'] == 'User record available'){
+            setState(() {
+              name = value['user']['name'];
+            });
+          }
+          if(value['message'] == 'User not found!'){
+            setState(() {
+              name = "User not found";
+            });
+          }
+        });
+    }
+
+    @override
+    void dispose() {
+    searchOnStoppedTyping?.cancel();
+    super.dispose();
   }
 
   @override
@@ -95,6 +135,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                   children: [
                     TextFormField(
                       controller: ctr.mobile1,
+                      onChanged: _onChangeHandler,
                       decoration: InputDecoration(
                         suffixIcon: Icon(
                           Icons.qr_code,
@@ -123,10 +164,11 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                     SizedBox(
                       height: 10.h,
                     ),
+                    if(name != '')
                     Text(
-                      'NAME'.tr,
+                      name,
                       style: TextStyle(
-                        color: R.colors.black,
+                        color: name == 'User not found'? Colors.red : R.colors.black,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -422,6 +464,11 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
+                              
+                              if (name == 'User not found') {
+                                Get.snackbar('Error'.tr, "Enter a valid number");
+                                return;
+                              }
                               if (ctr.mobile1.text.isEmpty) {
                                 Get.snackbar('Error'.tr, "mobile is required");
                                 return;

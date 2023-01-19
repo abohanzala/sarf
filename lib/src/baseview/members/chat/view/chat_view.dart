@@ -14,13 +14,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sarf/constant/api_links.dart';
+import 'package:sarf/src/baseview/members/chat/controller/chat_controller.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../resources/resources.dart';
 
 class ChatScreen extends StatefulWidget {
   final String title;
   final String email;
-  const ChatScreen({super.key, required this.title, required this.email});
+  final String otherUserPhoto;
+  const ChatScreen({super.key, required this.title, required this.email,required this.otherUserPhoto});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -39,6 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
    bool isRecording = false;
    File? image;
    FlutterSoundRecorder? _soundRecorder;
+   ChatController ctr = Get.put<ChatController>(ChatController());
 
   @override
   void initState() {
@@ -143,9 +148,29 @@ class _ChatScreenState extends State<ChatScreen> {
  void sendImageFile() async{
   debugPrint('here');
 
-  image = null;
+  //image = null;
   debugPrint(image.toString());
-  
+
+    await ctr.uploadFirebaseFile(image!,'${const Uuid().v1()}.jpg').then((value) async{
+      //print("photo----------$value");
+      if(value != ''){
+         await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
+        'sender' : currentUser,
+        'message' : "${ApiLinks.assetBasePath}$value",
+        'messageType': messageType,
+        'time' : DateTime.now().toIso8601String(),
+      }).then((value){
+        image = null;
+      }).catchError((error){
+        debugPrint(error.toString());
+      });
+      }
+      if(value == ''){
+        Get.snackbar("Error", 'Something went wrong try later');
+      }
+      image = null;
+      
+    });
     // final ref = FirebaseStorage.instance.ref().child('chatsImages').child('${const Uuid().v1()}.jpg');
 
     // await ref.putFile(image!).whenComplete(() {});
@@ -166,6 +191,27 @@ class _ChatScreenState extends State<ChatScreen> {
 
  void sendAudioFile(File file) async{
   debugPrint('here');
+  messageType = 'audio';
+  await ctr.uploadFirebaseFile(file,const Uuid().v1()).then((value) async{
+      //print("photo----------$value");
+      if(value != ''){
+         await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
+        'sender' : currentUser,
+        'message' : "${ApiLinks.assetBasePath}$value",
+        'messageType': messageType,
+        'time' : DateTime.now().toIso8601String(),
+      }).then((value){
+        // image = null;
+      }).catchError((error){
+        debugPrint(error.toString());
+      });
+      }
+      if(value == ''){
+        Get.snackbar("Error", 'Something went wrong try later');
+      }
+      // image = null;
+      
+    });
   //  messageType = 'audio';
   
   //   final ref = FirebaseStorage.instance.ref().child('chatsAudios').child(const Uuid().v1());
@@ -250,7 +296,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: (context, index) {
                         QueryDocumentSnapshot<Object?> singleData = data[index];
                   
-                          return  MessageBox(isMe: currentUser == singleData['sender'] ? true : false, message: singleData['message'], time: singleData['time'].toString(),messageType : singleData['messageType'].toString() );
+                          return  MessageBox(isMe: currentUser == singleData['sender'] ? true : false, message: singleData['message'], time: singleData['time'].toString(),messageType : singleData['messageType'].toString(),otherUserPhoto: widget.otherUserPhoto, );
                       },
                 );
                             }
@@ -401,9 +447,10 @@ class _ChatScreenState extends State<ChatScreen> {
 class MessageBox extends StatefulWidget {
  final bool isMe;
  final String message;
+ final String otherUserPhoto;
   final String time;
   final String messageType ;
-  const MessageBox({super.key, required this.isMe, required this.message, required this.time, required this.messageType});
+  const MessageBox({super.key, required this.isMe, required this.message, required this.time, required this.messageType, required this.otherUserPhoto});
 
   @override
   State<MessageBox> createState() => _MessageBoxState();
@@ -448,6 +495,76 @@ class _MessageBoxState extends State<MessageBox> {
                       if(widget.messageType == 'image' )
                       SizedBox(
                             height: 120,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(imageUrl: widget.message,fit: BoxFit.fill,width: Get.width,))),
+                      if(widget.messageType == 'audio')
+                      GestureDetector(
+                                onTap: ()async{
+                                  
+                                   if(isPlaying == true){
+                                                                     
+
+                                    await audioPlayer.pause();
+                                    isPlaying = false;
+                                    setState((){
+                                      
+                                      
+                                    });
+                                    return;
+                                  }
+
+                                  if(isPlaying == false){
+                                                                    
+                                     await audioPlayer.play(UrlSource(widget.message));
+                                      isPlaying = true;
+                                     setState((){
+                                      
+                                    });
+                                   
+                                  } 
+                                  audioPlayer.onPlayerStateChanged.listen((event) { 
+                                    if(event.toString() == 'PlayerState.completed'){
+                                      isPlaying = false;
+                                      setState(() {
+                                        
+                                      });
+                                    }
+                                  });
+                                  
+                                },
+                                child: Center(child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.black , )),
+                              ),      
+                      if(widget.messageType == 'text')
+                      Text(widget.message,style: TextStyle(color: R.colors.white,fontSize: 14),),
+                      const SizedBox(height: 8,),
+                      Text(outputDate,
+                        // DateFormat("yyyy-MM-dd hh:mm").parse(DateTime.parse(time).toString()).toString(),
+                        style: TextStyle(color: R.colors.white,fontSize: 10),)
+                    ],
+                  ),    
+                  ),
+              )
+
+            ],
+          ) : Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              
+
+              Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: R.colors.themeColor,
+                      ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if(widget.messageType == 'image' )
+                      SizedBox(
+                            height: 120,
                             child: CachedNetworkImage(imageUrl: widget.message,)),
                       if(widget.messageType == 'audio')
                       GestureDetector(
@@ -484,35 +601,9 @@ class _MessageBoxState extends State<MessageBox> {
                                   });
                                   
                                 },
-                                child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.black , ),
+                                child: Center(child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.black , )),
                               ),      
                       if(widget.messageType == 'text')
-                      Text(widget.message,style: TextStyle(color: R.colors.white,fontSize: 14),),
-                      const SizedBox(height: 8,),
-                      Text(outputDate,
-                        // DateFormat("yyyy-MM-dd hh:mm").parse(DateTime.parse(time).toString()).toString(),
-                        style: TextStyle(color: R.colors.white,fontSize: 10),)
-                    ],
-                  ),    
-                  ),
-              )
-
-            ],
-          ) : Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              
-
-              Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: R.colors.themeColor,
-                      ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
                       Text(widget.message,style: TextStyle(color: R.colors.white,fontSize: 14),),
                       const SizedBox(height: 8,),
                       Text(outputDate,
@@ -528,6 +619,7 @@ class _MessageBoxState extends State<MessageBox> {
               CircleAvatar(
                   radius: 20,
                   backgroundColor: R.colors.grey,
+                  // backgroundImage: NetworkImage(wiotherUserPhoto),
                 ),
 
                 
