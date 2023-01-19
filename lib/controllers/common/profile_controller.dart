@@ -78,22 +78,37 @@ class ProfileController extends GetxController {
       debugPrint(response.toString());
       profileModel = ProfileModel.fromJson(response);
       print('This is ===================${profileModel}');
-      nameController.text = profileModel!.user!.name.toString();
-      userNameController.text = profileModel!.user!.username.toString();
-      emailController.text = profileModel!.user!.email.toString();
-      mobileController.text = profileModel!.user!.mobile.toString();
-      instaController.text =
-          profileModel!.user!.userDetail!.instaLink.toString();
+      nameController.text = profileModel!.user!.name == null
+          ? ''
+          : nameController.text = profileModel!.user!.name!;
+      userNameController.text = profileModel!.user!.username == null
+          ? ''
+          : userNameController.text = profileModel!.user!.username!;
+      emailController.text = profileModel!.user!.email == null
+          ? ''
+          : emailController.text = profileModel!.user!.email!;
+      mobileController.text = profileModel!.user!.mobile == null
+          ? ''
+          : mobileController.text = profileModel!.user!.mobile!;
+      instaController.text = profileModel!.user!.userDetail!.instaLink == null
+          ? ''
+          : profileModel!.user!.userDetail!.instaLink!;
       twitterController.text =
-          profileModel!.user!.userDetail!.twitterLink.toString();
-      contactController.text =
-          profileModel!.user!.userDetail!.contactNo.toString();
-      whatsappController.text =
-          profileModel!.user!.userDetail!.whatsapp.toString();
-      websiteController.text =
-          profileModel!.user!.userDetail!.website.toString();
-      locationController.text =
-          profileModel!.user!.userDetail!.location.toString();
+          profileModel!.user!.userDetail!.twitterLink == null
+              ? ''
+              : profileModel!.user!.userDetail!.twitterLink!;
+      contactController.text = profileModel!.user!.userDetail!.contactNo == null
+          ? ''
+          : profileModel!.user!.userDetail!.contactNo!;
+      whatsappController.text = profileModel!.user!.userDetail!.whatsapp == null
+          ? ''
+          : profileModel!.user!.userDetail!.whatsapp!;
+      websiteController.text = profileModel!.user!.userDetail!.website == null
+          ? ''
+          : profileModel!.user!.userDetail!.website!;
+      locationController.text = profileModel!.user!.userDetail!.location == null
+          ? ''
+          : profileModel!.user!.userDetail!.location!;
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);

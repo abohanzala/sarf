@@ -251,11 +251,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           source: source,
         );
         setState(() {
-          print('SetStateCalling======================================');
           _imageFile = pickedFile!;
-          registrationController.profileImage.add(File(_imageFile!.path));
+          registrationController.profileImage = File(_imageFile!.path);
           print(
-              "This is my ImagePath=====================${_imageFile!.length}");
+              'SetStateCalling=========================${registrationController.profileImage}');
+          print(
+              "This is my ImagePath=====================${registrationController.profileImage!.path}");
           //    _setImageFileListFromFile(pickedFile);
         });
       } catch (e) {
@@ -464,12 +465,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           InkWell(
             onTap: () {
               print(
-                  "This is mapData Location==================${mapData.read('location')}");
+                  "This is  Location==================${registrationController.location}");
               print(
-                  "This is mapData lat==================${mapData.read('latitude')}");
+                  "This is  lat==================${registrationController.location_lat}");
               print(
-                  "This is mapData lng==================${mapData.read('longitude')}");
-              Get.toNamed('terms_and_conditions');
+                  "This is  lng==================${registrationController.location_lng}");
+              //  Get.toNamed('terms_and_conditions');
             },
             child: Container(
               margin: EdgeInsets.only(left: 5),
@@ -1107,14 +1108,17 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                     .en
                                                     .toString();
                                           });
-                                          var getCityId = dataCollectionController
-                                              .cities![selectedCityIndex].id;
+                                          var getCityId =
+                                              dataCollectionController
+                                                  .cities![selectedCityIndex]
+                                                  .id;
 
                                           print(
                                               "This is my selctedCity Id ============${getCityId}");
 
                                           setState(() {
-                                            cityId=getCityId;
+                                            registrationController.cityId =
+                                                getCityId;
                                           });
 
                                           Get.back();
@@ -1236,7 +1240,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         print(
                                             "This is my typeCity Id ============${getTypeId}");
                                         setState(() {
-                                          expense_typeId=getTypeId;
+                                          registrationController
+                                              .expense_typeId = getTypeId;
                                         });
                                         Get.back();
                                       },
@@ -1374,6 +1379,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                 )),
             Expanded(
               child: ListView(
+                scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.all(0),
                 children: [
                   Container(

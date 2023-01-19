@@ -30,7 +30,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
   }
 
   InvoiceController ctr = Get.find<InvoiceController>();
-  
+
   Future pickImage(ImageSource source) async {
     try {
       var pickedFile = await ImagePicker().pickMultiImage(imageQuality: 35);
@@ -436,11 +436,9 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                               }
                               FocusScope.of(context).unfocus();
                               ctr
-                                  .postNewInvoice(
-                                      ctr.mobile1.text, ctr.amount2.text, ctr.note3.text)
-                                  .then((value) {
-                               
-                              });
+                                  .postNewInvoice(ctr.mobile1.text,
+                                      ctr.amount2.text, ctr.note3.text)
+                                  .then((value) {});
                             },
                             child: Container(
                               height: 50.h,

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/firebase_options.dart';
+import 'package:sarf/src/Auth/change_profile.dart';
 import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
@@ -17,6 +18,7 @@ import 'controllers/auth/register_controller.dart';
 import 'controllers/auth/registration_controller.dart';
 import 'controllers/auth/reset_password_controller.dart';
 import 'controllers/common/about_controller.dart';
+import 'controllers/common/change_profile_controller.dart';
 import 'controllers/common/delete_account_controller.dart';
 import 'controllers/common/privacy_policy_controller.dart';
 import 'controllers/common/profile_controller.dart';
@@ -46,6 +48,7 @@ void main() async {
   Get.put<AboutController>(AboutController());
   Get.put<ProfileController>(ProfileController());
   Get.put<DeleteAccountController>(DeleteAccountController());
+  Get.put<ChangeProfileController>(ChangeProfileController());
   runApp(const MyApp());
 }
 

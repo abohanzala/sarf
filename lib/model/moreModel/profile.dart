@@ -32,9 +32,9 @@ class User {
   String? email;
   String? firebaseEmail;
   String? mobile;
-  Null? photo;
+  String? photo;
   int? role;
-  Null? thumbnail;
+  String? thumbnail;
   String? theme;
   String? locale;
   int? userType;

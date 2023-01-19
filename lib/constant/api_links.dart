@@ -12,6 +12,7 @@ class ApiLinks {
   static const String about = '$base/page';
   static const String delete_account = '$base/delete_account';
   static const String profile = '$base/profile';
+  static const String change_profile = '$base/user/update';
   static const String change_password = '$base/change_password';
   static const String membersList = '$base/member_list?language=';
   static const String cityList = '$base/cities_members';

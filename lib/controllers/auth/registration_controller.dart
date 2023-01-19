@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart' as ddio;
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -27,14 +28,15 @@ class RegistrationController extends GetxController {
   TextEditingController websiteController = TextEditingController();
   bool accountType = true;
   bool isOnline = false;
-
+  var cityId;
+  var expense_typeId;
   var message;
   var finalSelectedCity = ''.obs;
   var finalSelectedType = ''.obs;
   var location = ''.obs;
   var location_lat = ''.obs;
   var location_lng = ''.obs;
-  List<File> profileImage = <File>[].obs;
+  File? profileImage;
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
@@ -43,43 +45,109 @@ class RegistrationController extends GetxController {
 
   Future registration() async {
     openLoader();
-    //check validation
-    // final isValid = loginFormKey.currentState!.validate();
-    // if (!isValid) {
-    //   return;
-    // }
-    // loginFormKey.currentState!.save();
-    // validation ends
+
+    ddio.FormData formData = ddio.FormData();
+
+    var file = profileImage;
+    String fileName = file!.path.split('/').last;
+    formData.files.add(MapEntry("photo",
+        await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+
     var a = registerController.phone.text;
     final splitted = a.split('+');
-    var request = {
-      'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
-      'account_type': accountType == true ? 0 : 1,
-      'password': passwordController.text,
-      'name': accountType == true
+    formData.fields
+        .add(MapEntry('language', GetStorage().read('lang').toString()));
+    formData.fields.add(MapEntry(
+      'mobile',
+      splitted[1],
+    ));
+    formData.fields.add(MapEntry(
+        'account_type', accountType == true ? 0.toString() : 1.toString()));
+    formData.fields.add(MapEntry(
+      'password',
+      passwordController.text,
+    ));
+    formData.fields.add(MapEntry(
+      'name',
+      accountType == true
           ? companyNameController.text
           : fullNameController.text,
-      'city_id': cityId.toString(),
-      'expense_type_id': expense_typeId.toString(),
-      'insta_link': instagramController.text,
-      'twitter_link': twitterController.text,
-      'contact_no': contactController.text,
-      'whatsapp': whatsappController.text,
-      'website': websiteController.text,
-      'is_online': isOnline == true ? 0 : 1,
-      'location': '',
-      'location_lat': '',
-      'location_lng': '',
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
-    };
-    print("This is our request ==================${request}");
+    ));
+    formData.fields.add(MapEntry(
+      'city_id',
+      cityId.toString(),
+    ));
+    formData.fields.add(MapEntry(
+      'expense_type_id',
+      expense_typeId.toString(),
+    ));
+    formData.fields.add(MapEntry(
+      'insta_link',
+      instagramController.text,
+    ));
+    formData.fields.add(MapEntry(
+      'contact_no',
+      contactController.text,
+    ));
+    formData.fields.add(MapEntry(
+      'whatsapp',
+      whatsappController.text,
+    ));
+    formData.fields.add(MapEntry(
+      'website',
+      websiteController.text,
+    ));
+    formData.fields.add(MapEntry(
+      'is_online',
+      isOnline == true ? 0.toString() : 1.toString(),
+    ));
+    formData.fields.add(MapEntry(
+      'location',
+      location.value,
+    ));
+    formData.fields.add(MapEntry(
+      'location_lat',
+      location_lat.value,
+    ));
+    formData.fields.add(MapEntry(
+      'location_lng',
+      location_lng.value,
+    ));
+    formData.fields.add(MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+    formData.fields
+        .add(MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+    debugPrint(formData.fields.toString());
+
+    // var request = {
+    //   'language': GetStorage().read('lang'),
+    //   'mobile': splitted[1],
+    //   'account_type': accountType == true ? 0 : 1,
+    //   'password': passwordController.text,
+    //   'name': accountType == true
+    //       ? companyNameController.text
+    //       : fullNameController.text,
+    //   'city_id': cityId.toString(),
+    //   'expense_type_id': expense_typeId.toString(),
+    //   'insta_link': instagramController.text,
+    //   'twitter_link': twitterController.text,
+    //   'contact_no': contactController.text,
+    //   'whatsapp': whatsappController.text,
+    //   'website': websiteController.text,
+    //   'is_online': isOnline == true ? 0 : 1,
+    //   'location': location.value,
+    //   'location_lat': location_lat.value,
+    //   'location_lng': location_lng.value,
+    //   'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
+    //   'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+    //   'photo': ''
+    // };
+    // print('This is ${''}');
+    print("This is our request ==================${formData}");
 
     //DialogBoxes.openLoadingDialog();
 
     var response = await DioClient()
-        .post(ApiLinks.registration, request)
+        .post(ApiLinks.registration, formData, true)
         .catchError((error) {
       if (error is BadRequestException) {
         Get.snackbar(
@@ -99,7 +167,7 @@ class RegistrationController extends GetxController {
         //HandlingErrors().handleError(error);
       }
     });
-    // message = response['message'];
+    //  message = response['message'];
     if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
@@ -111,6 +179,13 @@ class RegistrationController extends GetxController {
       contactController.clear();
       websiteController.clear();
       whatsappController.clear();
+      cityId = '';
+      expense_typeId = '';
+      location.value = '';
+      location_lat.value = '';
+      location_lng.value = '';
+      finalSelectedType.value = 'Select Type';
+      finalSelectedCity.value = 'Select City';
       var userInfo = LoginModel.fromJson(response);
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);
@@ -150,6 +225,3 @@ class RegistrationController extends GetxController {
     });
   }
 }
-
-var cityId;
-var expense_typeId;
