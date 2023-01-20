@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 
 import '../../../constant/api_links.dart';
+import '../../../controllers/common/profile_controller.dart';
 import '../../../resources/resources.dart';
 import '../../widgets/custom_appbar.dart';
 import '../Invoices/invoice_details.dart';
@@ -24,6 +25,7 @@ class SingleMemberDetails extends StatefulWidget {
 
 class _SingleMemberDetailsState extends State<SingleMemberDetails> {
   MembersController ctr = Get.find<MembersController>();
+  ProfileController ctrProfile = Get.find<ProfileController>();
 
 
 
@@ -67,12 +69,28 @@ launchPhone({required Uri u}) async {
   }
 }
 
+ static void navigateTo(double lat, double lng) async {
+   
+   if (await canLaunchUrl(Uri.parse("google.navigation:q=$lat,$lng&mode=d"))) {
+      await launchUrl (Uri.parse("google.navigation:q=$lat,$lng&mode=d"));
+   } else {
+    Get.snackbar('Error', 'Could not launch google.navigation:q=$lat,$lng');
+      throw 'Could not launch ${Uri.parse("google.navigation:q=$lat,$lng&mode=d")}';
+   }
+}
+
 
 
   @override
   void initState() {
-    ctr.getMemberDetails(widget.id);
+    getProfile();
     super.initState();
+  }
+  getProfile()async{
+    await ctrProfile.getProfile().then((value){
+                // print(ctrProfile.profileModel?.user?.name ?? 'asssssssssssssssssssssssss');
+              });
+    ctr.getMemberDetails(widget.id);
   }
   @override
   Widget build(BuildContext context) {
@@ -163,15 +181,37 @@ launchPhone({required Uri u}) async {
                                   ],
                                 )),
                                 const SizedBox(width: 3,),
-                                Row(
-                                  children: [
-                                    Text('Directions',
-                                      style:TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(width: 5,),
-                                      Icon(Icons.directions,color: R.colors.themeColor,size: 20,),
-                                  ],
+                                GestureDetector(
+                                  onTap: (){
+                                    double lat = 0.0;
+                                    double lng = 0.0;
+                                    if(ctr.memDetails.value.data?.userDetail?.locationLat != null){
+                                      lat = double.parse(ctr.memDetails.value.data!.userDetail!.locationLat!);
+                                    }
+                                    if(ctr.memDetails.value.data?.userDetail?.locationLng != null){
+                                      lng = double.parse(ctr.memDetails.value.data!.userDetail!.locationLng!);
+                                    }
+                                    if(
+                                      ctr.memDetails.value.data?.userDetail?.locationLng == null || ctr.memDetails.value.data?.userDetail?.locationLat == null
+                                    ){
+                                      Get.snackbar("Error", 'No direction provided');
+                                      return;
+                                    }
+                                    if(ctr.memDetails.value.data?.userDetail?.locationLng != null && ctr.memDetails.value.data?.userDetail?.locationLat != null ){
+                                      navigateTo(lat, lng);
+                                    }
+                                    
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text('Directions',
+                                        style:TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(width: 5,),
+                                        Icon(Icons.directions,color: R.colors.themeColor,size: 20,),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -219,7 +259,7 @@ launchPhone({required Uri u}) async {
                                   ],
                                 ),
                                 GestureDetector(
-                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),otherUserPhoto: ctr.memDetails.value.data!.photo ?? '',)),
+                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),otherUserPhoto: ctr.memDetails.value.data!.photo ?? '',curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',)),
                                   child: Row(children: [
                                     Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                     const SizedBox(width: 4,),

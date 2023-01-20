@@ -128,13 +128,51 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
            Padding(
              padding: const EdgeInsets.symmetric(horizontal: 12),
              child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: R.colors.grey
-                 ),
-             ),
+                                  width: Get.width,
+                                  padding: const EdgeInsets.symmetric(vertical: 0),
+                                  height: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                                      
+                                  
+                                                          Expanded(
+                                                            child: ListView.builder(
+                                                              scrollDirection: Axis.horizontal,
+                                                              shrinkWrap: true,
+                                                              itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
+                                                              itemBuilder: (context,index){
+                                                                var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
+                                                              return Container(
+                                                                
+                                                                width: 60,
+                                                                height: 60,
+                                                                margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                //padding: const EdgeInsets.all(8),
+                                                                decoration: BoxDecoration(
+                                                                  color: R.colors.grey,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(10),
+                                                                ),
+                                                                child: ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(10),
+                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,)),
+                                                              );
+                                                            
+                                                            }),
+                                                          ),
+                                    ],
+                                  ),
+                                ),
+            //  Container(
+            //   width: 60,
+            //   height: 60,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: R.colors.grey
+            //      ),
+            //  ),
            ),
            const SizedBox(height: 10,), 
            Padding(

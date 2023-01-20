@@ -89,12 +89,25 @@ class InvoiceController extends getpackage.GetxController {
     }
   }
 
-  Future<InvoiceList?> getInvoiceList() async {
+  Future<InvoiceList?> getInvoiceList(String query) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
+    var request = {};
+    if(query == ''){
+    request = {
+      "language": GetStorage().read('lang'),
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "query_string": query,
+    };
+   }
     var response = await DioClient()
-        .get("${ApiLinks.invoiceList}${GetStorage().read('lang')}")
+        .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
         .catchError((error) {
+          debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -111,6 +124,7 @@ class InvoiceController extends getpackage.GetxController {
         }
       }
     });
+    if(response == null ) return null;
     if (response['success'] == true) {
       debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);

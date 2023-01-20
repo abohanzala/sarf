@@ -24,7 +24,8 @@ class ChatScreen extends StatefulWidget {
   final String title;
   final String email;
   final String otherUserPhoto;
-  const ChatScreen({super.key, required this.title, required this.email,required this.otherUserPhoto});
+  final String curretUserPhoto;
+  const ChatScreen({super.key, required this.title, required this.email,required this.otherUserPhoto, required this.curretUserPhoto});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -238,9 +239,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
       setState(() {
         image = File(pickedImage.path);
+        showMoreOptions = false;
       });
       sendMessage();
     } on PlatformException catch(e) {
+      setState(() {
+        showMoreOptions = false;
+      });
       debugPrint('Failed to pick image: $e');
     }
   }
@@ -296,7 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: (context, index) {
                         QueryDocumentSnapshot<Object?> singleData = data[index];
                   
-                          return  MessageBox(isMe: currentUser == singleData['sender'] ? true : false, message: singleData['message'], time: singleData['time'].toString(),messageType : singleData['messageType'].toString(),otherUserPhoto: widget.otherUserPhoto, );
+                          return  MessageBox(isMe: currentUser == singleData['sender'] ? true : false, message: singleData['message'], time: singleData['time'].toString(),messageType : singleData['messageType'].toString(),otherUserPhoto: widget.otherUserPhoto,currentUserPhoto: widget.curretUserPhoto, );
                       },
                 );
                             }
@@ -448,9 +453,10 @@ class MessageBox extends StatefulWidget {
  final bool isMe;
  final String message;
  final String otherUserPhoto;
+ final String currentUserPhoto;
   final String time;
   final String messageType ;
-  const MessageBox({super.key, required this.isMe, required this.message, required this.time, required this.messageType, required this.otherUserPhoto});
+  const MessageBox({super.key, required this.isMe, required this.message, required this.time, required this.messageType, required this.otherUserPhoto, required this.currentUserPhoto});
 
   @override
   State<MessageBox> createState() => _MessageBoxState();
@@ -475,12 +481,7 @@ class _MessageBoxState extends State<MessageBox> {
           child: widget.isMe ? Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                  radius: 20,
-                  backgroundColor: R.colors.grey,
-                ),
-
-                const SizedBox(width: 8,),
+              
 
               Expanded(
                   child: Container(
@@ -533,7 +534,7 @@ class _MessageBoxState extends State<MessageBox> {
                                   });
                                   
                                 },
-                                child: Center(child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.black , )),
+                                child: Center(child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.white , )),
                               ),      
                       if(widget.messageType == 'text')
                       Text(widget.message,style: TextStyle(color: R.colors.white,fontSize: 14),),
@@ -544,14 +545,28 @@ class _MessageBoxState extends State<MessageBox> {
                     ],
                   ),    
                   ),
-              )
+              ),
+              const SizedBox(width: 8,),
+              if(widget.currentUserPhoto != '')
+              CircleAvatar(
+                  radius: 20,
+                 // backgroundColor: R.colors.grey,
+                  backgroundImage: NetworkImage("${ApiLinks.assetBasePath}${widget.currentUserPhoto}") ,
+                ),
+
+                
 
             ],
           ) : Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
-
+              if(widget.otherUserPhoto != '')
+              CircleAvatar(
+                  radius: 20,
+                  backgroundColor: R.colors.grey,
+                   backgroundImage: NetworkImage("${ApiLinks.assetBasePath}${widget.otherUserPhoto}"),
+                ),
+                const SizedBox(width: 8,),
               Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
@@ -565,7 +580,7 @@ class _MessageBoxState extends State<MessageBox> {
                       if(widget.messageType == 'image' )
                       SizedBox(
                             height: 120,
-                            child: CachedNetworkImage(imageUrl: widget.message,)),
+                            child: CachedNetworkImage(imageUrl: widget.message,width: Get.width,fit: BoxFit.fill,)),
                       if(widget.messageType == 'audio')
                       GestureDetector(
                                 onTap: ()async{
@@ -601,7 +616,7 @@ class _MessageBoxState extends State<MessageBox> {
                                   });
                                   
                                 },
-                                child: Center(child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.black , )),
+                                child: Center(child: Icon(isPlaying == false? Icons.play_circle : Icons.pause_circle ,color:R.colors.white , )),
                               ),      
                       if(widget.messageType == 'text')
                       Text(widget.message,style: TextStyle(color: R.colors.white,fontSize: 14),),
@@ -615,12 +630,8 @@ class _MessageBoxState extends State<MessageBox> {
                   ),
                   
               ),
-              const SizedBox(width: 8,),
-              CircleAvatar(
-                  radius: 20,
-                  backgroundColor: R.colors.grey,
-                  // backgroundImage: NetworkImage(wiotherUserPhoto),
-                ),
+              
+              
 
                 
 
