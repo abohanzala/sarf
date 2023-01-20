@@ -6,7 +6,6 @@ import 'package:sarf/services/dio_client.dart';
 import 'package:sarf/src/Auth/change_profile.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
-
 import '../../../constant/api_links.dart';
 import '../../../controllers/common/profile_controller.dart';
 import '../../../resources/resources.dart';
@@ -90,29 +89,38 @@ Future logout() async {
 
 class _MoreScreenState extends State<MoreScreen> {
   ProfileController profileController = Get.find<ProfileController>();
+  bool isLoading = true;
 
   @override
 // ignore: must_call_super
   initState() {
     // ignore: avoid_print
-    profileController.getProfile();
+    getData();
     print("initState Called");
+  }
+
+  Future getData() async {
+    await profileController.getProfile().then((value) => setState(() {
+          isLoading = false;
+        }));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          buildBackGroundImage(),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(0),
-              children: [buildMoreDetails()],
+      body: isLoading == true
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                buildBackGroundImage(),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.all(0),
+                    children: [buildMoreDetails()],
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 
@@ -602,25 +610,24 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildImage() {
     return Container(
-      height: 80,
-      width: 80,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          100,
+        height: 80,
+        width: 80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            100,
+          ),
+          color: R.colors.white,
         ),
-        color: R.colors.white,
-      ),
-      child: profileController.profileModel!.user!.photo != null
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.network(
-                ApiLinks.assetBasePath +
-                    profileController.profileModel!.user!.photo!,
-                fit: BoxFit.cover,
-              ),
-            )
-          : Center(),
-    );
+        child: profileController.profileModel!.user!.photo != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.network(
+                  ApiLinks.assetBasePath +
+                      profileController.profileModel!.user!.photo!,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Center());
   }
 
   Widget buildViewProfileLinkButton() {

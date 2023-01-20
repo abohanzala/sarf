@@ -37,8 +37,8 @@ class _LocationViewState extends State<LocationView> {
 
   var screenDecider =
       Get.arguments['From Profile Screen'] == 'From Profile Screen'
-          ? 'ProfileScreen'
-          : 'Register';
+          ? 'From Profile Screen'
+          : 'From Register Screen';
 
   CameraPosition? cameraPosition = CameraPosition(
     //innital position in map
@@ -173,7 +173,8 @@ class _LocationViewState extends State<LocationView> {
                       print(
                           "This is selected Longitude====================${lng.toString()}");
 
-                      if (screenDecider == 'register') {
+                      if (screenDecider == 'From Register Screen') {
+                        print(screenDecider);
                         print('Storing in register');
                         registrationController.location.value = location;
                         registrationController.location_lat.value = lat;
@@ -184,7 +185,9 @@ class _LocationViewState extends State<LocationView> {
                             "This is stored Location Lat====================${registrationController.location_lat.toString()}");
                         print(
                             "This is stored Location Lng====================${registrationController.location_lng.toString()}");
-                      } else {
+                      }
+                      if (screenDecider == 'From Profile Screen') {
+                        print(screenDecider);
                         print('Storing in profile');
                         profileController.location.value = location;
                         profileController.location_lat.value = lat;

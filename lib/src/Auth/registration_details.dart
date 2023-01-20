@@ -1365,7 +1365,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => const LocationView());
+          Get.to(() => const LocationView(),
+              arguments: {'From Register Screen': 'From Register Screen'});
+
           //   Get.toNamed(RoutesName.RegistrationDetails);
         },
         child: Row(

@@ -33,7 +33,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
-    getProfile();
+ //   getProfile();
     super.onInit();
   }
 

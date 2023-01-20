@@ -24,6 +24,7 @@ class ChangeProfileController extends GetxController {
   bool isOnline = false;
   File? changeProfileImage;
   var finalSelectedCity = ''.obs;
+
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
