@@ -10,6 +10,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+import 'package:sarf/controllers/common/profile_controller.dart';
 
 import '../../constant/global_constants.dart';
 import '../../controllers/auth/registration_controller.dart';
@@ -26,23 +27,52 @@ class LocationView extends StatefulWidget {
 class _LocationViewState extends State<LocationView> {
   RegistrationController registrationController =
       Get.find<RegistrationController>();
+  ProfileController profileController = Get.find<ProfileController>();
   String label = '';
   String address = '';
   String lat = '';
   String lng = '';
-  List<Marker> marker = [];
-  GoogleMapController? mapController; //contrller for Google map
-  CameraPosition? cameraPosition = const CameraPosition(
+  var locationLatGiven;
+  var locationLngGiven;
+
+  var screenDecider =
+      Get.arguments['From Profile Screen'] == 'From Profile Screen'
+          ? 'ProfileScreen'
+          : 'Register';
+
+  CameraPosition? cameraPosition = CameraPosition(
     //innital position in map
     target: LatLng(27.6602292, 85.308027), //initial position
     zoom: 30.0, //initial zoom level
   );
+
+  List<Marker> marker = [];
+  GoogleMapController? mapController; //contrller for Google map
+
   LatLng startLocation = const LatLng(27.6602292, 85.308027);
   String location = "Search";
   BitmapDescriptor? customIcon;
 
   @override
   void initState() {
+    // print(profileController.location_lng.value);
+    // print(profileController.location_lat.value);
+    if (profileController.location_lat.value.isEmpty) {
+      locationLatGiven = 27.6602292;
+    } else {
+      locationLatGiven = double.parse(profileController.location_lat.value);
+    }
+    if (profileController.location_lng.value.isEmpty) {
+      locationLngGiven = 85.308027;
+    } else {
+      locationLngGiven = double.parse(profileController.location_lng.value);
+    }
+
+    cameraPosition = CameraPosition(
+      //innital position in map
+      target: LatLng(locationLatGiven, locationLngGiven), //initial position
+      zoom: 30.0, //initial zoom level
+    );
     addMarker();
     super.initState();
   }
@@ -142,16 +172,31 @@ class _LocationViewState extends State<LocationView> {
                           "This is selected Latitude====================${lat.toString()}");
                       print(
                           "This is selected Longitude====================${lng.toString()}");
-                      registrationController.location.value = location;
-                      registrationController.location_lat.value = lat;
-                      registrationController.location_lng.value = lng;
 
-                      print(
-                          "This is stored Location====================${registrationController.location.toString()}");
-                      print(
-                          "This is stored Location Lat====================${registrationController.location_lat.toString()}");
-                      print(
-                          "This is stored Location Lng====================${registrationController.location_lng.toString()}");
+                      if (screenDecider == 'register') {
+                        print('Storing in register');
+                        registrationController.location.value = location;
+                        registrationController.location_lat.value = lat;
+                        registrationController.location_lng.value = lng;
+                        print(
+                            "This is stored Location====================${registrationController.location.toString()}");
+                        print(
+                            "This is stored Location Lat====================${registrationController.location_lat.toString()}");
+                        print(
+                            "This is stored Location Lng====================${registrationController.location_lng.toString()}");
+                      } else {
+                        print('Storing in profile');
+                        profileController.location.value = location;
+                        profileController.location_lat.value = lat;
+                        profileController.location_lng.value = lng;
+                        print(
+                            "This is stored Location====================${profileController.location.toString()}");
+                        print(
+                            "This is stored Location Lat====================${profileController.location_lat.toString()}");
+                        print(
+                            "This is stored Location Lng====================${profileController.location_lng.toString()}");
+                      }
+
                       Get.back();
                     },
                     child: Container(

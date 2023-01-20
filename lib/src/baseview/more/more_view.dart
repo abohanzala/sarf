@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/resources/dummy.dart';
 import 'package:sarf/services/dio_client.dart';
+import 'package:sarf/src/Auth/change_profile.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 
 import '../../../constant/api_links.dart';
+import '../../../controllers/common/profile_controller.dart';
 import '../../../resources/resources.dart';
 import '../base_controller.dart';
 
@@ -87,6 +89,16 @@ Future logout() async {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
+  ProfileController profileController = Get.find<ProfileController>();
+
+  @override
+// ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    profileController.getProfile();
+    print("initState Called");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -439,7 +451,7 @@ class _MoreScreenState extends State<MoreScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name'.tr,
+                  profileController.profileModel!.user!.name!.tr,
                   style: TextStyle(
                       color: R.colors.white, fontFamily: 'bold', fontSize: 16),
                 ),
@@ -457,71 +469,73 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildLogoutIconAndText() {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Get.dialog(Dialog(
-                                child: Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: R.colors.white),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                     Text("Are you sure you want to logout"),
-                                     SizedBox(height: 10,),
-                                     Row(
-                                      children: [
-                                        Expanded(
-                                          child: InkWell(
-                                           onTap: (){
-                                            Get.back();
-                                             logout();
-                                           },
-                                           child: Container(
-                                            // width: Get.width,
-                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                             decoration: BoxDecoration(
-                                                 borderRadius: BorderRadius.circular(10),
-                                                 color: R.colors.themeColor),
-                                             child: Center(
-                                                 child: Text(
-                                               'Logout'.tr,
-                                               style: TextStyle(color: R.colors.white),
-                                             )),
-                                           ),
-                                                                               ),
-                                        ),
-                                       SizedBox(width: 10,),
-                                       Expanded(
-                                         child: InkWell(
-                                           onTap: (){
-                                             Get.back();
-                                           },
-                                           child: Container(
-                                            // width: Get.width,
-                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                             decoration: BoxDecoration(
-                                                 borderRadius: BorderRadius.circular(10),
-                                                 color: R.colors.blue),
-                                             child: Center(
-                                                 child: Text(
-                                               'Back'.tr,
-                                               style: TextStyle(color: R.colors.white),
-                                             )),
-                                           ),
-                                         ),
-                                       )
-                                     
-                                      ],
-                                     )
-
-                                    ],
-                                  ),
-                                ),
-                              ));
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), color: R.colors.white),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Are you sure you want to logout"),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Get.back();
+                          logout();
+                        },
+                        child: Container(
+                          // width: Get.width,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: R.colors.themeColor),
+                          child: Center(
+                              child: Text(
+                            'Logout'.tr,
+                            style: TextStyle(color: R.colors.white),
+                          )),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          // width: Get.width,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: R.colors.blue),
+                          child: Center(
+                              child: Text(
+                            'Back'.tr,
+                            style: TextStyle(color: R.colors.white),
+                          )),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ));
       },
       child: Container(
         margin: EdgeInsets.only(top: 20),
@@ -591,21 +605,37 @@ class _MoreScreenState extends State<MoreScreen> {
       height: 80,
       width: 80,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            100,
-          ),
-          color: R.colors.white),
+        borderRadius: BorderRadius.circular(
+          100,
+        ),
+        color: R.colors.white,
+      ),
+      child: profileController.profileModel!.user!.photo != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(
+                ApiLinks.assetBasePath +
+                    profileController.profileModel!.user!.photo!,
+                fit: BoxFit.cover,
+              ),
+            )
+          : Center(),
     );
   }
 
   Widget buildViewProfileLinkButton() {
-    return Text(
-      'View Profile'.tr,
-      style: TextStyle(
-          decoration: TextDecoration.underline,
-          fontFamily: 'medium',
-          fontSize: 14,
-          color: R.colors.white),
+    return InkWell(
+      onTap: () {
+        Get.to(() => const ChangeProfile());
+      },
+      child: Text(
+        'View Profile'.tr,
+        style: TextStyle(
+            decoration: TextDecoration.underline,
+            fontFamily: 'medium',
+            fontSize: 14,
+            color: R.colors.white),
+      ),
     );
   }
 

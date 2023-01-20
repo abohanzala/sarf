@@ -16,6 +16,7 @@ import '../../controllers/common/profile_controller.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/loader.dart';
+import 'location_view.dart';
 
 class ChangeProfile extends StatefulWidget {
   const ChangeProfile({Key? key}) : super(key: key);
@@ -147,12 +148,12 @@ class _ChangeProfileState extends State<ChangeProfile> {
               children: [
                 buildNameField(),
                 buildSelectCityDropDown(),
-                buildUserNameField(),
+                //  buildUserNameField(),
                 buildWhatsappField(),
                 buildTwitterField(),
                 buildInstaField(),
                 buildContactNoField(),
-                buildEmailField(),
+                //  buildEmailField(),
                 buildLocationButton(),
                 buildUploadImage(),
                 buildUpdateButton()
@@ -394,12 +395,9 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Image.file(
-                      File(
-                        _imageFile!.path,
-                      ),
+                      File(changeProfileController.changeProfileImage!.path),
                       fit: BoxFit.cover,
-                    ),
-                  )
+                    ))
                 : profileController.profileModel!.user!.photo != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(100),
@@ -411,7 +409,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                       )
                     : Center(
                         child: Text(
-                          'LOGO',
+                          'Add Image',
                           style: TextStyle(
                               fontFamily: 'regular',
                               color: Colors.white,
@@ -432,7 +430,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
       ),
       child: InkWell(
         onTap: () {
-          //   Get.toNamed(RoutesName.RegistrationDetails);
+          Get.to(() => const LocationView(),
+              arguments: {'From Profile Screen': 'From Profile Screen'});
         },
         child: Row(
           children: [
@@ -449,15 +448,18 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 padding: EdgeInsets.all(0),
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 20, top: 20, right: 20),
-                    child: Text(
-                      profileController.locationController.text.tr,
-                      style: TextStyle(
-                          color: R.colors.black,
-                          fontSize: 13,
-                          fontFamily: 'medium'),
-                    ),
-                  ),
+                      margin: EdgeInsets.only(left: 20, top: 20, right: 20),
+                      child: Obx(
+                        () => Text(
+                          profileController.location.value != null
+                              ? profileController.location.value
+                              : 'Select Location',
+                          style: TextStyle(
+                              color: R.colors.black,
+                              fontSize: 13,
+                              fontFamily: 'medium'),
+                        ),
+                      )),
                 ],
               ),
             )
@@ -484,17 +486,17 @@ class _ChangeProfileState extends State<ChangeProfile> {
           child: Row(
             children: [
               Expanded(
-                  child: Text(
-                GetStorage().read('lang') == 'en'
-                    ? profileController
-                        .profileModel!.user!.userDetail!.cityId!.name!.en
-                        .toString()
-                    : profileController
-                        .profileModel!.user!.userDetail!.cityId!.name!.ar
-                        .toString(),
-                style: TextStyle(
-                    fontSize: 12, fontFamily: 'medium', color: R.colors.black),
-              )),
+                  child: Obx(() => Text(
+                        changeProfileController.finalSelectedCity.value != ''
+                            ? changeProfileController.finalSelectedCity.value
+                            : profileController.profileModel!.user!.userDetail!
+                                .cityId!.name!.en!
+                                .toString(),
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'medium',
+                            color: R.colors.grey),
+                      ))),
               Icon(Icons.arrow_drop_down),
             ],
           ),
@@ -514,8 +516,17 @@ class _ChangeProfileState extends State<ChangeProfile> {
           width: MediaQuery.of(context).size.width,
           titleTextAlign: TextAlign.center,
           onPress: (() {
-            changeProfileController.updateProfile();
-            //Get.toNamed('otp_screen');
+            if (changeProfileController.changeProfileImage == null ||
+                profileController.profileModel!.user!.photo == null) {
+              Get.snackbar(
+                'Alert'.tr,
+                'Please Attach Image',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+            } else {
+              changeProfileController.updateProfile();
+            }
           }),
           title: 'Update'.tr,
           color: R.colors.buttonColor,
@@ -569,7 +580,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '@d cn',
+          hintText: 'insta link',
           controller: profileController.instaController,
           color: R.colors.lightGrey,
           height: 45,
@@ -582,7 +593,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '@dscd',
+          hintText: 'whatsapp link ',
           controller: profileController.whatsappController,
           color: R.colors.lightGrey,
           height: 45,
@@ -608,7 +619,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '+923313',
+          hintText: 'Contact No:  e.g +923313',
           controller: profileController.contactController,
           color: R.colors.lightGrey,
           height: 45,
@@ -621,21 +632,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '@adcsdc',
+          hintText: 'twitter link',
           controller: profileController.twitterController,
-          color: R.colors.lightGrey,
-          height: 45,
-          borderColour: R.colors.transparent),
-    );
-  }
-
-  Widget buildLocationField() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: customTextField(
-          hintTextSize: 12,
-          hintText: 'e.g oloasjxdjdn dhx',
-          controller: profileController.locationController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
@@ -704,7 +702,13 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                         onTap: () {
                                           selectedCityIndex = index;
                                           print(selectedCityIndex);
-                                          setState(() {});
+                                          changeProfileController
+                                                  .finalSelectedCity.value =
+                                              dataCollectionController
+                                                  .cities![selectedCityIndex]
+                                                  .name!
+                                                  .en
+                                                  .toString();
                                           var getCityId =
                                               dataCollectionController
                                                   .cities![selectedCityIndex]
@@ -713,7 +717,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                           print(
                                               "This is my selctedCity Id ============${getCityId}");
 
-                                          setState(() {});
+                                          setState(() {
+                                            changeProfileController
+                                                .finalSelectedCity;
+                                          });
 
                                           Get.back();
                                         },

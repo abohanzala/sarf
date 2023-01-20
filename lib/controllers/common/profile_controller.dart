@@ -23,13 +23,17 @@ class ProfileController extends GetxController {
   TextEditingController contactController = TextEditingController();
   TextEditingController whatsappController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+
+  var location = ''.obs;
+  var location_lat = ''.obs;
+  var location_lng = ''.obs;
   var message;
   ProfileModel? profileModel;
 
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
+    getProfile();
     super.onInit();
   }
 
@@ -67,7 +71,7 @@ class ProfileController extends GetxController {
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        debugPrint('Something went Wrong===============${error.toString()}');
         //HandlingErrors().handleError(error);
       }
     });
@@ -106,7 +110,7 @@ class ProfileController extends GetxController {
       websiteController.text = profileModel!.user!.userDetail!.website == null
           ? ''
           : profileModel!.user!.userDetail!.website!;
-      locationController.text = profileModel!.user!.userDetail!.location == null
+      location.value = profileModel!.user!.userDetail!.location == null
           ? ''
           : profileModel!.user!.userDetail!.location!;
       update();

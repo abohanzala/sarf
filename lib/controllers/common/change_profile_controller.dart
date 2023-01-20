@@ -20,16 +20,10 @@ class ChangeProfileController extends GetxController {
   RegisterController registerController = Get.find<RegisterController>();
   ProfileController profileController = Get.find<ProfileController>();
   var message;
-  var cityId;
-  var expense_typeId;
   bool accountType = true;
   bool isOnline = false;
   File? changeProfileImage;
-  ProfileModel? profileModel;
   var finalSelectedCity = ''.obs;
-  var location = ''.obs;
-  var location_lat = ''.obs;
-  var location_lng = ''.obs;
   @override
   void onInit() {
     GetStorage().write('lang', 'en');
@@ -37,6 +31,7 @@ class ChangeProfileController extends GetxController {
   }
 
   Future updateProfile() async {
+    openLoader();
     ddio.FormData formData = ddio.FormData();
 
     var file = changeProfileImage;
@@ -44,30 +39,29 @@ class ChangeProfileController extends GetxController {
     formData.files.add(MapEntry("photo",
         await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
 
-    // var a = registerController.phone.text;
-    // final splitted = a.split('+');
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
-    // formData.fields.add(MapEntry(
-    //   'mobile',
-    //   splitted[1].toString(),
-    // ));
+    // formData.fields
+    //     .add(MapEntry('email', profileController.emailController.text));
+    formData.fields.add(MapEntry(
+        'mobile', profileController.profileModel!.user!.mobile!.toString()));
     formData.fields.add(MapEntry(
         'account_type', accountType == true ? 0.toString() : 1.toString()));
-    formData.fields.add(MapEntry(
-      'password',
-      '',
-    ));
+    // formData.fields.add(MapEntry(
+    //   'password',
+    //   '',
+    // ));
     formData.fields
         .add(MapEntry('name', profileController.nameController.text));
 
     formData.fields.add(MapEntry(
       'city_id',
-      cityId.toString(),
+      profileController.profileModel!.user!.userDetail!.cityId!.id.toString(),
     ));
     formData.fields.add(MapEntry(
       'expense_type_id',
-      expense_typeId.toString(),
+      profileController.profileModel!.user!.userDetail!.expenseTypeId!.id
+          .toString(),
     ));
     formData.fields.add(MapEntry(
       'insta_link',
@@ -95,15 +89,13 @@ class ChangeProfileController extends GetxController {
     ));
     formData.fields.add(MapEntry(
       'location',
-      location.value,
+      profileController.location.value,
     ));
-    formData.fields.add(MapEntry(
-      'location_lat',
-      location_lat.value,
-    ));
+    formData.fields
+        .add(MapEntry('location_lat', profileController.location_lat.value));
     formData.fields.add(MapEntry(
       'location_lng',
-      location_lng.value,
+      profileController.location_lat.value,
     ));
     formData.fields.add(MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
     formData.fields
@@ -143,7 +135,7 @@ class ChangeProfileController extends GetxController {
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
-      update();
+      Get.toNamed('settings');
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
