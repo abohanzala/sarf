@@ -22,6 +22,7 @@ class _MembersScreenState extends State<MembersScreen> {
   TextEditingController searchValue = TextEditingController();
   Timer? searchOnStoppedTyping;
   Future<MembersList?>? membersList;
+  String membersLenght = '';
 
   _onChangeHandler(value ) {
         const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
@@ -32,17 +33,32 @@ class _MembersScreenState extends State<MembersScreen> {
     }
 
     search(value) {
+      // setState(() {
+      //    membersLenght = '(0)';
+      // });
       FocusScope.of(context).unfocus();
         //print('hello world from search . the value is $value');
         if(value.isEmpty){
-          setState(() {
+          
             membersList = ctr.getMembersList('');
-          });
+            membersList?.then((value){
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+                  
+                });
+          
         }
 
-        setState(() {
+        
             membersList = ctr.getMembersList(searchValue.text);
-          });
+            membersList?.then((value){
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+                
+              });
+          
         //print(ctr.mobile1.text);
         
     }
@@ -58,6 +74,12 @@ void dispose(){
 }  
 loadMembers(){
   membersList = ctr.getMembersList('');
+  membersList?.then((value){
+    setState(() {
+      membersLenght = '(${value?.data?.length ?? 0})';
+    });
+    
+  });
 }
   @override
   Widget build(BuildContext context) {
@@ -66,7 +88,7 @@ loadMembers(){
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Members List'.tr,false,false,'',false),
+          customAppBar('Members List'.tr,false,true,membersLenght,false),
           //appbarSearch(),
 
           Transform(

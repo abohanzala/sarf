@@ -23,6 +23,7 @@ class _CityListScreenState extends State<CityListScreen> {
   TextEditingController searchValue = TextEditingController();
   Timer? searchOnStoppedTyping;
   Future<CityList?>? cityList;
+  String cityLenght = '';
 
   _onChangeHandler(value ) {
         const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
@@ -36,13 +37,23 @@ class _CityListScreenState extends State<CityListScreen> {
       FocusScope.of(context).unfocus();
         //print('hello world from search . the value is $value');
         if(value.isEmpty){
-          setState(() {
+          
             cityList = ctr.getCityList(ctr.selectExpanseTypeID, '');
-          });
+            cityList?.then((value){
+              setState(() {
+                cityLenght = '(${value?.data?.length ?? 0})';
+              });
+            });
+          
         }
-        setState(() {
+        
           cityList = ctr.getCityList(ctr.selectExpanseTypeID, searchValue.text);
-        });
+          cityList?.then((value){
+              setState(() {
+                cityLenght = '(${value?.data?.length ?? 0})';
+              });
+            });
+        
         //print(ctr.mobile1.text);
         
     }
@@ -58,6 +69,11 @@ void dispose(){
 }  
 loadMembers(){
   cityList = ctr.getCityList(ctr.selectExpanseTypeID, '');
+  cityList?.then((value){
+              setState(() {
+                cityLenght = '(${value?.data?.length ?? 0})';
+              });
+            });
 }
   @override
   Widget build(BuildContext context) {
@@ -66,7 +82,7 @@ loadMembers(){
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Cites'.tr,true,false,'',false),
+          customAppBar('Cites'.tr,true,true,cityLenght,false),
          // appbarSearch(),
          Transform(
           transform: Matrix4.translationValues(0, -20, 0),

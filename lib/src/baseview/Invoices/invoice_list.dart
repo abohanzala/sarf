@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/model/members/invoice_list_model.dart';
 
@@ -16,6 +17,68 @@ class InvoiceListScreen extends StatefulWidget {
 
 class _InvoiceListScreenState extends State<InvoiceListScreen> {
   InvoiceController ctr = Get.find<InvoiceController>();
+  TextEditingController searchValue = TextEditingController();
+  Timer? searchOnStoppedTyping;
+  Future<InvoiceList?>? membersList;
+  String membersLenght = '';
+
+  _onChangeHandler(value ) {
+        const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
+        if (searchOnStoppedTyping != null) {
+            setState(() => searchOnStoppedTyping?.cancel()); // clear timer
+        }
+        setState(() => searchOnStoppedTyping =  Timer(duration, () => search(value)));
+    }
+
+    search(value) {
+      // setState(() {
+      //    membersLenght = '(0)';
+      // });
+      FocusScope.of(context).unfocus();
+        //print('hello world from search . the value is $value');
+        if(value.isEmpty){
+          
+            membersList = ctr.getInvoiceList('');
+            membersList?.then((value){
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+                  
+                });
+          
+        }
+
+        
+            membersList = ctr.getInvoiceList(searchValue.text);
+            membersList?.then((value){
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+                
+              });
+          
+        //print(ctr.mobile1.text);
+        
+    }
+@override
+void initState() {
+    loadMembers();
+    super.initState();
+  }
+  @override
+void dispose(){
+  searchOnStoppedTyping?.cancel();
+  super.dispose();
+}  
+loadMembers(){
+  membersList = ctr.getInvoiceList('');
+  membersList?.then((value){
+    setState(() {
+      membersLenght = '(${value?.data?.length ?? 0})';
+    });
+    
+  });
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,32 +109,45 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(9),
-                          height: 25.h,
-                          width: 25.w,
-                          decoration: BoxDecoration(
-                            color: R.colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            size: 15.sp,
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Get.back();
+                      //   },
+                      //   child: Container(
+                      //     padding: const EdgeInsets.all(9),
+                      //     height: 25.h,
+                      //     width: 25.w,
+                      //     decoration: BoxDecoration(
+                      //       color: R.colors.white,
+                      //       borderRadius: BorderRadius.circular(5),
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.arrow_back_ios,
+                      //       size: 15.sp,
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(width: 10.w),
-                      Text(
-                        'Invoice List'.tr,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'Invoice List'.tr,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 5,),
+                          Text(
+                            membersLenght,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(width: 2.w),
                       // Text(
@@ -110,6 +186,8 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                 ),
                 margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: TextFormField(
+                  controller: searchValue,
+                  onChanged: _onChangeHandler,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: R.colors.blueGradient1),
@@ -136,7 +214,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
               transform: Matrix4.translationValues(0, -40.h, 0),
               child:  SingleChildScrollView(
                   child: FutureBuilder<InvoiceList?>(
-                          future: ctr.getInvoiceList(),
+                          future: membersList,
                           builder: (contaxt,snapshot){
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sarf/constant/api_links.dart';
+import 'package:sarf/controllers/common/profile_controller.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/src/baseview/members/chat/view/chat_view.dart';
 import 'package:sarf/src/baseview/members/single_member_detail.dart';
@@ -26,6 +27,8 @@ class _MembersListScreenState extends State<MembersListScreen> {
   TextEditingController searchValue = TextEditingController();
   Timer? searchOnStoppedTyping;
   Future<ListMembersNewList?>? cityList;
+  String membersLenght = "";
+  ProfileController ctrProfile = Get.find<ProfileController>();
 
   _onChangeHandler(value ) {
         const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
@@ -39,13 +42,22 @@ class _MembersListScreenState extends State<MembersListScreen> {
       FocusScope.of(context).unfocus();
         //print('hello world from search . the value is $value');
         if(value.isEmpty){
-          setState(() {
+          
             cityList = ctr.getMembersNewList(ctr.selectExpanseTypeID, ctr.selectCityID, '');
-          });
+            cityList?.then((value){
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+            });
+          
         }
-        setState(() {
+        
           cityList = ctr.getMembersNewList(ctr.selectExpanseTypeID, ctr.selectCityID, searchValue.text);
-        });
+          cityList?.then((value){
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+            });
         //print(ctr.mobile1.text);
         
     }
@@ -59,8 +71,17 @@ void dispose(){
   searchOnStoppedTyping?.cancel();
   super.dispose();
 }  
-loadMembers(){
+loadMembers()async{
+  await ctrProfile.getProfile().then((value){
+                // print(ctrProfile.profileModel?.user?.name ?? 'asssssssssssssssssssssssss');
+              });
   cityList = ctr.getMembersNewList(ctr.selectExpanseTypeID, ctr.selectCityID, '');
+  cityList?.then((value){
+              
+              setState(() {
+                membersLenght = '(${value?.data?.length ?? 0})';
+              });
+            });
 }
 
 
@@ -110,7 +131,7 @@ launchPhone({required Uri u}) async {
       body:  Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            customAppBar('Member List'.tr,true,true,'',false),
+            customAppBar('Member List'.tr,true,true,membersLenght,false),
            // appbarSearch(),
            Transform(
           transform: Matrix4.translationValues(0, -20, 0),
@@ -278,7 +299,7 @@ launchPhone({required Uri u}) async {
                                   ],
                                 ),
                                 GestureDetector(
-                                  onTap: () => Get.to(() => ChatScreen(title: singleData.name!,email: singleData.mobile.toString(),otherUserPhoto: singleData.photo ?? '',)) ,
+                                  onTap: () => Get.to(() => ChatScreen(title: singleData.name!,email: singleData.mobile.toString(),otherUserPhoto: singleData.photo ?? '',curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',)) ,
                                   child: SizedBox(
                                     height: 40,
                                     child: Row(children: [
