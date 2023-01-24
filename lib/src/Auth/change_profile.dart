@@ -516,16 +516,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
           width: MediaQuery.of(context).size.width,
           titleTextAlign: TextAlign.center,
           onPress: (() {
-            if (changeProfileController.changeProfileImage == null) {
-              Get.snackbar(
-                'Alert'.tr,
-                'Please Attach Image from your phone memory or camera',
-                snackPosition: SnackPosition.TOP,
-                backgroundColor: R.colors.themeColor,
-              );
-            } else {
-              changeProfileController.updateProfile();
-            }
+            changeProfileController.updateProfile();
           }),
           title: 'Update'.tr,
           color: R.colors.buttonColor,

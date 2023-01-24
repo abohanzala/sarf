@@ -35,10 +35,12 @@ class ChangeProfileController extends GetxController {
     openLoader();
     ddio.FormData formData = ddio.FormData();
 
-    var file = changeProfileImage;
-    String fileName = file!.path.split('/').last;
-    formData.files.add(MapEntry("photo",
-        await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+    if (changeProfileImage != null) {
+      var file = changeProfileImage;
+      String fileName = file!.path.split('/').last;
+      formData.files.add(MapEntry("photo",
+          await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+    }
 
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
