@@ -3,7 +3,7 @@ class ApiLinks {
   //static const String assetBasePath = "https://soaqna.said.com.sa/public/";
 
   // api path and links
-  static const String base = 'https://sarfapp.sharpvisions.cloud/api';
+  static const String base = 'https://sarfapp.com/api';
   static const String registerUser = '$base/register';
   static const String loginUser = '$base/login';
   static const String register = '$base/register';
@@ -25,7 +25,8 @@ class ApiLinks {
   static const String addSupport = '$base/app_support/add';
   static const String getSupport = '$base/app_support';
   static const String getSupportDetails = '$base/app_support/detail';
-  static const String assetBasePath = 'https://sarfapp.sharpvisions.cloud/public/';
+  static const String assetBasePath =
+      'https://sarfapp.sharpvisions.cloud/public/';
   static const String supportReply = '$base/app_support/reply';
   static const String budgetDelete = '$base/budget/destroy';
   static const String resetBudget = '$base/budget/reset';
@@ -33,7 +34,7 @@ class ApiLinks {
   static const String alerts = '$base/alerts';
   static const String alertsClear = '$base/alerts/clear';
   static const String simpleInvoice = '$base/generate_simple_invoice';
-  static const String memberNewList= '$base/members';
+  static const String memberNewList = '$base/members';
   static const String memberDetails = '$base/members_detail';
   static const String invoiceDetails = '$base/invoice_detail';
   static const String invoiceAttach = '$base/send_attachment_to_invoice';
