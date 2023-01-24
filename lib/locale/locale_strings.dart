@@ -131,6 +131,10 @@ class LocaleString extends Translations {
           "Login Successfully": "Login Successfully",
           "Error": "Error",
           "Something wnet wrong try later": "Something wnet wrong try later",
+          "User not found": "User not found",
+          "Are you sure you want to delete this budget": "Are you sure you want to delete this budget",
+          "Are you sure you want to logout": "Are you sure you want to logout",
+          "Select a budget": "Select a budget",
         },
         'ar_SA': {
           "Login": "Login",
@@ -260,6 +264,10 @@ class LocaleString extends Translations {
           "Login Successfully": "Login Successfully",
           "Error": "Error",
           "Something wnet wrong try later": "Something wnet wrong try later",
+          "User not found": "User not found",
+          "Are you sure you want to delete this budget": "Are you sure you want to delete this budget",
+          "Are you sure you want to logout": "Are you sure you want to logout",
+          "Select a budget": "Select a budget",
 
         },
       };
