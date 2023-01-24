@@ -168,7 +168,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                     Text(
                       name,
                       style: TextStyle(
-                        color: name == 'User not found'? Colors.red : R.colors.black,
+                        color: name == 'User not found'.tr? Colors.red : R.colors.black,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),

@@ -488,7 +488,7 @@ class _MoreScreenState extends State<MoreScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Are you sure you want to logout"),
+                Text("Are you sure you want to logout".tr),
                 SizedBox(
                   height: 10,
                 ),

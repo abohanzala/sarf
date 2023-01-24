@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           if (ctr.selectedBudgetId.value ==
                                               '') {
                                             Get.snackbar(
-                                                'Error'.tr, 'Select a budget');
+                                                'Error'.tr, 'Select a budget'.tr);
                                             return;
                                           }
                                           Get.dialog(Dialog(
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                     Text("Are you sure you want to delete this budget"),
+                                     Text("Are you sure you want to delete this budget".tr),
                                      SizedBox(height: 10,),
                                      Row(
                                       children: [
