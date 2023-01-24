@@ -244,7 +244,7 @@ launchPhone({required Uri u}) async {
                               children: [
                                 Text('Invoices'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                 const SizedBox(width: 10,),
-                                Text(singleData.invoicesCount ?? '0',style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                Text("${singleData.invoicesCount}",style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
                             ),
                             const SizedBox(height: 5,),

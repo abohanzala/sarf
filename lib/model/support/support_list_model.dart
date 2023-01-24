@@ -34,10 +34,10 @@ class SingleSupportList {
   int? id;
   String? type;
   String? message;
-  String? userId;
+  int? userId;
   List<String>? attachments;
   String? status;
-  String? isSatisfied;
+  int? isSatisfied;
   String? createdAt;
   String? updatedAt;
   String? createdDate;
