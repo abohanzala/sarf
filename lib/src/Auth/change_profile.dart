@@ -94,7 +94,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
   Widget buildBackArrowContainerAndChangeProfileText() {
     return Positioned(
       top: 50,
-      left: 30,
+      left: GetStorage().read("lang") == "en" ? 30 : null,
+      right: GetStorage().read("lang") != "en" ? 30 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);

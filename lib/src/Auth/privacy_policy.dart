@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../controllers/common/privacy_policy_controller.dart';
 import '../../resources/dummy.dart';
 import '../../resources/resources.dart';
@@ -85,7 +86,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                                 height: 15,
                               ),
                               Text(
-                                'Select Language',
+                                'Select Language'.tr,
                                 style: TextStyle(
                                     fontFamily: 'bold',
                                     fontSize: 20,
@@ -238,7 +239,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           onPress: (() {
             //Get.toNamed('otp_screen');
           }),
-          title: 'Update',
+          title: 'Update'.tr,
           color: R.colors.buttonColor,
           height: 45,
           borderColour: R.colors.transparent,
@@ -249,7 +250,8 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   Widget buildBackArrowContainerAndChangeProfileText() {
     return Positioned(
       top: 50,
-      left: 20,
+      left: GetStorage().read("lang") == "en" ? 30 : null,
+      right: GetStorage().read("lang") != "en" ? 30 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);

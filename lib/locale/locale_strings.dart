@@ -150,6 +150,15 @@ class LocaleString extends Translations {
           "Select": "Select",
           "Select the source": "Select the source",
           "No Data": "No Data",
+          "Title for the list below": "Title for the list below",
+          "Details": "Details",
+          "Attach image": "Attach image",
+          "Select Location": "Select Location",
+          "Search": "Search",
+          "Select Language": "Select Language",
+          "Enter Current Password": "Enter Current Password",
+          "Enter Confirm New Password":"Enter Confirm New Password",
+          "Please Accept Terms And Conditions": "Please Accept Terms And Conditions",
       
         },
     
@@ -299,7 +308,16 @@ class LocaleString extends Translations {
           "Select Type" : "اختر صنف",
           "Select": "يختار",
           "Select the source": "حدد المصدر",
-          //"No Data": ,
+          "No Data": "لايوجد بيانات" ,
+          "Title for the list below": "عنوان القائمة أدناه",
+          "Details": "تفاصيل",
+          "Attach image": "إرفاق الصورة",
+          "Select Location": "اختر موقعا",
+          "Search": "يبحث",
+          "Select Language": "اختار اللغة",
+          "Enter Current Password" : "إدخل كلمة السر الحالية",
+          "Enter Confirm New Password" : "أدخل تأكيد كلمة المرور الجديدة",
+          "Please Accept Terms And Conditions" : "الرجاء قبول الشروط والأحكام",
         },
       };
 }

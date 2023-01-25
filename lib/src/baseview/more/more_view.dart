@@ -271,7 +271,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildRateText() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Rate'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -317,7 +317,7 @@ class _MoreScreenState extends State<MoreScreen> {
         Get.toNamed(RoutesName.deleteAccount);
       },
       child: Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
         child: Text(
           'Delete Account'.tr,
           style: TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -336,7 +336,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildAboutText() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'About'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -362,7 +362,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildShareText() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Share'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -372,7 +372,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildPrivacyPolicyText() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Privacy Policy'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -382,7 +382,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildHelpAndSupportText() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Support'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -392,7 +392,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildTermsAndConditionsText() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0 ),
       child: Text(
         'Terms & Conditions'.tr,
         style: TextStyle(fontSize: 14, fontFamily: 'medium'),

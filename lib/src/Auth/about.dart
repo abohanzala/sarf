@@ -100,7 +100,8 @@ class _AboutState extends State<About> {
   Widget buildBackArrowContainerAndChangeProfileText() {
     return Positioned(
       top: 50,
-      left: 20,
+      left: GetStorage().read("lang") == "en" ? 30 : null,
+      right: GetStorage().read("lang") != "en" ? 30 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -192,7 +193,7 @@ class _AboutState extends State<About> {
                                 height: 15,
                               ),
                               Text(
-                                'Select Language',
+                                'Select Language'.tr,
                                 style: TextStyle(
                                     fontFamily: 'bold',
                                     fontSize: 20,

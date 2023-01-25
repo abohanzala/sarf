@@ -117,7 +117,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
             ),
           ),
            Expanded(
-             child: ctr.alerts.value.data == null ? const Center(child: Text('No Data',style: TextStyle(fontSize: 16),),)  : ListView.builder(
+             child: ctr.alerts.value.data == null ?  Center(child: Text('No Data'.tr,style: TextStyle(fontSize: 16),),)  : ListView.builder(
                 itemCount: ctr.alerts.value.data?.alerts?.length,
                 itemBuilder: (context,index){
                   var singleData = ctr.alerts.value.data?.alerts?[index];

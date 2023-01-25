@@ -381,7 +381,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                     InkWell(
                       onTap: () {
                         if (ctr.selectedTypeName.value == '') {
-                          Get.snackbar('Error'.tr, 'Select type'.tr);
+                          Get.snackbar('Error'.tr, 'Select Type'.tr);
                           return;
                         }
                         if (txt.text.isEmpty) {

@@ -164,8 +164,8 @@ class _DeleteAccountState extends State<DeleteAccount> {
                         if (deleteAccountController
                             .reasonForDeletingAccountController.text.isEmpty) {
                           Get.snackbar(
-                            'Alert',
-                            'Please Enter Reason for Deleting Account',
+                            'Alert'.tr,
+                            'Reason for deleting the account'.tr,
                             snackPosition: SnackPosition.TOP,
                             backgroundColor: R.colors.themeColor,
                           );
@@ -173,8 +173,8 @@ class _DeleteAccountState extends State<DeleteAccount> {
                         }
                         if (isChecked == false) {
                           Get.snackbar(
-                            'Alert',
-                            'Please Accept Terms And Conditions',
+                            'Alert'.tr,
+                            'Please Accept Terms And Conditions'.tr,
                             snackPosition: SnackPosition.TOP,
                             backgroundColor: R.colors.themeColor,
                           );

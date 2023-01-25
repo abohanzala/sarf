@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../controllers/common/terms_and_conditions_controller.dart';
 import '../../resources/dummy.dart';
 import '../../resources/resources.dart';
@@ -86,7 +87,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                                 height: 15,
                               ),
                               Text(
-                                'Select Language',
+                                'Select Language'.tr,
                                 style: TextStyle(
                                     fontFamily: 'bold',
                                     fontSize: 20,
@@ -255,7 +256,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   Widget buildBackArrowContainerAndChangeProfileText() {
     return Positioned(
       top: 50,
-      left: 20,
+      left: GetStorage().read("lang") == "en" ? 30 : null,
+      right: GetStorage().read("lang") != "en" ? 30 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);

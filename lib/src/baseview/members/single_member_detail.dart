@@ -109,7 +109,7 @@ launchPhone({required Uri u}) async {
               child: Center(child: SizedBox(width: 50,height: 50,child: CircularProgressIndicator(color: R.colors.blue),),),
             ),
             if(ctr.loadingMemDetails.value == false && ctr.memDetails.value.data == null)
-            Center(child: Text('No Data',style: TextStyle(fontSize: 16),),),
+            Center(child: Text('No Data'.tr,style: TextStyle(fontSize: 16),),),
             if(ctr.memDetails.value.data != null)...[
               Transform(
             transform: Matrix4.translationValues(0, -10, 0),
@@ -146,7 +146,7 @@ launchPhone({required Uri u}) async {
                             const SizedBox(height: 8,),
                             Row(
                               children: [
-                                Text('Invoices',style: TextStyle(color: R.colors.grey,fontSize: 14),),
+                                Text('Invoices'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                 const SizedBox(width: 10,),
                                 Text("${ctr.memDetails.value.data?.invoicesCount}" ,style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
@@ -154,7 +154,7 @@ launchPhone({required Uri u}) async {
                             const SizedBox(height: 5,),
                             Row(
                               children: [
-                                Text('Amounts',style: TextStyle(color: R.colors.grey,fontSize: 14),),
+                                Text('Amount'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                 const SizedBox(width: 10,),
                                 Text(ctr.memDetails.value.data?.invoicesSumAmount ?? '0',style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
@@ -280,7 +280,7 @@ launchPhone({required Uri u}) async {
              child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Title for the list below',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                Text('Title for the list below'.tr,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                 Row(children: [
                   Image.asset(R.images.listStack,width: 20,height: 20,),
                   const SizedBox(width: 20,),
@@ -309,14 +309,14 @@ launchPhone({required Uri u}) async {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Invoice No',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                      Text('Invoice No'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                       // Text(data.,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                     ],
                   ),
                   const SizedBox(height: 5,),
                   Text(data!.id.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                   const SizedBox(height: 10,),
-                  Text('Amount',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                  Text('Amount'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                   const SizedBox(height: 5,),
                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,7 +324,7 @@ launchPhone({required Uri u}) async {
                       Text( data.amount.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       GestureDetector(
                         onTap: () => Get.to( () => InvoiceDetails(id: data.id.toString(),) ),
-                        child: Text('Details',style: TextStyle(color: R.colors.themeColor,fontSize: 14,
+                        child: Text('Details'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,
                         decoration: TextDecoration.underline,fontWeight: FontWeight.w500,
                         ),
                         

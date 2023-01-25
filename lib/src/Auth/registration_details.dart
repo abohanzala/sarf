@@ -710,7 +710,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildBusinessText() {
     return Container(
-      margin: EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(left: 10,right: 10),
       child: Row(
         children: [
           Text(
@@ -725,7 +725,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildOnlineBusinessText() {
     return Container(
-      margin: EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(left: 10,right: 10),
       child: Row(
         children: [
           Text(
@@ -740,7 +740,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildOfflineBusinessText() {
     return Container(
-      margin: EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(left: 10,right: 10),
       child: Row(
         children: [
           Text(
@@ -885,7 +885,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildPersonalText() {
     return Container(
-      margin: EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(left: 10,right: 10),
       child: Text(
         'Personal'.tr,
         style: TextStyle(

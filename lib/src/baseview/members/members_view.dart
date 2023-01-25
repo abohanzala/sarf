@@ -214,7 +214,7 @@ loadMembers(){
                 });
                   }
                 }
-                return Center(child:Text('No Data'));
+                return Center(child:Text('No Data'.tr));
               }),
           ),
           

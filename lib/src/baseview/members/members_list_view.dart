@@ -320,7 +320,7 @@ launchPhone({required Uri u}) async {
               });
                   }
                 }
-                return Center(child:Text('No Data'));
+                return Center(child:Text('No Data'.tr));
               }),
             ),
             

@@ -56,7 +56,8 @@ class _SettingsState extends State<Settings> {
   Widget buildBackArrowContainerAndSettingsText() {
     return Positioned(
       top: 50,
-      left: 30,
+      left: GetStorage().read("lang") == "en" ? 30 : null,
+      right: GetStorage().read("lang") != "en" ? 30 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -137,16 +138,16 @@ class _SettingsState extends State<Settings> {
           onPress: (() {
             if (resetPasswordController.currentPassword.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Enter Current Password',
+                'Alert'.tr,
+                'Enter Current Password'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
               return;
             } else if (resetPasswordController.newPassword.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Enter New Password',
+                'Alert'.tr,
+                'Enter New Password'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
@@ -154,8 +155,8 @@ class _SettingsState extends State<Settings> {
             } else if (resetPasswordController
                 .confirmNewPassword.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Enter Confirm New Password',
+                'Alert'.tr,
+                'Enter Confirm New Password'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );

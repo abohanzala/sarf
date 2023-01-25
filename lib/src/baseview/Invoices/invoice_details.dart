@@ -63,7 +63,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
               child: Center(child: SizedBox(width: 50,height: 50,child: CircularProgressIndicator(color: R.colors.blue),),),
             ),
             if(ctr.loadingInvoiceDetails.value == false && ctr.inVoiceDetails.value.data == null)
-            Center(child: Text('No Data',style: TextStyle(fontSize: 16),),),
+            Center(child: Text('No Data'.tr,style: TextStyle(fontSize: 16),),),
             if(ctr.inVoiceDetails.value.data  != null)...[
               Transform(
             transform: Matrix4.translationValues(0, -10, 0),
@@ -343,7 +343,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                   onTap: (){
                     if(ctr.uploadImages.isEmpty){
                       
-                      Get.snackbar('Error'.tr, "Attach image");
+                      Get.snackbar('Error'.tr, "Attach image".tr);
                       return;
                     }
                     ctr.postInvoiceAttach(widget.id);

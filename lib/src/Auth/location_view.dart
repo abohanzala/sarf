@@ -50,7 +50,7 @@ class _LocationViewState extends State<LocationView> {
   GoogleMapController? mapController; //contrller for Google map
 
   LatLng startLocation = const LatLng(27.6602292, 85.308027);
-  String location = "Search";
+  String location = "Search".tr;
   BitmapDescriptor? customIcon;
 
   @override
@@ -292,7 +292,7 @@ class _LocationViewState extends State<LocationView> {
                       padding: const EdgeInsets.all(0),
                       width: MediaQuery.of(context).size.width - 40,
                       child: Text(
-                        location,
+                        location.tr,
                         style: const TextStyle(fontSize: 14),
                         overflow: TextOverflow.ellipsis,
                       ),

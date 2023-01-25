@@ -137,7 +137,7 @@ class ProfileController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Error',
+        'Error'.tr,
         '${message}',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,

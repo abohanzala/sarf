@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../resources/resources.dart';
 import '../utils/routes_name.dart';
 
@@ -84,7 +85,7 @@ Container customButton({
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: margin),
+              margin: EdgeInsets.only(left: GetStorage().read("lang") == 'en'? margin:0,right: GetStorage().read("lang") != 'en'? margin:0),
               child: Text(
                 textAlign: titleTextAlign,
                 title,
