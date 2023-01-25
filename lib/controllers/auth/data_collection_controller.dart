@@ -1,24 +1,16 @@
 import 'dart:convert';
-import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/model/data_collection.dart';
-import 'package:sarf/src/utils/routes_name.dart';
+
 import '../../constant/api_links.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/data_collection.dart';
-import '../../model/loginModel.dart';
+
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
-import '../../src/widgets/loader.dart';
+
 
 class DataCollectionController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
@@ -79,10 +71,6 @@ class DataCollectionController extends GetxController {
       var data = DataCollection.fromJson(response);
       cities = data.data!.cities;
       types = data.data!.expenseType!;
-      print(
-          'This is my cities Length======================${cities?.length.toString()}');
-      print(
-          'This is my types Length======================${types?.length.toString()}');
       // await GetStorage().write('user_token', userInfo.token);
       // await GetStorage().write('userId', userInfo.user!.id);
       // await GetStorage().write('name', userInfo.user!.name);

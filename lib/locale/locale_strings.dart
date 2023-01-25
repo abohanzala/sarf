@@ -159,6 +159,7 @@ class LocaleString extends Translations {
           "Enter Current Password": "Enter Current Password",
           "Enter Confirm New Password":"Enter Confirm New Password",
           "Please Accept Terms And Conditions": "Please Accept Terms And Conditions",
+        
       
         },
     

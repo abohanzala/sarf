@@ -71,15 +71,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 15.0),
+                margin: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Center(
                   child: Container(
                     height: 145,
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 15.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(12.0),
                           topRight: Radius.circular(12.0),
                           bottomLeft: Radius.circular(8.0),
@@ -87,13 +87,13 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                     ),
                     child: Column(
                       children: <Widget>[
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Container(
                           child: Text(
                             'Select'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               color: Colors.black,
                               fontFamily: 'medium',
@@ -101,13 +101,13 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
                           child: Text(
                             'Select the source'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF999999),
                               fontFamily: 'medium',
@@ -115,7 +115,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 18,
                         ),
                         Row(
@@ -139,7 +139,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 child: Center(
                                   child: Text(
                                     'Camera'.tr,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
                                       fontFamily: 'bold',
@@ -148,7 +148,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 15.0,
                             ),
                             InkWell(
@@ -170,7 +170,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 child: Center(
                                   child: Text(
                                     'Gallery'.tr,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
                                       fontFamily: 'bold',
@@ -379,7 +379,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Color(0xFFFFFFFF)),
+              borderRadius: BorderRadius.circular(5), color: const Color(0xFFFFFFFF)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('assets/images/arrow.png'),
@@ -393,7 +393,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       //  height: MediaQuery.of(context).size.height - 250,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -405,7 +405,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildRegistrationDetailsText() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Center(
         child: Text(
           'Registration Details'.tr,
@@ -418,7 +418,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildForm() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
       child: Column(
         children: [
           buildUserTypeText(),
@@ -445,12 +445,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   buildAgreeToTermsAndConditionsBox() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       child: Row(
         children: <Widget>[
           Checkbox(
             checkColor: Colors.white,
-            activeColor: Color(0xFF2C313E),
+            activeColor: const Color(0xFF2C313E),
             value: this.checkBox,
             onChanged: (bool? value) {
               setState(() {
@@ -460,7 +460,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           ),
           Text(
             'I Accept'.tr,
-            style: TextStyle(fontSize: 17, color: Colors.grey),
+            style: const TextStyle(fontSize: 17, color: Colors.grey),
           ),
           InkWell(
             onTap: () {
@@ -473,10 +473,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               //  Get.toNamed('terms_and_conditions');
             },
             child: Container(
-              margin: EdgeInsets.only(left: 5),
+              margin: const EdgeInsets.only(left: 5),
               child: Text(
                 'Terms & Conditions'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   decoration: TextDecoration.underline,
                   color: Colors.grey,
                   fontSize: 17,
@@ -491,17 +491,17 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildPasswordField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+          borderRadius: BorderRadius.circular(10), color: const Color(0xFFEAEEF2)),
       child: Row(
         children: [
           Container(
-              margin: EdgeInsets.only(left: 20, right: 10, top: 3),
+              margin: const EdgeInsets.only(left: 20, right: 10, top: 3),
               child: Image.asset('assets/images/passwordIcon.png',
-                  height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
+                  height: 15, color: const Color(0xFF9A9A9A).withOpacity(0.8))),
           Expanded(
             child: TextFormField(
               validator: (value) {
@@ -518,7 +518,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   hintStyle: TextStyle(
                       fontSize: 10,
                       fontFamily: 'medium',
-                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                      color: const Color(0xFF9A9A9A).withOpacity(0.8)),
                   border: InputBorder.none),
             ),
           )
@@ -537,7 +537,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         children: [
           _imageFile != null
               ? Container(
-                  margin: EdgeInsets.only(top: 20),
+                  margin: const EdgeInsets.only(top: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Image.file(
@@ -551,7 +551,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   ),
                 )
               : Container(
-                  margin: EdgeInsets.only(top: 20),
+                  margin: const EdgeInsets.only(top: 20),
                   height: 80,
                   width: 80,
                   decoration: BoxDecoration(
@@ -562,20 +562,20 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   child: Center(
                     child: Text(
                       'Upload Image'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'regular',
                           color: Colors.white,
                           fontSize: 10),
                     ),
                   ),
                 ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Center(
             child: Text(
               '(Optional)'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'regular', color: Colors.grey, fontSize: 10),
             ),
           ),
@@ -586,10 +586,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildSubmitButton() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       height: 50,
       decoration: BoxDecoration(
-        color: Color(0xFFFB7B57),
+        color: const Color(0xFFFB7B57),
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
@@ -685,7 +685,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         child: Center(
           child: Text(
             'Submit'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
         ),
@@ -695,7 +695,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildUserTypeText() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Row(
         children: [
           Text(
@@ -710,7 +710,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildBusinessText() {
     return Container(
-      margin: EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10,right: 10),
       child: Row(
         children: [
           Text(
@@ -725,7 +725,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildOnlineBusinessText() {
     return Container(
-      margin: EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10,right: 10),
       child: Row(
         children: [
           Text(
@@ -740,7 +740,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildOfflineBusinessText() {
     return Container(
-      margin: EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10,right: 10),
       child: Row(
         children: [
           Text(
@@ -755,7 +755,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildBusinessTypeOptions() {
     return Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 12,
       ),
       child: Row(
@@ -809,7 +809,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         setState(() {});
       },
       child: Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20),
         child: Row(
           children: [
             Container(
@@ -838,7 +838,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildUserTypeOptions() {
     return Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 12,
       ),
       child: Row(
@@ -885,10 +885,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildPersonalText() {
     return Container(
-      margin: EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10,right: 10),
       child: Text(
         'Personal'.tr,
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 14, fontFamily: 'regular', color: Color(0xFF9A9A9A)),
       ),
     );
@@ -896,12 +896,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildBusinessTypeText() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Row(
         children: [
           Text(
             'Business'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 14, fontFamily: 'regular', color: Color(0xFF9A9A9A)),
           ),
         ],
@@ -918,7 +918,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         setState(() {});
       },
       child: Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20),
         child: Row(
           children: [
             Container(
@@ -947,7 +947,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildCompanyNameField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           makeCompulsoryField: true,
           hintTextSize: 12,
@@ -961,7 +961,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildFullNameField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Full Name'.tr,
@@ -974,7 +974,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildInstagramField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Instagram Link (Optional)'.tr,
@@ -987,7 +987,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildWebsiteField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Website (Optional)'.tr,
@@ -1000,7 +1000,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildContactNoField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Contact No (Optional)',
@@ -1013,7 +1013,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildWhatsappField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Whatsapp (Optional)',
@@ -1026,7 +1026,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildTwitterField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
           hintText: 'Twitter Link (Optional)'.tr,
@@ -1071,7 +1071,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         ),
                         child: Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Text(
@@ -1081,12 +1081,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                   fontFamily: 'bold',
                                   color: R.colors.buttonColor),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Expanded(
                               child: Container(
-                                margin: EdgeInsets.only(top: 10, bottom: 10),
+                                margin: const EdgeInsets.only(top: 10, bottom: 10),
                                 //  height: MediaQuery.of(context).size.height / 4,
                                 color: R.colors.lightGrey,
                                 width: MediaQuery.of(context).size.width,
@@ -1124,7 +1124,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           Get.back();
                                         },
                                         child: Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Container(
                                             height: 30,
                                             decoration: BoxDecoration(
@@ -1136,7 +1136,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                     BorderRadius.circular(100),
                                                 border: Border.all(
                                                     color: Colors.grey)),
-                                            margin: EdgeInsets.only(top: 2),
+                                            margin: const EdgeInsets.only(top: 2),
                                             child: Center(
                                               child: Text(
                                                 dataCollectionController
@@ -1199,7 +1199,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                       ),
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(
@@ -1209,12 +1209,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 fontFamily: 'bold',
                                 color: R.colors.buttonColor),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              margin: const EdgeInsets.only(top: 10, bottom: 10),
                               //  height: MediaQuery.of(context).size.height / 4,
                               color: R.colors.lightGrey,
                               width: MediaQuery.of(context).size.width,
@@ -1246,7 +1246,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         Get.back();
                                       },
                                       child: Padding(
-                                        padding: EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           height: 30,
                                           decoration: BoxDecoration(
@@ -1257,7 +1257,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                   BorderRadius.circular(100),
                                               border: Border.all(
                                                   color: Colors.grey)),
-                                          margin: EdgeInsets.only(top: 2),
+                                          margin: const EdgeInsets.only(top: 2),
                                           child: Center(
                                             child: Text(
                                               dataCollectionController
@@ -1289,7 +1289,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildSelectCityDropDown() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       height: 45,
       decoration: BoxDecoration(
         color: R.colors.lightGrey,
@@ -1300,7 +1300,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           openPopUpOptionsForCities();
         },
         child: Container(
-          margin: EdgeInsets.only(left: 15, right: 15),
+          margin: const EdgeInsets.only(left: 15, right: 15),
           child: Row(
             children: [
               Expanded(
@@ -1313,7 +1313,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                             fontFamily: 'medium',
                             color: R.colors.grey),
                       ))),
-              Icon(Icons.arrow_drop_down),
+              const Icon(Icons.arrow_drop_down),
             ],
           ),
         ),
@@ -1323,7 +1323,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildTypeDropDown() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       height: 45,
       decoration: BoxDecoration(
         color: R.colors.lightGrey,
@@ -1334,7 +1334,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           openPopUpOptionsForTypes();
         },
         child: Container(
-          margin: EdgeInsets.only(left: 15, right: 15),
+          margin: const EdgeInsets.only(left: 15, right: 15),
           child: Row(
             children: [
               Expanded(
@@ -1347,7 +1347,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                             fontFamily: 'medium',
                             color: R.colors.grey),
                       ))),
-              Icon(Icons.arrow_drop_down),
+              const Icon(Icons.arrow_drop_down),
             ],
           ),
         ),
@@ -1357,7 +1357,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildLocationButton() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       height: 50,
       decoration: BoxDecoration(
         color: R.colors.blue,
@@ -1373,8 +1373,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         child: Row(
           children: [
             Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Icon(
+                margin: const EdgeInsets.only(left: 10),
+                child: const Icon(
                   Icons.pin_drop,
                   size: 20,
                   color: Colors.white,
@@ -1382,16 +1382,16 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             Expanded(
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 children: [
                   Container(
-                      margin: EdgeInsets.only(left: 20, top: 20),
+                      margin: const EdgeInsets.only(left: 20, top: 20),
                       child: Obx(
                         () => Text(
                           registrationController.location.value != ''
                               ? registrationController.location.value
                               : 'Select Location',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 13,
                               fontFamily: 'medium'),

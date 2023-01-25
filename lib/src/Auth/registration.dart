@@ -299,13 +299,14 @@ class _RegistrationState extends State<Registration> {
           print(
               'This is my phoneNumber===============${registerController.phone.text}');
           if (registerController.phone.text.isEmpty ||
-              registerController.phone.text == "+966") {
+              registerController.phone.text == "+966" || registerController.phone.text.length != 13) {
             Get.snackbar(
-              'Alert',
-              'Enter Mobile Number',
+              'Alert'.tr,
+              'Enter Mobile Number'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
+            return;
           } else {
             registerController.register();
           }

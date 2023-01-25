@@ -1,9 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sarf/controllers/auth/register_controller.dart';
-import 'package:sarf/src/Auth/change_password.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -45,7 +45,7 @@ class ChangePasswordController extends GetxController {
       'new_password': newPassword.text,
       'confirm_password': confirmNewPassword.text,
     };
-    print("This is my request====================${request}");
+    debugPrint("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -56,12 +56,12 @@ class ChangePasswordController extends GetxController {
         Get.back();
         Get.snackbar(
           'Error',
-          '${message}',
+          '$message',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
@@ -105,7 +105,7 @@ class ChangePasswordController extends GetxController {
       Get.back();
       Get.snackbar(
         'Error',
-        '${message}',
+        '$message',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
