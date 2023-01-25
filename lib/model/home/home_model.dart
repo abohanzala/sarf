@@ -122,7 +122,7 @@ class ExpenseTypes {
   int? id;
   String? expenseName;
   String? expenseNameAr;
-  String? invoiceSumAmount;
+  int? invoiceSumAmount;
 
   ExpenseTypes(
       {this.id, this.expenseName, this.expenseNameAr, this.invoiceSumAmount});

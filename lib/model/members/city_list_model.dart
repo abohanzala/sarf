@@ -33,7 +33,7 @@ class CityList {
 class SingleCity {
   int? id;
   Name? name;
-  String? membersCount;
+  int? membersCount;
 
   SingleCity({this.id, this.name, this.membersCount});
 

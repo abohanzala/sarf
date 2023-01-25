@@ -148,7 +148,7 @@ launchPhone({required Uri u}) async {
                               children: [
                                 Text('Invoices',style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                 const SizedBox(width: 10,),
-                                Text(ctr.memDetails.value.data?.invoicesCount ?? '0',style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                Text("${ctr.memDetails.value.data?.invoicesCount}" ,style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
                             ),
                             const SizedBox(height: 5,),

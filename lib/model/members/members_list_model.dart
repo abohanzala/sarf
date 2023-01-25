@@ -34,7 +34,7 @@ class SingleMember {
   int? id;
   String? expenseName;
   String? expenseNameAr;
-  String? membersCount;
+  int? membersCount;
 
   SingleMember({this.id, this.expenseName, this.expenseNameAr, this.membersCount});
 
