@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/support/support_controller.dart';
 
@@ -54,33 +55,36 @@ class _SingleSupportState extends State<SingleSupport> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(children: [
-                    GestureDetector(
-                    onTap: () => Get.back() ,
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: R.colors.white,
+                  Container(
+                    padding: EdgeInsets.only(right: GetStorage().read('lang') != "en" ? 10: 0  ),
+                    child: Row(children: [
+                      GestureDetector(
+                      onTap: () => Get.back() ,
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: R.colors.white,
+                        ),
+                        child: Icon(Icons.arrow_back_ios,color: R.colors.black,size: 20,),
                       ),
-                      child: Icon(Icons.arrow_back_ios,color: R.colors.black,size: 20,),
                     ),
-                  ),
-                  const SizedBox(width: 10,),
-                  
-                  
-                  Text(
-                    widget.title ,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10,),
+                    
+                    
+                    Text(
+                      widget.title ,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
       
-                  ],),
+                    ],),
+                  ),
                   
                   
                   Padding(

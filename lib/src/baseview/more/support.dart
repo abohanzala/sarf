@@ -201,7 +201,8 @@ class _SupportState extends State<Support> {
   Widget buildBackArrowAndSupportText() {
     return Positioned(
       top: 80,
-      left: 12,
+      left: GetStorage().read("lang") == "en" ? 12 : null,
+      right: GetStorage().read("lang") != "en" ? 12 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -235,7 +236,9 @@ class _SupportState extends State<Support> {
   Widget buildAddNewButton() {
     return Positioned(
       top: 80,
-      right: 12,
+      //right: 12,
+      left: GetStorage().read("lang") != "en" ? 12 : null,
+      right: GetStorage().read("lang") == "en" ? 12 : null,
       child: Container(
         child: customButton(
           optionalNavigateIcon: false,

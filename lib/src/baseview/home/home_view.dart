@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(
                       width: Get.width,
-                      height: 100,
+                      height: GetStorage().read("lang") == 'en'? 100: 120,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -311,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 5,
                                   ),
                                   Text(
-                                    'New\nbudget',
+                                    'New budget'.tr,
                                     style: TextStyle(
                                       color: R.colors.white,
                                       decoration: TextDecoration.underline,
@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   var singleData = ctr.budgets[index];
                                   return Obx(
                                     () => Container(
-                                      height: 100,
+                                      height: GetStorage().read("lang") == 'en'? 100: 120,
                                       margin: const EdgeInsets.only(left: 2),
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
@@ -371,8 +371,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ctr.getHome(singleData.id.toString());
                                         },
                                         child: Container(
-                                          height: 80,
-                                          width: 80,
+                                          height: GetStorage().read("lang") == 'en'? 80: 100,
+                                          width: GetStorage().read("lang") == 'en'? 80: 100,
                                           padding: const EdgeInsets.all(5),
                                           //margin: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(

@@ -142,17 +142,17 @@ class RegistrationController extends GetxController {
     //   'photo': ''
     // };
     // print('This is ${''}');
-    print("This is our request ==================${formData}");
+   // print("This is our request ==================${formData}");
 
     //DialogBoxes.openLoadingDialog();
-
+      print("${ApiLinks.registration}");
     var response = await DioClient()
         .post(ApiLinks.registration, formData, true)
         .catchError((error) {
       if (error is BadRequestException) {
         Get.snackbar(
-          'Error',
-          '${message}',
+          'Error'.tr,
+          error.toString(),
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
@@ -169,7 +169,8 @@ class RegistrationController extends GetxController {
     });
     //  message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    debugPrint("This is my response================== $response");
+    if(response == null || response =="")return;
     if (response['success'] == true) {
       debugPrint(response.toString());
       passwordController.clear();
@@ -184,8 +185,8 @@ class RegistrationController extends GetxController {
       location.value = '';
       location_lat.value = '';
       location_lng.value = '';
-      finalSelectedType.value = 'Select Type';
-      finalSelectedCity.value = 'Select City';
+      finalSelectedType.value = 'Select Type'.tr;
+      finalSelectedCity.value = 'Select City'.tr;
       var userInfo = LoginModel.fromJson(response);
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);
@@ -217,7 +218,7 @@ class RegistrationController extends GetxController {
             email: GetStorage().read('mobile') + '@gmail.com',
             password: GetStorage().read('mobile'))
         .then((value) {
-      Get.snackbar("firebase-created", 'firebase-created');
+      //Get.snackbar("firebase-created", 'firebase-created');
       //SnakeBars.showSuccessSnake(description: 'firebase reg');
     }).catchError((error) {
       Get.snackbar("firebase-error", error.toString());

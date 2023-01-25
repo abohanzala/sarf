@@ -126,14 +126,14 @@ class LoginController extends GetxController {
           email: email,
           password: password).then((value){
             // SnakeBars.showSuccessSnake(description: "FireBase signin");
-            Get.snackbar('FireBase signin', '');
+            //Get.snackbar('FireBase signin', '');
           }).catchError((error) async{
             if (error.code == 'user-not-found' ) {
               await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: email,
               password: password).then((value){
                 //  SnakeBars.showSuccessSnake(description: "FireBase Created");
-                Get.snackbar('FireBase created', '');
+               // Get.snackbar('FireBase created', '');
               }).catchError((error){
                 // DialogBoxes.showErroDialog(description: error.code);
               });

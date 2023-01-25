@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/resources/resources.dart';
@@ -73,7 +74,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
           }
           if(value['message'] == 'User not found!'){
             setState(() {
-              name = "User not found";
+              name = "User not found".tr;
             });
           }
         });
@@ -93,7 +94,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 16.w, top: 20.h),
+            padding: EdgeInsets.only(left: GetStorage().read("lang") == 'en'?  16.w : 0, top: 20.h,right: GetStorage().read("lang") == 'en'? 0:16.w ),
             height: 120.h,
             width: double.infinity,
             decoration: BoxDecoration(
@@ -108,7 +109,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: GetStorage().read('lang') == 'en' ? Alignment.centerLeft : Alignment.centerRight,
               child: Text(
                 'Simple Invoice'.tr,
                 style: TextStyle(

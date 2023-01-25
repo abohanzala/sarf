@@ -430,7 +430,10 @@ class _MoreScreenState extends State<MoreScreen> {
       buildOptions(),
       Positioned(
         top: 80,
-        right: 30,
+        right: GetStorage().read('lang') == 'en' ?  30 : null,
+        //left: GetStorage().read('lang') == 'en' ?  0 : 30 ,
+        left: GetStorage().read('lang') != 'en' ?  30 : null,
+        
         child: Column(
           children: [
             buildNotificationAndSettingsIcon(),
@@ -444,7 +447,8 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget buildOptions() {
     return Positioned(
       top: 70,
-      left: 30,
+      left: GetStorage().read('lang') == 'en' ?  30 : 0 ,
+      right: GetStorage().read('lang') == 'en' ?  0 : 30,
       child: Row(
         children: [
           buildImage(),
@@ -656,7 +660,7 @@ class _MoreScreenState extends State<MoreScreen> {
             child: GestureDetector(
               onTap: () {},
               child: Container(
-                height: MediaQuery.of(context).size.height,
+                //height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 margin: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Center(
@@ -697,7 +701,7 @@ class _MoreScreenState extends State<MoreScreen> {
         child: Container(
           decoration: BoxDecoration(
               color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
-          height: MediaQuery.of(context).size.height / 3,
+          //height: MediaQuery.of(context).size.height / 3,
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [

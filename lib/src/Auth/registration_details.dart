@@ -92,7 +92,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         ),
                         Container(
                           child: Text(
-                            'Select',
+                            'Select'.tr,
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black,
@@ -106,7 +106,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         ),
                         Container(
                           child: Text(
-                            'Select the source',
+                            'Select the source'.tr,
                             style: TextStyle(
                               fontSize: 14,
                               color: Color(0xFF999999),
@@ -138,7 +138,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'camera',
+                                    'Camera'.tr,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
@@ -169,7 +169,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'gallery',
+                                    'Gallery'.tr,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
@@ -596,8 +596,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         onTap: () {
           if (registrationController.passwordController.text.isEmpty) {
             Get.snackbar(
-              'Alert',
-              'Enter Password',
+              'Alert'.tr,
+              'Enter Password'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
@@ -606,8 +606,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           if (registrationController.accountType == true) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Please Enter Name',
+                'Alert'.tr,
+                'Please Enter Name'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
@@ -619,8 +619,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               print(
                   "This is fullName =============${registrationController.fullNameController.text}");
               Get.snackbar(
-                'Alert',
-                'Please Enter Name',
+                'Alert'.tr,
+                'Please Enter Name'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
@@ -629,8 +629,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           }
           if (selectedCityIndex == -1) {
             Get.snackbar(
-              'Alert',
-              'Please Select City',
+              'Alert'.tr,
+              'Please Select City'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
@@ -638,8 +638,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           }
           if (selectedTypeIndex == -1) {
             Get.snackbar(
-              'Alert',
-              'Please Select Type',
+              'Alert'.tr,
+              'Please Select Type'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
@@ -647,8 +647,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           }
           if (checkBox == false) {
             Get.snackbar(
-              'Alert',
-              'Please Agree to Terms And Conditions',
+              'Alert'.tr,
+              'Please Agree to Terms And Conditions'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
@@ -657,8 +657,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           if (registrationController.accountType == true) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Please Enter Name',
+                'Alert'.tr,
+                'Please Enter Name'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
@@ -672,8 +672,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               print(
                   "This is fullName =============${registrationController.fullNameController.text}");
               Get.snackbar(
-                'Alert',
-                'Please Enter Name',
+                'Alert'.tr,
+                'Please Enter Name'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
@@ -1075,7 +1075,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                               height: 20,
                             ),
                             Text(
-                              'Select City',
+                              'Select City'.tr,
                               style: TextStyle(
                                   fontSize: 18,
                                   fontFamily: 'bold',
@@ -1203,7 +1203,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                             height: 20,
                           ),
                           Text(
-                            'Select Type',
+                            'Select Type'.tr,
                             style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: 'bold',
@@ -1307,7 +1307,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   child: Obx(() => Text(
                         registrationController.finalSelectedCity.value != ''
                             ? registrationController.finalSelectedCity.value
-                            : 'Select City',
+                            : 'Select City'.tr,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',
@@ -1341,7 +1341,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   child: Obx(() => Text(
                         registrationController.finalSelectedType.value != ''
                             ? registrationController.finalSelectedType.value
-                            : 'Select Type',
+                            : 'Select Type'.tr,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',

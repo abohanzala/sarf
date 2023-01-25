@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/resources/resources.dart';
 import 'package:sarf/src/Auth/otp.dart';
 import '../../controllers/auth/change_password_controller.dart';
@@ -57,7 +58,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget buildBackArrowContainerAndChangePasswordText() {
     return Positioned(
       top: 50,
-      left: 30,
+      left: GetStorage().read('lang') == "en" ? 30 : null,
+      right: GetStorage().read('lang') != "en" ? 30 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -247,16 +249,16 @@ class _ChangePasswordState extends State<ChangePassword> {
           onPress: (() {
             if (changePasswordController.otp.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Required Field',
+                'Alert'.tr,
+                'Required Field'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
               return;
             } else if (changePasswordController.newPassword.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Required Field',
+                'Alert'.tr,
+                'Required Field'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );
@@ -264,8 +266,8 @@ class _ChangePasswordState extends State<ChangePassword> {
             } else if (changePasswordController
                 .confirmNewPassword.text.isEmpty) {
               Get.snackbar(
-                'Alert',
-                'Required Field',
+                'Alert'.tr,
+                'Required Field'.tr,
                 snackPosition: SnackPosition.TOP,
                 backgroundColor: R.colors.themeColor,
               );

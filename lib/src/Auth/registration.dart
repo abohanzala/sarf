@@ -206,6 +206,7 @@ class _RegistrationState extends State<Registration> {
                   'This is my phoneNumber===============${registerController.phone}');
             },
             initialCountryCode: 'SA',
+            invalidNumberMessage: "Invalid mobile number".tr,
             onCountryChanged: (country) =>
                 setState(() => countryName = country.code),
             decoration: InputDecoration(
@@ -215,7 +216,7 @@ class _RegistrationState extends State<Registration> {
               // ),
               label: Container(
                 margin: EdgeInsets.symmetric(horizontal: 0),
-                child: Text(' Enter Mobile Number'.tr,
+                child: Text('Enter Mobile Number'.tr,
                     style: TextStyle(
                         color: Color(0xFF707070),
                         fontFamily: 'regular',

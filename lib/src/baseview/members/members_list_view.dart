@@ -303,7 +303,7 @@ launchPhone({required Uri u}) async {
                                   child: SizedBox(
                                     height: 40,
                                     child: Row(children: [
-                                      Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
+                                      Text('Chat'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                       const SizedBox(width: 4,),
                                       Icon(Icons.chat,color: R.colors.themeColor,size: 15,),
                                     ],),

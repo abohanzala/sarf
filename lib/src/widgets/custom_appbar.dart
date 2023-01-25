@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../resources/resources.dart';
 
 
 Container customAppBar(String title,bool back,bool braket,String? braketText,bool share) {
 
     return Container(
-          padding: EdgeInsets.only(left: 16.w, top: 20.h),
+          padding: EdgeInsets.only(left: GetStorage().read('lang') == 'en' ? 16.w : 0, top: 20.h,right: GetStorage().read('lang') == 'en' ? 0 : 16.w),
           height: 100,
           width: double.infinity,
           decoration: BoxDecoration(

@@ -172,8 +172,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
           if (otpControllerText.text.isEmpty) {
             Get.snackbar(
-              'Title',
-              'Required Field',
+              'Alert'.tr,
+              'Required Field'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );

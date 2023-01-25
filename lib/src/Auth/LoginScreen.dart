@@ -215,9 +215,10 @@ class _LoginScreenState extends State<LoginScreen> {
             onChanged: (number) {
               phone.text = number.completeNumber;
               loginController.phone.text = phone.text;
-              print(
+              debugPrint(
                   'This is my phoneNumber===============${loginController.phone.text}');
             },
+            invalidNumberMessage: 'Invalid mobile number'.tr,
             initialCountryCode: 'SA',
             onCountryChanged: (country) {},
             decoration: InputDecoration(
@@ -262,6 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   'This is my phoneNumber===============${forgotPasswordController.phone}');
             },
             initialCountryCode: 'SA',
+            invalidNumberMessage: 'Invalid mobile number'.tr,
             onCountryChanged: (country) {},
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -510,8 +512,8 @@ class _LoginScreenState extends State<LoginScreen> {
           if (forgotPasswordController.phone.text.isEmpty ||
               forgotPasswordController.phone.text == "+966") {
             Get.snackbar(
-              'Alert',
-              'Enter Mobile Number',
+              'Alert'.tr,
+              'Enter Mobile Number'.tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );

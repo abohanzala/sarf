@@ -194,7 +194,7 @@ launchPhone({required Uri u}) async {
                                     if(
                                       ctr.memDetails.value.data?.userDetail?.locationLng == null || ctr.memDetails.value.data?.userDetail?.locationLat == null
                                     ){
-                                      Get.snackbar("Error", 'No direction provided');
+                                      Get.snackbar("Error".tr, 'No Direction'.tr);
                                       return;
                                     }
                                     if(ctr.memDetails.value.data?.userDetail?.locationLng != null && ctr.memDetails.value.data?.userDetail?.locationLat != null ){
@@ -204,7 +204,7 @@ launchPhone({required Uri u}) async {
                                   },
                                   child: Row(
                                     children: [
-                                      Text('Directions',
+                                      Text('Directions'.tr,
                                         style:TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.bold),
                                         overflow: TextOverflow.ellipsis,
                                         ),
@@ -261,7 +261,7 @@ launchPhone({required Uri u}) async {
                                 GestureDetector(
                                   onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),otherUserPhoto: ctr.memDetails.value.data!.photo ?? '',curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',)),
                                   child: Row(children: [
-                                    Text('chat',style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
+                                    Text('Chat'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                     const SizedBox(width: 4,),
                                     Icon(Icons.chat,color: R.colors.themeColor,size: 15,),
                                   ],),
