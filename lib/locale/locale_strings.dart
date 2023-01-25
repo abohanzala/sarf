@@ -159,6 +159,13 @@ class LocaleString extends Translations {
           "Enter Current Password": "Enter Current Password",
           "Enter Confirm New Password":"Enter Confirm New Password",
           "Please Accept Terms And Conditions": "Please Accept Terms And Conditions",
+          "Enter a valid number": "Enter a valid number",
+          "mobile is required": "mobile is required",
+          "amount is required" : "amount is required",
+          "note is required" : "note is required",
+          "Add Image": "Add Image",
+          "Message required": "Message required",
+          "Image required": "Image required",
         
       
         },
@@ -319,6 +326,13 @@ class LocaleString extends Translations {
           "Enter Current Password" : "إدخل كلمة السر الحالية",
           "Enter Confirm New Password" : "أدخل تأكيد كلمة المرور الجديدة",
           "Please Accept Terms And Conditions" : "الرجاء قبول الشروط والأحكام",
+          "Enter a valid number": "Enter a valid number",
+          "mobile is required": "mobile is required",
+          "amount is required" : "amount is required",
+          "note is required" : "note is required",
+          "Add Image": "Add Image",
+          "Message required": "Message required",
+          "Image required": "Image required",
         },
       };
 }

@@ -467,19 +467,19 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
                             onTap: () {
                               
                               if (name == 'User not found') {
-                                Get.snackbar('Error'.tr, "Enter a valid number");
+                                Get.snackbar('Error'.tr, "Enter a valid number".tr);
                                 return;
                               }
                               if (ctr.mobile1.text.isEmpty) {
-                                Get.snackbar('Error'.tr, "mobile is required");
+                                Get.snackbar('Error'.tr, "mobile is required".tr);
                                 return;
                               }
                               if (ctr.amount2.text.isEmpty) {
-                                Get.snackbar('Error'.tr, "amount is required");
+                                Get.snackbar('Error'.tr, "amount is required".tr);
                                 return;
                               }
                               if (ctr.note3.text.isEmpty) {
-                                Get.snackbar('Error'.tr, "note is required");
+                                Get.snackbar('Error'.tr, "note is required".tr);
                                 return;
                               }
                               FocusScope.of(context).unfocus();

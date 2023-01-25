@@ -274,7 +274,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                         ),
                         Container(
                           child: Text(
-                            'Select',
+                            'Select'.tr,
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black,
@@ -288,7 +288,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                         ),
                         Container(
                           child: Text(
-                            'Select the source',
+                            'Select the source'.tr,
                             style: TextStyle(
                               fontSize: 14,
                               color: Color(0xFF999999),
@@ -320,7 +320,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'camera',
+                                    'Camera'.tr,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
@@ -351,7 +351,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'gallery',
+                                    'Gallery'.tr,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
@@ -410,7 +410,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                       )
                     : Center(
                         child: Text(
-                          'Add Image',
+                          'Add Image'.tr,
                           style: TextStyle(
                               fontFamily: 'regular',
                               color: Colors.white,
