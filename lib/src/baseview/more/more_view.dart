@@ -445,32 +445,27 @@ class _MoreScreenState extends State<MoreScreen> {
     return Positioned(
       top: 70,
       left: 30,
-      child: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Row(
-          children: [
-            buildImage(),
-            SizedBox(
-              width: 15,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  profileController.profileModel!.user!.name!.tr,
-                  style: TextStyle(
-                      color: R.colors.white, fontFamily: 'bold', fontSize: 16),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                buildViewProfileLinkButton()
-              ],
-            ),
-          ],
-        ),
+      child: Row(
+        children: [
+          buildImage(),
+          SizedBox(
+            width: 15,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                profileController.profileModel!.user!.name!.tr,
+                style: TextStyle(
+                    color: R.colors.white, fontFamily: 'bold', fontSize: 16),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              buildViewProfileLinkButton()
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -627,7 +622,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   fit: BoxFit.cover,
                 ),
               )
-            : Center());
+            : Container());
   }
 
   Widget buildViewProfileLinkButton() {

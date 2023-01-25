@@ -168,7 +168,7 @@ class RegistrationController extends GetxController {
       }
     });
     //  message = response['message'];
-    if (response == null) return;
+    // if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
