@@ -144,10 +144,10 @@ class SupportController extends getpackage.GetxController {
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
         debugPrint("aaaaaaaa${error.toString()}");
-        getpackage.Get.snackbar('Error', apiError["reason"].toString());
+        getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
-        getpackage.Get.snackbar('Error', 'Something went wrong');
+        getpackage.Get.snackbar('Error'.tr, 'Something went wrong'.tr);
         debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
@@ -168,7 +168,7 @@ class SupportController extends getpackage.GetxController {
       selectedTypeIndex.value = 0;
       selectedTypeName.value = '';
       getpackage.Get.back();
-      getpackage.Get.snackbar('Success', response['message'].toString());
+      getpackage.Get.snackbar('Success'.tr, response['message'].toString());
       //files.clear();
 
     } else {
@@ -179,7 +179,7 @@ class SupportController extends getpackage.GetxController {
           // SnakeBars.showValidationErrorSnake(
           //     title: response['message'].toString(),
           //     description: response['validation_errors'].toString())
-          : getpackage.Get.snackbar('Error', response['message'].toString());
+          : getpackage.Get.snackbar('Error'.tr, response['message'].toString());
       //SnakeBars.showErrorSnake(description: response['message'].toString());
       Navigator.of(getpackage.Get.context!).pop();
     }

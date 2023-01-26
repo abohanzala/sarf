@@ -48,8 +48,8 @@ class OtpForgotPasswordController extends GetxController {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
-          'Title',
-          'Message',
+          'Error'.tr,
+          'Message'.tr,
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
@@ -91,8 +91,8 @@ class OtpForgotPasswordController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Title',
-        'Message',
+        'Error'.tr,
+        'Message'.tr,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

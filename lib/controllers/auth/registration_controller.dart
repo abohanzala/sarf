@@ -48,10 +48,14 @@ class RegistrationController extends GetxController {
 
     ddio.FormData formData = ddio.FormData();
 
-    var file = profileImage;
+    if(profileImage != null){
+      var file = profileImage;
     String fileName = file!.path.split('/').last;
     formData.files.add(MapEntry("photo",
         await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+    }
+
+    
 
     var a = registerController.phone.text;
     final splitted = a.split('+');

@@ -192,10 +192,10 @@ void onInit(){
     }); 
     debugPrint(response.toString());
     if (response['success'] == true) {
-      print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss");
+     // print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss");
       //debugPrint(response.toString());
         var listNew = ListMembersNewList.fromJson(response);
-        print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss${listNew.data.toString()}");
+       // print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss${listNew.data.toString()}");
         return listNew;
     } else {
       debugPrint('here');
@@ -239,10 +239,8 @@ Future getMemberDetails(String id) async {
     debugPrint(response.toString());
     if (response['success'] == true) {
       loadingMemDetails.value = false;
-      print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss");
       //debugPrint(response.toString());
         var listNew = MemberDetails.fromJson(response);
-        print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss${listNew.data.toString()}");
         memDetails.value = listNew;
     } else {
       loadingMemDetails.value = false;
@@ -289,10 +287,8 @@ Future getMemberDetails(String id) async {
     if (response['success'] == true) {
       
       loadingInvoiceDetails.value = false;
-      print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss");
       //debugPrint(response.toString());
         var invoice = SingleInvoiceDetails.fromJson(response);
-        print("aaaaaaaaaaaaaaaaaassssssssssssssssssssssss${invoice.data?.id}");
         inVoiceDetails.value = invoice;
     } else {
       loadingInvoiceDetails.value = false;
@@ -327,10 +323,10 @@ for (var i = 0; i < uploadImages.length; i++) {
         
         var apiError = json.decode(error.message!);
         debugPrint("aaaaaaaa${error.toString()}");
-        Get.snackbar('Error', apiError["reason"].toString());
+        Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
-        Get.snackbar('Error', 'Something went wrong');
+        Get.snackbar('Error'.tr, 'Something went wrong'.tr);
         debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
@@ -346,7 +342,7 @@ for (var i = 0; i < uploadImages.length; i++) {
     if (response['success']) {
       Get.back();
       //SnakeBars.showSuccessSnake(description: response['message'].toString());
-      Get.snackbar('Success', response['message'].toString());
+      Get.snackbar('Success'.tr, response['message'].toString());
       uploadImages.clear();
       //Get.back();
       //files.clear();
@@ -361,7 +357,7 @@ for (var i = 0; i < uploadImages.length; i++) {
           // SnakeBars.showValidationErrorSnake(
           //     title: response['message'].toString(),
           //     description: response['validation_errors'].toString())
-          : Get.snackbar('Success', response['message'].toString());
+          : Get.snackbar('Success'.tr, response['message'].toString());
           //SnakeBars.showErrorSnake(description: response['message'].toString());
       Navigator.of(Get.context!).pop();
     }

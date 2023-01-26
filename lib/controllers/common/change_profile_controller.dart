@@ -119,7 +119,7 @@ class ChangeProfileController extends GetxController {
         Get.back();
         Get.snackbar(
           'Error',
-          '${message}',
+          '$message',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );

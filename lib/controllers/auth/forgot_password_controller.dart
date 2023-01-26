@@ -47,7 +47,7 @@ class ForgotPasswordController extends GetxController {
       Get.back();
       if (error is BadRequestException) {
         Get.snackbar(
-          'Error',
+          'Error'.tr,
           '$message',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
@@ -90,7 +90,7 @@ class ForgotPasswordController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Message',
+        'Error'.tr,
         message,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,

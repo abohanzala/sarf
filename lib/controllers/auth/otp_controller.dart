@@ -47,8 +47,8 @@ class OtpController extends GetxController {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
-          'Title',
-          'Message',
+          'Error'.tr,
+          'Message'.tr,
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
@@ -90,8 +90,8 @@ class OtpController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Title',
-        'Message',
+        'Error'.tr,
+        'Message'.tr,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

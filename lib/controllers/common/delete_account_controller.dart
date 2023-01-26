@@ -51,7 +51,7 @@ class DeleteAccountController extends GetxController {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
-          'Error',
+          'Error'.tr,
           '${message}',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
@@ -96,7 +96,7 @@ class DeleteAccountController extends GetxController {
 
     } else {
       Get.snackbar(
-        'Error',
+        'Error'.tr,
         '${message}',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,

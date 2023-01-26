@@ -42,7 +42,7 @@ class RegisterController extends GetxController {
       Get.back();
       if (error is BadRequestException) {
         Get.snackbar(
-          'Error',
+          'Error'.tr,
           '${message}',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
@@ -87,7 +87,7 @@ class RegisterController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Error',
+        'Error'.tr,
         '${message.toString()}',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,

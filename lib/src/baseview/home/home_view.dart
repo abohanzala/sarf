@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           if (ctr.selectedBudgetId.value ==
                                               '') {
                                             Get.snackbar(
-                                                'Error'.tr, 'Select a budget');
+                                                'Error'.tr, 'Select a budget'.tr);
                                             return;
                                           }
                                           ctr.resetBudget();
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         if (txt.text.isEmpty) {
                                           Get.snackbar(
                                               'Error'.tr,
-                                              'Project name field is required'
+                                              'Required Field'.tr
                                                   .tr,
                                               backgroundColor:
                                                   R.colors.themeColor);
