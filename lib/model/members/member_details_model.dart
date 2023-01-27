@@ -48,7 +48,7 @@ class Data {
   String? updatedAt;
   String? reason;
   int? invoicesCount;
-  String? invoicesSumAmount;
+  int? invoicesSumAmount;
   UserDetail? userDetail;
   List<Invoices>? invoices;
 

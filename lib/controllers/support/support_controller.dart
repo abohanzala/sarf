@@ -21,6 +21,7 @@ class SupportController extends getpackage.GetxController {
   var selectedTypeIndex = 0.obs;
   var selectedTypeId = ''.obs;
   var supportStatus = '1'.obs;
+  TextEditingController txt = TextEditingController();
   List<File> uploadImages = <File>[].obs;
   var isLoadingSupport = false.obs;
   var isLoadingSupportDetails = false.obs;
@@ -167,6 +168,7 @@ class SupportController extends getpackage.GetxController {
       selectedTypeId.value = '';
       selectedTypeIndex.value = 0;
       selectedTypeName.value = '';
+      txt.clear();
       getpackage.Get.back();
       getpackage.Get.snackbar('Success'.tr, response['message'].toString());
       //files.clear();

@@ -20,6 +20,12 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
       Get.find<DeleteAccountController>();
 
   @override
+  void initState() {
+    deleteAccountController.passwordController.clear();
+    super.initState();
+  }    
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: R.colors.lightGrey,

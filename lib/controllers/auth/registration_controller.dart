@@ -37,11 +37,7 @@ class RegistrationController extends GetxController {
   var location_lat = ''.obs;
   var location_lng = ''.obs;
   File? profileImage;
-  @override
-  void onInit() {
-    GetStorage().write('lang', 'en');
-    super.onInit();
-  }
+ 
 
   Future registration() async {
     openLoader();
@@ -69,7 +65,7 @@ class RegistrationController extends GetxController {
         'account_type', accountType == true ? 0.toString() : 1.toString()));
     formData.fields.add(MapEntry(
       'password',
-      passwordController.text,
+      registerController.password.text,
     ));
     formData.fields.add(MapEntry(
       'name',
@@ -81,10 +77,13 @@ class RegistrationController extends GetxController {
       'city_id',
       cityId.toString(),
     ));
-    formData.fields.add(MapEntry(
+    if(accountType == true){
+      formData.fields.add(MapEntry(
       'expense_type_id',
       expense_typeId.toString(),
     ));
+    }
+    
     formData.fields.add(MapEntry(
       'insta_link',
       instagramController.text,
@@ -177,7 +176,8 @@ class RegistrationController extends GetxController {
     if(response == null || response =="")return;
     if (response['success'] == true) {
       debugPrint(response.toString());
-      passwordController.clear();
+      registerController.password.clear();
+      registerController.phone.clear();
       fullNameController.clear();
       companyNameController.clear();
       twitterController.clear();

@@ -63,8 +63,8 @@ class ChangeProfileController extends GetxController {
     ));
     formData.fields.add(MapEntry(
       'expense_type_id',
-      profileController.profileModel!.user!.userDetail!.expenseTypeId!.id
-          .toString(),
+      profileController.profileModel?.user?.userDetail?.expenseTypeId?.id
+          .toString() ?? "",
     ));
     formData.fields.add(MapEntry(
       'insta_link',
@@ -124,11 +124,23 @@ class ChangeProfileController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
+        Get.snackbar(
+        'Error'.tr,
+        apiError['message'],
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: R.colors.themeColor,
+      );
         print(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
+        Get.snackbar(
+        'Error'.tr,
+        'Something went wrong'.tr,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: R.colors.themeColor,
+      );
         debugPrint('This is error=================${error.toString()}');
         //HandlingErrors().handleError(error);
       }
@@ -138,7 +150,15 @@ class ChangeProfileController extends GetxController {
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
-      Get.toNamed('settings');
+      Get.back();
+       Get.snackbar(
+        'Success'.tr,
+        response['message'],
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: R.colors.white,
+      );
+      await profileController.getProfile();
+      //Get.offNamed(RoutesName.Settings);
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
@@ -162,8 +182,8 @@ class ChangeProfileController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Error',
-        '${message}',
+        'Error'.tr,
+        'Something went wrong'.tr,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

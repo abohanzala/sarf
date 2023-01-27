@@ -10,14 +10,14 @@ class Notifications {
     success = json['success'];
     message = json['message'];
     redirect = json['redirect'];
-    data = json['data'] != null ? new NotificationData.fromJson(json['data']) : null;
+    data = json['data'] != null ? NotificationData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    data['redirect'] = this.redirect;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    data['redirect'] = redirect;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -35,18 +35,18 @@ class NotificationData {
     if (json['alerts'] != null) {
       alerts = <Alerts>[];
       json['alerts'].forEach((v) {
-        alerts!.add(new Alerts.fromJson(v));
+        alerts!.add(Alerts.fromJson(v));
       });
     }
     alertCount = json['alert_count'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.alerts != null) {
-      data['alerts'] = this.alerts!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (alerts != null) {
+      data['alerts'] = alerts!.map((v) => v.toJson()).toList();
     }
-    data['alert_count'] = this.alertCount;
+    data['alert_count'] = alertCount;
     return data;
   }
 }
@@ -77,9 +77,9 @@ class Alerts {
     id = json['id'];
     userId = json['user_id'];
     refId = json['ref_id'];
-    title = json['title'] != null ? new Title.fromJson(json['title']) : null;
+    title = json['title'] != null ? Title.fromJson(json['title']) : null;
     description = json['description'] != null
-        ? new Title.fromJson(json['description'])
+        ? Title.fromJson(json['description'])
         : null;
     alertType = json['alert_type'];
     isRead = json['is_read'];
@@ -88,20 +88,20 @@ class Alerts {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['ref_id'] = this.refId;
-    if (this.title != null) {
-      data['title'] = this.title!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['ref_id'] = refId;
+    if (title != null) {
+      data['title'] = title!.toJson();
     }
-    if (this.description != null) {
-      data['description'] = this.description!.toJson();
+    if (description != null) {
+      data['description'] = description!.toJson();
     }
-    data['alert_type'] = this.alertType;
-    data['is_read'] = this.isRead;
-    data['created_date'] = this.createdDate;
-    data['created_time'] = this.createdTime;
+    data['alert_type'] = alertType;
+    data['is_read'] = isRead;
+    data['created_date'] = createdDate;
+    data['created_time'] = createdTime;
     return data;
   }
 }
@@ -118,9 +118,9 @@ class Title {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ar'] = this.ar;
-    data['en'] = this.en;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ar'] = ar;
+    data['en'] = en;
     return data;
   }
 }

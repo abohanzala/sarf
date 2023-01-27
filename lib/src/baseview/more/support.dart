@@ -59,7 +59,7 @@ class _SupportState extends State<Support> {
                           child: Text('No Data'.tr),
                         )
                       : Transform(
-                        transform: Matrix4.translationValues(0, -40, 0),
+                        transform: Matrix4.translationValues(0, -30, 0),
                         child: ListView.builder(
                             itemCount: ctr.supportList.length,
                             shrinkWrap: true,

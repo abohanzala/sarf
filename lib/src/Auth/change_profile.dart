@@ -44,6 +44,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
   // ignore: must_call_super
   initState() {
     // ignore: avoid_print
+    changeProfileController.changeProfileImage = null;
     getData();
     getDataCollection();
 

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class ApiLinks {
   // assets base path
   //static const String assetBasePath = "https://soaqna.said.com.sa/public/";

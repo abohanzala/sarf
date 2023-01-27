@@ -24,6 +24,13 @@ class _RegistrationState extends State<Registration> {
   RegisterController registerController = Get.find<RegisterController>();
 
   @override
+  void initState() {
+    registerController.phone.clear();
+    registerController.password.clear();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -86,6 +93,8 @@ class _RegistrationState extends State<Registration> {
           children: [
             buildRegisterText(),
             buildPhonefield(),
+            buildPasswordField(),
+            buildAgreeToTermsAndConditionsBox(),
             buildNextButton(),
           ],
         ),
@@ -109,87 +118,9 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  buildLoginText() {
-    return Expanded(
-      child: Text(
-        'Login',
-        style: TextStyle(
-            color: Color(0xFF9A9A9A), fontFamily: 'bold', fontSize: 18),
-      ),
-    );
-  }
+  
 
-  buildLanguageCard() {
-    return Container(
-      height: 30,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey)),
-      child: Row(
-        children: [buildEnglishOption(), buildArabicOption()],
-      ),
-    );
-  }
-
-  buildEnglishOption() {
-    return Material(
-        child: InkWell(
-      onTap: () {
-        english = true;
-        arabic = false;
-        setState(() {});
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: english ? Color(0xFFFB7B57) : Colors.transparent,
-        ),
-        margin: EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
-        width: 50,
-        height: 30,
-        child: Center(
-          child: Text(
-            'Eng',
-            style: TextStyle(
-                fontSize: 10,
-                fontFamily: 'semibold',
-                color: english ? Colors.white : Colors.black),
-          ),
-        ),
-      ),
-    ));
-  }
-
-  buildArabicOption() {
-    return Material(
-      child: InkWell(
-        onTap: () {
-          english = false;
-          arabic = true;
-          setState(() {});
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: arabic ? Color(0xFFFB7B57) : Colors.transparent,
-          ),
-          margin: EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
-          width: 50,
-          height: 30,
-          child: Center(
-            child: Text(
-              "العربية",
-              style: TextStyle(
-                  fontSize: 10,
-                  fontFamily: 'semibold,',
-                  color: arabic ? Colors.white : Colors.black),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
+  
   buildPhonefield() {
     return Row(
       children: [
@@ -252,7 +183,8 @@ class _RegistrationState extends State<Registration> {
                   height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
           Expanded(
             child: TextField(
-              focusNode: searchFieldNode,
+             // focusNode: searchFieldNode,
+             controller: registerController.password,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   hintText: 'Enter Password'.tr,
@@ -268,21 +200,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  buildForgotPassword() {
-    return Container(
-      margin: EdgeInsets.only(top: 30, bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Forgot Password?',
-            style: TextStyle(
-                fontSize: 14, fontFamily: 'semibold', color: Color(0xFFFB7B57)),
-          )
-        ],
-      ),
-    );
-  }
+  
 
   buildNextButton() {
     return Container(
@@ -307,7 +225,27 @@ class _RegistrationState extends State<Registration> {
               backgroundColor: R.colors.themeColor,
             );
             return;
-          } else {
+          }
+           if (registerController.password.text.isEmpty) {
+            Get.snackbar(
+              'Alert'.tr,
+              'Enter Password'.tr,
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+          }
+            if (checkBox == false) {
+            Get.snackbar(
+              'Alert'.tr,
+              'Please Agree to Terms And Conditions'.tr,
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+          }
+          
+           else {
             registerController.register();
           }
         },
@@ -322,34 +260,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  buildDontHaveAnAccount() {
-    return Container(
-      margin: EdgeInsets.only(top: 50, left: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: Text(
-              'Dont Have An Account',
-              style: TextStyle(
-                  color: Colors.black, fontSize: 13, fontFamily: 'medium'),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 10),
-            child: Text(
-              'Register',
-              style: TextStyle(
-                  color: Color(0xFFFB7B57),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                  fontFamily: 'medium'),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  
 
   buildAgreeToTermsAndConditionsBox() {
     return Container(

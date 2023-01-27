@@ -86,34 +86,24 @@ loadMembers()async{
 
 
   void launchWhatsApp(String phone) async {
-  String url() {
-    if (Platform.isAndroid) {
-      // add the [https]
-      return "https://wa.me/$phone/"; // new line
-    } else {
-      // add the [https]
-      return "https://api.whatsapp.com/send?phone=$phone"; // new line
-    }
-  }
+  final Uri whatsApp = Uri.parse("https://wa.me/$phone/?text=Hi");
 
-  if (await canLaunchUrl(Uri.parse(url()))) {
-    await canLaunchUrl(Uri.parse(url()));
-  } else {
-    // throw 'Could not launch ${url()}';
-    Get.snackbar('Error', 'Could not launch ${url()}');
-  }
+    await launchUrl(whatsApp,mode: LaunchMode.externalApplication).catchError((erorr){
+      debugPrint(erorr.toString());
+      Get.snackbar('Error'.tr, 'Could not launch');
+    });
 }
 
 
 void launchUrls(String url) async {
   
 
-  if (await canLaunchUrl(Uri.parse(url))) {
-    await canLaunchUrl(Uri.parse(url));
-  } else {
-    // throw 'Could not launch ${url()}';
-    Get.snackbar('Error', 'Could not launch $url');
-  }
+  
+    await launchUrl(Uri.parse(url)).catchError((erorr){
+      debugPrint(erorr.toString());
+      Get.snackbar('Error'.tr, 'Could not launch');
+    });
+  
 }
 
 launchPhone({required Uri u}) async {
@@ -252,7 +242,7 @@ launchPhone({required Uri u}) async {
                               children: [
                                 Text('Amounts'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                 const SizedBox(width: 10,),
-                                Text(  singleData.invoicesSumAmount ?? '0',style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                Text(  "${singleData.invoicesSumAmount ?? 0}",style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
                             ),
                             const SizedBox(height: 10,),
@@ -263,26 +253,27 @@ launchPhone({required Uri u}) async {
                                   children: [
                                     GestureDetector(
                                       onTap: (){
-                                        launchUrls('//https://twitter.com/${ctr.memDetails.value.data?.userDetail?.twitterLink}');
+                                        launchUrls('//https://twitter.com/${singleData.userDetail?.twitterLink}');
                                       },
                                       child: Image.asset(R.images.twitter,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
                                     GestureDetector(
                                       onTap: (){
-                                        launchUrls('https://instagram.com/${ctr.memDetails.value.data?.userDetail?.instaLink}');
+                                        launchUrls('https://instagram.com/${singleData.userDetail?.instaLink}');
                                         //ctr.memDetails.value.data?.userDetail?.whatsapp
                                       },
                                       child: Image.asset(R.images.insta,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
                                     GestureDetector(
                                       onTap: (){
-                                        launchUrls('${ctr.memDetails.value.data?.userDetail?.website}');
+                                        launchUrls('${singleData.userDetail?.website}');
                                       },
                                       child: Image.asset(R.images.web,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
                                     GestureDetector(
                                       onTap: (){
-                                        launchWhatsApp(ctr.memDetails.value.data?.userDetail?.whatsapp ?? '');
+                                        //print("aaaaaaaaaaaaa${ctr.memDetails.value.data?.userDetail?.whatsapp}");
+                                        launchWhatsApp(singleData.userDetail?.whatsapp ?? "");
                                       },
                                       child: Image.asset(R.images.whatsapp,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),
@@ -290,7 +281,7 @@ launchPhone({required Uri u}) async {
                                       onTap: (){
                                         final Uri teleLaunchUri = Uri(
                                                                       scheme: 'tel',
-                                                                      path: "${ctr.memDetails.value.data?.userDetail?.contactNo}", // your number
+                                                                      path: "${singleData.userDetail?.contactNo}", // your number
                                                                     );
                                         launchPhone(u: teleLaunchUri);
                                       },

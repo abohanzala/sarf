@@ -19,7 +19,18 @@ class NewSupportScreen extends StatefulWidget {
 
 class _NewSupportScreenState extends State<NewSupportScreen> {
   SupportController ctr = Get.find<SupportController>();
-  TextEditingController txt = TextEditingController();
+  //TextEditingController txt = TextEditingController();
+
+  @override
+  void initState() {
+    
+    ctr.txt.clear();
+    ctr.selectedTypeId.value = '';
+     ctr.selectedTypeIndex.value = 0;
+      ctr.selectedTypeName.value = '';
+      ctr.uploadImages.clear();
+    super.initState();
+  }
 
   Future pickImage(ImageSource source) async {
     try {
@@ -204,7 +215,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                       child: TextFormField(
                         
                         maxLines: 10,
-                        controller: txt,
+                        controller: ctr.txt,
                         decoration: InputDecoration(
                           hintText: 'Message here'.tr,
                           hintStyle: TextStyle(color: R.colors.grey),
@@ -384,7 +395,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                           Get.snackbar('Error'.tr, 'Select Type'.tr);
                           return;
                         }
-                        if (txt.text.isEmpty) {
+                        if (ctr.txt.text.isEmpty) {
                           Get.snackbar('Error'.tr, 'Message required'.tr);
                           return;
                         }
@@ -393,9 +404,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                           return;
                         }
                         FocusScope.of(context).unfocus();
-                        ctr.postNewSupport(txt.text).then((value) {
-                          txt.clear();
-                        });
+                        ctr.postNewSupport(ctr.txt.text);
                       },
                       child: Container(
                         width: Get.width,

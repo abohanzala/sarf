@@ -733,15 +733,14 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildSubScriptionMessageDetail() {
-    return SingleChildScrollView(
-      child: Container(
-        height: 50,
-        margin: EdgeInsets.only(top: 20, left: 15, right: 15),
-        child: Text(
-          DummyData.longText,
-          style: TextStyle(
-              fontFamily: 'medium', fontSize: 12, color: R.colors.grey),
-        ),
+    return Container(
+      // height: 50,
+      margin: EdgeInsets.only(top: 20, left: 15, right: 15,bottom: 20),
+      child: Text(
+        DummyData.longText,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontFamily: 'medium', fontSize: 12, color: R.colors.grey),
       ),
     );
   }

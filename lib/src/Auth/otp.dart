@@ -22,6 +22,12 @@ class _OtpScreenState extends State<OtpScreen> {
   OtpController otpController = Get.find<OtpController>();
   OtpForgotPasswordController otpForgotPasswordController =
       Get.find<OtpForgotPasswordController>();
+@override
+void initState() {
+    otpController.otpControllerGet.clear();
+    
+    super.initState();
+  }      
   @override
   Widget build(BuildContext context) {
     return Scaffold(

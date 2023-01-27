@@ -54,6 +54,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   final TextEditingController maxHeightController = TextEditingController();
   final TextEditingController qualityController = TextEditingController();
 
+
+
   void openGalleryCameraPickDialogs(bool video) {
     showDialog(
       context: context,
@@ -332,6 +334,17 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   @override
   void initState() {
+    registrationController.companyNameController.clear();
+    registrationController.fullNameController.clear();
+    registrationController.websiteController.clear();
+    registrationController.whatsappController.clear();
+    registrationController.contactController.clear();
+    registrationController.instagramController.clear();
+    registrationController.profileImage = null;
+    registrationController.finalSelectedCity.value = 'Select City'.tr;
+    registrationController.finalSelectedType.value = 'Select Type'.tr;
+    selectedCityIndex = -1;
+    selectedTypeIndex = -1;
     mapData.remove('location');
     mapData.remove('latitude');
     mapData.remove('longitude');
@@ -423,10 +436,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         children: [
           buildUserTypeText(),
           buildUserTypeOptions(),
-          buildPasswordField(),
+          // buildPasswordField(),
           business ? buildCompanyNameField() : buildFullNameField(),
           buildSelectCityDropDown(),
-          buildTypeDropDown(),
+          business ? buildTypeDropDown() : Container(),
           business ? buildInstagramField() : Container(),
           business ? buildTwitterField() : Container(),
           business ? buildContactNoField() : Container(),
@@ -436,7 +449,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           business && onlineBusiness ? buildWebsiteField() : Container(),
           offlineBusiness ? buildLocationButton() : Container(),
           business ? buildUploadImage() : Container(),
-          buildAgreeToTermsAndConditionsBox(),
+          // buildAgreeToTermsAndConditionsBox(),
           buildSubmitButton()
         ],
       ),
@@ -594,15 +607,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          if (registrationController.passwordController.text.isEmpty) {
-            Get.snackbar(
-              'Alert'.tr,
-              'Enter Password'.tr,
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: R.colors.themeColor,
-            );
-            return;
-          }
+          // if (registrationController.passwordController.text.isEmpty) {
+          //   Get.snackbar(
+          //     'Alert'.tr,
+          //     'Enter Password'.tr,
+          //     snackPosition: SnackPosition.TOP,
+          //     backgroundColor: R.colors.themeColor,
+          //   );
+          //   return;
+          // }
           if (registrationController.accountType == true) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(
@@ -614,9 +627,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               return;
             }
           }
-          if (registrationController.accountType == false) {
-            if (registrationController.fullNameController.text.isEmpty) {
-              print(
+          if (registrationController.accountType == false && registrationController.fullNameController.text.isEmpty) {
+            
+              debugPrint(
                   "This is fullName =============${registrationController.fullNameController.text}");
               Get.snackbar(
                 'Alert'.tr,
@@ -625,7 +638,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                 backgroundColor: R.colors.themeColor,
               );
               return;
-            }
+            
           }
           if (selectedCityIndex == -1) {
             Get.snackbar(
@@ -636,7 +649,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             );
             return;
           }
-          if (selectedTypeIndex == -1) {
+          if (selectedTypeIndex == -1 && registrationController.accountType == true) {
             Get.snackbar(
               'Alert'.tr,
               'Please Select Type'.tr,
@@ -645,15 +658,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             );
             return;
           }
-          if (checkBox == false) {
-            Get.snackbar(
-              'Alert'.tr,
-              'Please Agree to Terms And Conditions'.tr,
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: R.colors.themeColor,
-            );
-            return;
-          }
+          // if (checkBox == false) {
+          //   Get.snackbar(
+          //     'Alert'.tr,
+          //     'Please Agree to Terms And Conditions'.tr,
+          //     snackPosition: SnackPosition.TOP,
+          //     backgroundColor: R.colors.themeColor,
+          //   );
+          //   return;
+          // }
           if (registrationController.accountType == true) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(

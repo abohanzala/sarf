@@ -49,7 +49,14 @@ class _SimpleInvoiceState extends State<SimpleInvoice> {
     }
   }
 
-
+  @override
+  initState(){
+    ctr.mobile1.clear();
+    ctr.amount2.clear();
+    ctr.note3.clear();
+    super.initState();
+  }
+  
    
 
     _onChangeHandler(value ) {

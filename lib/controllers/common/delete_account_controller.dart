@@ -72,7 +72,15 @@ class DeleteAccountController extends GetxController {
       Get.back();
       debugPrint(response.toString());
       await GetStorage().remove('user_token');
-      Get.toNamed(RoutesName.deleteAccount3);
+      await GetStorage().remove('userId');
+      await GetStorage().remove('name');
+      await GetStorage().remove('username');
+      await GetStorage().remove('email');
+      await GetStorage().remove('firebase_email');
+      await GetStorage().remove('mobile');
+      await GetStorage().remove('photo');
+      await GetStorage().remove('status');
+      Get.offAllNamed(RoutesName.deleteAccount3);
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
@@ -97,7 +105,7 @@ class DeleteAccountController extends GetxController {
     } else {
       Get.snackbar(
         'Error'.tr,
-        '${message}',
+        '$message',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

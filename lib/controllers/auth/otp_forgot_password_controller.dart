@@ -39,7 +39,7 @@ class OtpForgotPasswordController extends GetxController {
       'mobile': splitted[1],
       'otp': otpControllerGet.text,
     };
-    print("This is my request====================${request}");
+    debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
 
     var response = await DioClient()
@@ -54,7 +54,7 @@ class OtpForgotPasswordController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {

@@ -37,7 +37,7 @@ class OtpController extends GetxController {
       'mobile': splitted[1],
       'otp': otpControllerGet.text,
     };
-    print("This is my request====================${request}");
+    debugPrint("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -53,7 +53,7 @@ class OtpController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
@@ -67,7 +67,7 @@ class OtpController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
-      Get.toNamed(RoutesName.RegistrationDetails);
+      Get.offNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);
       //  await storage.write('userId', userInfo.user!.id);

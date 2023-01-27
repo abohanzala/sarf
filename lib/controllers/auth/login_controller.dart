@@ -33,7 +33,7 @@ class LoginController extends GetxController {
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
     };
-    print("This is my request====================${request}");
+    debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
       if (error is BadRequestException) {

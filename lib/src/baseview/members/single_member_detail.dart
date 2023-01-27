@@ -31,41 +31,32 @@ class _SingleMemberDetailsState extends State<SingleMemberDetails> {
 
 
 void launchWhatsApp(String phone) async {
-  String url() {
-    if (Platform.isAndroid) {
-      // add the [https]
-      return "https://wa.me/$phone/"; // new line
-    } else {
-      // add the [https]
-      return "https://api.whatsapp.com/send?phone=$phone"; // new line
-    }
-  }
+  final Uri whatsApp = Uri.parse("https://wa.me/$phone/?text=Hi");
 
-  if (await canLaunchUrl(Uri.parse(url()))) {
-    await canLaunchUrl(Uri.parse(url()));
-  } else {
-    // throw 'Could not launch ${url()}';
-    Get.snackbar('Error', 'Could not launch ${url()}');
-  }
+    await launchUrl(whatsApp,mode: LaunchMode.externalApplication).catchError((erorr){
+      debugPrint(erorr.toString());
+      Get.snackbar('Error'.tr, 'Could not launch');
+    });
+    
 }
 
 
 void launchUrls(String url) async {
   
 
-  if (await canLaunchUrl(Uri.parse(url))) {
-    await canLaunchUrl(Uri.parse(url));
-  } else {
-    // throw 'Could not launch ${url()}';
-    Get.snackbar('Error', 'Could not launch $url');
-  }
+  
+    await launchUrl(Uri.parse(url)).catchError((erorr){
+      debugPrint(erorr.toString());
+      Get.snackbar('Error'.tr, 'Could not launch');
+    });
+  
 }
 
 launchPhone({required Uri u}) async {
   if (await canLaunchUrl(u)) {
     await launchUrl(u);
   } else {
-    throw 'Could not launch $u';
+    throw 'Could not launch';
   }
 }
 
@@ -74,7 +65,7 @@ launchPhone({required Uri u}) async {
    if (await canLaunchUrl(Uri.parse("google.navigation:q=$lat,$lng&mode=d"))) {
       await launchUrl (Uri.parse("google.navigation:q=$lat,$lng&mode=d"));
    } else {
-    Get.snackbar('Error', 'Could not launch google.navigation:q=$lat,$lng');
+    Get.snackbar('Error'.tr, 'Could not launch');
       throw 'Could not launch ${Uri.parse("google.navigation:q=$lat,$lng&mode=d")}';
    }
 }
@@ -156,7 +147,7 @@ launchPhone({required Uri u}) async {
                               children: [
                                 Text('Amount'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                 const SizedBox(width: 10,),
-                                Text(ctr.memDetails.value.data?.invoicesSumAmount ?? '0',style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                Text("${ctr.memDetails.value.data?.invoicesSumAmount ?? 0}",style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
                             ),
                             const SizedBox(height: 10,),
@@ -223,7 +214,7 @@ launchPhone({required Uri u}) async {
                                   children: [
                                     GestureDetector(
                                       onTap: (){
-                                        launchUrls('//https://twitter.com/${ctr.memDetails.value.data?.userDetail?.twitterLink}');
+                                        launchUrls('https://twitter.com/${ctr.memDetails.value.data?.userDetail?.twitterLink}');
                                       },
                                       child: Image.asset(R.images.twitter,width: 30,height: 30,)),
                                     const SizedBox(width: 5,),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -12,12 +14,8 @@ import '../../src/widgets/loader.dart';
 class RegisterController extends GetxController {
   var registerFormKey = GlobalKey<FormState>();
   TextEditingController phone = TextEditingController();
+  TextEditingController password = TextEditingController();
   var message;
-  @override
-  void onInit() {
-    GetStorage().write('lang', 'en');
-    super.onInit();
-  }
 
   Future register() async {
     openLoader();
@@ -34,7 +32,7 @@ class RegisterController extends GetxController {
       'language': GetStorage().read('lang'),
       'mobile': splitted[1],
     };
-    print("This is my request====================${request}");
+    debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
 
     var response =
@@ -43,12 +41,12 @@ class RegisterController extends GetxController {
       if (error is BadRequestException) {
         Get.snackbar(
           'Error'.tr,
-          '${message}',
+          '$message',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
@@ -64,7 +62,7 @@ class RegisterController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
-      Get.toNamed(RoutesName.OtpScreen);
+      Get.offNamed(RoutesName.OtpScreen);
       //   userInfo = UserInfo.fromMap(response);S
       //  await  storage.write('user_token', userInfo.token);
       //  await storage.write('userId', userInfo.user!.id);
@@ -88,7 +86,7 @@ class RegisterController extends GetxController {
       Get.back();
       Get.snackbar(
         'Error'.tr,
-        '${message.toString()}',
+        message.toString(),
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

@@ -19,6 +19,13 @@ class _DeleteAccountState extends State<DeleteAccount> {
   DeleteAccountController deleteAccountController =
       Get.find<DeleteAccountController>();
 
+
+  @override
+  void initState() {
+    deleteAccountController.reasonForDeletingAccountController.clear();
+    super.initState();
+  }    
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
