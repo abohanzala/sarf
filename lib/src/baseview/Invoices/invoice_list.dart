@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart' as get_storage;
+import 'package:sarf/controllers/auth/data_collection_controller.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/model/members/invoice_list_model.dart';
 
 import '../../../resources/resources.dart';
+import 'invoice_details.dart';
 
 class InvoiceListScreen extends StatefulWidget {
   const InvoiceListScreen({super.key});
@@ -227,89 +230,94 @@ loadMembers(){
                    return Column(
                       children: List.generate(data.length, (index) {
                         var singleData = data[index];
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          margin: EdgeInsets.only(
-                              left: 20.w, right: 20.w, bottom: 20.h),
+                        return GestureDetector(
+                          onTap: (){
+                            Get.to(() => InvoiceDetails(id: singleData.id.toString(),) );
+                          },
                           child: Container(
-                            padding: EdgeInsets.all(16.w),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Invoice ID'.tr,
-                                      style: TextStyle(
-                                        color: R.colors.grey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Text(
-                                      singleData?.createdDate ?? '',
-                                      style: TextStyle(
-                                        color: R.colors.grey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 5.h),
-                                Text(
-                                  singleData!.id.toString(),
-                                  style: TextStyle(
-                                    color: R.colors.black,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(height: 8.h),
-                                Text('Customer Name'.tr,
-                                    style: TextStyle(
-                                      color: R.colors.grey,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w600,
-                                    )),
-                                SizedBox(height: 5.h),
-                                Text(
-                                  singleData.customer?.name ?? '',
-                                  style: TextStyle(
-                                    color: R.colors.black,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Container(
-                                  padding: EdgeInsets.symmetric(vertical: 10.w),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: R.colors.lightGrey,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '${"Amount".tr} ${singleData.amount}',
+                            margin: EdgeInsets.only(
+                                left: 20.w, right: 20.w, bottom: 20.h),
+                            child: Container(
+                              padding: EdgeInsets.all(16.w),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Invoice ID'.tr,
                                         style: TextStyle(
-                                          color: R.colors.blueGradient1,
+                                          color: R.colors.grey,
                                           fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                         ),
+                                      ),
+                                      Text(
+                                        singleData?.createdDate ?? '',
+                                        style: TextStyle(
+                                          color: R.colors.grey,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    singleData!.id.toString(),
+                                    style: TextStyle(
+                                      color: R.colors.black,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Text('Customer Name'.tr,
+                                      style: TextStyle(
+                                        color: R.colors.grey,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
                                       )),
-                                )
-                              ],
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    singleData.customer?.name ?? '',
+                                    style: TextStyle(
+                                      color: R.colors.black,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10.w),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: R.colors.lightGrey,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '${"Amount".tr} ${singleData.amount}',
+                                          style: TextStyle(
+                                            color: R.colors.blueGradient1,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -317,7 +325,7 @@ loadMembers(){
                     );
                   }
                 }
-                return Center(child:Text('No Data'));
+                return const Center(child:Text('No Data'));
                           }),
                   // child:  Column(
                   //     children: List.generate(8, (index) {
@@ -429,6 +437,7 @@ class InvoiceBottomSheet extends StatefulWidget {
 
 class _InvoiceBottomSheetState extends State<InvoiceBottomSheet> {
   InvoiceController ctr = Get.find<InvoiceController>();
+  DataCollectionController dataCtr = Get.find<DataCollectionController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -452,7 +461,11 @@ class _InvoiceBottomSheetState extends State<InvoiceBottomSheet> {
           ),
           SizedBox(height: 20.h),
           Expanded(
-            child: ListView.builder(itemBuilder: ((context, index) {
+            child: ListView.builder(
+              itemCount: dataCtr.types?.length,
+              shrinkWrap: true,
+              itemBuilder: ((context, index) {
+                var singleData = dataCtr.types?[index];
               return Container(
                   margin: EdgeInsets.symmetric(horizontal: 20.w),
                   padding:
@@ -461,12 +474,17 @@ class _InvoiceBottomSheetState extends State<InvoiceBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'Type 1',
-                        style: TextStyle(
-                          color: R.colors.black,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
+                      GestureDetector(
+                        onTap: (){
+                          debugPrint('here');
+                        },
+                        child: Text(
+                          get_storage.GetStorage().read("lang") == "en" ? singleData?.expenseName ?? "" : singleData?.expenseNameAr ?? "" ,
+                          style: TextStyle(
+                            color: R.colors.black,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                       SizedBox(height: 10.h),

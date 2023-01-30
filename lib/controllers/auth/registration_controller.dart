@@ -4,7 +4,6 @@ import 'package:dio/dio.dart' as ddio;
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
@@ -116,9 +115,9 @@ class RegistrationController extends GetxController {
       'location_lng',
       location_lng.value,
     ));
-    formData.fields.add(MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+    formData.fields.add(const MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
     formData.fields
-        .add(MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+        .add(const MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
     debugPrint(formData.fields.toString());
 
     // var request = {
@@ -148,7 +147,7 @@ class RegistrationController extends GetxController {
    // print("This is our request ==================${formData}");
 
     //DialogBoxes.openLoadingDialog();
-      print("${ApiLinks.registration}");
+     // print("${ApiLinks.registration}");
     var response = await DioClient()
         .post(ApiLinks.registration, formData, true)
         .catchError((error) {
@@ -160,11 +159,18 @@ class RegistrationController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
+        // Get.back();
+      Get.snackbar(
+        'Error'.tr,
+        'Something went wrong'.tr,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: R.colors.themeColor,
+      );
         debugPrint("This is error==================${error.toString()}");
 
         //HandlingErrors().handleError(error);
@@ -206,8 +212,8 @@ class RegistrationController extends GetxController {
     } else {
       Get.back();
       Get.snackbar(
-        'Error',
-        '${message}',
+        'Error'.tr,
+        'Something went wrong'.tr,
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );

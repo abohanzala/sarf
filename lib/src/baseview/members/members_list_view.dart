@@ -7,6 +7,7 @@ import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/common/profile_controller.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/src/baseview/members/chat/view/chat_view.dart';
+import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
 import 'package:sarf/src/baseview/members/single_member_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -72,7 +73,7 @@ void dispose(){
   super.dispose();
 }  
 loadMembers()async{
-  await ctrProfile.getProfile().then((value){
+   ctrProfile.getProfile().then((value){
                 // print(ctrProfile.profileModel?.user?.name ?? 'asssssssssssssssssssssssss');
               });
   cityList = ctr.getMembersNewList(ctr.selectExpanseTypeID, ctr.selectCityID, '');
@@ -90,7 +91,7 @@ loadMembers()async{
 
     await launchUrl(whatsApp,mode: LaunchMode.externalApplication).catchError((erorr){
       debugPrint(erorr.toString());
-      Get.snackbar('Error'.tr, 'Could not launch');
+      Get.snackbar('Error'.tr, 'Could not launch'.tr);
     });
 }
 
@@ -101,7 +102,7 @@ void launchUrls(String url) async {
   
     await launchUrl(Uri.parse(url)).catchError((erorr){
       debugPrint(erorr.toString());
-      Get.snackbar('Error'.tr, 'Could not launch');
+      Get.snackbar('Error'.tr, 'Could not launch'.tr);
     });
   
 }
@@ -110,6 +111,7 @@ launchPhone({required Uri u}) async {
   if (await canLaunchUrl(u)) {
     await launchUrl(u);
   } else {
+    Get.snackbar('Error'.tr, 'Could not launch'.tr);
     throw 'Could not launch $u';
   }
 }
@@ -152,22 +154,27 @@ launchPhone({required Uri u}) async {
                                   ),
                                 ),),
                                 const SizedBox(width: 10,),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
-                                  child: Center(child: Row(
-                                    children: [
-                                          Icon(
-                                            Icons.qr_code,
-                                            color: R.colors.blue,
-                                            //size: 25.sp,
-                                          ),
-                                          const SizedBox(width: 5,),
-                                          Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
-                                          //fontSize: 25.sp
-                                          ),)
-                                    ],
-                                  ),),
+                                GestureDetector(
+                                  onTap: (){
+                                    Get.to(() => const QRScannerScreen() );
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
+                                    child: Center(child: Row(
+                                      children: [
+                                            Icon(
+                                              Icons.qr_code,
+                                              color: R.colors.blue,
+                                              //size: 25.sp,
+                                            ),
+                                            const SizedBox(width: 5,),
+                                            Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
+                                            //fontSize: 25.sp
+                                            ),)
+                                      ],
+                                    ),),
+                                  ),
                                 )
                 ],
               ),

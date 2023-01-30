@@ -131,6 +131,7 @@ class LocaleString extends Translations {
           "Login Successfully": "Login Successfully",
           "Error": "Error",
           "Something wnet wrong try later": "Something wnet wrong try later",
+          "Something wnet wrong": "Something wnet wrong try later",
           "User not found": "User not found",
           "Are you sure you want to delete this budget": "Are you sure you want to delete this budget",
           "Are you sure you want to logout": "Are you sure you want to logout",
@@ -166,6 +167,7 @@ class LocaleString extends Translations {
           "Add Image": "Add Image",
           "Message required": "Message required",
           "Image required": "Image required",
+          "Could not launch": "Could not launch",
         
       
         },
@@ -298,6 +300,7 @@ class LocaleString extends Translations {
           "Login Successfully": "تم تسجيل الدخول بنجاح",
           "Error": "خطاء",
           "Something wnet wrong try later": "حدث خطأ ما حاول لاحقا",
+          "Something wnet wrong": "حدث خطأ ما حاول لاحقا",
           "User not found": "لم يتم العثور على المستخدم",
           "Are you sure you want to delete this budget": "هل أنت متأكد أنك تريد حذف هذه الميزانية",
           "Are you sure you want to logout": "هل أنت متأكد أنك تريد تسجيل الخروج",
@@ -333,6 +336,7 @@ class LocaleString extends Translations {
           "Add Image": "Add Image",
           "Message required": "Message required",
           "Image required": "Image required",
+          "Could not launch": "Could not launch",
         },
       };
 }

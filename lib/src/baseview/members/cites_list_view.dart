@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/model/members/city_list_model.dart';
+import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 
 import '../../../resources/resources.dart';
@@ -113,22 +114,27 @@ loadMembers(){
                                   ),
                                 ),),
                                 const SizedBox(width: 10,),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
-                                  child: Center(child: Row(
-                                    children: [
-                                          Icon(
-                                            Icons.qr_code,
-                                            color: R.colors.blue,
-                                            //size: 25.sp,
-                                          ),
-                                          const SizedBox(width: 5,),
-                                          Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
-                                          //fontSize: 25.sp
-                                          ),)
-                                    ],
-                                  ),),
+                                GestureDetector(
+                                   onTap: (){
+                                    Get.to(() => const QRScannerScreen());
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
+                                    child: Center(child: Row(
+                                      children: [
+                                            Icon(
+                                              Icons.qr_code,
+                                              color: R.colors.blue,
+                                              //size: 25.sp,
+                                            ),
+                                            const SizedBox(width: 5,),
+                                            Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
+                                            //fontSize: 25.sp
+                                            ),)
+                                      ],
+                                    ),),
+                                  ),
                                 )
                 ],
               ),

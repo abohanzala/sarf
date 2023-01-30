@@ -18,8 +18,9 @@ class DataCollectionController extends GetxController {
   List<ExpenseType>? types = [];
 
   @override
-  void onInit() {
-    GetStorage().write('lang', 'en');
+  void onInit() async{
+   // GetStorage().write('lang', 'en');
+   await dataCollection();
     super.onInit();
   }
 
@@ -67,6 +68,8 @@ class DataCollectionController extends GetxController {
       }
     });
     if (response['success'] == true) {
+      cities?.clear();
+      types?.clear();
       debugPrint(response.toString());
       var data = DataCollection.fromJson(response);
       cities = data.data!.cities;

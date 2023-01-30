@@ -315,6 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                       color: R.colors.white,
                                       decoration: TextDecoration.underline,
+                                      fontSize: 12
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -326,6 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                       color: R.colors.white,
                                       decoration: TextDecoration.underline,
+                                      fontSize: 12
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -333,21 +335,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 0,
+                           SizedBox(
+                            width: GetStorage().read('lang') == "en" ? 10 : 10,
                           ),
                           Expanded(
                             child: ListView.builder(
                                 // physics: NeverScrollableScrollPhysics(),
                                 reverse: true,
                                 shrinkWrap: true,
+                                padding:  EdgeInsets.only(right: GetStorage().read("lang") != "en" ? 7:0,left: GetStorage().read("lang") == "en" ? 7:0 ),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: ctr.budgets.length,
                                 itemBuilder: (context, index) {
                                   var singleData = ctr.budgets[index];
                                   return Obx(
                                     () => Container(
-                                      height: GetStorage().read("lang") == 'en'? 100: 120,
+                                      height: GetStorage().read("lang") == 'en'? 100: 100,
                                       margin: const EdgeInsets.only(left: 2),
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
@@ -371,8 +374,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ctr.getHome(singleData.id.toString());
                                         },
                                         child: Container(
-                                          height: GetStorage().read("lang") == 'en'? 80: 100,
-                                          width: GetStorage().read("lang") == 'en'? 80: 100,
+                                          height: GetStorage().read("lang") == 'en'? 80: 80,
+                                          width: GetStorage().read("lang") == 'en'? 80: 80,
                                           padding: const EdgeInsets.all(5),
                                           //margin: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
@@ -391,6 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 "${singleData.name ?? ''}\n${singleData.number ?? ''}",
                                                 style: const TextStyle(
                                                     fontSize: 14),
+                                                    overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.center,    
                                               ),
                                             ],

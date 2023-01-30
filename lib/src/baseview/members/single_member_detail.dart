@@ -35,7 +35,7 @@ void launchWhatsApp(String phone) async {
 
     await launchUrl(whatsApp,mode: LaunchMode.externalApplication).catchError((erorr){
       debugPrint(erorr.toString());
-      Get.snackbar('Error'.tr, 'Could not launch');
+      Get.snackbar('Error'.tr, 'Could not launch'.tr);
     });
     
 }
@@ -47,7 +47,7 @@ void launchUrls(String url) async {
   
     await launchUrl(Uri.parse(url)).catchError((erorr){
       debugPrint(erorr.toString());
-      Get.snackbar('Error'.tr, 'Could not launch');
+      Get.snackbar('Error'.tr, 'Could not launch'.tr);
     });
   
 }
@@ -56,6 +56,7 @@ launchPhone({required Uri u}) async {
   if (await canLaunchUrl(u)) {
     await launchUrl(u);
   } else {
+    Get.snackbar('Error'.tr, 'Could not launch'.tr);
     throw 'Could not launch';
   }
 }
@@ -65,7 +66,7 @@ launchPhone({required Uri u}) async {
    if (await canLaunchUrl(Uri.parse("google.navigation:q=$lat,$lng&mode=d"))) {
       await launchUrl (Uri.parse("google.navigation:q=$lat,$lng&mode=d"));
    } else {
-    Get.snackbar('Error'.tr, 'Could not launch');
+    Get.snackbar('Error'.tr, 'Could not launch'.tr);
       throw 'Could not launch ${Uri.parse("google.navigation:q=$lat,$lng&mode=d")}';
    }
 }
@@ -78,7 +79,7 @@ launchPhone({required Uri u}) async {
     super.initState();
   }
   getProfile()async{
-    await ctrProfile.getProfile().then((value){
+     ctrProfile.getProfile().then((value){
                 // print(ctrProfile.profileModel?.user?.name ?? 'asssssssssssssssssssssssss');
               });
     ctr.getMemberDetails(widget.id);

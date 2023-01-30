@@ -21,7 +21,7 @@ class InvoiceDetails extends StatefulWidget {
 }
 
 class _InvoiceDetailsState extends State<InvoiceDetails> {
-  MembersController ctr = Get.find<MembersController>();
+  MembersController ctr = Get.put<MembersController>(MembersController());
   Future pickImage(ImageSource source) async {
     
     try {
@@ -157,7 +157,9 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                 child: ClipRRect(
                                                                   borderRadius:
                                                                       BorderRadius.circular(10),
-                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,)),
+                                                                  child: Image.network("${ApiLinks.assetBasePath}$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+                                                                    return  Center(child: Text('No Data'.tr));
+                                                                  } ,)),
                                                               );
                                                             
                                                             }),
@@ -220,7 +222,9 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                 child: ClipRRect(
                                                                   borderRadius:
                                                                       BorderRadius.circular(10),
-                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,)),
+                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+                                                                    return  Center(child: Text('No Data'.tr));
+                                                                  },)),
                                                               );
                                                             
                                                             }),

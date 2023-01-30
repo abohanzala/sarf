@@ -34,7 +34,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   RegistrationController registrationController =
       Get.find<RegistrationController>();
-  FocusNode searchFieldNode = FocusNode();
+ // FocusNode searchFieldNode = FocusNode();
   bool business = true;
   bool personal = false;
   bool onlineBusiness = true;
@@ -524,7 +524,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                 return null;
               },
               controller: registrationController.passwordController,
-              focusNode: searchFieldNode,
+              //focusNode: searchFieldNode,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   hintText: 'Enter Password'.tr,
@@ -1310,6 +1310,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
+          FocusScope.of(context).unfocus();
           openPopUpOptionsForCities();
         },
         child: Container(
@@ -1324,7 +1325,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',
-                            color: R.colors.grey),
+                            color: registrationController.finalSelectedCity.value != '' ? R.colors.black : R.colors.grey),
                       ))),
               const Icon(Icons.arrow_drop_down),
             ],
@@ -1344,6 +1345,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
+          
           openPopUpOptionsForTypes();
         },
         child: Container(
@@ -1358,7 +1360,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',
-                            color: R.colors.grey),
+                            color: registrationController.finalSelectedType.value != ''? R.colors.black : R.colors.grey),
                       ))),
               const Icon(Icons.arrow_drop_down),
             ],

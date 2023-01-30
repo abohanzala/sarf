@@ -48,7 +48,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
     getData();
     getDataCollection();
 
-    print("initState Called");
+    //print("initState Called");
   }
 
   Future getData() async {
@@ -497,7 +497,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',
-                            color: R.colors.grey),
+                            color: R.colors.black),
                       ))),
               Icon(Icons.arrow_drop_down),
             ],
