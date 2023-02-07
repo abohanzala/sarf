@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sarf/controllers/home/home_controller.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../resources/resources.dart';
 
@@ -16,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeController ctr = Get.put<HomeController>(HomeController());
   TextEditingController txt = TextEditingController();
+  ScreenshotController screenshotController = ScreenshotController();
   //ScrollController scrollCtr = ScrollController();
   @override
   void initState() {
@@ -39,6 +46,33 @@ class _HomeScreenState extends State<HomeScreen> {
       
     });
   }
+  @override
+  void dispose() {
+    txt.dispose();
+    super.dispose();
+  }
+
+
+  _shareQrCode() async {
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    screenshotController.capture().then((Uint8List? image) async {
+      if (image != null) {
+        try {
+          String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+          final imagePath = await File('$directory/$fileName.png').create();
+          await imagePath.writeAsBytes(image);
+          
+          // ignore: deprecated_member_use
+          Share.shareXFiles([XFile(imagePath.path)]);
+        } catch (error) {
+          debugPrint(error.toString());
+        }
+      }
+    }).catchError((onError) {
+      debugPrint('Error --->> $onError');
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -487,17 +521,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                SizedBox(
                                 width: 100,
                                 height: 100,
-                                child: QrImage(
-                                          data: ctr.qrCode.value,
-                                          version: QrVersions.auto,
-                                          size: 100.0,
-                                        ),
+                                child: Screenshot(
+                                  controller: screenshotController,
+                                  child: Container(
+                                    color: R.colors.white,
+                                    child: QrImage(
+                                              data: ctr.qrCode.value,
+                                              version: QrVersions.auto,
+                                              size: 100.0,
+                                            ),
+                                  ),
+                                ),
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                '${ctr.selectedBudgetName} - QR code',
+                                '${ctr.selectedBudgetName} - ${'QR code'.tr}',
                                 style: TextStyle(color: R.colors.grey),
                               ),
                               // const SizedBox(
@@ -625,27 +665,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                         color: R.colors.grey, width: 1)),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      R.images.icon3,
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Share QR code'.tr,
-                                          style: TextStyle(
-                                              color: R.colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                child: GestureDetector(
+                                  onTap: (){
+                                    _shareQrCode();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        R.images.icon3,
+                                        width: 25,
+                                        height: 25,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Share QR code'.tr,
+                                            style: TextStyle(
+                                                color: R.colors.black,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

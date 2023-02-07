@@ -9,6 +9,7 @@ import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/firebase_options.dart';
 import 'package:sarf/src/Auth/change_profile.dart';
 import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
+import 'package:sarf/src/utils/navigation_observer.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
 import 'controllers/auth/forgot_password_controller.dart';
@@ -67,12 +68,13 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           builder: BotToastInit(),
-          navigatorObservers: [BotToastNavigatorObserver()],
+         // navigatorObservers: [BotToastNavigatorObserver()],
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
+          navigatorObservers: [Helper.routeObserver],
           initialRoute: GetStorage().read('user_token') == null
               ? RoutesName.LogIn
               : RoutesName.base,

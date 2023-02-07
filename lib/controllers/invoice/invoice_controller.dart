@@ -14,6 +14,8 @@ import '../../src/widgets/loader.dart';
 
 class InvoiceController extends getpackage.GetxController {
   List<File> uploadImages = <File>[].obs;
+  var qrCode = "".obs;
+  bool checkMobile = false;
   TextEditingController mobile1 = TextEditingController();
   TextEditingController amount2 = TextEditingController();
   TextEditingController note3 = TextEditingController();
@@ -43,6 +45,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.simpleInvoice, formData, true)
         .catchError((error) {
+      checkMobile = false;    
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
@@ -63,6 +66,7 @@ class InvoiceController extends getpackage.GetxController {
     // Navigator.of(getpackage.Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
+      checkMobile = false;
       getpackage.Get.back();
       //SnakeBars.showSuccessSnake(description: response['message'].toString());
       

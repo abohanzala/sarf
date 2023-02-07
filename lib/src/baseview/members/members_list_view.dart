@@ -156,7 +156,7 @@ launchPhone({required Uri u}) async {
                                 const SizedBox(width: 10,),
                                 GestureDetector(
                                   onTap: (){
-                                    Get.to(() => const QRScannerScreen() );
+                                    Get.to(() => const QRScannerScreen(invoice: false,) );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),

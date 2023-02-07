@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sarf/controllers/invoice/invoice_controller.dart';
 
 import '../../../resources/resources.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  const QRScannerScreen({super.key});
+ final bool invoice;
+   const QRScannerScreen({super.key, required this.invoice});
 
   @override
   State<QRScannerScreen> createState() => _QRScannerScreenState();
@@ -17,6 +19,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   final qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   Barcode? barcode;
+  InvoiceController ctr = Get.find<InvoiceController>();
+ // bool invoice =  Get.arguments['invoice'] != null ? Get.arguments['invoice']  : false;
 
   buildQrView(BuildContext context) {
   return QRView(key: qrKey, onQRViewCreated: onQRViewCreated,
@@ -29,12 +33,22 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   ),
   );
 }
+@override
+  void initState() {
+    super.initState();
+  }
 
  void onQRViewCreated(QRViewController controller) {
 setState(() => this.controller = controller);
 controller.scannedDataStream.listen((barcode){
   setState((() {
 this.barcode = barcode;
+if(widget.invoice){
+  ctr.checkMobile = true;
+ctr.qrCode.value = barcode.code ?? '';
+ctr.mobile1.text = ctr.qrCode.value;
+}
+
 controller.dispose();
 }));
 Future.delayed(const Duration(seconds: 2),(){
@@ -65,6 +79,7 @@ controller.resumeCamera();
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(" aaaaaaaa ${widget.invoice}");
     return Scaffold(
       body: SafeArea(child: Stack(alignment: Alignment.center,
       children: [

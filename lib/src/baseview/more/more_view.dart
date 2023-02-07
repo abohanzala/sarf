@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -631,8 +632,63 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildViewProfileLinkButton() {
     return InkWell(
-      onTap: () {
-        Get.to(() => const ChangeProfile());
+      onTap: (){
+        Get.bottomSheet(Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+          decoration: BoxDecoration(
+            color: R.colors.white,
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   GestureDetector(
+                    onTap: (){
+                      Get.toNamed(RoutesName.RegistrationDetails);
+                    },
+                    child: Text('Add new account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
+                   GestureDetector(
+                    onTap: (){
+                      Get.toNamed(RoutesName.LogIn);
+                    },
+                    child: Text('Existing account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
+                 ],
+               ),
+               const SizedBox(height: 10,),
+              Divider(color: R.colors.lightGrey,thickness: 0.5,),
+              const SizedBox(height: 10,),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: 1,
+                primary: false,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  width: Get.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: R.colors.grey,
+                      ),
+                      const SizedBox(width: 10,),
+                      Text('Account Name',style: TextStyle(fontSize: 14,color: R.colors.black,fontWeight: FontWeight.w500),)
+                    ],
+                  ),
+                );
+                
+              }),
+               
+            ],),
+          ),
+        ));
       },
       child: Text(
         'View Profile'.tr,

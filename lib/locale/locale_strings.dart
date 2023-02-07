@@ -168,8 +168,10 @@ class LocaleString extends Translations {
           "Message required": "Message required",
           "Image required": "Image required",
           "Could not launch": "Could not launch",
-        
-      
+          "Add new account": "Add new account",
+          "Existing account": "Existing account",
+          "QR code" : "QR code",
+          "Scan a code" : "Scan a code",
         },
     
         'ar_SA': {
@@ -229,7 +231,7 @@ class LocaleString extends Translations {
           "Total Invoices": "اجمالي الفواتير",
           "Total Expenses": "مجموعات المصاريف",
           "Share Report": "مشاركة التقرير",
-          "Share QR code": "شارك qr code",
+          "Share QR code": "شارك رمز الاستجابة السريعة",
           "Add": "اضف",
           "Members List": "قائمة المضافين",
           "Search here": "ابحث هنا",
@@ -329,14 +331,18 @@ class LocaleString extends Translations {
           "Enter Current Password" : "إدخل كلمة السر الحالية",
           "Enter Confirm New Password" : "أدخل تأكيد كلمة المرور الجديدة",
           "Please Accept Terms And Conditions" : "الرجاء قبول الشروط والأحكام",
-          "Enter a valid number": "Enter a valid number",
-          "mobile is required": "mobile is required",
-          "amount is required" : "amount is required",
-          "note is required" : "note is required",
-          "Add Image": "Add Image",
-          "Message required": "Message required",
-          "Image required": "Image required",
-          "Could not launch": "Could not launch",
+          "Enter a valid number": "أدخل رقمًا صالحًا",
+          "mobile is required": "المحمول مطلوب",
+          "amount is required" : "المبلغ مطلوب",
+          "note is required" : "ملاحظة مطلوبة",
+          "Add Image": "إضافة صورة",
+          "Message required": "الرسالة المطلوبة",
+          "Image required": "الصورة مطلوبة",
+          "Could not launch": "تعذر الإطلاق",
+          "Existing account": "حساب موجود",
+          "Add new account": "إضافة حساب جديد",
+          "QR code" : "رمز الاستجابة السريعة",
+          "Scan a code" : "مسح الرمز ضوئيًا",
         },
       };
 }
