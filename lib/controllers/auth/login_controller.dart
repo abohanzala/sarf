@@ -18,7 +18,7 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    GetStorage().write('lang', 'en');
+    
     super.onInit();
   }
 
@@ -95,6 +95,7 @@ class LoginController extends GetxController {
       await GetStorage().write('mobile', userInfo.user!.mobile);
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
+      await GetStorage().write('groupId', userInfo.user!.groupId);
       await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile'));
       Get.offAllNamed(RoutesName.base);
     } else {

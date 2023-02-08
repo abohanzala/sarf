@@ -52,6 +52,7 @@ void main() async {
   Get.put<ProfileController>(ProfileController());
   Get.put<DeleteAccountController>(DeleteAccountController());
   Get.put<ChangeProfileController>(ChangeProfileController());
+  GetStorage().write('lang', 'ar');
   runApp(const MyApp());
 }
 
@@ -79,7 +80,7 @@ class MyApp extends StatelessWidget {
               ? RoutesName.LogIn
               : RoutesName.base,
           onGenerateRoute: Routes.generateRoute,
-          locale: const Locale('en', 'US'),
+          locale: const Locale('ar', 'SA'),
           translations: LocaleString(),
           fallbackLocale: const Locale('en', 'US'),
         );

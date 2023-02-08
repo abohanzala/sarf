@@ -20,7 +20,7 @@ class DeleteAccountController extends GetxController {
 
   @override
   void onInit() {
-    GetStorage().write('lang', 'en');
+    // GetStorage().write('lang', 'en');
     super.onInit();
   }
 

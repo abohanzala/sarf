@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/resources/resources.dart';
 import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
+import 'package:scan/scan.dart';
 
 import '../../utils/navigation_observer.dart';
 
@@ -47,13 +48,31 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
 
   Future pickImage(ImageSource source) async {
     try {
-      var pickedFile = await ImagePicker().pickMultiImage(imageQuality: 35);
+      var pickedFile = await ImagePicker().pickMultiImage();
       // var pickedFile = await picker.pickImage(source: source, imageQuality: 35);
       // ignore: unnecessary_null_comparison
       if (pickedFile == null) return;
       for (var item in pickedFile) {
         ctr.uploadImages.add(File(item.path));
       }
+    } on PlatformException catch (e) {
+      debugPrint('Failed to pick image: $e');
+    }
+  }
+
+
+   Future pickImageQr() async {
+    try {
+      var pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      // var pickedFile = await picker.pickImage(source: source, imageQuality: 35);
+      // ignore: unnecessary_null_comparison
+      if (pickedFile == null) return;
+      ctr.mobile1.text = (await Scan.parse(pickedFile.path))!;
+      ctr.checkMobile = true;
+      Get.back();
+      // for (var item in pickedFile) {
+      //   ctr.uploadImages.add(File(item.path));
+      // }
     } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');
     }
@@ -168,7 +187,38 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                         decoration: InputDecoration(
                           suffixIcon: GestureDetector(
                             onTap: (){
-                              Get.to(() => const QRScannerScreen(invoice: true,) );
+                              Get.bottomSheet(Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                  color: R.colors.white,
+                                  
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: (){
+                                        Get.back();
+                                        Get.to(() => const QRScannerScreen(invoice: true,) );
+                                      },
+                                      child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                      const SizedBox(height: 10,),
+                                      Divider(color: R.colors.grey,thickness: 0.5,),
+                                      const SizedBox(height: 10,),
+                                      GestureDetector(
+                                      onTap: (){
+                                        pickImageQr();
+                                        
+                                      },
+                                      child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                  ],
+                                ),
+
+                              ),
+                              );
+                              
                             },
                             child: Icon(
                               Icons.qr_code,

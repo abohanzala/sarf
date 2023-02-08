@@ -23,6 +23,13 @@ class _SettingsState extends State<Settings> {
   bool arabic = false;
   String? countryName;
   TextEditingController phone = TextEditingController();
+
+  @override
+  void initState() {
+    english = GetStorage().read("lang") == "en" ? true : false ;
+    arabic = GetStorage().read("lang") == "ar" ? true: false;
+    super.initState();
+  }    
   @override
   Widget build(BuildContext context) {
     return Scaffold(

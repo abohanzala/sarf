@@ -38,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ctr.selectedBudgetIndex.value = 1;
           ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
           ctr.selectedBudgetNumbder.value = "";    
-          ctr.selectedBudgetName.value = ctr.budgets.first.name.toString();
-          ctr.qrCode.value = "${GetStorage().read('mobile')}";
+          ctr.selectedBudgetName.value = ctr.budgets.first.name.toString() == 'Expenses' ? GetStorage().read('name') : ctr.budgets.first.name.toString() ;
+          ctr.qrCode.value = "${GetStorage().read('name')}";
         }
       });
       }
@@ -402,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ctr.selectedBudgetId.value =
                                               singleData.id.toString();
                                           ctr.selectedBudgetNumbder.value = singleData.number ?? '';    
-                                          ctr.selectedBudgetName.value = singleData.name ?? '' ;    
+                                          ctr.selectedBudgetName.value = singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? '' ;    
                                           debugPrint(
                                               ctr.selectedBudgetId.value);
                                           ctr.getHome(singleData.id.toString());
@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "${singleData.name ?? ''}\n${singleData.number ?? ''}",
+                                                "${singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number ?? ''}",
                                                 style: const TextStyle(
                                                     fontSize: 14),
                                                     overflow: TextOverflow.ellipsis,
@@ -627,35 +627,35 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 8,
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: R.colors.grey, width: 1)),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      R.images.icon1,
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Share Report'.tr,
-                                          style: TextStyle(
-                                              color: R.colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
+                              // Container(
+                              //   padding: const EdgeInsets.all(8),
+                              //   decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(10),
+                              //       border: Border.all(
+                              //           color: R.colors.grey, width: 1)),
+                              //   child: Row(
+                              //     children: [
+                              //       Image.asset(
+                              //         R.images.icon1,
+                              //         width: 25,
+                              //         height: 25,
+                              //       ),
+                              //       const SizedBox(
+                              //         width: 5,
+                              //       ),
+                              //       Column(
+                              //         children: [
+                              //           Text(
+                              //             'Share Report'.tr,
+                              //             style: TextStyle(
+                              //                 color: R.colors.black,
+                              //                 fontSize: 12),
+                              //           ),
+                              //         ],
+                              //       )
+                              //     ],
+                              //   ),
+                              // ),
                               const SizedBox(
                                 height: 8,
                               ),

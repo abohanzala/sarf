@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/auth/login_controller.dart';
 import 'package:sarf/resources/dummy.dart';
 import 'package:sarf/services/dio_client.dart';
 import 'package:sarf/src/Auth/change_profile.dart';
@@ -9,7 +10,9 @@ import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 import '../../../constant/api_links.dart';
 import '../../../controllers/common/profile_controller.dart';
+import '../../../model/moreModel/account_model.dart';
 import '../../../resources/resources.dart';
+import '../../Auth/registration.dart';
 import '../base_controller.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -26,6 +29,7 @@ Future logout() async {
       await DioClient().get(ApiLinks.logout).catchError((error) async {
     //debugPrint(error.toString());
     await GetStorage().remove('user_token');
+    await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
     await GetStorage().remove(
       'name',
@@ -61,6 +65,7 @@ Future logout() async {
 
   await GetStorage().remove('user_token');
   await GetStorage().remove('userId');
+  await GetStorage().remove('groupId');
   await GetStorage().remove(
     'name',
   );
@@ -93,17 +98,21 @@ class _MoreScreenState extends State<MoreScreen> {
   bool isLoading = true;
 
   @override
-// ignore: must_call_super
+
   initState() {
+    
     // ignore: avoid_print
     getData();
-    print("initState Called");
+    super.initState();
+    //print("initState Called");
   }
 
   Future getData() async {
+    await profileController.getAccounts();
     await profileController.getProfile().then((value) => setState(() {
           isLoading = false;
         }));
+        
   }
 
   @override
@@ -649,14 +658,14 @@ class _MoreScreenState extends State<MoreScreen> {
                  children: [
                    GestureDetector(
                     onTap: (){
-                      Get.toNamed(RoutesName.RegistrationDetails);
+                      Get.to(() => const Registration());
                     },
                     child: Text('Add new account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
-                   GestureDetector(
-                    onTap: (){
-                      Get.toNamed(RoutesName.LogIn);
-                    },
-                    child: Text('Existing account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
+                  //  GestureDetector(
+                  //   onTap: (){
+                  //     Get.toNamed(RoutesName.LogIn);
+                  //   },
+                  //   child: Text('Existing account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
                  ],
                ),
                const SizedBox(height: 10,),
@@ -664,23 +673,31 @@ class _MoreScreenState extends State<MoreScreen> {
               const SizedBox(height: 10,),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: 1,
+                itemCount: profileController.accounts?.accounts?.length,
                 primary: false,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
+                var  singleData = profileController.accounts?.accounts?[index];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   width: Get.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: R.colors.grey,
-                      ),
-                      const SizedBox(width: 10,),
-                      Text('Account Name',style: TextStyle(fontSize: 14,color: R.colors.black,fontWeight: FontWeight.w500),)
-                    ],
+                  child: GestureDetector(
+                    onTap: (){
+                      
+                      profileController.login(singleData!.mobile!.toString(),singleData.swtichPassKey.toString(),singleData.groupId.toString());
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: singleData?.photo == null ? R.colors.grey : null,
+                          backgroundImage: singleData?.photo != null ?NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") : null,
+                        ),
+                        const SizedBox(width: 10,),
+                        Text(singleData?.name ?? '' ,style: TextStyle(fontSize: 14,color: R.colors.black,fontWeight: FontWeight.w500),)
+                      ],
+                    ),
                   ),
                 );
                 

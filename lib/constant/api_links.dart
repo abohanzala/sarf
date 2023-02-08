@@ -43,4 +43,5 @@ class ApiLinks {
   static const String invoiceList = '$base/invoices?language=';
   static const String mobileCheckInvoice = '$base/mobile_check';
   static const String firebaseFileStorage = '$base/firebase_file_upload';
+  static const String getAccounts = '$base/group_accounts';
 }

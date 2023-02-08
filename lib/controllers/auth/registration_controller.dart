@@ -10,6 +10,7 @@ import '../../model/loginModel.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../src/baseview/base_controller.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -82,7 +83,12 @@ class RegistrationController extends GetxController {
       expense_typeId.toString(),
     ));
     }
-    
+    if(GetStorage().read('groupId') != null && GetStorage().read('groupId') != '' ){
+      formData.fields.add(MapEntry(
+      'group_id',
+      GetStorage().read('groupId').toString(),
+    ));
+    }
     formData.fields.add(MapEntry(
       'insta_link',
       instagramController.text,
@@ -207,7 +213,11 @@ class RegistrationController extends GetxController {
       await GetStorage().write('mobile', userInfo.user!.mobile);
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
+      await GetStorage().write('groupId', userInfo.user!.groupId);
       await createFirebaseUser();
+       MyBottomNavigationController ctr =
+      Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+  ctr.tabIndex.value = 0;
       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();

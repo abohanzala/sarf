@@ -19,8 +19,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool english = true;
-  bool arabic = false;
+  bool english = false;
+  bool arabic = true;
   String? countryName;
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -28,6 +28,13 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginController loginController = Get.find<LoginController>();
   ForgotPasswordController forgotPasswordController =
       Get.find<ForgotPasswordController>();
+
+  @override
+  void initState() {
+    english = GetStorage().read("lang") == "en" ? true : false ;
+    arabic = GetStorage().read("lang") == "ar" ? true: false;
+    super.initState();
+  }    
 
   @override
   Widget build(BuildContext context) {
