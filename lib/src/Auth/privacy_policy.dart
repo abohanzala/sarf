@@ -18,15 +18,17 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   PrivacyController privacyController = Get.find<PrivacyController>();
   bool english = true;
   bool arabic = false;
-  var selectedLanguage = 'English'.obs;
+  var selectedLanguage = (GetStorage().read("lang") == "en" ? "English" : "Arabic").obs;
 
   @override
   // ignore: must_call_super
   initState() {
     // ignore: avoid_print
+    english = GetStorage().read("lang") == "en" ? true: false;
+    arabic = GetStorage().read("lang") == "ar" ? true: false;
     privacyController.privacy();
-
-    print("initState Called");
+    super.initState();
+    
   }
 
   @override

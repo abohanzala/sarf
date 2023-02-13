@@ -33,7 +33,7 @@ class ProfileController extends GetxController {
   var location_lng = ''.obs;
   var message;
   ProfileModel? profileModel;
-  UserAccounts? accounts;
+  Rx<UserAccounts> accounts = UserAccounts().obs;
 
 
   @override
@@ -193,7 +193,7 @@ class ProfileController extends GetxController {
     if (response['success'] == true) {
      //debugPrint("This ==================$response");
      var data = UserAccounts.fromJson(response);
-      accounts = data;
+      accounts.value = data;
 
     } else {
       debugPrint(response.toString());

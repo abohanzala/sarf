@@ -103,7 +103,7 @@ class _MoreScreenState extends State<MoreScreen> {
     
     // ignore: avoid_print
     getData();
-    super.initState();
+   // super.initState();
     //print("initState Called");
   }
 
@@ -649,61 +649,65 @@ class _MoreScreenState extends State<MoreScreen> {
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
           ),
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                   GestureDetector(
-                    onTap: (){
-                      Get.to(() => const Registration());
-                    },
-                    child: Text('Add new account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
-                  //  GestureDetector(
-                  //   onTap: (){
-                  //     Get.toNamed(RoutesName.LogIn);
-                  //   },
-                  //   child: Text('Existing account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
-                 ],
-               ),
-               const SizedBox(height: 10,),
-              Divider(color: R.colors.lightGrey,thickness: 0.5,),
-              const SizedBox(height: 10,),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: profileController.accounts?.accounts?.length,
-                primary: false,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                var  singleData = profileController.accounts?.accounts?[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  width: Get.width,
-                  child: GestureDetector(
-                    onTap: (){
-                      
-                      profileController.login(singleData!.mobile!.toString(),singleData.swtichPassKey.toString(),singleData.groupId.toString());
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: singleData?.photo == null ? R.colors.grey : null,
-                          backgroundImage: singleData?.photo != null ?NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") : null,
+            child: Obx(
+              () => Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     GestureDetector(
+                      onTap: (){
+                        Get.to(() => const Registration());
+                      },
+                      child: Text('Add new account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
+                    //  GestureDetector(
+                    //   onTap: (){
+                    //     Get.toNamed(RoutesName.LogIn);
+                    //   },
+                    //   child: Text('Existing account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
+                   ],
+                 ),
+                 const SizedBox(height: 10,),
+                Divider(color: R.colors.lightGrey,thickness: 0.5,),
+                const SizedBox(height: 10,),
+                if(profileController.accounts.value.success == true)
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: profileController.accounts.value.accounts?.length,
+                    primary: false,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                    var  singleData = profileController.accounts.value.accounts?[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      width: Get.width,
+                      child: GestureDetector(
+                        onTap: (){
+                          
+                          profileController.login(singleData!.mobile!.toString(),singleData.swtichPassKey.toString(),singleData.groupId.toString());
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 25,
+                              backgroundColor: singleData?.photo == null ? R.colors.grey : null,
+                              backgroundImage: singleData?.photo != null ?NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") : null,
+                            ),
+                            const SizedBox(width: 10,),
+                            Text(singleData?.name ?? '' ,style: TextStyle(fontSize: 14,color: R.colors.black,fontWeight: FontWeight.w500),)
+                          ],
                         ),
-                        const SizedBox(width: 10,),
-                        Text(singleData?.name ?? '' ,style: TextStyle(fontSize: 14,color: R.colors.black,fontWeight: FontWeight.w500),)
-                      ],
-                    ),
-                  ),
-                );
+                      ),
+                    );
+                    
+                  }),
                 
-              }),
-               
-            ],),
+                 
+              ],),
+            ),
           ),
         ));
       },

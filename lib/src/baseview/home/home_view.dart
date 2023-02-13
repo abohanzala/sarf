@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
           ctr.selectedBudgetNumbder.value = "";    
           ctr.selectedBudgetName.value = ctr.budgets.first.name.toString() == 'Expenses' ? GetStorage().read('name') : ctr.budgets.first.name.toString() ;
-          ctr.qrCode.value = "${GetStorage().read('name')}";
+          ctr.qrCode.value = "${GetStorage().read('mobile')}";
         }
       });
       }

@@ -167,7 +167,13 @@ loadMembers(){
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.bottomSheet(InvoiceBottomSheet());
+                          Get.bottomSheet(InvoiceBottomSheet()).then((value){
+                            if(ctr.filter != 0){
+                              setState(() {
+                                membersList = ctr.getInvoiceList('');
+                              });
+                            }
+                          });
                         },
                         child: Image.asset(
                           'assets/images/data.png',
@@ -223,8 +229,14 @@ loadMembers(){
                   return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
                 }
                 if(snapshot.hasData){
-                  
-                  List<Data?> data = snapshot.data!.data!;
+                  //ctr.filter != ''
+                  List<Data?> data = [];
+                  if(ctr.filter != 0){
+                    data = snapshot.data!.data!.where((element) => element.expenseTypeId == ctr.filter).toList();
+                  }else{
+                    data = snapshot.data!.data!;
+                  }
+                   
                   if(data.isNotEmpty){
 
                    return Column(
@@ -325,7 +337,7 @@ loadMembers(){
                     );
                   }
                 }
-                return const Center(child:Text('No Data'));
+                return  Center(child:Text('No Data'.tr));
                           }),
                   // child:  Column(
                   //     children: List.generate(8, (index) {
@@ -476,7 +488,8 @@ class _InvoiceBottomSheetState extends State<InvoiceBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          debugPrint('here');
+                           ctr.filter = singleData!.id!;
+                           Get.back();
                         },
                         child: Text(
                           get_storage.GetStorage().read("lang") == "en" ? singleData?.expenseName ?? "" : singleData?.expenseNameAr ?? "" ,

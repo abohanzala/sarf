@@ -30,7 +30,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
          // mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-            padding: EdgeInsets.only(left: 16.w, top: 20.h),
+            padding: EdgeInsets.only(left: 16.w, top: 20.h,right: 16.w),
             height: 100,
             width: double.infinity,
             decoration: BoxDecoration(

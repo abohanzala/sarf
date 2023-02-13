@@ -33,7 +33,7 @@ class PrivacyController extends GetxController {
     // var a = forgotPasswordController.phone.text;
     // final splitted = a.split('+');
 
-    var request = {'language': GetStorage().read('lang'), 'id': 1};
+    var request = {'language': GetStorage().read('lang'), 'id': 2};
     print("This is my request====================${request}");
 
     //DialogBoxes.openLoadingDialog();

@@ -4,8 +4,6 @@ import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -28,10 +26,15 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
   File? _scannedImage;
   Timer? searchOnStoppedTyping;
   String name = "";
+  bool qrCode = false;
+  TextEditingController prefix = TextEditingController();
 
   void _startScan(BuildContext context) async {
     try{
-      var image = await DocumentScannerFlutter.launch(context,source: ScannerFileSource.CAMERA);
+      var image = await DocumentScannerFlutter.launch(context,source: ScannerFileSource.CAMERA)?.catchError((error){
+        Get.snackbar("Error".tr, error.toString(),backgroundColor: R.colors.blue);
+      });
+
     if (image != null) {
       _scannedImage = image;
       ctr.uploadImages.add(_scannedImage!);
@@ -83,15 +86,34 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
   });
+
+    prefix.text = "9665";
     ctr.mobile1.clear();
     ctr.amount2.clear();
     ctr.note3.clear();
+    ctr.uploadImages.clear();
     super.initState();
+
   }
 
   @override
   void didPopNext() {
-    if(ctr.checkMobile) _onChangeHandler(ctr.mobile1.text);
+    if(ctr.checkMobile){
+      qrCode = true;
+      // _onChangeHandler(ctr.mobile1.text);
+      ctr.mobileCheck(ctr.mobile1.text).then((value){
+          if(value['message'] == 'User record available'){
+            setState(() {
+              name = value['user']['name'];
+            });
+          }
+          if(value['message'] == 'User not found!'){
+            setState(() {
+              name = "User not found".tr;
+            });
+          }
+        });
+    } 
     
     super.didPopNext();
   }
@@ -99,6 +121,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
    
 
     _onChangeHandler(value) {
+        qrCode = false;
         const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
         if (searchOnStoppedTyping != null) {
             setState(() => searchOnStoppedTyping?.cancel()); // clear timer
@@ -109,10 +132,17 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
     search(value) {
         //print('hello world from search . the value is $value');
         if(value.isEmpty){
+          // qrCode = false;
           return;
         }
+        String val = '';
+        if(qrCode){
+          val = ctr.mobile1.text;
+        }else{
+          val = "${prefix.text}${ctr.mobile1.text}";
+        }
         //print(ctr.mobile1.text);
-        ctr.mobileCheck(ctr.mobile1.text).then((value){
+        ctr.mobileCheck(val).then((value){
           if(value['message'] == 'User record available'){
             setState(() {
               name = value['user']['name'];
@@ -129,6 +159,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
     @override
     void dispose() {
     searchOnStoppedTyping?.cancel();
+    prefix.dispose();
     super.dispose();
   }
 
@@ -180,55 +211,21 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextFormField(
-                        //initialValue: ctr.mobile1.text,
-                        controller: ctr.mobile1,
-                        onChanged: _onChangeHandler,
+                      Row(
+                        children: [
+                          Expanded(child: 
+                          TextFormField(
+                            //enabled: false,
+                          controller: prefix,
+                          onChanged: (value){
+                            prefix.text = '9665';
+                          },
+                        
                         decoration: InputDecoration(
-                          suffixIcon: GestureDetector(
-                            onTap: (){
-                              Get.bottomSheet(Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                                  color: R.colors.white,
-                                  
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (){
-                                        Get.back();
-                                        Get.to(() => const QRScannerScreen(invoice: true,) );
-                                      },
-                                      child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
-                                      const SizedBox(height: 10,),
-                                      Divider(color: R.colors.grey,thickness: 0.5,),
-                                      const SizedBox(height: 10,),
-                                      GestureDetector(
-                                      onTap: (){
-                                        pickImageQr();
-                                        
-                                      },
-                                      child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
-                                  ],
-                                ),
-
-                              ),
-                              );
-                              
-                            },
-                            child: Icon(
-                              Icons.qr_code,
-                              color: R.colors.blue,
-                              size: 25.sp,
-                            ),
-                          ),
+                          // enabled: false,
                           fillColor: R.colors.lightGrey,
                           filled: true,
-                          labelText: 'Mobile Number'.tr,
+                          //labelText: 'Amount'.tr,
                           labelStyle: TextStyle(
                             color: R.colors.grey,
                             fontSize: 14.sp,
@@ -238,12 +235,82 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: R.colors.grey,
-                            ),
+                            borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                      ),),
+                          const SizedBox(width: 5,),
+                          Expanded(
+                            flex: 4,
+                            child: TextFormField(
+                              //initialValue: ctr.mobile1.text,
+                              controller: ctr.mobile1,
+                              onChanged: _onChangeHandler,
+                              decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  onTap: (){
+                                    Get.bottomSheet(Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                        color: R.colors.white,
+                                        
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: (){
+                                              Get.back();
+                                              // qrCode = true;
+                                              Get.to(() => const QRScannerScreen(invoice: true,) );
+                                            },
+                                            child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                            const SizedBox(height: 10,),
+                                            Divider(color: R.colors.grey,thickness: 0.5,),
+                                            const SizedBox(height: 10,),
+                                            GestureDetector(
+                                            onTap: (){
+                                              pickImageQr();
+                                              
+                                            },
+                                            child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                        ],
+                                      ),
+                          
+                                    ),
+                                    );
+                                    
+                                  },
+                                  child: Icon(
+                                    Icons.qr_code,
+                                    color: R.colors.blue,
+                                    size: 25.sp,
+                                  ),
+                                ),
+                                fillColor: R.colors.lightGrey,
+                                filled: true,
+                                labelText: 'Mobile Number'.tr,
+                                labelStyle: TextStyle(
+                                  color: R.colors.grey,
+                                  fontSize: 14.sp,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: R.colors.grey,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 10.h,
@@ -566,8 +633,14 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                   return;
                                 }
                                 FocusScope.of(context).unfocus();
+                                String val = '';
+                                if(qrCode){
+                                  val = ctr.mobile1.text;
+                                  }else{
+                                    val = "${prefix.text}${ctr.mobile1.text}";
+                                  }
                                 ctr
-                                    .postNewInvoice(ctr.mobile1.text,
+                                    .postNewInvoice(val,
                                         ctr.amount2.text, ctr.note3.text)
                                     .then((value) {
                                       setState(() {

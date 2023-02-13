@@ -105,7 +105,7 @@ Future getHome(String? id) async {
         currency.value = data.data!.currency.toString();
         totalInvoices.value = data.data!.totalInvoices.toString();
         totalExpanses.value = data.data!.totalExpenses.toString();
-        qrCode.value = selectedBudgetName.value == '${GetStorage().read('name')}' ? GetStorage().read('name') : "${GetStorage().read('mobile')}$selectedBudgetNumbder";
+        qrCode.value = "${GetStorage().read('mobile')}$selectedBudgetNumbder";
         //print(budgets.first.name);
         
        // return data;

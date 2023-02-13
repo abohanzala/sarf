@@ -18,12 +18,17 @@ class _AboutState extends State<About> {
   AboutController aboutController = Get.find<AboutController>();
   bool english = true;
   bool arabic = false;
-  var selectedLanguage = 'English'.obs;
+  var selectedLanguage = (GetStorage().read("lang") == "en" ? "English" : "Arabic").obs;
 
   @override
   initState() {
-    // ignore: avoid_print
     aboutController.about();
+    
+    english = GetStorage().read("lang") == "en" ? true: false;
+    arabic = GetStorage().read("lang") == "ar" ? true: false;
+    super.initState();
+    // ignore: avoid_print
+    
   }
 
   @override

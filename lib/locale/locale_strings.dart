@@ -247,7 +247,7 @@ class LocaleString extends Translations {
           "Sent Attachments": "المرفقات المرسلة",
           "Attach": "يربط",
           "Camera": "كاميرا",
-          "Gallery": "صالة عرض",
+          "Gallery": "معرض الصور",
           "Write something": "أكتب شيئا",
           "Invoice List": "قائمة الفواتير",
           "Invoice ID": "رقم الفاتوره",

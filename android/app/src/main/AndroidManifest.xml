@@ -6,9 +6,7 @@
    <uses-permission android:name="android.permission.RECORD_AUDIO" />
    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
-   <uses-permission
-        android:name="android.permission.CAMERA"
-        />
+   <uses-permission android:name="android.permission.CAMERA" />
    <application
         android:usesCleartextTraffic="true"
         android:label="Sarf | صرف"
