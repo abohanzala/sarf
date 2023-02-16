@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sarf/controllers/home/home_controller.dart';
+import 'package:sarf/src/baseview/Invoices/invoice_list_home.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -459,47 +460,54 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemCount: ctr.expenseTypes.length,
                             itemBuilder: (context, index) {
                               var singleExpanse = ctr.expenseTypes[index];
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: Get.width,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: R.colors.blue, width: 1),
-                                        color: R.colors.white),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          ctr.currency.value,
-                                          style:
-                                              TextStyle(color: R.colors.blue),
+                              return Obx(
+                                () => GestureDetector(
+                                  onTap: (){
+                                    Get.to(() => InvoiceListScreenHome( expanseId: singleExpanse.id.toString(),budgetId: ctr.selectedBudgetId.value.toString(),) );
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: Get.width,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: R.colors.blue, width: 1),
+                                            color: R.colors.white),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              ctr.currency.value,
+                                              style:
+                                                  TextStyle(color: R.colors.blue),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "${singleExpanse.invoiceSumAmount ?? 0}",
+                                              style:
+                                                  TextStyle(color: R.colors.blue),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          "${singleExpanse.invoiceSumAmount ?? 0}",
-                                          style:
-                                              TextStyle(color: R.colors.blue),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "${GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
+                                        style: TextStyle(
+                                            color: R.colors.blackSecondery),
+                                      )
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "${GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
-                                    style: TextStyle(
-                                        color: R.colors.blackSecondery),
-                                  )
-                                ],
+                                ),
                               );
                             })),
                     const SizedBox(

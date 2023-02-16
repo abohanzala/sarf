@@ -9,6 +9,7 @@ import 'package:sarf/model/members/invoice_list_model.dart';
 import 'package:sarf/services/app_exceptions.dart';
 
 import '../../constant/api_links.dart';
+import '../../model/invoice/searched_mobile_model.dart';
 import '../../services/dio_client.dart';
 import '../../src/widgets/loader.dart';
 
@@ -17,6 +18,7 @@ class InvoiceController extends getpackage.GetxController {
   var qrCode = "".obs;
   var filter = 0;
   bool checkMobile = false;
+  getpackage.Rx<SearchedMobileList> searchedUsers = SearchedMobileList().obs;
   TextEditingController mobile1 = TextEditingController();
   TextEditingController amount2 = TextEditingController();
   TextEditingController note3 = TextEditingController();
@@ -141,6 +143,59 @@ class InvoiceController extends getpackage.GetxController {
     return null;
   }
 
+  Future<InvoiceList?> getInvoiceListHome(String query,String expenseId,String bId) async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    // openLoader();
+    // expense_id
+    var request = {};
+    if(query == ''){
+    request = {
+      "language": GetStorage().read('lang'),
+      "expense_id" : expenseId,
+      "budget_id" : bId,
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "query_string": query,
+      "expense_id" : expenseId,
+      "budget_id" : bId,
+    };
+   }
+   debugPrint(request.toString());
+    var response = await DioClient()
+        .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
+        .catchError((error) {
+          debugPrint(error.toString());
+      if (error is BadRequestException) {
+        // print(error.toString());
+      } else {
+        //print(error.toString());
+
+        if (error is BadRequestException) {
+          // print(error.toString());
+
+        } else if (error is FetchDataException) {
+          // print(error.toString());
+
+        } else if (error is ApiNotRespondingException) {
+          //print(error.message.toString());
+        }
+      }
+    });
+    if(response == null ) return null;
+    if (response['success'] == true) {
+      debugPrint(response.toString());
+      var membersList = InvoiceList.fromJson(response);
+      //print(membersList.data?.first.expenseName);
+      return membersList;
+    } else {
+      debugPrint('here');
+    }
+    return null;
+  }
+
   Future mobileCheck(String number) async {
     var data;
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
@@ -216,5 +271,31 @@ class InvoiceController extends getpackage.GetxController {
       debugPrint('here');
     }
     return data;
+  }
+
+  Future getMobileUsers(String number) async {
+    searchedUsers.value = SearchedMobileList();
+    var request = {
+      "mobile": number,
+    };
+    var response = await DioClient()
+        .post(ApiLinks.getUserList, request)
+        .catchError((error) {
+      debugPrint(error.toString());
+     
+    });
+    // debugPrint(response.toString());
+    if (response == null) return;
+    if (response['success'] == true) {
+      // debugPrint(response.toString());
+      var data = SearchedMobileList.fromJson(response);
+      searchedUsers.value = data;
+      debugPrint(searchedUsers.value.data.toString());
+      
+    } else {
+      
+      debugPrint('here error');
+    }
+    return null;
   }
 }
