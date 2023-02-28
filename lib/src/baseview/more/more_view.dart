@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/login_controller.dart';
+import 'package:sarf/controllers/home/home_controller.dart';
 import 'package:sarf/resources/dummy.dart';
 import 'package:sarf/services/dio_client.dart';
 import 'package:sarf/src/Auth/change_profile.dart';
@@ -13,6 +14,7 @@ import '../../../controllers/common/profile_controller.dart';
 import '../../../model/moreModel/account_model.dart';
 import '../../../resources/resources.dart';
 import '../../Auth/registration.dart';
+import '../../utils/navigation_observer.dart';
 import '../base_controller.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -93,7 +95,7 @@ Future logout() async {
   Get.offAllNamed(RoutesName.LogIn)?.then((value) {});
 }
 
-class _MoreScreenState extends State<MoreScreen> {
+class _MoreScreenState extends State<MoreScreen>  with RouteAware {
   ProfileController profileController = Get.find<ProfileController>();
   bool isLoading = true;
 
@@ -102,13 +104,65 @@ class _MoreScreenState extends State<MoreScreen> {
   initState() {
     
     // ignore: avoid_print
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  });
     getData();
-   // super.initState();
+    super.initState();
     //print("initState Called");
   }
 
+  @override
+  void didPopNext() {
+    if(mounted){
+      setState(() {
+      isLoading = true;
+    });
+    }
+    
+    profileController.getAlertCount().then((value){
+      if(mounted){
+        setState(() {
+        isLoading = false;
+      });
+      }
+      
+    });
+    super.didPopNext();
+
+     
+  }
+
   Future getData() async {
+    await profileController.getAlertCount();
     await profileController.getAccounts();
+    // .catchError((error) async{
+    //      await GetStorage().remove('user_token');
+    // await GetStorage().remove('groupId');
+    // await GetStorage().remove('userId');
+    // await GetStorage().remove(
+    //   'name',
+    // );
+    // await GetStorage().remove(
+    //   'username',
+    // );
+    // await GetStorage().remove(
+    //   'email',
+    // );
+    // await GetStorage().remove(
+    //   'firebase_email',
+    // );
+    // await GetStorage().remove(
+    //   'mobile',
+    // );
+    // await GetStorage().remove(
+    //   'photo',
+    // );
+    // await GetStorage().remove(
+    //   'status',
+    // );
+    //  Get.offAllNamed(RoutesName.LogIn);
+    // });
     await profileController.getProfile().then((value) => setState(() {
           isLoading = false;
         }));
@@ -119,13 +173,13 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading == true
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 buildBackGroundImage(),
                 Expanded(
                   child: ListView(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     children: [buildMoreDetails()],
                   ),
                 )
@@ -137,12 +191,12 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget buildMoreDetails() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       child: Container(
-        margin: EdgeInsets.only(left: 15, right: 15),
+        margin: const EdgeInsets.only(left: 15, right: 15),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -173,7 +227,7 @@ class _MoreScreenState extends State<MoreScreen> {
         Get.toNamed('terms_and_conditions');
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         child: Row(
           children: [
             buildTermsAndConditionsImage(),
@@ -198,7 +252,7 @@ class _MoreScreenState extends State<MoreScreen> {
         Get.toNamed('Support');
       },
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: Row(
           children: [
             buildHelpAndSupportImage(),
@@ -215,7 +269,7 @@ class _MoreScreenState extends State<MoreScreen> {
         Get.toNamed('privacy_policy');
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         child: Row(
           children: [
             buildPrivacyPolicyImage(),
@@ -228,7 +282,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildShareOption() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: Row(
         children: [
           buildShareImage(),
@@ -240,7 +294,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildRateOption() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: Row(
         children: [
           buildRateImage(),
@@ -256,7 +310,7 @@ class _MoreScreenState extends State<MoreScreen> {
         Get.toNamed('about');
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         child: Row(
           children: [
             buildAboutImage(),
@@ -269,7 +323,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildDeleteAccountOption() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: Row(
         children: [
           buildDeleteAccountImage(),
@@ -284,14 +338,14 @@ class _MoreScreenState extends State<MoreScreen> {
       margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Rate'.tr,
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
   }
 
   Widget buildDivider() {
     return Container(
-      margin: EdgeInsets.only(top: 20.0, bottom: 20),
+      margin: const EdgeInsets.only(top: 20.0, bottom: 20),
       color: R.colors.lightGrey,
       height: 2.0,
     );
@@ -330,7 +384,7 @@ class _MoreScreenState extends State<MoreScreen> {
         margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
         child: Text(
           'Delete Account'.tr,
-          style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+          style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
         ),
       ),
     );
@@ -349,7 +403,7 @@ class _MoreScreenState extends State<MoreScreen> {
       margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'About'.tr,
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
   }
@@ -375,7 +429,7 @@ class _MoreScreenState extends State<MoreScreen> {
       margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Share'.tr,
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
   }
@@ -385,7 +439,7 @@ class _MoreScreenState extends State<MoreScreen> {
       margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Privacy Policy'.tr,
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
   }
@@ -395,7 +449,7 @@ class _MoreScreenState extends State<MoreScreen> {
       margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
       child: Text(
         'Support'.tr,
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
   }
@@ -405,14 +459,14 @@ class _MoreScreenState extends State<MoreScreen> {
       margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0 ),
       child: Text(
         'Terms & Conditions'.tr,
-        style: TextStyle(fontSize: 14, fontFamily: 'medium'),
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
       ),
     );
   }
 
   Widget buildSubscribeButton() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customButton(
         margin: 20,
         width: MediaQuery.of(context).size.width,
@@ -430,11 +484,11 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildBackGroundImage() {
-    return Stack(alignment: Alignment.topLeft, children: [
+    return Stack( children: [
       Image.asset(
         R.images.backgroundImageChangePassword,
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 5,
+        height: Get.height * 0.25,
         fit: BoxFit.cover,
       ),
       buildOptions(),
@@ -462,7 +516,7 @@ class _MoreScreenState extends State<MoreScreen> {
       child: Row(
         children: [
           buildImage(),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           Column(
@@ -473,7 +527,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 style: TextStyle(
                     color: R.colors.white, fontFamily: 'bold', fontSize: 16),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               buildViewProfileLinkButton()
@@ -498,7 +552,7 @@ class _MoreScreenState extends State<MoreScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Are you sure you want to logout".tr),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -524,7 +578,7 @@ class _MoreScreenState extends State<MoreScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
@@ -555,7 +609,7 @@ class _MoreScreenState extends State<MoreScreen> {
         ));
       },
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: Row(
           children: [
             Image.asset(
@@ -563,12 +617,12 @@ class _MoreScreenState extends State<MoreScreen> {
               height: 20,
               width: 20,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
               'Logout'.tr,
-              style: TextStyle(fontFamily: 'semibold', fontSize: 12),
+              style: const TextStyle(fontFamily: 'semibold', fontSize: 12),
             )
           ],
         ),
@@ -577,30 +631,35 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Widget buildNotificationAndSettingsIcon() {
+    ProfileController homeController = Get.find<ProfileController>();
     return Row(
       children: [
-        Stack(
-          alignment: Alignment.topRight,
-          children: [
-            GestureDetector(
-              onTap: () => Get.toNamed(RoutesName.alerts),
-              child: Image.asset(
-                R.images.notificationIcon,
-                height: 20,
-                width: 20,
-              ),
+        Obx(
+          () => GestureDetector(
+            onTap: () => Get.toNamed(RoutesName.alerts),
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Image.asset(
+                  R.images.notificationIcon,
+                  height: 25,
+                  width: 25,
+                ),
+                if(homeController.alertCount.value > 0)
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: R.colors.buttonColor,
+                  ),
+                  height: 15,
+                  width: 15,
+                  child: Obx(() => Center(child: Text('${homeController.alertCount.value}',style: TextStyle(color: R.colors.black,fontSize: 8),))),
+                )
+              ],
             ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: R.colors.buttonColor,
-              ),
-              height: 10,
-              width: 10,
-            )
-          ],
+          ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
         InkWell(
@@ -609,8 +668,8 @@ class _MoreScreenState extends State<MoreScreen> {
           },
           child: Image.asset(
             R.images.settingsIcon,
-            height: 20,
-            width: 20,
+            height: 25,
+            width: 25,
           ),
         ),
       ],
@@ -660,16 +719,18 @@ class _MoreScreenState extends State<MoreScreen> {
                      GestureDetector(
                       onTap: (){
                         Get.to(() => const Registration());
+                        
                       },
                       child: Text('Add new account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
-                    //  GestureDetector(
-                    //   onTap: (){
-                    //     Get.toNamed(RoutesName.LogIn);
-                    //   },
-                    //   child: Text('Existing account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
+                     GestureDetector(
+                      onTap: (){
+                        Get.back();
+                        Get.toNamed(RoutesName.LogIn);
+                      },
+                      child: Text('Login'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
                    ],
                  ),
-                 const SizedBox(height: 10,),
+                 const  SizedBox(height: 10,),
                 Divider(color: R.colors.lightGrey,thickness: 0.5,),
                 const SizedBox(height: 10,),
                 if(profileController.accounts.value.success == true)
@@ -792,7 +853,7 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildSubscriptionImage() {
     return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: const EdgeInsets.only(top: 30),
         child: Image.asset(
           R.images.subscriptionImage,
           height: 90,
@@ -801,10 +862,10 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildSubScriptionTextHeading() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Text(
         'Subscription'.tr,
-        style: TextStyle(fontFamily: 'bold', fontSize: 18),
+        style: const TextStyle(fontFamily: 'bold', fontSize: 18),
       ),
     );
   }
@@ -812,7 +873,7 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget buildSubScriptionMessageDetail() {
     return Container(
       // height: 50,
-      margin: EdgeInsets.only(top: 20, left: 15, right: 15,bottom: 20),
+      margin: const EdgeInsets.only(top: 20, left: 15, right: 15,bottom: 20),
       child: Text(
         DummyData.longText,
         textAlign: TextAlign.center,
@@ -824,12 +885,12 @@ class _MoreScreenState extends State<MoreScreen> {
 
   Widget buildSubscribeAndNotNowButtonsInPoPup() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15),
       child: Row(
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: customButton(
                 margin: 0,
                 width: MediaQuery.of(context).size.width,
@@ -845,11 +906,11 @@ class _MoreScreenState extends State<MoreScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             child: customButton(
               optionalNavigateIcon: false,
               margin: 0,

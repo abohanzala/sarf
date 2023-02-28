@@ -121,29 +121,34 @@ class _AlertsScreenState extends State<AlertsScreen> {
                 itemCount: ctr.alerts.value.data?.alerts?.length,
                 itemBuilder: (context,index){
                   var singleData = ctr.alerts.value.data?.alerts?[index];
-                return Container(
-                      width: Get.width,
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-                      margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius:  BorderRadius.circular(10),
-                        color: R.colors.white,
+                return GestureDetector(
+                  onTap: (){
+                    ctr.readAlert(singleData!.id.toString());
+                  },
+                  child: Container(
+                        width: Get.width,
+                        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                        margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius:  BorderRadius.circular(10),
+                          color: R.colors.white,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(GetStorage().read('lang') == "en" ? singleData?.title?.en ?? '' : singleData?.title?.ar ?? '' ,style: TextStyle(color: R.colors.black,fontSize: 16,fontWeight: FontWeight.w500),),
+                                Text('${singleData?.createdDate} - ${singleData?.createdTime}',style: TextStyle(color: Color(0xFF28527A),fontSize: 14,fontWeight: FontWeight.w500),),
+                              ],
+                            ),
+                            const SizedBox(height: 8,),
+                            Text(GetStorage().read('lang') == "en" ? singleData?.description?.en ?? '' : singleData?.description?.ar ?? '',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500,height: 1.5),),
+                          ],
+                        ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(GetStorage().read('lang') == "en" ? singleData?.title?.en ?? '' : singleData?.title?.ar ?? '' ,style: TextStyle(color: R.colors.black,fontSize: 16,fontWeight: FontWeight.w500),),
-                              Text('${singleData?.createdDate} - ${singleData?.createdTime}',style: TextStyle(color: Color(0xFF28527A),fontSize: 14,fontWeight: FontWeight.w500),),
-                            ],
-                          ),
-                          const SizedBox(height: 8,),
-                          Text(GetStorage().read('lang') == "en" ? singleData?.description?.en ?? '' : singleData?.description?.ar ?? '',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500,height: 1.5),),
-                        ],
-                      ),
-                    );
+                );
                }),
              
            ),

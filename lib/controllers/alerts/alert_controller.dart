@@ -149,6 +149,77 @@ class AlertsController extends GetxController{
     return null;
   }
 
+Future readAlert(String id) async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+   // openLoader();
+  //  isLoadingAlert.value = true;
+   var request = {
+    "language": GetStorage().read('lang'),
+    "id": id,
+   };
+    var response =
+        await DioClient().post(ApiLinks.readAlert, request).catchError((error) {
+          debugPrint(error.toString());
+    //   if (error is BadRequestException) {
+    //     isLoadingAlert.value = false;
+    //      var apiError = json.decode(error.message!);
+    //     Get.snackbar(
+    //       'Error'.tr,
+    //       apiError["reason"].toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    //    // print(error.toString());
+    //   } else {
+    //     isLoadingAlert.value = false;
+    //   if (error is BadRequestException) {
+    //   var message = error.message;
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       message.toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // } else if (error is FetchDataException) {
+    //   var message = error.message;
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       message.toString(),
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // } else if (error is ApiNotRespondingException) {
+      
+    //   Get.snackbar(
+    //       'Error'.tr,
+    //       'Oops! It took longer to respond.'.tr,
+    //       snackPosition: SnackPosition.TOP,
+    //       backgroundColor: R.colors.themeColor,
+    //     );
+    // }
+
+    //   }
+    });
+    debugPrint(response.toString());
+    if(response == null) return; 
+    if (response['success'] == true) {
+      // isLoadingAlert.value = false;
+      // debugPrint(response.toString());
+      
+      //   alerts.value = Notifications();
+       
+    } else {
+      // isLoadingAlert.value = false;
+      // Get.snackbar(
+      //     'Error'.tr,
+      //     response['message'].toString(),
+      //     snackPosition: SnackPosition.TOP,
+      //     backgroundColor: R.colors.themeColor,
+      //   );
+      debugPrint('here');
+    }
+    return null;
+  }
 
 
 }

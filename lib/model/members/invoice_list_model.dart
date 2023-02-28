@@ -13,16 +13,16 @@ class InvoiceList {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    data['redirect'] = this.redirect;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    data['redirect'] = redirect;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -45,6 +45,7 @@ class Data {
   int? invoiceType;
   int? paidStatus;
   int? status;
+  int? viewed;
   String? createdDate;
   String? createdTime;
   Customer? customer;
@@ -64,6 +65,7 @@ class Data {
       this.invoiceType,
       this.paidStatus,
       this.status,
+      this.viewed,
       this.createdDate,
       this.createdTime,
       this.customer});
@@ -88,35 +90,37 @@ class Data {
     invoiceType = json['invoice_type'];
     paidStatus = json['paid_status'];
     status = json['status'];
+    viewed = json['is_viewed'];
     createdDate = json['created_date'];
     createdTime = json['created_time'];
     customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
+        ?  Customer.fromJson(json['customer'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['member_id'] = this.memberId;
-    data['amount'] = this.amount;
-    data['note'] = this.note;
-    if (this.attachments != null) {
-      data['attachments'] = this.attachments!.map((v) => v).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['member_id'] = memberId;
+    data['amount'] = amount;
+    data['note'] = note;
+    if (attachments != null) {
+      data['attachments'] = attachments!.map((v) => v).toList();
     }
-    data['expense_type_id'] = this.expenseTypeId;
-    data['budget_id'] = this.budgetId;
-    data['payment_type'] = this.paymentType;
-    data['is_reset'] = this.isReset;
-    data['is_approve'] = this.isApprove;
-    data['invoice_type'] = this.invoiceType;
-    data['paid_status'] = this.paidStatus;
-    data['status'] = this.status;
-    data['created_date'] = this.createdDate;
-    data['created_time'] = this.createdTime;
-    if (this.customer != null) {
-      data['customer'] = this.customer!.toJson();
+    data['expense_type_id'] = expenseTypeId;
+    data['budget_id'] = budgetId;
+    data['payment_type'] = paymentType;
+    data['is_reset'] = isReset;
+    data['is_approve'] = isApprove;
+    data['invoice_type'] = invoiceType;
+    data['paid_status'] = paidStatus;
+    data['status'] = status;
+    data['is_viewed'] = viewed;
+    data['created_date'] = createdDate;
+    data['created_time'] = createdTime;
+    if (customer != null) {
+      data['customer'] = customer!.toJson();
     }
     return data;
   }
@@ -138,11 +142,11 @@ class Customer {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['username'] = this.username;
-    data['mobile'] = this.mobile;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['username'] = username;
+    data['mobile'] = mobile;
     return data;
   }
 }

@@ -9,6 +9,7 @@ import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/model/members/invoice_list_model.dart';
 
 import '../../../resources/resources.dart';
+import '../../utils/navigation_observer.dart';
 import 'invoice_details.dart';
 
 class InvoiceListScreenHome extends StatefulWidget {
@@ -20,7 +21,7 @@ class InvoiceListScreenHome extends StatefulWidget {
   State<InvoiceListScreenHome> createState() => _InvoiceListScreenHomeState();
 }
 
-class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> {
+class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> with RouteAware {
   InvoiceController ctr = Get.find<InvoiceController>();
   TextEditingController searchValue = TextEditingController();
   Timer? searchOnStoppedTyping;
@@ -67,6 +68,9 @@ class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> {
     }
 @override
 void initState() {
+  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  });
   searchValue.clear();
     loadMembers();
     super.initState();
@@ -86,6 +90,13 @@ loadMembers(){
     
   });
 }
+@override
+  void didPopNext() {
+    
+    loadMembers();
+    
+    super.didPopNext();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,7 +273,7 @@ loadMembers(){
                         var singleData = data[index];
                         return GestureDetector(
                           onTap: (){
-                            Get.to(() => InvoiceDetails(id: singleData.id.toString(),) );
+                            Get.to(() => InvoiceDetails(id: singleData!.id.toString(),) );
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -284,6 +295,19 @@ loadMembers(){
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
+                                      Row(
+                                        children: [
+                                          if(singleData?.viewed == 0 ) ...[
+                                        Container(
+                                                width: 10,
+                                                height: 10,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10,),
+                                      ],
                                       Text(
                                         'Invoice ID'.tr,
                                         style: TextStyle(
@@ -291,6 +315,8 @@ loadMembers(){
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w600,
                                         ),
+                                      ),
+                                        ],
                                       ),
                                       Text(
                                         singleData?.createdDate ?? '',
@@ -304,7 +330,8 @@ loadMembers(){
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    singleData!.id.toString(),
+                                    "${index + 1}",
+                                    // singleData!.id.toString(),
                                     style: TextStyle(
                                       color: R.colors.black,
                                       fontSize: 18.sp,
@@ -320,7 +347,7 @@ loadMembers(){
                                       )),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    singleData.customer?.name ?? '',
+                                    singleData?.customer?.name ?? '',
                                     style: TextStyle(
                                       color: R.colors.black,
                                       fontSize: 18.sp,
@@ -338,7 +365,7 @@ loadMembers(){
                                     child: Align(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          '${"Amount".tr} ${singleData.amount}',
+                                          '${"Amount".tr} ${singleData?.amount}',
                                           style: TextStyle(
                                             color: R.colors.blueGradient1,
                                             fontSize: 16.sp,

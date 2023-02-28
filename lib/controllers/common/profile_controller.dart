@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import 'package:sarf/model/moreModel/account_model.dart';
+import 'package:sarf/model/moreModel/alerts_model.dart';
 import 'package:sarf/src/Auth/change_password.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
@@ -27,6 +28,7 @@ class ProfileController extends GetxController {
   TextEditingController contactController = TextEditingController();
   TextEditingController whatsappController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
+  var alertCount = 0.obs;
 
   var location = ''.obs;
   var location_lat = ''.obs;
@@ -39,6 +41,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     // GetStorage().write('lang', 'en');
+    getAlertCount();
     getProfile();
     getAccounts();
     super.onInit();
@@ -201,6 +204,53 @@ class ProfileController extends GetxController {
     return null;
     // return null;
   }
+
+
+  Future getAlertCount() async {
+    
+
+    var request = {
+      'language': GetStorage().read('lang'),
+    };
+    
+
+    
+
+    var response =
+        await DioClient().post(ApiLinks.alertCount, request).catchError((error) {
+      if (error is BadRequestException) {
+        
+        var apiError = json.decode(error.message!);
+        debugPrint(apiError.toString());
+
+        
+      } else {
+        
+        debugPrint('Something went Wrong===============${error.toString()}');
+        
+      }
+    });
+    
+    debugPrint("This ==================$response");
+    if (response['success'] == true) {
+     
+     var data = AlertsCount.fromJson(response);
+     if(data.data?.alertCount != null){
+      alertCount.value = data.data!.alertCount!;
+     }
+
+     
+     
+
+    } else {
+      alertCount.value = 0;
+      debugPrint(response.toString());
+    }
+    return null;
+    // return null;
+  }
+
+
   Future login(String phone,String password,String groupId) async {
     openLoader();
     

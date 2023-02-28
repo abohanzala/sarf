@@ -45,4 +45,6 @@ class ApiLinks {
   static const String firebaseFileStorage = '$base/firebase_file_upload';
   static const String getAccounts = '$base/group_accounts';
   static const String getUserList = '$base/user/list';
+  static const String alertCount = '$base/more_screen';
+  static const String readAlert = '$base/alerts/read';
 }

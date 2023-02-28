@@ -21,6 +21,7 @@ var selectedBudgetId = ''.obs;
 var selectedBudgetNumbder = "".obs;
 var selectedBudgetName = "".obs;
 var qrCode = "".obs;
+var alertCount = 0.obs;
 //var expansetype = ''.obs;
 var currency = ''.obs;
 var totalInvoices = ''.obs;
@@ -93,6 +94,7 @@ Future getHome(String? id) async {
         var data = HomeData.fromJson(response);
         //print( " asasasasasas ${data.data?.budgets?.length.toString()}" );
         if(data.data != null){
+          alertCount.value = data.data?.alertCount ?? 0;
           for (var budget in data.data!.budgets!) {
           budgets.add(budget);
         }

@@ -293,7 +293,7 @@ class InvoiceController extends getpackage.GetxController {
       debugPrint(searchedUsers.value.data.toString());
       
     } else {
-      
+      searchedUsers.value = SearchedMobileList();
       debugPrint('here error');
     }
     return null;

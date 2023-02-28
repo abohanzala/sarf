@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 
@@ -143,23 +144,44 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                               itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
                                                               itemBuilder: (context,index){
                                                                 var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
-                                                              return Container(
-                                                                
-                                                                width: 60,
-                                                                height: 60,
-                                                                margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                //padding: const EdgeInsets.all(8),
-                                                                decoration: BoxDecoration(
-                                                                  color: R.colors.grey,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(10),
+                                                              return GestureDetector(
+                                                                onTap: ()async{
+                                                                  try {
+  // Saved with this method.
+                                                                      var imageId = await ImageDownloader.downloadImage("${ApiLinks.assetBasePath}$singleAttach",destination: AndroidDestinationType.directoryDownloads..subDirectory("Sarf/$singleAttach") );
+                                                                      if (imageId == null) {
+                                                                        return;
+                                                                      }
+
+                                                                      // Below is a method of obtaining saved image information.
+                                                                      var fileName = await ImageDownloader.findName(imageId);
+                                                                      var path = await ImageDownloader.findPath(imageId);
+                                                                      var size = await ImageDownloader.findByteSize(imageId);
+                                                                      var mimeType = await ImageDownloader.findMimeType(imageId);
+                                                                      
+                                                                    } on PlatformException catch (error) {
+                                                                      
+                                                                      debugPrint(error.toString());
+                                                                    }
+                                                                },
+                                                                child: Container(
+                                                                  
+                                                                  width: 60,
+                                                                  height: 60,
+                                                                  margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                  //padding: const EdgeInsets.all(8),
+                                                                  decoration: BoxDecoration(
+                                                                    color: R.colors.grey,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(10),
+                                                                  ),
+                                                                  child: ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(10),
+                                                                    child: Image.network("${ApiLinks.assetBasePath}$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+                                                                      return  Center(child: Text('No Data'.tr));
+                                                                    } ,)),
                                                                 ),
-                                                                child: ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(10),
-                                                                  child: Image.network("${ApiLinks.assetBasePath}$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
-                                                                    return  Center(child: Text('No Data'.tr));
-                                                                  } ,)),
                                                               );
                                                             
                                                             }),
@@ -208,23 +230,42 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                               itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
                                                               itemBuilder: (context,index){
                                                                 var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
-                                                              return Container(
-                                                                
-                                                                width: 60,
-                                                                height: 60,
-                                                                margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                //padding: const EdgeInsets.all(8),
-                                                                decoration: BoxDecoration(
-                                                                  color: R.colors.grey,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(10),
+                                                              return GestureDetector(
+                                                                onTap: ()async{
+                                                                  try {
+  // Saved with this method.
+                                                                      var imageId = await ImageDownloader.downloadImage("${ApiLinks.assetBasePath}$singleAttach",destination: AndroidDestinationType.directoryDownloads..subDirectory("Sarf/$singleAttach") );
+                                                                      if (imageId == null) {
+                                                                        return;
+                                                                      }
+
+                                                                      // Below is a method of obtaining saved image information.
+                                                                      var fileName = await ImageDownloader.findName(imageId);
+                                                                      var path = await ImageDownloader.findPath(imageId);
+                                                                      var size = await ImageDownloader.findByteSize(imageId);
+                                                                      var mimeType = await ImageDownloader.findMimeType(imageId);
+                                                                    } on PlatformException catch (error) {
+                                                                      debugPrint(error.toString());
+                                                                    }
+                                                                },
+                                                                child: Container(
+                                                                  
+                                                                  width: 60,
+                                                                  height: 60,
+                                                                  margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                  //padding: const EdgeInsets.all(8),
+                                                                  decoration: BoxDecoration(
+                                                                    color: R.colors.grey,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(10),
+                                                                  ),
+                                                                  child: ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(10),
+                                                                    child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+                                                                      return  Center(child: Text('No Data'.tr));
+                                                                    },)),
                                                                 ),
-                                                                child: ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(10),
-                                                                  child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
-                                                                    return  Center(child: Text('No Data'.tr));
-                                                                  },)),
                                                               );
                                                             
                                                             }),

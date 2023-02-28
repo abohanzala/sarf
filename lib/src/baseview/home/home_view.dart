@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sarf/controllers/home/home_controller.dart';
 import 'package:sarf/src/baseview/Invoices/invoice_list_home.dart';
+import 'package:sarf/src/utils/routes_name.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -45,7 +46,34 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       }
       
+    }).catchError((error) async{
+    await GetStorage().remove('user_token');
+    await GetStorage().remove('groupId');
+    await GetStorage().remove('userId');
+    await GetStorage().remove(
+      'name',
+    );
+    await GetStorage().remove(
+      'username',
+    );
+    await GetStorage().remove(
+      'email',
+    );
+    await GetStorage().remove(
+      'firebase_email',
+    );
+    await GetStorage().remove(
+      'mobile',
+    );
+    await GetStorage().remove(
+      'photo',
+    );
+    await GetStorage().remove(
+      'status',
+    );
+     Get.offAllNamed(RoutesName.LogIn);
     });
+   
   }
   @override
   void dispose() {
@@ -112,7 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      GestureDetector(
+                                      if(ctr.selectedBudgetName.value !=
+                                              GetStorage().read('name')) ... [
+                                        GestureDetector(
                                         onTap: () {
                                           if (ctr.selectedBudgetId.value ==
                                               '') {
@@ -133,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                      Text("Are you sure you want to delete this budget".tr),
-                                     SizedBox(height: 10,),
+                                     const SizedBox(height: 10,),
                                      Row(
                                       children: [
                                         Expanded(
@@ -154,9 +184,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                style: TextStyle(color: R.colors.white),
                                              )),
                                            ),
-                                                                               ),
+                                          ),
                                         ),
-                                       SizedBox(width: 10,),
+                                       const SizedBox(width: 10,),
                                        Expanded(
                                          child: InkWell(
                                            onTap: (){
@@ -192,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: R.colors.blackSecondery),
                                         ),
                                       ),
-                                      const SizedBox(
+                                       const SizedBox(
                                         height: 10,
                                       ),
                                       Divider(
@@ -202,6 +232,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(
                                         height: 10,
                                       ),
+                                      ],
+                                     
                                       GestureDetector(
                                         onTap: () {
                                           if (ctr.selectedBudgetId.value ==
@@ -481,6 +513,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
+                                            if(singleExpanse.unviewInvoice != null && singleExpanse.unviewInvoice! > 0 ) ...[
+                                              Container(
+                                                width: 10,
+                                                height: 10,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10,),
+                                            ],
                                             Text(
                                               ctr.currency.value,
                                               style:
@@ -526,12 +569,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Border.all(color: R.colors.grey, width: 1)),
                           child: Column(
                             children: [
-                               SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Screenshot(
-                                  controller: screenshotController,
-                                  child: Container(
+                              Screenshot(controller: screenshotController, child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child:  Container(
                                     color: R.colors.white,
                                     child: QrImage(
                                               data: ctr.qrCode.value,
@@ -539,13 +582,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                               size: 100.0,
                                             ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(
+                                  ),
+                                   const SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                '${ctr.selectedBudgetName} - ${'QR code'.tr}',
+                                '${ctr.selectedBudgetName}',
+                                // - ${'QR code'.tr
                                 style: TextStyle(color: R.colors.grey),
                               ),
                               // const SizedBox(
@@ -558,6 +601,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
+
+                                ],
+                              )),
+                              //  SizedBox(
+                              //   width: 100,
+                              //   height: 100,
+                              //   child: Screenshot(
+                              //     controller: screenshotController,
+                              //     child: Container(
+                              //       color: R.colors.white,
+                              //       child: QrImage(
+                              //                 data: ctr.qrCode.value,
+                              //                 version: QrVersions.auto,
+                              //                 size: 100.0,
+                              //               ),
+                              //     ),
+                              //   ),
+                              // ),
+                             
                               Text(
                                 ctr.qrCode.value,
                                 style: TextStyle(color: R.colors.black),

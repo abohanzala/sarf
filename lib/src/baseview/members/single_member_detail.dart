@@ -306,14 +306,16 @@ launchPhone({required Uri u}) async {
                     ],
                   ),
                   const SizedBox(height: 5,),
-                  Text(data!.id.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                  Text(
+                    "${index + 1}"
+                  ,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                   const SizedBox(height: 10,),
                   Text('Amount'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                   const SizedBox(height: 5,),
                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text( data.amount.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                      Text( data!.amount.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       GestureDetector(
                         onTap: () => Get.to( () => InvoiceDetails(id: data.id.toString(),) ),
                         child: Text('Details'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,

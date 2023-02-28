@@ -123,15 +123,17 @@ class ExpenseTypes {
   String? expenseName;
   String? expenseNameAr;
   int? invoiceSumAmount;
+  int? unviewInvoice;
 
   ExpenseTypes(
-      {this.id, this.expenseName, this.expenseNameAr, this.invoiceSumAmount});
+      {this.id, this.expenseName, this.expenseNameAr, this.invoiceSumAmount,this.unviewInvoice});
 
   ExpenseTypes.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     expenseName = json['expense_name'];
     expenseNameAr = json['expense_name_ar'];
     invoiceSumAmount = json['invoice_sum_amount'];
+    unviewInvoice = json['unview_invoice_count'];
   }
 
   Map<String, dynamic> toJson() {
@@ -140,6 +142,7 @@ class ExpenseTypes {
     data['expense_name'] = expenseName;
     data['expense_name_ar'] = expenseNameAr;
     data['invoice_sum_amount'] = invoiceSumAmount;
+    data['unview_invoice_count'] = unviewInvoice;
     return data;
   }
 }
