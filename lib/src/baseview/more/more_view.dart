@@ -488,7 +488,7 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
       Image.asset(
         R.images.backgroundImageChangePassword,
         width: MediaQuery.of(context).size.width,
-        height: Get.height * 0.25,
+        height: Get.height * 0.23,
         fit: BoxFit.cover,
       ),
       buildOptions(),

@@ -390,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 2,
                                   ),
                                   Text(
-                                    "${ctr.budgets.length}",
+                                    "#${ctr.budgets.length}",
                                     style: TextStyle(
                                       color: R.colors.white,
                                       decoration: TextDecoration.underline,
@@ -458,7 +458,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "${singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number ?? ''}",
+                                                "${singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number == '#0' ? '' : singleData.number ?? ''}",
                                                 style: const TextStyle(
                                                     fontSize: 14),
                                                     overflow: TextOverflow.ellipsis,
