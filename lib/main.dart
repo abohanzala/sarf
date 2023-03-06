@@ -7,8 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/firebase_options.dart';
-import 'package:sarf/src/Auth/change_profile.dart';
-import 'package:sarf/src/Auth/otp_Forgot_Password.dart';
 import 'package:sarf/src/utils/navigation_observer.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
@@ -31,7 +29,7 @@ import 'src/utils/routes_name.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -69,7 +67,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           builder: BotToastInit(),
-         // navigatorObservers: [BotToastNavigatorObserver()],
+          // navigatorObservers: [BotToastNavigatorObserver()],
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
