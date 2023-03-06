@@ -16,12 +16,6 @@ class LoginController extends GetxController {
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  @override
-  void onInit() {
-    
-    super.onInit();
-  }
-
   Future login() async {
     openLoader();
     var a = phone.text;
@@ -96,7 +90,9 @@ class LoginController extends GetxController {
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
       await GetStorage().write('groupId', userInfo.user!.groupId);
-      await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile'));
+      await GetStorage().write('user_lang', userInfo.user!.locale);
+      await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
+          GetStorage().read('mobile'));
       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();
@@ -109,8 +105,9 @@ class LoginController extends GetxController {
     }
     return null;
   }
-  Future createFirebaseUser(String email,String password) async {
-    await signIn(email,password);
+
+  Future createFirebaseUser(String email, String password) async {
+    await signIn(email, password);
     // // final user = firebase_auth.FirebaseAuth.instance.currentUser;
     // // print(user);
     // if (user != null) {
@@ -121,42 +118,39 @@ class LoginController extends GetxController {
     // }
   }
 
-  Future signIn(String email,String password) async {
+  Future signIn(String email, String password) async {
     // try {
-      await firebase_auth.FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password).then((value){
-            // SnakeBars.showSuccessSnake(description: "FireBase signin");
-            //Get.snackbar('FireBase signin', '');
-          }).catchError((error) async{
-            if (error.code == 'user-not-found' ) {
-              await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
-              email: email,
-              password: password).then((value){
-                //  SnakeBars.showSuccessSnake(description: "FireBase Created");
-               // Get.snackbar('FireBase created', '');
-              }).catchError((error){
-                // DialogBoxes.showErroDialog(description: error.code);
-              });
-              
-            }
-            // DialogBoxes.showErroDialog(description: error.code);
-            debugPrint('Firebase signin ${error.code}');
-          });
+    await firebase_auth.FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      // SnakeBars.showSuccessSnake(description: "FireBase signin");
+      //Get.snackbar('FireBase signin', '');
+    }).catchError((error) async {
+      if (error.code == 'user-not-found') {
+        await firebase_auth.FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) {
+          //  SnakeBars.showSuccessSnake(description: "FireBase Created");
+          // Get.snackbar('FireBase created', '');
+        }).catchError((error) {
+          // DialogBoxes.showErroDialog(description: error.code);
+        });
+      }
+      // DialogBoxes.showErroDialog(description: error.code);
+      debugPrint('Firebase signin ${error.code}');
+    });
 
-          //  final user = _auth.currentUser;
-          //   if (user != null) {
-          //     loggedInUser = user;
-          //     // print(loggedInUser?.email);
-          //   }
-      
+    //  final user = _auth.currentUser;
+    //   if (user != null) {
+    //     loggedInUser = user;
+    //     // print(loggedInUser?.email);
+    //   }
+
     // } catch (e) {
     //   //var error =
-      
+
     //    //debugPrint('Firebase signin ${e['code']}');
     // }
-
-   
   }
 
   Future signUp() async {
