@@ -2,13 +2,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sarf/controllers/auth/register_controller.dart';
 import 'package:sarf/model/moreModel/account_model.dart';
 import 'package:sarf/model/moreModel/alerts_model.dart';
-import 'package:sarf/src/Auth/change_password.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
-import '../../model/moreModel/about.dart';
 import '../../model/moreModel/profile.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -37,7 +34,6 @@ class ProfileController extends GetxController {
   ProfileModel? profileModel;
   Rx<UserAccounts> accounts = UserAccounts().obs;
 
-
   @override
   void onInit() {
     // GetStorage().write('lang', 'en');
@@ -61,7 +57,7 @@ class ProfileController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
     };
-    print("This is my request====================${request}");
+    print("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -71,7 +67,7 @@ class ProfileController extends GetxController {
         Get.back();
         Get.snackbar(
           'Error'.tr,
-          '${message}',
+          '$message',
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
@@ -85,13 +81,13 @@ class ProfileController extends GetxController {
         //HandlingErrors().handleError(error);
       }
     });
+    if (response == null) return;
     message = response['message'];
-    // if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
       profileModel = ProfileModel.fromJson(response);
-      print('This is ===================${profileModel}');
+      print('This is ===================$profileModel');
       nameController.text = profileModel!.user!.name == null
           ? ''
           : nameController.text = profileModel!.user!.name!;
@@ -143,12 +139,11 @@ class ProfileController extends GetxController {
       //   }).catchError((error){
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
-
     } else {
       Get.back();
       Get.snackbar(
         'Error'.tr,
-        '${message}',
+        '$message',
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
@@ -173,31 +168,29 @@ class ProfileController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
     };
-    
 
     //DialogBoxes.openLoadingDialog();
 
-    var response =
-        await DioClient().post(ApiLinks.getAccounts, request).catchError((error) {
+    var response = await DioClient()
+        .post(ApiLinks.getAccounts, request)
+        .catchError((error) {
       if (error is BadRequestException) {
-        
         var apiError = json.decode(error.message!);
         debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
-        
         debugPrint('Something went Wrong===============${error.toString()}');
         //HandlingErrors().handleError(error);
       }
     });
     //message = response['message'];
+    if (response == null) return;
     debugPrint("This ==================$response");
     if (response['success'] == true) {
-     //debugPrint("This ==================$response");
-     var data = UserAccounts.fromJson(response);
+      //debugPrint("This ==================$response");
+      var data = UserAccounts.fromJson(response);
       accounts.value = data;
-
     } else {
       debugPrint(response.toString());
     }
@@ -205,62 +198,49 @@ class ProfileController extends GetxController {
     // return null;
   }
 
-
   Future getAlertCount() async {
-    
-
     var request = {
       'language': GetStorage().read('lang'),
     };
-    
 
-    
-
-    var response =
-        await DioClient().post(ApiLinks.alertCount, request).catchError((error) {
+    var response = await DioClient()
+        .post(ApiLinks.alertCount, request)
+        .catchError((error) {
       if (error is BadRequestException) {
-        
         var apiError = json.decode(error.message!);
         debugPrint(apiError.toString());
-
-        
       } else {
-        
         debugPrint('Something went Wrong===============${error.toString()}');
-        
       }
     });
-    
+
+    if (response == null) return;
     debugPrint("This ==================$response");
-    if (response['success'] == true) {
-     
-     var data = AlertsCount.fromJson(response);
-     if(data.data?.alertCount != null){
-      alertCount.value = data.data!.alertCount!;
-     }
-
-     
-     
-
-    } else {
-      alertCount.value = 0;
-      debugPrint(response.toString());
+    if (response != null) {
+      if (response['success'] == true) {
+        var data = AlertsCount.fromJson(response);
+        if (data.data?.alertCount != null) {
+          alertCount.value = data.data!.alertCount!;
+        }
+      } else {
+        alertCount.value = 0;
+        debugPrint(response.toString());
+      }
     }
     return null;
     // return null;
   }
 
-
-  Future login(String phone,String password,String groupId) async {
+  Future login(String phone, String password, String groupId) async {
     openLoader();
-    
+
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phone,
       'password': password,
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
-      "group_id" : groupId
+      "group_id": groupId
     };
     debugPrint("This is my request====================$request");
     var response =
@@ -323,10 +303,11 @@ class ProfileController extends GetxController {
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
       await GetStorage().write('groupId', userInfo.user!.groupId);
-      await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile'));
-       MyBottomNavigationController ctr =
-      Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-  ctr.tabIndex.value = 0;
+      await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
+          GetStorage().read('mobile'));
+      MyBottomNavigationController ctr =
+          Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      ctr.tabIndex.value = 0;
       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();
@@ -339,8 +320,9 @@ class ProfileController extends GetxController {
     }
     return null;
   }
-   Future createFirebaseUser(String email,String password) async {
-    await signIn(email,password);
+
+  Future createFirebaseUser(String email, String password) async {
+    await signIn(email, password);
     // // final user = firebase_auth.FirebaseAuth.instance.currentUser;
     // // print(user);
     // if (user != null) {
@@ -351,42 +333,39 @@ class ProfileController extends GetxController {
     // }
   }
 
-  Future signIn(String email,String password) async {
+  Future signIn(String email, String password) async {
     // try {
-      await firebase_auth.FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password).then((value){
-            // SnakeBars.showSuccessSnake(description: "FireBase signin");
-            //Get.snackbar('FireBase signin', '');
-          }).catchError((error) async{
-            if (error.code == 'user-not-found' ) {
-              await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
-              email: email,
-              password: password).then((value){
-                //  SnakeBars.showSuccessSnake(description: "FireBase Created");
-               // Get.snackbar('FireBase created', '');
-              }).catchError((error){
-                // DialogBoxes.showErroDialog(description: error.code);
-              });
-              
-            }
-            // DialogBoxes.showErroDialog(description: error.code);
-            debugPrint('Firebase signin ${error.code}');
-          });
+    await firebase_auth.FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      // SnakeBars.showSuccessSnake(description: "FireBase signin");
+      //Get.snackbar('FireBase signin', '');
+    }).catchError((error) async {
+      if (error.code == 'user-not-found') {
+        await firebase_auth.FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) {
+          //  SnakeBars.showSuccessSnake(description: "FireBase Created");
+          // Get.snackbar('FireBase created', '');
+        }).catchError((error) {
+          // DialogBoxes.showErroDialog(description: error.code);
+        });
+      }
+      // DialogBoxes.showErroDialog(description: error.code);
+      debugPrint('Firebase signin ${error.code}');
+    });
 
-          //  final user = _auth.currentUser;
-          //   if (user != null) {
-          //     loggedInUser = user;
-          //     // print(loggedInUser?.email);
-          //   }
-      
+    //  final user = _auth.currentUser;
+    //   if (user != null) {
+    //     loggedInUser = user;
+    //     // print(loggedInUser?.email);
+    //   }
+
     // } catch (e) {
     //   //var error =
-      
+
     //    //debugPrint('Firebase signin ${e['code']}');
     // }
-
-   
   }
 
   Future signUp() async {
