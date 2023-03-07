@@ -15,7 +15,8 @@ import '../../widgets/custom_appbar.dart';
 
 class InvoiceDetails extends StatefulWidget {
   final String id;
-  const InvoiceDetails({super.key, required this.id});
+  final String invoiceNum;
+  const InvoiceDetails({super.key, required this.id, required this.invoiceNum});
 
   @override
   State<InvoiceDetails> createState() => _InvoiceDetailsState();
@@ -87,7 +88,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                           ],
                         ),
                         const SizedBox(height: 5,),
-                        Text(ctr.inVoiceDetails.value.data!.id.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                        Text(widget.invoiceNum,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                         const SizedBox(height: 10,),
                         Text('Customer Name'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                          const SizedBox(height: 5,),
@@ -212,76 +213,76 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
              child: Text('Sent Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
            ),
            const SizedBox(height: 8,),
-           Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 12),
-             child: Container(
-                                  width: Get.width,
-                                  padding: const EdgeInsets.symmetric(vertical: 0),
-                                  height: 80,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
+  //          Padding(
+  //            padding: const EdgeInsets.symmetric(horizontal: 12),
+  //            child: Container(
+  //                                 width: Get.width,
+  //                                 padding: const EdgeInsets.symmetric(vertical: 0),
+  //                                 height: 80,
+  //                                 child: Row(
+  //                                   mainAxisAlignment: MainAxisAlignment.start,
+  //                                   children: [
                                                       
                                   
-                                                          Expanded(
-                                                            child: ListView.builder(
-                                                              scrollDirection: Axis.horizontal,
-                                                              shrinkWrap: true,
-                                                              itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
-                                                              itemBuilder: (context,index){
-                                                                var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
-                                                              return GestureDetector(
-                                                                onTap: ()async{
-                                                                  try {
-  // Saved with this method.
-                                                                      var imageId = await ImageDownloader.downloadImage("${ApiLinks.assetBasePath}$singleAttach",destination: AndroidDestinationType.directoryDownloads..subDirectory("Sarf/$singleAttach") );
-                                                                      if (imageId == null) {
-                                                                        return;
-                                                                      }
+  //                                                         Expanded(
+  //                                                           child: ListView.builder(
+  //                                                             scrollDirection: Axis.horizontal,
+  //                                                             shrinkWrap: true,
+  //                                                             itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
+  //                                                             itemBuilder: (context,index){
+  //                                                               var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
+  //                                                             return GestureDetector(
+  //                                                               onTap: ()async{
+  //                                                                 try {
+  // // Saved with this method.
+  //                                                                     var imageId = await ImageDownloader.downloadImage("${ApiLinks.assetBasePath}$singleAttach",destination: AndroidDestinationType.directoryDownloads..subDirectory("Sarf/$singleAttach") );
+  //                                                                     if (imageId == null) {
+  //                                                                       return;
+  //                                                                     }
 
-                                                                      // Below is a method of obtaining saved image information.
-                                                                      var fileName = await ImageDownloader.findName(imageId);
-                                                                      var path = await ImageDownloader.findPath(imageId);
-                                                                      var size = await ImageDownloader.findByteSize(imageId);
-                                                                      var mimeType = await ImageDownloader.findMimeType(imageId);
-                                                                    } on PlatformException catch (error) {
-                                                                      debugPrint(error.toString());
-                                                                    }
-                                                                },
-                                                                child: Container(
+  //                                                                     // Below is a method of obtaining saved image information.
+  //                                                                     var fileName = await ImageDownloader.findName(imageId);
+  //                                                                     var path = await ImageDownloader.findPath(imageId);
+  //                                                                     var size = await ImageDownloader.findByteSize(imageId);
+  //                                                                     var mimeType = await ImageDownloader.findMimeType(imageId);
+  //                                                                   } on PlatformException catch (error) {
+  //                                                                     debugPrint(error.toString());
+  //                                                                   }
+  //                                                               },
+  //                                                               child: Container(
                                                                   
-                                                                  width: 60,
-                                                                  height: 60,
-                                                                  margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                  //padding: const EdgeInsets.all(8),
-                                                                  decoration: BoxDecoration(
-                                                                    color: R.colors.grey,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(10),
-                                                                  ),
-                                                                  child: ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(10),
-                                                                    child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
-                                                                      return  Center(child: Text('No Data'.tr));
-                                                                    },)),
-                                                                ),
-                                                              );
+  //                                                                 width: 60,
+  //                                                                 height: 60,
+  //                                                                 margin: const EdgeInsets.only(right: 10,top: 5),
+  //                                                                 //padding: const EdgeInsets.all(8),
+  //                                                                 decoration: BoxDecoration(
+  //                                                                   color: R.colors.grey,
+  //                                                                   borderRadius:
+  //                                                                       BorderRadius.circular(10),
+  //                                                                 ),
+  //                                                                 child: ClipRRect(
+  //                                                                   borderRadius:
+  //                                                                       BorderRadius.circular(10),
+  //                                                                   child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+  //                                                                     return  Center(child: Text('No Data'.tr));
+  //                                                                   },)),
+  //                                                               ),
+  //                                                             );
                                                             
-                                                            }),
-                                                          ),
-                                    ],
-                                  ),
-                                ),
-            //  Container(
-            //   width: 60,
-            //   height: 60,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(8),
-            //     color: R.colors.grey
-            //      ),
-            //  ),
-           ),
+  //                                                           }),
+  //                                                         ),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //           //  Container(
+  //           //   width: 60,
+  //           //   height: 60,
+  //           //   decoration: BoxDecoration(
+  //           //     borderRadius: BorderRadius.circular(8),
+  //           //     color: R.colors.grey
+  //           //      ),
+  //           //  ),
+  //          ),
            const SizedBox(height: 10,),
            Padding(
              padding: const EdgeInsets.symmetric(horizontal: 12),

@@ -90,13 +90,13 @@ loadMembers(){
     
   });
 }
-@override
-  void didPopNext() {
+// @override
+//   void didPopNext() {
     
-    loadMembers();
+//     loadMembers();
     
-    super.didPopNext();
-  }
+//     super.didPopNext();
+//   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -273,7 +273,7 @@ loadMembers(){
                         var singleData = data[index];
                         return GestureDetector(
                           onTap: (){
-                            Get.to(() => InvoiceDetails(id: singleData!.id.toString(),) );
+                            Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${index + 1}",) );
                           },
                           child: Container(
                             decoration: BoxDecoration(

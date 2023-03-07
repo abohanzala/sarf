@@ -39,20 +39,23 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Scaffold(
-            backgroundColor: const Color(0xFFF2F2F9),
-            body: Stack(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
               children: [
-                buildBackGroundImage(),
+                
+                      buildBackGroundImage(),
+                     
+                    ],
+            ),
+                 buildLoginCard(),
               ],
             ),
-          ),
-          buildLoginCard(),
-        ],
       ),
-    );
+        
+      );
+    
   }
 
   buildBackGroundImage() {
@@ -83,32 +86,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget buildLoginCard() {
-    return Positioned(
-      top: 250,
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        child: Column(
-          children: [
-            buildLoginTextAndLanguageOptions(),
-            Form(
-              key: loginController.loginFormKey,
-              child: Column(
-                children: [
-                  buildPhoneFieldForLogin(),
-                  buildPasswordField(),
-                ],
-              ),
+    return Container(
+      // height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      child: Column(
+        children: [
+          buildLoginTextAndLanguageOptions(),
+          Form(
+            key: loginController.loginFormKey,
+            child: Column(
+              children: [
+                buildPhoneFieldForLogin(),
+                buildPasswordField(),
+              ],
             ),
-            buildForgotPassword(),
-            buildNextButton(),
-            buildDontHaveAnAccount()
-          ],
-        ),
+          ),
+          buildForgotPassword(),
+          buildNextButton(),
+          buildDontHaveAnAccount()
+        ],
       ),
     );
   }

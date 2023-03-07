@@ -434,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               (index + 1);
                                           ctr.selectedBudgetId.value =
                                               singleData.id.toString();
-                                          ctr.selectedBudgetNumbder.value = singleData.number ?? '';    
+                                          ctr.selectedBudgetNumbder.value = singleData.number == '#0' ? '' : singleData.number ?? '' ;    
                                           ctr.selectedBudgetName.value = singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? '' ;    
                                           debugPrint(
                                               ctr.selectedBudgetId.value);
