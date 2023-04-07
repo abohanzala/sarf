@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
@@ -26,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController password = TextEditingController();
   FocusNode searchFieldNode = FocusNode();
   LoginController loginController = Get.find<LoginController>();
+  var loginFormKey = GlobalKey<FormState>();
   ForgotPasswordController forgotPasswordController =
       Get.find<ForgotPasswordController>();
 
@@ -38,23 +42,31 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                
-                      buildBackGroundImage(),
-                     
-                    ],
-            ),
-                 buildLoginCard(),
-              ],
-            ),
-      ),
-        
-      );
+    return WillPopScope(
+      onWillPop: () async{
+        // exit(0);
+        //  SystemNavigator.pop();
+        SystemNavigator.pop(animated: true);
+         return true;
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  
+                        buildBackGroundImage(),
+                       
+                      ],
+              ),
+                   buildLoginCard(),
+                ],
+              ),
+        ),
+          
+        ),
+    );
     
   }
 
@@ -97,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           buildLoginTextAndLanguageOptions(),
           Form(
-            key: loginController.loginFormKey,
+            key: loginFormKey,
             child: Column(
               children: [
                 buildPhoneFieldForLogin(),
@@ -372,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
           print(
               'This is my phoneNumber before apiCall===============${loginController.phone}');
 
-          if (loginController.loginFormKey.currentState!.validate()) {
+          if (loginFormKey.currentState!.validate()) {
             loginController.login();
           }
         },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
@@ -99,7 +100,7 @@ class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
           top: 10,
         ),
         child: customTextField(
-            hintText: 'ex 1234',
+            hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
             controller: otpForgotPasswordController.otpControllerGet,
             color: R.colors.lightGrey,
             height: 45,
@@ -176,6 +177,10 @@ class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
             );
             return;
           }
+          if(otpForgotPasswordController.otpControllerGet.text == "١٢٣٤"){
+            otpForgotPasswordController.otpControllerGet.text == "1234";
+          }
+          // otpController.otpControllerGet.text == "١٢٣٤" ? "1234": otpController.otpControllerGet.text
           otpForgotPasswordController.otp();
         },
         child: Center(

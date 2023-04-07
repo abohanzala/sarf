@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:sarf/src/baseview/more/delete_account3.dart';
 
@@ -110,7 +111,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                         fillColor: R.colors.lightGrey,
                         filled: true,
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: '0000',
+                        hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
                         hintStyle: TextStyle(
                           color: R.colors.grey,
                           fontSize: 14.sp,

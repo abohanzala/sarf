@@ -24,8 +24,14 @@ var qrCode = "".obs;
 var alertCount = 0.obs;
 //var expansetype = ''.obs;
 var currency = ''.obs;
-var totalInvoices = ''.obs;
-var totalExpanses = ''.obs;
+var totalInvoicesDaily = ''.obs;
+var totalInvoicesMontly = ''.obs;
+var totalInvoicesYearly = ''.obs;
+var totalExpansesDaily = ''.obs;
+var totalExpansesMontly = ''.obs;
+var totalExpansesYearly = ''.obs;
+// var expanse = 'All'.obs;
+// var expansesId = '0'.obs;
 
 
 @override
@@ -35,14 +41,18 @@ void onInit() async{
   
 }
 
-Future getHome(String? id) async {
+Future getHome(String? id,int? day,int? month,int? year) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
    // openLoader();
    loading.value = true;
    var request = {
     "language": GetStorage().read('lang'),
     "budget_id": id,
+    "daily_filter" : day,
+    "monthly_filter" : month,
+    "yearly_filter" : year,
    };
+   debugPrint(request.toString());
     var response =
         await DioClient().post(ApiLinks.getHome, request).catchError((error) {
       if (error is BadRequestException) {
@@ -105,8 +115,12 @@ Future getHome(String? id) async {
         }
         }
         currency.value = data.data!.currency.toString();
-        totalInvoices.value = data.data!.totalInvoices.toString();
-        totalExpanses.value = data.data!.totalExpenses.toString();
+        totalInvoicesDaily.value = data.data!.totalInvoicesDaily.toString();
+        totalInvoicesMontly.value = data.data!.totalInvoicesMontly.toString();
+        totalInvoicesYearly.value = data.data!.totalInvoicesYearly.toString();
+        totalExpansesDaily.value = data.data!.totalExpensesDaily.toString();
+        totalExpansesMontly.value = data.data!.totalExpensesMonthly.toString();
+        totalExpansesYearly.value = data.data!.totalExpensesYearly.toString();
         qrCode.value = "${GetStorage().read('mobile')}$selectedBudgetNumbder";
         //print(budgets.first.name);
         
@@ -172,7 +186,7 @@ Future getHome(String? id) async {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
-      getHome(null);
+      getHome(null,null,null,null);
       Get.back();
 
     } else {
@@ -246,7 +260,7 @@ Future getHome(String? id) async {
       selectedBudgetName = "".obs;
       qrCode.value = '';
       Get.back();
-      getHome(null);
+      getHome(null,null,null,null);
       //Get.back();
 
     } else {
@@ -323,7 +337,7 @@ Future getHome(String? id) async {
       selectedBudgetName = "".obs;
       qrCode.value = '';
       Get.back();
-      getHome(null);
+      getHome(null,null,null,null);
       //Get.back();
 
     } else {

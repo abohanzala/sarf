@@ -6,6 +6,7 @@ import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/support/support_controller.dart';
 
 import '../../../resources/resources.dart';
+import '../../widgets/custom_appbar.dart';
 
 class SingleSupport extends StatefulWidget {
   final String title;
@@ -117,6 +118,11 @@ class _SingleSupportState extends State<SingleSupport> {
                           //     Text('12-04-2021',style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                           //   ],
                           // ),
+                           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: budgetName(),
+          ),
+          const SizedBox(height: 10,),
                           Container(
                               margin: const EdgeInsets.only(top: 10),
                               //height: 45,

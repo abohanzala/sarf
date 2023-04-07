@@ -203,6 +203,7 @@ class RegistrationController extends GetxController {
       location_lng.value = '';
       finalSelectedType.value = 'Select Type'.tr;
       finalSelectedCity.value = 'Select City'.tr;
+      accountType = true;
       var userInfo = LoginModel.fromJson(response);
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);
@@ -214,6 +215,7 @@ class RegistrationController extends GetxController {
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
       await GetStorage().write('groupId', userInfo.user!.groupId);
+      await GetStorage().write('user_type', userInfo.user!.userType);
       await createFirebaseUser();
        MyBottomNavigationController ctr =
       Get.put<MyBottomNavigationController>(MyBottomNavigationController());

@@ -281,16 +281,16 @@ class _RegistrationState extends State<Registration> {
             'I Accept'.tr,
             style: TextStyle(fontSize: 17, color: Colors.grey),
           ),
-          InkWell(
-            onTap: () {},
-            child: Text(
-              ' Terms & Conditions'.tr,
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 17,
-              ),
-            ),
-          ),
+          // InkWell(
+          //   onTap: () {},
+          //   child: Text(
+          //     ' Terms & Conditions'.tr,
+          //     style: TextStyle(
+          //       color: Colors.grey,
+          //       fontSize: 17,
+          //     ),
+          //   ),
+          // ),
         ], //<Widget>[]
       ),
     );

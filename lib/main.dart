@@ -50,7 +50,12 @@ void main() async {
   Get.put<ProfileController>(ProfileController());
   Get.put<DeleteAccountController>(DeleteAccountController());
   Get.put<ChangeProfileController>(ChangeProfileController());
-  GetStorage().write('lang', 'ar');
+  if( await GetStorage().read('lang') == null){
+    
+    await GetStorage().write('lang', 'ar');
+  }
+ 
+  
   runApp(const MyApp());
 }
 
@@ -66,6 +71,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          
           builder: BotToastInit(),
           // navigatorObservers: [BotToastNavigatorObserver()],
           debugShowCheckedModeBanner: false,
@@ -78,9 +84,12 @@ class MyApp extends StatelessWidget {
               ? RoutesName.LogIn
               : RoutesName.base,
           onGenerateRoute: Routes.generateRoute,
-          locale: const Locale('ar', 'SA'),
+          locale: GetStorage().read('lang') == 'ar' ? const Locale('ar', 'SA'): const Locale('en', 'US'),
           translations: LocaleString(),
           fallbackLocale: const Locale('en', 'US'),
+  //         localizationsDelegates: const [
+  //               MonthYearPickerLocalizations.delegate,
+  // ],
         );
       },
     );

@@ -30,16 +30,25 @@ class SingleHomeData {
   int? alertCount;
   List<Budgets>? budgets;
   List<ExpenseTypes>? expenseTypes;
-  int? totalInvoices;
-  int? totalExpenses;
+  int? totalInvoicesDaily;
+  int? totalInvoicesMontly;
+  int? totalInvoicesYearly;
+  int? totalExpensesDaily;
+  int? totalExpensesMonthly;
+  int? totalExpensesYearly;
 
   SingleHomeData(
       {this.currency,
       this.alertCount,
       this.budgets,
       this.expenseTypes,
-      this.totalInvoices,
-      this.totalExpenses});
+      this.totalInvoicesDaily,
+      this.totalInvoicesMontly,
+      this.totalInvoicesYearly,
+      this.totalExpensesDaily,
+      this.totalExpensesMonthly,
+      this.totalExpensesYearly
+      });
 
   SingleHomeData.fromJson(Map<String, dynamic> json) {
     currency = json['currency'];
@@ -56,8 +65,12 @@ class SingleHomeData {
         expenseTypes!.add(ExpenseTypes.fromJson(v));
       });
     }
-    totalInvoices = json['total_invoices'];
-    totalExpenses = json['total_expenses'];
+    totalInvoicesDaily = json['total_invoices_daily'];
+    totalInvoicesMontly = json['total_invoices_monthly'];
+    totalInvoicesYearly = json['total_invoices_yearly'];
+    totalExpensesDaily = json['total_expenses_daily'];
+    totalExpensesMonthly = json['total_expenses_monthly'];
+    totalExpensesYearly = json['total_expenses_yearly'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,8 +84,12 @@ class SingleHomeData {
       data['expense_types'] =
           expenseTypes!.map((v) => v.toJson()).toList();
     }
-    data['total_invoices'] = totalInvoices;
-    data['total_expenses'] = totalExpenses;
+    data['total_invoices_daily'] = totalInvoicesDaily;
+    data['total_invoices_monthly'] = totalInvoicesMontly;
+    data['total_invoices_yearly'] = totalInvoicesYearly;
+    data['total_expenses_daily'] = totalExpensesDaily;
+    data['total_expenses_monthly'] = totalExpensesMonthly;
+    data['total_expenses_yearly'] = totalExpensesYearly;
     return data;
   }
 }

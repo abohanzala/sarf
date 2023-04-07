@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
+import 'package:sarf/src/baseview/Invoices/fullscreen_img.dart';
 
 import '../../../constant/api_links.dart';
 import '../../../resources/resources.dart';
@@ -16,7 +18,8 @@ import '../../widgets/custom_appbar.dart';
 class InvoiceDetails extends StatefulWidget {
   final String id;
   final String invoiceNum;
-  const InvoiceDetails({super.key, required this.id, required this.invoiceNum});
+  final bool reverse;
+  const InvoiceDetails({super.key, required this.id, required this.invoiceNum, required this.reverse});
 
   @override
   State<InvoiceDetails> createState() => _InvoiceDetailsState();
@@ -48,7 +51,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
   }
   @override
   Widget build(BuildContext context) {
-    
+    debugPrint(GetStorage().read("user_token"));
     return Scaffold(
       backgroundColor: R.colors.lightGrey,
       body: Obx(
@@ -80,6 +83,11 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                         Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: budgetName(),
+          ),
+          const SizedBox(height: 10,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -119,296 +127,289 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
            ),
            const SizedBox(height: 10,),
            Expanded(child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 12),
-             child: Text('Received Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-           ),
-           const SizedBox(height: 8,),
-           Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 12),
-             child: Container(
-                                  width: Get.width,
-                                  padding: const EdgeInsets.symmetric(vertical: 0),
-                                  height: 80,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                                      
-                                  
-                                                          Expanded(
-                                                            child: ListView.builder(
-                                                              scrollDirection: Axis.horizontal,
-                                                              shrinkWrap: true,
-                                                              itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
-                                                              itemBuilder: (context,index){
-                                                                var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
-                                                              return GestureDetector(
-                                                                onTap: ()async{
-                                                                  try {
-  // Saved with this method.
-                                                                      var imageId = await ImageDownloader.downloadImage("${ApiLinks.assetBasePath}$singleAttach",destination: AndroidDestinationType.directoryDownloads..subDirectory("Sarf/$singleAttach") );
-                                                                      if (imageId == null) {
-                                                                        return;
-                                                                      }
-
-                                                                      // Below is a method of obtaining saved image information.
-                                                                      var fileName = await ImageDownloader.findName(imageId);
-                                                                      var path = await ImageDownloader.findPath(imageId);
-                                                                      var size = await ImageDownloader.findByteSize(imageId);
-                                                                      var mimeType = await ImageDownloader.findMimeType(imageId);
-                                                                      
-                                                                    } on PlatformException catch (error) {
-                                                                      
-                                                                      debugPrint(error.toString());
-                                                                    }
-                                                                },
-                                                                child: Container(
-                                                                  
-                                                                  width: 60,
-                                                                  height: 60,
-                                                                  margin: const EdgeInsets.only(right: 10,top: 5),
-                                                                  //padding: const EdgeInsets.all(8),
-                                                                  decoration: BoxDecoration(
-                                                                    color: R.colors.grey,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(10),
-                                                                  ),
-                                                                  child: ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(10),
-                                                                    child: Image.network("${ApiLinks.assetBasePath}$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
-                                                                      return  Center(child: Text('No Data'.tr));
-                                                                    } ,)),
-                                                                ),
-                                                              );
-                                                            
-                                                            }),
-                                                          ),
-                                    ],
-                                  ),
-                                ),
-            //  Container(
-            //   width: 60,
-            //   height: 60,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(8),
-            //     color: R.colors.grey
-            //      ),
-            //  ),
-           ),
-           const SizedBox(height: 10,), 
-           Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 12),
-             child: Divider(
-              color: R.colors.lightBlue4,
-              thickness: 0.1,
-             ),
-           ),
-           const SizedBox(height: 10,), 
-            Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 12),
-             child: Text('Sent Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-           ),
-           const SizedBox(height: 8,),
-  //          Padding(
-  //            padding: const EdgeInsets.symmetric(horizontal: 12),
-  //            child: Container(
-  //                                 width: Get.width,
-  //                                 padding: const EdgeInsets.symmetric(vertical: 0),
-  //                                 height: 80,
-  //                                 child: Row(
-  //                                   mainAxisAlignment: MainAxisAlignment.start,
-  //                                   children: [
-                                                      
-                                  
-  //                                                         Expanded(
-  //                                                           child: ListView.builder(
-  //                                                             scrollDirection: Axis.horizontal,
-  //                                                             shrinkWrap: true,
-  //                                                             itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
-  //                                                             itemBuilder: (context,index){
-  //                                                               var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
-  //                                                             return GestureDetector(
-  //                                                               onTap: ()async{
-  //                                                                 try {
-  // // Saved with this method.
-  //                                                                     var imageId = await ImageDownloader.downloadImage("${ApiLinks.assetBasePath}$singleAttach",destination: AndroidDestinationType.directoryDownloads..subDirectory("Sarf/$singleAttach") );
-  //                                                                     if (imageId == null) {
-  //                                                                       return;
-  //                                                                     }
-
-  //                                                                     // Below is a method of obtaining saved image information.
-  //                                                                     var fileName = await ImageDownloader.findName(imageId);
-  //                                                                     var path = await ImageDownloader.findPath(imageId);
-  //                                                                     var size = await ImageDownloader.findByteSize(imageId);
-  //                                                                     var mimeType = await ImageDownloader.findMimeType(imageId);
-  //                                                                   } on PlatformException catch (error) {
-  //                                                                     debugPrint(error.toString());
-  //                                                                   }
-  //                                                               },
-  //                                                               child: Container(
-                                                                  
-  //                                                                 width: 60,
-  //                                                                 height: 60,
-  //                                                                 margin: const EdgeInsets.only(right: 10,top: 5),
-  //                                                                 //padding: const EdgeInsets.all(8),
-  //                                                                 decoration: BoxDecoration(
-  //                                                                   color: R.colors.grey,
-  //                                                                   borderRadius:
-  //                                                                       BorderRadius.circular(10),
-  //                                                                 ),
-  //                                                                 child: ClipRRect(
-  //                                                                   borderRadius:
-  //                                                                       BorderRadius.circular(10),
-  //                                                                   child: Image.network("${ApiLinks.assetBasePath}/$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
-  //                                                                     return  Center(child: Text('No Data'.tr));
-  //                                                                   },)),
-  //                                                               ),
-  //                                                             );
-                                                            
-  //                                                           }),
-  //                                                         ),
-  //                                   ],
-  //                                 ),
-  //                               ),
-  //           //  Container(
-  //           //   width: 60,
-  //           //   height: 60,
-  //           //   decoration: BoxDecoration(
-  //           //     borderRadius: BorderRadius.circular(8),
-  //           //     color: R.colors.grey
-  //           //      ),
-  //           //  ),
-  //          ),
-           const SizedBox(height: 10,),
-           Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 12),
-             child: Text('Attach'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-           ),
-           const SizedBox(height: 5,),
-      
-           Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-           child: Container(
-            width: Get.width,
-            padding: const EdgeInsets.symmetric(vertical: 0),
-            height: 70,
-             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                                GestureDetector(
-                                  onTap: (){
-                                    pickImage(ImageSource.gallery);
-                                  },
-                                  child: Container(
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 12),
+               child: Text( widget.reverse == true ? 'Sent Attachments'.tr : 'Received Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                       ),
+                       const SizedBox(height: 8,),
+                       Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 12),
+               child: Container(
+                                    width: Get.width,
+                                    padding: const EdgeInsets.symmetric(vertical: 0),
+                                    height: 80,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                                        
                                     
-                                          height: 60,
-                                          width: 60,
-                                          margin: const EdgeInsets.only(right: 10,top: 1),
-                                          padding: const EdgeInsets.all(18),
-                                          decoration: BoxDecoration(
-                                            color: R.colors.grey,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/attach.png',
-                                            
-                                          ),
-                                      ),
-                                ),
-                                    const SizedBox(width: 5,),
-             
-                                    Expanded(
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        shrinkWrap: true,
-                                        itemCount: ctr.uploadImages.length,
-                                        itemBuilder: (context,index){
-                                          var singleFile = ctr.uploadImages[index];
-                                         return Stack(
-                                        //alignment: Alignment.topRight,
-                                        children: [
-                                          Container(
-                                            
-                                            width: 60,
+                                                            Expanded(
+                                                              child: ListView.builder(
+                                                                scrollDirection: Axis.horizontal,
+                                                                shrinkWrap: true,
+                                                                itemCount: ctr.inVoiceDetails.value.data?.attachments?.length,
+                                                                itemBuilder: (context,index){
+                                                                  var singleAttach = ctr.inVoiceDetails.value.data?.attachments?[index];
+                                                                return GestureDetector(
+                                                                  onTap: ()async{
+                                                                    Get.to(() => FullScreenView(url: "${ApiLinks.assetBasePath}$singleAttach", tag: "${ApiLinks.assetBasePath}$singleAttach", singleAttach: singleAttach!) );
+                                                                  },
+                                                                  child: Hero(
+                                                                    tag: "${ApiLinks.assetBasePath}$singleAttach",
+                                                                    child: Container(
+                                                                      
+                                                                      width: 60,
+                                                                      height: 60,
+                                                                      margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                      //padding: const EdgeInsets.all(8),
+                                                                      decoration: BoxDecoration(
+                                                                        color: R.colors.grey,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                      child: ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        child: Image.network("${ApiLinks.assetBasePath}$singleAttach",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+                                                                          return  Center(child: Text('No Data'.tr));
+                                                                        } ,)),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              
+                                                              }),
+                                                            ),
+                                      ],
+                                    ),
+                                  ),
+              //  Container(
+              //   width: 60,
+              //   height: 60,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(8),
+              //     color: R.colors.grey
+              //      ),
+              //  ),
+                       ),
+                       const SizedBox(height: 10,), 
+                       Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 12),
+               child: Divider(
+                color: R.colors.lightBlue4,
+                thickness: 0.1,
+               ),
+                       ),
+                       const SizedBox(height: 10,), 
+              Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 12),
+               child: Text( widget.reverse == true ? 'Received Attachments'.tr: 'Sent Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                       ),
+                       const SizedBox(height: 8,),
+                       
+                       Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 12),
+               child: Container(
+                                    width: Get.width,
+                                    padding: const EdgeInsets.symmetric(vertical: 0),
+                                    height: 80,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                                        
+                                    
+                                                            Expanded(
+                                                              child: ListView.builder(
+                                                                scrollDirection: Axis.horizontal,
+                                                                shrinkWrap: true,
+                                                                itemCount: ctr.inVoiceDetails.value.data?.invoiceFiles?.length,
+                                                                itemBuilder: (context,index1){
+                                                                  var singleAttach = ctr.inVoiceDetails.value.data?.invoiceFiles?[index1];
+                                                                return singleAttach?.files != null ? ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  primary: false,
+                                                                  itemCount: singleAttach?.files?.length,
+                                                                  scrollDirection: Axis.horizontal,
+                                                                  itemBuilder: (context,index){
+                                                                    var singleFile = ctr.inVoiceDetails.value.data?.invoiceFiles?[index1].files?[index];
+                                                                    return GestureDetector(
+                                                                      onTap: (){
+                                                                        Get.to( () => FullScreenView(url: "${ApiLinks.assetBasePath}$singleFile", tag: "${ApiLinks.assetBasePath}$singleFile", singleAttach: singleFile!) );
+                                                                      },
+                                                                      child: Hero(
+                                                                        tag: "${ApiLinks.assetBasePath}$singleFile",
+                                                                        child: Container(
+                                                                                                                                        
+                                                                                                                                        width: 60,
+                                                                                                                                        height: 60,
+                                                                                                                                        margin: const EdgeInsets.only(right: 10,top: 5),
+                                                                                                                                        //padding: const EdgeInsets.all(8),
+                                                                                                                                        decoration: BoxDecoration(
+                                                                        color: R.colors.grey,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                                                                                        ),
+                                                                                                                                        child: ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        child: Image.network("${ApiLinks.assetBasePath}/$singleFile",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace){
+                                                                          return  Center(child: Text('No Data'.tr));
+                                                                        },)),
+                                                                                                                                      ),
+                                                                      ),
+                                                                    );
+            
+                                                                  }) : Container() ;
+                                                              
+                                                              }),
+                                                            ),
+                                      ],
+                                    ),
+                                  ),
+              //  Container(
+              //   width: 60,
+              //   height: 60,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(8),
+              //     color: R.colors.grey
+              //      ),
+              //  ),
+                       ),
+                       const SizedBox(height: 10,),
+                       Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 12),
+               child: Text('Attach'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                       ),
+                       const SizedBox(height: 5,),
+                  
+                       Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+                       child: Container(
+              width: Get.width,
+              padding: const EdgeInsets.symmetric(vertical: 0),
+              height: 70,
+               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      pickImage(ImageSource.gallery);
+                                    },
+                                    child: Container(
+                                      
                                             height: 60,
-                                            margin: const EdgeInsets.only(right: 10,top: 5),
-                                            padding: const EdgeInsets.all(8),
+                                            width: 60,
+                                            margin: const EdgeInsets.only(right: 10,top: 1),
+                                            padding: const EdgeInsets.all(18),
                                             decoration: BoxDecoration(
-                                             // color: R.colors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                              color: R.colors.grey,
+                                              borderRadius: BorderRadius.circular(8),
                                             ),
-                                            child: Image.file(
-                                            singleFile,
-                                            height: 25.h,
-                                            width: 25.w,
-                                          ),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 5,
-                                            child: GestureDetector(
-                                              onTap: (){
-                                                ctr.uploadImages.removeAt(index);
-                                              },
-                                              child: Container(
-                                                height: 20,
-                                                width: 20,
-                                                //padding: const EdgeInsets.all(5),
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.red,
-                                                    shape: BoxShape.circle),
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    size: 12,
-                                                    color: R.colors.white,
+                                            child: Image.asset(
+                                              'assets/images/attach.png',
+                                              
+                                            ),
+                                        ),
+                                  ),
+                                      const SizedBox(width: 5,),
+               
+                                      Expanded(
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: ctr.uploadImages.length,
+                                          itemBuilder: (context,index){
+                                            var singleFile = ctr.uploadImages[index];
+                                           return Stack(
+                                          //alignment: Alignment.topRight,
+                                          children: [
+                                            Container(
+                                              
+                                              width: 60,
+                                              height: 60,
+                                              margin: const EdgeInsets.only(right: 10,top: 5),
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                               // color: R.colors.grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Image.file(
+                                              singleFile,
+                                              height: 25.h,
+                                              width: 25.w,
+                                            ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 5,
+                                              child: GestureDetector(
+                                                onTap: (){
+                                                  ctr.uploadImages.removeAt(index);
+                                                },
+                                                child: Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  //padding: const EdgeInsets.all(5),
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.red,
+                                                      shape: BoxShape.circle),
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      size: 12,
+                                                      color: R.colors.white,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                      
-                                      }),
-                                    ),
-              ],
-             ),
-           ),
-           ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: InkWell(
-                  onTap: (){
-                    if(ctr.uploadImages.isEmpty){
-                      
-                      Get.snackbar('Error'.tr, "Attach image".tr);
-                      return;
-                    }
-                    ctr.postInvoiceAttach(widget.id);
-                  },
-                  child: Container(
-                    width: Get.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: R.colors.themeColor),
-                    child: Center(
-                        child: Text(
-                      'Send'.tr,
-                      style: TextStyle(color: R.colors.white),
-                    )),
+                                            )
+                                          ],
+                                        );
+                                        
+                                        }),
+                                      ),
+                ],
+               ),
+                       ),
+                       ),
+                      SizedBox(
+              height: 20,
+                      ),
+                      Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: InkWell(
+                    onTap: (){
+                      if(GetStorage().read("user_type") == 3){
+                                  Get.snackbar("Error".tr, "You do not have access".tr);
+                                  return;
+                                }
+                      if(ctr.uploadImages.isEmpty){
+                        
+                        Get.snackbar('Error'.tr, "Attach image".tr);
+                        return;
+                      }
+                      ctr.postInvoiceAttach(widget.id);
+                    },
+                    child: Container(
+                      width: Get.width,
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: R.colors.themeColor),
+                      child: Center(
+                          child: Text(
+                        'Send'.tr,
+                        style: TextStyle(color: R.colors.white),
+                      )),
+                    ),
                   ),
-                ),
-          ),
-              ],
+                      ),
+                      SizedBox(height: 10,),
+                ],
+              ),
             ),
            )
            ),

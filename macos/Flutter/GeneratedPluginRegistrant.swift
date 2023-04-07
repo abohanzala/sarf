@@ -12,7 +12,7 @@ import firebase_auth
 import firebase_core
 import geolocator_apple
 import just_audio
-import location
+import location_macos
 import package_info_plus
 import path_provider_foundation
 import share_plus

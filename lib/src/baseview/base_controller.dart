@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/src/baseview/Invoices/invoice_list.dart';
 import 'package:sarf/src/baseview/Send/simple_invoice.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
@@ -19,6 +20,10 @@ class MyBottomNavigationController extends GetxController {
   // final homeCon = Get.put(HomeController());
   // final orderCon = Get.put(OrdersController());
   void changeTabIndex(int index) {
+    if(GetStorage().read("user_type") == 3 && (index == 1 || index == 2 )){
+      Get.snackbar("Error".tr, "You do not have access".tr);
+      return;
+    }
     tabIndex.value = index;
   }
 

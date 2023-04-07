@@ -12,24 +12,39 @@ import '../../src/widgets/loader.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class LoginController extends GetxController {
-  var loginFormKey = GlobalKey<FormState>();
+  String id = '';
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
-
+ 
   Future login() async {
     openLoader();
     var a = phone.text;
     final splitted = a.split('+');
-    var request = {
+    var request = {};
+    if(id == ''){
+      request = {
       'language': GetStorage().read('lang'),
       'mobile': splitted[1],
       'password': password.text,
       'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
       'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
     };
+    }
+    if(id.isNotEmpty){
+       request = {
+      'language': GetStorage().read('lang'),
+      'mobile': splitted[1],
+      'password': password.text,
+      "user_id" : id,
+      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
+      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+    };
+    }
+     
     debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
+          debugPrint(error.toString());
       if (error is BadRequestException) {
         Get.back();
         var apiError = json.decode(error.message!);
@@ -80,6 +95,7 @@ class LoginController extends GetxController {
       var userInfo = LoginModel.fromJson(response);
       phone.clear();
       password.clear();
+      id = '';
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);
       await GetStorage().write('name', userInfo.user!.name);
@@ -91,6 +107,7 @@ class LoginController extends GetxController {
       await GetStorage().write('status', userInfo.user!.status);
       await GetStorage().write('groupId', userInfo.user!.groupId);
       await GetStorage().write('user_lang', userInfo.user!.locale);
+      await GetStorage().write('user_type', userInfo.user!.userType);
       await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
           GetStorage().read('mobile'));
       Get.offAllNamed(RoutesName.base);

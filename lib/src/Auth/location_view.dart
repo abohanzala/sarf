@@ -234,7 +234,8 @@ class _LocationViewState extends State<LocationView> {
                       //components: [Component(Component.country, 'np')],
                       //google_map_webservice package
                       onError: (err) {
-                        debugPrint(err.toString());
+                        debugPrint(err.errorMessage);
+                        debugPrint("hahahaah");
                       }).then((value) async {
                     if (value != null) {
                       //  print(value);

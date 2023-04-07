@@ -21,7 +21,7 @@ class OtpController extends GetxController {
     super.onInit();
   }
 
-  Future otp() async {
+  Future otp(String otp) async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -35,7 +35,7 @@ class OtpController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': splitted[1],
-      'otp': otpControllerGet.text,
+      'otp': otp,
     };
     debugPrint("This is my request====================$request");
 

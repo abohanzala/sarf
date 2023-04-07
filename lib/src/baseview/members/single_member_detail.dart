@@ -134,7 +134,14 @@ launchPhone({required Uri u}) async {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(ctr.memDetails.value.data?.name ?? '',style: TextStyle(color: R.colors.black,fontSize: 16),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(ctr.memDetails.value.data?.name ?? '',style: TextStyle(color: R.colors.black,fontSize: 16),),
+                                budgetName(),
+          
+                              ],
+                            ),
                             const SizedBox(height: 8,),
                             Row(
                               children: [
@@ -151,63 +158,63 @@ launchPhone({required Uri u}) async {
                                 Text("${ctr.memDetails.value.data?.invoicesSumAmount ?? 0}",style: TextStyle(color: R.colors.black,fontSize: 14),),
                               ],
                             ),
-                            const SizedBox(height: 10,),
-                            Divider(
-                              color: R.colors.grey,
-                              thickness: 1,
-                            ),
-                            const SizedBox(height: 10,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(child: Row(
-                                  children: [
-                                    Icon(Icons.location_on_sharp,size: 20,color: R.colors.black,),
-                                    const SizedBox(width: 8,),
-                                    Flexible(
-                                      child: Text(ctr.memDetails.value.data?.userDetail?.location ?? '',
-                                      style:TextStyle(color: R.colors.black,fontSize: 14),
-                                      overflow: TextOverflow.ellipsis,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                                const SizedBox(width: 3,),
-                                GestureDetector(
-                                  onTap: (){
-                                    double lat = 0.0;
-                                    double lng = 0.0;
-                                    if(ctr.memDetails.value.data?.userDetail?.locationLat != null){
-                                      lat = double.parse(ctr.memDetails.value.data!.userDetail!.locationLat!);
-                                    }
-                                    if(ctr.memDetails.value.data?.userDetail?.locationLng != null){
-                                      lng = double.parse(ctr.memDetails.value.data!.userDetail!.locationLng!);
-                                    }
-                                    if(
-                                      ctr.memDetails.value.data?.userDetail?.locationLng == null || ctr.memDetails.value.data?.userDetail?.locationLat == null
-                                    ){
-                                      Get.snackbar("Error".tr, 'No Direction'.tr);
-                                      return;
-                                    }
-                                    if(ctr.memDetails.value.data?.userDetail?.locationLng != null && ctr.memDetails.value.data?.userDetail?.locationLat != null ){
-                                      navigateTo(lat, lng);
-                                    }
+                            // const SizedBox(height: 10,),
+                            // Divider(
+                            //   color: R.colors.grey,
+                            //   thickness: 1,
+                            // ),
+                            // const SizedBox(height: 10,),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Expanded(child: Row(
+                            //       children: [
+                            //         Icon(Icons.location_on_sharp,size: 20,color: R.colors.black,),
+                            //         const SizedBox(width: 8,),
+                            //         Flexible(
+                            //           child: Text(ctr.memDetails.value.data?.userDetail?.location ?? '',
+                            //           style:TextStyle(color: R.colors.black,fontSize: 14),
+                            //           overflow: TextOverflow.ellipsis,
+                            //           ),
+                            //         )
+                            //       ],
+                            //     )),
+                            //     const SizedBox(width: 3,),
+                            //     GestureDetector(
+                            //       onTap: (){
+                            //         double lat = 0.0;
+                            //         double lng = 0.0;
+                            //         if(ctr.memDetails.value.data?.userDetail?.locationLat != null){
+                            //           lat = double.parse(ctr.memDetails.value.data!.userDetail!.locationLat!);
+                            //         }
+                            //         if(ctr.memDetails.value.data?.userDetail?.locationLng != null){
+                            //           lng = double.parse(ctr.memDetails.value.data!.userDetail!.locationLng!);
+                            //         }
+                            //         if(
+                            //           ctr.memDetails.value.data?.userDetail?.locationLng == null || ctr.memDetails.value.data?.userDetail?.locationLat == null
+                            //         ){
+                            //           Get.snackbar("Error".tr, 'No Direction'.tr);
+                            //           return;
+                            //         }
+                            //         if(ctr.memDetails.value.data?.userDetail?.locationLng != null && ctr.memDetails.value.data?.userDetail?.locationLat != null ){
+                            //           navigateTo(lat, lng);
+                            //         }
                                     
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text('Directions'.tr,
-                                        style:TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(width: 5,),
-                                        Icon(Icons.directions,color: R.colors.themeColor,size: 20,),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 15,),
+                            //       },
+                            //       child: Row(
+                            //         children: [
+                            //           Text('Directions'.tr,
+                            //             style:TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.bold),
+                            //             overflow: TextOverflow.ellipsis,
+                            //             ),
+                            //             const SizedBox(width: 5,),
+                            //             Icon(Icons.directions,color: R.colors.themeColor,size: 20,),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                             const SizedBox(height: 15,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -307,7 +314,7 @@ launchPhone({required Uri u}) async {
                   ),
                   const SizedBox(height: 5,),
                   Text(
-                    "${index + 1}"
+                    data!.id.toString()
                   ,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                   const SizedBox(height: 10,),
                   Text('Amount'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
@@ -315,9 +322,9 @@ launchPhone({required Uri u}) async {
                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text( data!.amount.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                      Text( data.amount.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       GestureDetector(
-                        onTap: () => Get.to( () => InvoiceDetails(id: data.id.toString(),invoiceNum: "${index + 1}", )),
+                        onTap: () => Get.to( () => InvoiceDetails(id: data.id.toString(),invoiceNum: data.id.toString(),reverse: false, )),
                         child: Text('Details'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,
                         decoration: TextDecoration.underline,fontWeight: FontWeight.w500,
                         ),

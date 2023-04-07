@@ -62,7 +62,7 @@ class ProfileController extends GetxController {
     //DialogBoxes.openLoadingDialog();
 
     var response =
-        await DioClient().post(ApiLinks.profile, request).catchError((error) {
+        await DioClient().post(ApiLinks.profile, request).catchError((error) async {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
@@ -78,6 +78,31 @@ class ProfileController extends GetxController {
       } else {
         Get.back();
         debugPrint('Something went Wrong===============${error.toString()}');
+        await GetStorage().remove('user_token');
+    await GetStorage().remove('groupId');
+    await GetStorage().remove('userId');
+    await GetStorage().remove(
+      'name',
+    );
+    await GetStorage().remove(
+      'username',
+    );
+    await GetStorage().remove(
+      'email',
+    );
+    await GetStorage().remove(
+      'firebase_email',
+    );
+    await GetStorage().remove(
+      'mobile',
+    );
+    await GetStorage().remove(
+      'photo',
+    );
+    await GetStorage().remove(
+      'status',
+    );
+     Get.offAllNamed(RoutesName.LogIn);
         //HandlingErrors().handleError(error);
       }
     });
@@ -100,25 +125,25 @@ class ProfileController extends GetxController {
       mobileController.text = profileModel!.user!.mobile == null
           ? ''
           : mobileController.text = profileModel!.user!.mobile!;
-      instaController.text = profileModel!.user!.userDetail!.instaLink == null
+      instaController.text = profileModel!.user!.userDetail?.instaLink == null
           ? ''
           : profileModel!.user!.userDetail!.instaLink!;
       twitterController.text =
-          profileModel!.user!.userDetail!.twitterLink == null
+          profileModel!.user!.userDetail?.twitterLink == null
               ? ''
-              : profileModel!.user!.userDetail!.twitterLink!;
-      contactController.text = profileModel!.user!.userDetail!.contactNo == null
+              : profileModel!.user!.userDetail?.twitterLink ?? '';
+      contactController.text = profileModel!.user!.userDetail?.contactNo == null
           ? ''
-          : profileModel!.user!.userDetail!.contactNo!;
-      whatsappController.text = profileModel!.user!.userDetail!.whatsapp == null
+          : profileModel!.user!.userDetail?.contactNo ?? "";
+      whatsappController.text = profileModel!.user!.userDetail?.whatsapp == null
           ? ''
-          : profileModel!.user!.userDetail!.whatsapp!;
-      websiteController.text = profileModel!.user!.userDetail!.website == null
+          : profileModel!.user!.userDetail?.whatsapp! ?? '';
+      websiteController.text = profileModel!.user!.userDetail?.website == null
           ? ''
-          : profileModel!.user!.userDetail!.website!;
-      location.value = profileModel!.user!.userDetail!.location == null
+          : profileModel!.user!.userDetail?.website ?? '';
+      location.value = profileModel!.user!.userDetail?.location == null
           ? ''
-          : profileModel!.user!.userDetail!.location!;
+          : profileModel!.user!.userDetail?.location ?? '';
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
@@ -233,7 +258,7 @@ class ProfileController extends GetxController {
 
   Future login(String phone, String password, String groupId) async {
     openLoader();
-
+    var result = '';
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phone,
@@ -284,6 +309,7 @@ class ProfileController extends GetxController {
     });
     debugPrint(response.toString());
     if (response['success'] == true) {
+      result = 'true';
       Get.back();
       debugPrint(response.toString());
       Get.snackbar(
@@ -310,6 +336,7 @@ class ProfileController extends GetxController {
       ctr.tabIndex.value = 0;
       Get.offAllNamed(RoutesName.base);
     } else {
+      result = 'false';
       Get.back();
       Get.snackbar(
         'Error'.tr,
@@ -318,7 +345,7 @@ class ProfileController extends GetxController {
         backgroundColor: R.colors.themeColor,
       );
     }
-    return null;
+    return result;
   }
 
   Future createFirebaseUser(String email, String password) async {

@@ -74,6 +74,11 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                     Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: budgetName(),
+          ),
+          const SizedBox(height: 10,),
                     Container(
                       margin: const EdgeInsets.only(top: 10),
                       height: 45,

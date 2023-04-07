@@ -1,5 +1,8 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/login_controller.dart';
@@ -7,6 +10,7 @@ import 'package:sarf/controllers/home/home_controller.dart';
 import 'package:sarf/resources/dummy.dart';
 import 'package:sarf/services/dio_client.dart';
 import 'package:sarf/src/Auth/change_profile.dart';
+import 'package:sarf/src/baseview/more/add_users.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 import '../../../constant/api_links.dart';
@@ -15,6 +19,7 @@ import '../../../model/moreModel/account_model.dart';
 import '../../../resources/resources.dart';
 import '../../Auth/registration.dart';
 import '../../utils/navigation_observer.dart';
+import '../../widgets/custom_appbar.dart';
 import '../base_controller.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -33,6 +38,8 @@ Future logout() async {
     await GetStorage().remove('user_token');
     await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
+    await GetStorage().remove('user_type');
+    
     await GetStorage().remove(
       'name',
     );
@@ -68,6 +75,7 @@ Future logout() async {
   await GetStorage().remove('user_token');
   await GetStorage().remove('userId');
   await GetStorage().remove('groupId');
+  await GetStorage().remove('user_type');
   await GetStorage().remove(
     'name',
   );
@@ -171,29 +179,47 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: isLoading == true
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                buildBackGroundImage(),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.all(0),
-                    children: [buildMoreDetails()],
-                  ),
-                )
-              ],
+    return WillPopScope(
+      onWillPop: () async{
+        // exit(0);
+        //  SystemNavigator.pop();
+        SystemNavigator.pop(animated: true);
+          return true;
+      },
+      child: Scaffold(
+        backgroundColor: R.colors.lightGrey,
+        body: isLoading == true
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  buildBackGroundImage(),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.all(0),
+                      children: [
+                         
+            const SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: budgetName(),
             ),
+            const SizedBox(height: 10,),
+                        if(GetStorage().read("user_type") != 3)
+                        buildMoreDetails()],
+                    ),
+                  )
+                ],
+              ),
+      ),
     );
   }
 
   Widget buildMoreDetails() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.only(
+      decoration:  BoxDecoration(
+          color: R.colors.white.withOpacity(0.5),
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       child: Container(
         margin: const EdgeInsets.only(left: 15, right: 15),
@@ -201,6 +227,45 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
           child: Column(
             children: [
               buildSubscribeButton(),
+              const SizedBox(height: 10,),
+              GestureDetector(
+                onTap: () => Get.to(() => const AddUsersScreen() ),
+                child: GestureDetector(
+                  child: Container(
+                    
+                    width: Get.width,
+                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
+                    decoration: BoxDecoration(
+                      color: R.colors.white,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     // color: R.colors.lightGrey,
+                      //     blurRadius: 2,
+                      //     spreadRadius: 2,
+                      //     offset: Offset(0,2),
+                      //   )
+                      // ],
+                      borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+              
+                            Icon(Icons.group,color: R.colors.themeColor,),
+                            const SizedBox(width: 5,),
+                            Text('Users'.tr,style: TextStyle(color: R.colors.themeColor),),
+                        ],),
+                        Icon(Icons.arrow_forward_ios,color: R.colors.themeColor,),
+                      ],
+                    ),
+                  )
+                  
+                  ),
+              ),
+                const SizedBox(height: 10,),
               buildHelpAndSupportOption(),
               buildDivider(),
               buildTermsAndConditionsOption(),
@@ -500,7 +565,9 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
         
         child: Column(
           children: [
+            if(GetStorage().read("user_type") != 3)
             buildNotificationAndSettingsIcon(),
+            
             buildLogoutIconAndText()
           ],
         ),
@@ -725,6 +792,8 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
                      GestureDetector(
                       onTap: (){
                         Get.back();
+                        LoginController loginController = Get.find<LoginController>();
+                        loginController.id = " ${GetStorage().read('userId') ?? '' } ";
                         Get.toNamed(RoutesName.LogIn);
                       },
                       child: Text('Login'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
@@ -745,9 +814,13 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
                       margin: const EdgeInsets.only(bottom: 10),
                       width: Get.width,
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () async{
                           
-                          profileController.login(singleData!.mobile!.toString(),singleData.swtichPassKey.toString(),singleData.groupId.toString());
+                          profileController.login(singleData!.mobile!.toString(),singleData.swtichPassKey.toString(),singleData.groupId.toString()).then((value)async{
+                            if(value == 'true'){
+                              await GetStorage().write('user_type', singleData.userType);
+                            }
+                          });
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,

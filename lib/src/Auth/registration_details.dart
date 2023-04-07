@@ -1151,7 +1151,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                     color: Colors.grey)),
                                             margin: const EdgeInsets.only(top: 2),
                                             child: Center(
-                                              child: Text(
+                                              child: Text( GetStorage().read("lang") == "ar" ? dataCollectionController
+                                                    .cities![index].name!.ar
+                                                    .toString() :
                                                 dataCollectionController
                                                     .cities![index].name!.en
                                                     .toString(),
@@ -1273,6 +1275,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           margin: const EdgeInsets.only(top: 2),
                                           child: Center(
                                             child: Text(
+                                              GetStorage().read("lang") == "ar" ?  dataCollectionController
+                                                  .types![index].expenseNameAr
+                                                  .toString() :
                                               dataCollectionController
                                                   .types![index].expenseName
                                                   .toString(),

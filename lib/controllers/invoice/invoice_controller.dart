@@ -15,13 +15,21 @@ import '../../src/widgets/loader.dart';
 
 class InvoiceController extends getpackage.GetxController {
   List<File> uploadImages = <File>[].obs;
+  var selectedBudgetId = "".obs;
+  var selectedExptId = "".obs;
+  var selectedBudgetName = "Select Category".obs;
+  var selectedExpName = "Select Expanse".obs;
+  // var selectedBudgetName = "Select Category".obs;
+  // List<File> uploadImages2 = <File>[].obs;
   var qrCode = "".obs;
   var filter = 0;
   bool checkMobile = false;
   getpackage.Rx<SearchedMobileList> searchedUsers = SearchedMobileList().obs;
   TextEditingController mobile1 = TextEditingController();
   TextEditingController amount2 = TextEditingController();
+  TextEditingController amount22 = TextEditingController();
   TextEditingController note3 = TextEditingController();
+  TextEditingController note33 = TextEditingController();
 
   Future postNewInvoice(String mobile, String amount, String note) async {
     openLoader();
@@ -56,7 +64,7 @@ class InvoiceController extends getpackage.GetxController {
         getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
-        getpackage.Get.snackbar('Error'.tr, 'Something went wrong'.tr);
+        getpackage.Get.snackbar('Error'.tr, "Something wnet wrong".tr);
         debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
@@ -96,9 +104,87 @@ class InvoiceController extends getpackage.GetxController {
     }
   }
 
+  Future postNewCustomInvoice(String bid, String expId ,String amount, String note) async {
+    openLoader();
+
+    FormData formData = FormData();
+
+    for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("file_attach[$i]",
+          await MultipartFile.fromFile(file.path, filename: fileName)));
+    }
+    formData.fields
+        .add(MapEntry('language', GetStorage().read('lang').toString()));
+    formData.fields.add(MapEntry('budget_id', bid));
+    formData.fields.add(MapEntry('expense_type_id', expId));
+    formData.fields.add(MapEntry('amount', amount));
+    formData.fields.add(MapEntry('note', note));
+    
+    debugPrint(formData.fields.toString());
+
+    //debugPrint(formData.files.first.toString());
+
+    //Dio http = API.getInstance();
+    var response = await DioClient()
+        .post(ApiLinks.customSimpleInvoice, formData, true)
+        .catchError((error) {
+      checkMobile = false;    
+      getpackage.Get.back();
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        debugPrint("aaaaaaaa${error.toString()}");
+        getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
+        //DialogBoxes.showErroDialog(description: apiError["reason"]);
+      } else {
+        getpackage.Get.snackbar('Error'.tr, 'Something went wrong'.tr);
+        debugPrint("aaaaaaaa${error.toString()}");
+        //Navigator.of(getpackage.Get.context!).pop();
+        //HandlingErrors().handleError(error);
+      }
+    });
+
+    // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
+
+    debugPrint("aaaaaaaaaaa$response");
+    // Navigator.of(getpackage.Get.context!).pop();
+    if (response == null) return;
+    if (response['success']) {
+      checkMobile = false;
+      getpackage.Get.back();
+      //SnakeBars.showSuccessSnake(description: response['message'].toString());
+      
+      uploadImages.clear();
+      selectedBudgetId.value = '';
+      selectedExptId.value = '';
+      selectedBudgetName.value = "Select Category";
+      selectedExpName.value = "Select Expanse";
+
+      amount22.clear();
+      note33.clear();
+      getpackage.Get.back();
+      getpackage.Get.snackbar('Success'.tr, response['message'].toString());
+      //files.clear();
+
+    } else {
+      //uploadImages.clear();
+      debugPrint('here');
+      (response.containsKey('validation_errors'))
+          ? getpackage.Get.snackbar(response['message'].toString(),
+              response['validation_errors'].toString())
+          // SnakeBars.showValidationErrorSnake(
+          //     title: response['message'].toString(),
+          //     description: response['validation_errors'].toString())
+          : getpackage.Get.snackbar('Error'.tr, response['message'].toString());
+      //SnakeBars.showErrorSnake(description: response['message'].toString());
+      Navigator.of(getpackage.Get.context!).pop();
+    }
+  }
+
   Future<InvoiceList?> getInvoiceList(String query) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
-    // openLoader();
+    //  openLoader();
     var request = {};
     if(query == ''){
     request = {
@@ -133,11 +219,13 @@ class InvoiceController extends getpackage.GetxController {
     });
     if(response == null ) return null;
     if (response['success'] == true) {
+      // getpackage.Get.back();
       debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
+      // getpackage.Get.back();
       debugPrint('here');
     }
     return null;

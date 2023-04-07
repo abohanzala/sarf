@@ -740,24 +740,47 @@ packages:
   location:
     dependency: "direct main"
     description:
-      name: location
+      path: "packages/location"
+      ref: HEAD
+      resolved-ref: f9c1051ad3b4edfeb5574395f3bdabe5bef789f8
+      url: "https://github.com/faisalansari0367/flutterlocation"
+    source: git
+    version: "5.0.0-dev.8"
+  location_android:
+    dependency: transitive
+    description:
+      name: location_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "5.0.0-dev.3"
+  location_ios:
+    dependency: transitive
+    description:
+      name: location_ios
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0-dev.4"
+  location_macos:
+    dependency: transitive
+    description:
+      name: location_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0-dev.3"
   location_platform_interface:
     dependency: transitive
     description:
       name: location_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.0"
+    version: "5.0.0-dev.3"
   location_web:
     dependency: transitive
     description:
       name: location_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "5.0.0-dev.3"
   logger:
     dependency: transitive
     description:
@@ -765,6 +788,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.2"
+  mat_month_picker_dialog:
+    dependency: "direct main"
+    description:
+      name: mat_month_picker_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   matcher:
     dependency: transitive
     description:
@@ -885,7 +915,7 @@ packages:
     source: hosted
     version: "2.1.4"
   pdf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pdf
       url: "https://pub.dartlang.org"
@@ -1205,7 +1235,7 @@ packages:
     source: hosted
     version: "2.1.2"
   video_player:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: video_player
       url: "https://pub.dartlang.org"

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/home/home_controller.dart';
 import '../../resources/resources.dart';
 
 
@@ -76,6 +77,15 @@ Container customAppBar(String title,bool back,bool braket,String? braketText,boo
             ),
           ),
         );
+  }
+
+  Widget budgetName(){
+    return const SizedBox();
+    // HomeController ctr = Get.find<HomeController>();
+    // return Row(children: [
+      
+    //   Obx(() => Text(ctr.selectedBudgetName.value == GetStorage().read("name") ? "Main Budget".tr :  ctr.selectedBudgetName.value ,style: const TextStyle(fontWeight: FontWeight.w500),)),
+    // ],);
   }
 
   Transform appbarSearch() {

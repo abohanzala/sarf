@@ -12,11 +12,13 @@ import 'package:intl_phone_field/phone_number.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/resources/resources.dart';
+import 'package:sarf/src/baseview/Send/custom_invoice.dart';
 import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:scan/scan.dart';
 
 import '../../utils/navigation_observer.dart';
+import '../../widgets/custom_appbar.dart';
 
 class SimpleInvoice extends StatefulWidget {
   const SimpleInvoice({super.key});
@@ -50,6 +52,17 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
   }
 
   InvoiceController ctr = Get.find<InvoiceController>();
+
+  String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
 
   Future pickImage(ImageSource source) async {
     try {
@@ -113,7 +126,9 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
             });
           }
         });
-    } 
+    } else{
+      ctr.uploadImages.clear();
+    }
     
     super.didPopNext();
   }
@@ -196,108 +211,173 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: R.colors.lightGrey,
-      body: Column(
-        // mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: GetStorage().read("lang") == 'en'?  16.w : 0, top: 20.h,right: GetStorage().read("lang") == 'en'? 0:16.w ),
-            height: 120.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  R.colors.blueGradient1,
-                  R.colors.blueGradient2,
-                ],
+    return WillPopScope(
+      onWillPop: () async{
+        // exit(0);
+         SystemNavigator.pop(animated: true);
+        //  SystemNavigator.pop();
+          return true;
+      },
+      child: Scaffold(
+        backgroundColor: R.colors.lightGrey,
+        body: Stack(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: GetStorage().read("lang") == 'en'?  16.w : 0, top: 20.h,right: GetStorage().read("lang") == 'en'? 0:16.w ),
+              height: 120.h,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    R.colors.blueGradient1,
+                    R.colors.blueGradient2,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(10),
               ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Align(
-              alignment: GetStorage().read('lang') == 'en' ? Alignment.centerLeft : Alignment.centerRight,
-              child: Text(
-                'Simple Invoice'.tr,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
+              child: Align(
+                alignment: GetStorage().read('lang') == 'en' ? Alignment.centerLeft : Alignment.centerRight,
+                child: Text(
+                  'Send Invoice'.tr,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Transform(
-              transform: Matrix4.translationValues(0, -40.h, 0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                padding:  EdgeInsets.only(left: 12.w,right: 12.w,top: 15.h,bottom: 10),
-                child: SingleChildScrollView(
-                  child: Form(
-                    child: Column(
-                          // mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Text('Mobile Number'.tr,style: TextStyle(
-                            //       color: R.colors.grey,
-                            //       fontSize: 14.sp,
-                            //     ),),
-                            //     const SizedBox(height: 5,),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                                  decoration: BoxDecoration(
-                                    color: R.colors.lightGrey,
-                                    borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: IntlPhoneField(
-                                           controller: ctr.mobile1,
-                                          keyboardType: TextInputType.text,
-                                          disableLengthCheck: true,
-                                          onChanged: _onChangeHandler,
-                                                  countries: ["SA"],
-                                                  showDropdownIcon: false,
-                                                  flagsButtonPadding: EdgeInsets.only(left: 10),
-                                                 
-                                                  invalidNumberMessage: 'Invalid mobile number'.tr,
-                                                  initialCountryCode: 'SA',
-                                                  onCountryChanged: (country) {},
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    label: Container(
-                                                      margin: EdgeInsets.symmetric(horizontal: 0),
-                                                      child: Text('Enter Mobile Number'.tr,
-                                                          style: TextStyle(
-                                                              color: Color(0xFF707070),
-                                                              fontFamily: 'regular',
-                                                              fontSize: 12)),
-                                                    ),
-                                                    isDense: false,
-                                                    contentPadding:
-                                                        const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                                                    // border: OutlineInputBorder(
-                                                    //   borderRadius: BorderRadius.circular(5.0),
-                                                    // ),
-                                                    // filled: true,
-                                                    //  fillColor: const Color(0xffF0F0F0)
-                                                  ),
-                                                ),
-                                
+            Container(
+              margin: const EdgeInsets.only(top: 80),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
+                      padding:  EdgeInsets.only(left: 12.w,right: 12.w,top: 15.h,bottom: 20),
+                      child: Form(
+                        child: Column(
+                              // mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: budgetName(),
+            ),
+            const SizedBox(height: 10,),
+                                // Text('Mobile Number'.tr,style: TextStyle(
+                                //       color: R.colors.grey,
+                                //       fontSize: 14.sp,
+                                //     ),),
+                                //     const SizedBox(height: 5,),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                                      decoration: BoxDecoration(
+                                        color: R.colors.lightGrey,
+                                        borderRadius: BorderRadius.circular(10)
                                       ),
-                                
-                                       Padding(
-                                        padding: EdgeInsets.only(bottom: 10),
-                                         child: GestureDetector(
-                                                                           onTap: (){
-                                                                             Get.bottomSheet(Container(
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: IntlPhoneField(
+                                               controller: ctr.mobile1,
+                                              keyboardType: TextInputType.text,
+                                              disableLengthCheck: true,
+                                              onChanged: _onChangeHandler,
+                                                      countries: ["SA"],
+                                                      showDropdownIcon: false,
+                                                      flagsButtonPadding: const EdgeInsets.only(left: 10),
+                                                     
+                                                      invalidNumberMessage: 'Invalid mobile number'.tr,
+                                                      initialCountryCode: 'SA',
+                                                      onCountryChanged: (country) {},
+                                                      decoration: InputDecoration(
+                                                        border: InputBorder.none,
+                                                        label: Container(
+                                                          margin: const EdgeInsets.symmetric(horizontal: 0),
+                                                          child: Text('Enter Mobile Number'.tr,
+                                                              style: const TextStyle(
+                                                                  color: Color(0xFF707070),
+                                                                  fontFamily: 'regular',
+                                                                  fontSize: 12)),
+                                                        ),
+                                                        isDense: false,
+                                                        contentPadding:
+                                                            const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                                                        // border: OutlineInputBorder(
+                                                        //   borderRadius: BorderRadius.circular(5.0),
+                                                        // ),
+                                                        // filled: true,
+                                                        //  fillColor: const Color(0xffF0F0F0)
+                                                      ),
+                                                    ),
+                                    
+                                          ),
+                                    
+                                           Padding(
+                                            padding: const EdgeInsets.only(bottom: 10),
+                                             child: GestureDetector(
+                                                                               onTap: (){
+                                                                                 Get.bottomSheet(Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                                              decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                                color: R.colors.white,
+                                                
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: (){
+                                                      Get.back();
+                                                      // qrCode = true;
+                                                      Get.to(() => const QRScannerScreen(invoice: true,) );
+                                                    },
+                                                    child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                                    const SizedBox(height: 10,),
+                                                    Divider(color: R.colors.grey,thickness: 0.5,),
+                                                    const SizedBox(height: 10,),
+                                                    GestureDetector(
+                                                    onTap: (){
+                                                      pickImageQr();
+                                                      
+                                                    },
+                                                    child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                                ],
+                                              ),
+                                                                  
+                                                                                 ),
+                                                                                 );
+                                                                                 
+                                                                               },
+                                                                               child: Icon(
+                                                                                 Icons.qr_code,
+                                                                                 color: R.colors.blue,
+                                                                                 size: 25.sp,
+                                                                               ),
+                                                                             ),
+                                           )
+                                          
+                                        ],
+                                      ),
+                                    ),
+                                /*TextFormField(
+                                  //initialValue: ctr.mobile1.text,
+                                  controller: ctr.mobile1,
+                                  onChanged: _onChangeHandler,
+                                  decoration: InputDecoration(
+                                    suffixIcon: GestureDetector(
+                                      onTap: (){
+                                        Get.bottomSheet(Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
                                           decoration: BoxDecoration(
                                             borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
@@ -326,407 +406,383 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                                 child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
                                             ],
                                           ),
-                                                              
-                                                                             ),
-                                                                             );
-                                                                             
-                                                                           },
-                                                                           child: Icon(
-                                                                             Icons.qr_code,
-                                                                             color: R.colors.blue,
-                                                                             size: 25.sp,
-                                                                           ),
-                                                                         ),
-                                       )
-                                      
-                                    ],
-                                  ),
-                                ),
-                            /*TextFormField(
-                              //initialValue: ctr.mobile1.text,
-                              controller: ctr.mobile1,
-                              onChanged: _onChangeHandler,
-                              decoration: InputDecoration(
-                                suffixIcon: GestureDetector(
-                                  onTap: (){
-                                    Get.bottomSheet(Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                                        color: R.colors.white,
+                                
+                                        ),
+                                        );
                                         
+                                      },
+                                      child: Icon(
+                                        Icons.qr_code,
+                                        color: R.colors.blue,
+                                        size: 25.sp,
                                       ),
-                                      child: Column(
+                                    ),
+                                    //'Mobile Number'.tr
+                                    fillColor: R.colors.lightGrey,
+                                    filled: true,
+                                    hintText: "9665----",
+                                   
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: R.colors.grey,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),*/
+                                Obx(
+                                  () => Stack(
+                                    children: [
+                                     
+                                      Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  if(name != '')
+                                  Text(
+                                    name,
+                                    style: TextStyle(
+                                      color: name == 'User not found'.tr? Colors.red : R.colors.black,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  TextFormField(
+                                    controller: ctr.amount2,
+                                    decoration: InputDecoration(
+                                      fillColor: R.colors.lightGrey,
+                                      filled: true,
+                                      labelText: 'Amount'.tr,
+                                      labelStyle: TextStyle(
+                                        color: R.colors.grey,
+                                        fontSize: 14.sp,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: R.colors.grey,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  TextFormField(
+                                    controller: ctr.note3,
+                                    maxLines: 7,
+                                    decoration: InputDecoration(
+                                      fillColor: R.colors.lightGrey,
+                                      filled: true,
+                                      labelText: 'Description(Optional)'.tr,
+                                      labelStyle: TextStyle(
+                                        color: R.colors.grey,
+                                        fontSize: 14.sp,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: R.colors.grey,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                   Container(
+                                      width: Get.width,
+                                      padding: const EdgeInsets.symmetric(vertical: 0),
+                                      height: 70,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           GestureDetector(
-                                            onTap: (){
-                                              Get.back();
-                                              // qrCode = true;
-                                              Get.to(() => const QRScannerScreen(invoice: true,) );
+                                            onTap: () {
+                                              pickImage(ImageSource.gallery);
                                             },
-                                            child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
-                                            const SizedBox(height: 10,),
-                                            Divider(color: R.colors.grey,thickness: 0.5,),
-                                            const SizedBox(height: 10,),
-                                            GestureDetector(
-                                            onTap: (){
-                                              pickImageQr();
-                                              
-                                            },
-                                            child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
-                                        ],
-                                      ),
-                            
-                                    ),
-                                    );
-                                    
-                                  },
-                                  child: Icon(
-                                    Icons.qr_code,
-                                    color: R.colors.blue,
-                                    size: 25.sp,
-                                  ),
-                                ),
-                                //'Mobile Number'.tr
-                                fillColor: R.colors.lightGrey,
-                                filled: true,
-                                hintText: "9665----",
-                               
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: R.colors.grey,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),*/
-                            Obx(
-                              () => Stack(
-                                children: [
-                                 
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                height: 10.h,
-                              ),
-                              if(name != '')
-                              Text(
-                                name,
-                                style: TextStyle(
-                                  color: name == 'User not found'.tr? Colors.red : R.colors.black,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              TextFormField(
-                                controller: ctr.amount2,
-                                decoration: InputDecoration(
-                                  fillColor: R.colors.lightGrey,
-                                  filled: true,
-                                  labelText: 'Amount'.tr,
-                                  labelStyle: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 14.sp,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: R.colors.grey,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              TextFormField(
-                                controller: ctr.note3,
-                                maxLines: 7,
-                                decoration: InputDecoration(
-                                  fillColor: R.colors.lightGrey,
-                                  filled: true,
-                                  labelText: 'Description'.tr,
-                                  labelStyle: TextStyle(
-                                    color: R.colors.grey,
-                                    fontSize: 14.sp,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: R.colors.grey,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                               Container(
-                                  width: Get.width,
-                                  padding: const EdgeInsets.symmetric(vertical: 0),
-                                  height: 70,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          pickImage(ImageSource.gallery);
-                                        },
-                                        child: Container(
-                                          height: 60,
-                                          width: 60,
-                                          margin:
-                                              const EdgeInsets.only(right: 10, top: 1),
-                                          padding: const EdgeInsets.all(18),
-                                          decoration: BoxDecoration(
-                                            color: R.colors.grey,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/attach.png',
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _startScan(context);
-                                                  
-                                          //  pickImage(ImageSource.gallery);
-                                        },
-                                        child: Container(
-                                            height: 60,
-                                            width: 60,
-                                            margin:
-                                                const EdgeInsets.only(right: 10, top: 1),
-                                            padding: const EdgeInsets.all(18),
-                                            decoration: BoxDecoration(
-                                              color: R.colors.grey,
-                                              borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 60,
+                                              width: 60,
+                                              margin:
+                                                  const EdgeInsets.only(right: 10, top: 1),
+                                              padding: const EdgeInsets.all(18),
+                                              decoration: BoxDecoration(
+                                                color: R.colors.grey,
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Image.asset(
+                                                'assets/images/attach.png',
+                                              ),
                                             ),
-                                            child: Icon(
-                                              Icons.qr_code_scanner_rounded,
-                                              //size: 28.sp,
-                                              color: R.colors.white,
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Expanded(
-                                        child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            shrinkWrap: true,
-                                            itemCount: ctr.uploadImages.length,
-                                            itemBuilder: (context, index) {
-                                              var singleFile = ctr.uploadImages[index];
-                                              return Stack(
-                                                //alignment: Alignment.topRight,
-                                                children: [
-                                                  Container(
-                                                    width: 60,
-                                                    height: 60,
-                                                    margin: const EdgeInsets.only(
-                                                        right: 10, top: 5),
-                                                    decoration: BoxDecoration(
-                                                      //  color: R.colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(10),
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(5),
-                                                      child: Image.file(
-                                                        singleFile,
-                                                        height: 25.h,
-                                                        width: 25.w,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: 0,
-                                                    right: 5,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        ctr.uploadImages.removeAt(index);
-                                                      },
-                                                      child: Container(
-                                                        height: 20,
-                                                        width: 20,
-                                                        //padding: const EdgeInsets.all(5),
-                                                        decoration: const BoxDecoration(
-                                                            color: Colors.red,
-                                                            shape: BoxShape.circle),
-                                                        child: Align(
-                                                          alignment: Alignment.center,
-                                                          child: Icon(
-                                                            Icons.close,
-                                                            size: 12,
-                                                            color: R.colors.white,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              _startScan(context);
+                                                      
+                                              //  pickImage(ImageSource.gallery);
+                                            },
+                                            child: Container(
+                                                height: 60,
+                                                width: 60,
+                                                margin:
+                                                    const EdgeInsets.only(right: 10, top: 1),
+                                                padding: const EdgeInsets.all(18),
+                                                decoration: BoxDecoration(
+                                                  color: R.colors.grey,
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: Icon(
+                                                  Icons.qr_code_scanner_rounded,
+                                                  //size: 28.sp,
+                                                  color: R.colors.white,
+                                                )),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                            child: ListView.builder(
+                                                scrollDirection: Axis.horizontal,
+                                                shrinkWrap: true,
+                                                itemCount: ctr.uploadImages.length,
+                                                itemBuilder: (context, index) {
+                                                  var singleFile = ctr.uploadImages[index];
+                                                  return Stack(
+                                                    //alignment: Alignment.topRight,
+                                                    children: [
+                                                      Container(
+                                                        width: 60,
+                                                        height: 60,
+                                                        margin: const EdgeInsets.only(
+                                                            right: 10, top: 5),
+                                                        decoration: BoxDecoration(
+                                                          //  color: R.colors.grey,
+                                                          borderRadius:
+                                                              BorderRadius.circular(10),
+                                                        ),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(5),
+                                                          child: Image.file(
+                                                            singleFile,
+                                                            height: 25.h,
+                                                            width: 25.w,
+                                                            fit: BoxFit.cover,
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            }),
+                                                      Positioned(
+                                                        top: 0,
+                                                        right: 5,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            ctr.uploadImages.removeAt(index);
+                                                          },
+                                                          child: Container(
+                                                            height: 20,
+                                                            width: 20,
+                                                            //padding: const EdgeInsets.all(5),
+                                                            decoration: const BoxDecoration(
+                                                                color: Colors.red,
+                                                                shape: BoxShape.circle),
+                                                            child: Align(
+                                                              alignment: Alignment.center,
+                                                              child: Icon(
+                                                                Icons.close,
+                                                                size: 12,
+                                                                color: R.colors.white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  );
+                                                }),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
+                                  
+                                                           
+                                  SizedBox(
+                                    height: 10.h,
                                   ),
-                                ),
-                              
-                                                       
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        
-                                        if (name == 'User not found') {
-                                          Get.snackbar('Error'.tr, "Enter a valid number".tr);
-                                          return;
-                                        }
-                                        if (ctr.mobile1.text.isEmpty) {
-                                          Get.snackbar('Error'.tr, "mobile is required".tr);
-                                          return;
-                                        }
-                                        if (ctr.amount2.text.isEmpty) {
-                                          Get.snackbar('Error'.tr, "amount is required".tr);
-                                          return;
-                                        }
-                                        // if (ctr.note3.text.isEmpty) {
-                                        //   Get.snackbar('Error'.tr, "note is required".tr);
-                                        //   return;
-                                        // }
-                                        FocusScope.of(context).unfocus();
-                            
-                                        String a = '966${ctr.mobile1.text}';
-                                        
-                                        ctr
-                                            .postNewInvoice(a,
-                                                ctr.amount2.text, ctr.note3.text)
-                                            .then((value) {
-                                              setState(() {
-                                                name = '';
-                                              });
-                                            });
-                                      },
-                                      child: Container(
-                                        height: 50.h,
-                                        decoration: BoxDecoration(
-                                          color: R.colors.themeColor,
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Send Invoice'.tr,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold,
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            
+                                            if (name == 'User not found') {
+                                              Get.snackbar('Error'.tr, "Enter a valid number".tr);
+                                              return;
+                                            }
+                                            if (ctr.mobile1.text.isEmpty) {
+                                              Get.snackbar('Error'.tr, "mobile is required".tr);
+                                              return;
+                                            }
+                                            if (ctr.amount2.text.isEmpty) {
+                                              Get.snackbar('Error'.tr, "amount is required".tr);
+                                              return;
+                                            }
+                                            // if (ctr.note3.text.isEmpty) {
+                                            //   Get.snackbar('Error'.tr, "note is required".tr);
+                                            //   return;
+                                            // }
+                                            FocusScope.of(context).unfocus();
+                                
+                                            String a = '966${ctr.mobile1.text}';
+                                            String b = replaceArabicNumber(ctr.amount2.text);
+                                            // print(b);
+                                            
+                                            ctr
+                                                .postNewInvoice(a,
+                                                    b, ctr.note3.text)
+                                                .then((value) {
+                                                  setState(() {
+                                                    name = '';
+                                                  });
+                                                });
+                                          },
+                                          child: Container(
+                                            height: 50.h,
+                                            decoration: BoxDecoration(
+                                              color: R.colors.themeColor,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'Send'.tr,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                        ],
+                                      ),
+                                       if(searching && ctr.searchedUsers.value.data != null) ...[
+                                     Container(
+                                      decoration: BoxDecoration(
+                                        color: R.colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: R.colors.lightGrey,
+                                            offset: const Offset(0,2),
+                                            spreadRadius: 2,
+                                            blurRadius: 2
+                                          ),
+                                        ],
+                                      ),
+                                      height: 300,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: ctr.searchedUsers.value.data?.length,
+                                        itemBuilder: (context,index){
+                                          var singleData = ctr.searchedUsers.value.data?[index];
+                                        return ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundColor: R.colors.lightGrey,
+                                            radius: 25,
+                                            backgroundImage: singleData?.photo == null ? null : NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") ,
+                                          ),
+                                          title: Text(singleData?.name ?? ''),
+                                          subtitle: Text(singleData?.mobile ?? ''),
+                                          onTap: (){
+                                            FocusScope.of(context).unfocus();
+                                            var a = singleData?.mobile ?? '';
+                                            final spliited = a.split("966");
+                                            ctr.mobile1.text = spliited[1];
+                                            ctr.mobile1.selection = TextSelection.collapsed(offset: ctr.mobile1.text.length);
+                                            setState(() {
+                                              searching = false;
+                                            });
+                                            ctr.mobileCheck('966${ctr.mobile1.text}').then((value){
+                                                if(value['message'] == 'User record available'){
+                                                  setState(() {
+                                                    name = value['user']['name'];
+                                                  });
+                                                }
+                                                if(value['message'] == 'User not found!'){
+                                                  setState(() {
+                                                    name = "User not found".tr;
+                                                  });
+                                                }
+                                              });
+                                          },
+                                        );
+                                      }),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                  
                                     ],
                                   ),
-                                   if(searching && ctr.searchedUsers.value.data != null) ...[
-                                 Container(
-                                  decoration: BoxDecoration(
-                                    color: R.colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: R.colors.lightGrey,
-                                        offset: Offset(0,2),
-                                        spreadRadius: 2,
-                                        blurRadius: 2
-                                      ),
-                                    ],
-                                  ),
-                                  height: 300,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: ctr.searchedUsers.value.data?.length,
-                                    itemBuilder: (context,index){
-                                      var singleData = ctr.searchedUsers.value.data?[index];
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundColor: R.colors.lightGrey,
-                                        radius: 25,
-                                        backgroundImage: singleData?.photo == null ? null : NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") ,
-                                      ),
-                                      title: Text(singleData?.name ?? ''),
-                                      subtitle: Text(singleData?.mobile ?? ''),
-                                      onTap: (){
-                                        FocusScope.of(context).unfocus();
-                                        var a = singleData?.mobile ?? '';
-                                        final spliited = a.split("966");
-                                        ctr.mobile1.text = spliited[1];
-                                        ctr.mobile1.selection = TextSelection.collapsed(offset: ctr.mobile1.text.length);
-                                        setState(() {
-                                          searching = false;
-                                        });
-                                        ctr.mobileCheck('966${ctr.mobile1.text}').then((value){
-                                            if(value['message'] == 'User record available'){
-                                              setState(() {
-                                                name = value['user']['name'];
-                                              });
-                                            }
-                                            if(value['message'] == 'User not found!'){
-                                              setState(() {
-                                                name = "User not found".tr;
-                                              });
-                                            }
-                                          });
-                                      },
-                                    );
-                                  }),
                                 ),
                               ],
-                              
-                                ],
-                              ),
                             ),
-                          ],
-                        ),
+                        
+                        
+                      ),
+                    ),
                     
-                    
-                  ),
+                    GestureDetector(
+                      onTap: () => Get.to(() => const CustomInvoice()),
+                      child: Container(
+                      width: Get.width,
+                      margin: EdgeInsets.symmetric(horizontal: 20.w),
+                      padding:  const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                      color: R.colors.blue,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.list_alt,color: R.colors.white,),
+                          const SizedBox(height: 8,),
+                          Text("Generate Custom Invoice".tr,style: TextStyle(color: R.colors.white),),
+                        ],
+                      ),
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                  ],
                 ),
               ),
             ),
-          )
-        ],
+            
+    
+          ],
+        ),
       ),
     );
   }
