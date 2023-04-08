@@ -9,6 +9,7 @@ import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
 
 class HomeController extends GetxController{
@@ -54,7 +55,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
    };
    debugPrint(request.toString());
     var response =
-        await DioClient().post(ApiLinks.getHome, request).catchError((error) {
+        await DioClient().post(ApiLinks.getHome, request).catchError((error) async{
       if (error is BadRequestException) {
         loading.value = false;
          var apiError = json.decode(error.message!);
@@ -65,7 +66,40 @@ Future getHome(String? id,int? day,int? month,int? year) async {
           backgroundColor: R.colors.themeColor,
         );
        // print(error.toString());
-      } else {
+      } 
+      
+      if (error is UnAuthorizedException) {
+        loading.value = false;
+         await GetStorage().remove('user_token');
+    await GetStorage().remove('groupId');
+    await GetStorage().remove('userId');
+    await GetStorage().remove(
+      'name',
+    );
+    await GetStorage().remove(
+      'username',
+    );
+    await GetStorage().remove(
+      'email',
+    );
+    await GetStorage().remove(
+      'firebase_email',
+    );
+    await GetStorage().remove(
+      'mobile',
+    );
+    await GetStorage().remove(
+      'photo',
+    );
+    await GetStorage().remove(
+      'status',
+    );
+     Get.offAllNamed(RoutesName.LogIn);
+      
+      } 
+      
+      
+      else {
         loading.value = false;
       if (error is BadRequestException) {
       var message = error.message;

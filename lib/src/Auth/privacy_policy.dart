@@ -152,7 +152,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                                     width: MediaQuery.of(context).size.width,
                                     child: Center(
                                       child: Text(
-                                        'Arabic',
+                                        'عربي',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: arabic

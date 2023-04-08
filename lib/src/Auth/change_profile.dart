@@ -455,7 +455,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                         () => Text(
                           profileController.location.value != null
                               ? profileController.location.value
-                              : 'Select Location',
+                              : 'Select Location'.tr,
                           style: TextStyle(
                               color: R.colors.black,
                               fontSize: 13,
@@ -491,8 +491,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                   child: Obx(() => Text(
                         changeProfileController.finalSelectedCity.value != ''
                             ? changeProfileController.finalSelectedCity.value
-                            : profileController.profileModel!.user!.userDetail!
+                            : GetStorage().read("lang") == "en" ? profileController.profileModel!.user!.userDetail!
                                 .cityId!.name!.en!
+                                .toString() :  profileController.profileModel!.user!.userDetail!
+                                .cityId!.name!.ar!
                                 .toString(),
                         style: TextStyle(
                             fontSize: 12,
@@ -572,7 +574,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'insta link',
+          hintText: 'Instagram Link (Optional)'.tr,
           controller: profileController.instaController,
           color: R.colors.lightGrey,
           height: 45,
@@ -585,7 +587,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'whatsapp link ',
+          hintText: 'Whatsapp (Optional)'.tr,
           controller: profileController.whatsappController,
           color: R.colors.lightGrey,
           height: 45,
@@ -611,7 +613,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Contact No:  e.g +923313',
+          hintText: 'Contact No (Optional)'.tr,
           controller: profileController.contactController,
           color: R.colors.lightGrey,
           height: 45,
@@ -624,7 +626,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'twitter link',
+          hintText: 'Twitter Link (Optional)'.tr,
           controller: profileController.twitterController,
           color: R.colors.lightGrey,
           height: 45,
@@ -670,7 +672,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                               height: 20,
                             ),
                             Text(
-                              'Select City',
+                              'Select City'.tr,
                               style: TextStyle(
                                   fontSize: 18,
                                   fontFamily: 'bold',
@@ -696,11 +698,16 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                           print(selectedCityIndex);
                                           changeProfileController
                                                   .finalSelectedCity.value =
+                                              GetStorage().read("lang") == "en" ?    
                                               dataCollectionController
                                                   .cities![selectedCityIndex]
                                                   .name!
                                                   .en
-                                                  .toString();
+                                                  .toString() : dataCollectionController
+                                                  .cities![selectedCityIndex]
+                                                  .name!
+                                                  .ar
+                                                  .toString() ;
                                           var getCityId =
                                               dataCollectionController
                                                   .cities![selectedCityIndex]
@@ -732,8 +739,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                             margin: EdgeInsets.only(top: 2),
                                             child: Center(
                                               child: Text(
-                                                dataCollectionController
+                                               GetStorage().read("lang") == "en"? dataCollectionController
                                                     .cities![index].name!.en
+                                                    .toString() : dataCollectionController
+                                                    .cities![index].name!.ar
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,

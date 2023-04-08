@@ -15,6 +15,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../constant/api_links.dart';
+import '../../../controllers/common/profile_controller.dart';
 import '../../../resources/resources.dart';
 import '../../../services/dio_client.dart';
 import '../base_controller.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController ctr = Get.put<HomeController>(HomeController());
+  ProfileController profileController = Get.put<ProfileController>(ProfileController());
   TextEditingController txt = TextEditingController();
   ScreenshotController screenshotController = ScreenshotController();
   DateTime date = DateTime.now();

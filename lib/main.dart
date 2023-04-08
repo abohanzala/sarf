@@ -47,9 +47,7 @@ void main() async {
   Get.put<TermsAndConditionsController>(TermsAndConditionsController());
   Get.put<PrivacyController>(PrivacyController());
   Get.put<AboutController>(AboutController());
-  Get.put<ProfileController>(ProfileController());
-  Get.put<DeleteAccountController>(DeleteAccountController());
-  Get.put<ChangeProfileController>(ChangeProfileController());
+  
   if( await GetStorage().read('lang') == null){
     
     await GetStorage().write('lang', 'ar');

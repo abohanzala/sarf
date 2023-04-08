@@ -1016,7 +1016,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Contact No (Optional)',
+          hintText: 'Contact No (Optional)'.tr,
           controller: registrationController.contactController,
           color: R.colors.lightGrey,
           height: 45,
@@ -1029,7 +1029,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
-          hintText: 'Whatsapp (Optional)',
+          hintText: 'Whatsapp (Optional)'.tr,
           controller: registrationController.whatsappController,
           color: R.colors.lightGrey,
           height: 45,
@@ -1115,10 +1115,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           setState(() {
                                             registrationController
                                                     .finalSelectedCity.value =
+                                                GetStorage().read("lang") == "ar" ? dataCollectionController
+                                                    .cities![index].name!.ar
+                                                    .toString() :
                                                 dataCollectionController
-                                                    .cities![selectedCityIndex]
-                                                    .name!
-                                                    .en
+                                                    .cities![index].name!.en
                                                     .toString();
                                           });
                                           var getCityId =
@@ -1244,10 +1245,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         print(selectedTypeIndex);
                                         registrationController
                                                 .finalSelectedType.value =
-                                            dataCollectionController
-                                                .types![selectedTypeIndex]
-                                                .expenseName
-                                                .toString();
+                                            GetStorage().read("lang") == "ar" ?  dataCollectionController
+                                                  .types![index].expenseNameAr
+                                                  .toString() :
+                                              dataCollectionController
+                                                  .types![index].expenseName
+                                                  .toString();
 
                                         var getTypeId = dataCollectionController
                                             .types![index].id
@@ -1410,7 +1413,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         () => Text(
                           registrationController.location.value != ''
                               ? registrationController.location.value
-                              : 'Select Location',
+                              : 'Select Location'.tr,
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 13,

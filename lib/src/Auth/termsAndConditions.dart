@@ -153,7 +153,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                                     width: MediaQuery.of(context).size.width,
                                     child: Center(
                                       child: Text(
-                                        'Arabic',
+                                        'عربي',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: arabic

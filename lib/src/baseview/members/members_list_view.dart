@@ -257,15 +257,15 @@ launchPhone({required Uri u}) async {
                                   const SizedBox(height: 8,),
                                   Row(
                                     children: [
-                                      Text('Invoices'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
+                                      Text('Total Invoices'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                       const SizedBox(width: 10,),
-                                      Text("${singleData.invoicesCount}",style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                      Text("${singleData.invoicesCount ?? 0}",style: TextStyle(color: R.colors.black,fontSize: 14),),
                                     ],
                                   ),
                                   const SizedBox(height: 5,),
                                   Row(
                                     children: [
-                                      Text('Amounts'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
+                                      Text('Total Expenses'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                       const SizedBox(width: 10,),
                                       Text(  "${singleData.invoicesSumAmount ?? 0}",style: TextStyle(color: R.colors.black,fontSize: 14),),
                                     ],

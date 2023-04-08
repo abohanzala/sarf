@@ -14,6 +14,8 @@ import 'package:sarf/src/baseview/more/add_users.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 import '../../../constant/api_links.dart';
+import '../../../controllers/common/change_profile_controller.dart';
+import '../../../controllers/common/delete_account_controller.dart';
 import '../../../controllers/common/profile_controller.dart';
 import '../../../model/moreModel/account_model.dart';
 import '../../../resources/resources.dart';
@@ -29,6 +31,17 @@ class MoreScreen extends StatefulWidget {
   State<MoreScreen> createState() => _MoreScreenState();
 }
 
+
+class _MoreScreenState extends State<MoreScreen>  with RouteAware {
+  ProfileController profileController = Get.find<ProfileController>();
+  DeleteAccountController delController =  Get.put<DeleteAccountController>(DeleteAccountController());
+  ChangeProfileController changeProfileController = Get.put<ChangeProfileController>(ChangeProfileController());
+  
+ 
+  
+  bool isLoading = true;
+
+  
 Future logout() async {
   // openLoader();
 
@@ -102,10 +115,7 @@ Future logout() async {
   ctr.tabIndex.value = 0;
   Get.offAllNamed(RoutesName.LogIn)?.then((value) {});
 }
-
-class _MoreScreenState extends State<MoreScreen>  with RouteAware {
-  ProfileController profileController = Get.find<ProfileController>();
-  bool isLoading = true;
+  
 
   @override
 
@@ -171,9 +181,15 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
     // );
     //  Get.offAllNamed(RoutesName.LogIn);
     // });
-    await profileController.getProfile().then((value) => setState(() {
+    await profileController.getProfile().then((value){
+      if(mounted){
+        setState(() {
           isLoading = false;
-        }));
+        });
+      }
+    });
+
+    
         
   }
 
