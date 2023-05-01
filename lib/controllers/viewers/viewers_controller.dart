@@ -16,6 +16,10 @@ class ViewersController extends GetxController{
 TextEditingController phone = TextEditingController();
 TextEditingController password = TextEditingController();
 Rx<ViewerModel> userData = ViewerModel().obs;
+var code = "966".obs;
+  var flag = "admin/country/sa.png".obs;
+  var lenght = 9.obs;
+  var selectedCountry = 2.obs;
 
 @override
   void onInit() {

@@ -51,4 +51,5 @@ class ApiLinks {
   static const String getUserList = '$base/user/list';
   static const String alertCount = '$base/more_screen';
   static const String readAlert = '$base/alerts/read';
+  static const String createChat = '$base/chat/add';
 }

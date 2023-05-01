@@ -14,6 +14,10 @@ import '../../src/widgets/loader.dart';
 class ForgotPasswordController extends GetxController {
   var registerFormKey = GlobalKey<FormState>();
   TextEditingController phone = TextEditingController();
+  var code = "966".obs;
+  var flag = "admin/country/sa.png".obs;
+  var lenght = 9.obs;
+  var selectedCountry = 2.obs;
   var message;
 
   @override
@@ -22,7 +26,7 @@ class ForgotPasswordController extends GetxController {
     super.onInit();
   }
 
-  Future forgotPassword() async {
+  Future forgotPassword(String mob) async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -31,12 +35,11 @@ class ForgotPasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = phone.text;
-    final splitted = a.split('+');
+   
 
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
+      'mobile': mob,
     };
 
     //DialogBoxes.openLoadingDialog();

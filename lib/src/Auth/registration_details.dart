@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,12 +13,14 @@ import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
+import 'package:sarf/src/widgets/loader.dart';
 import 'package:video_player/video_player.dart';
 import '../../constant/global_constants.dart';
 import '../../controllers/auth/data_collection_controller.dart';
 import '../../controllers/auth/register_controller.dart';
 import '../../controllers/auth/registration_controller.dart';
 import '../../helper/aspect_ratio.dart';
+import '../../model/data_collection.dart';
 import '../../resources/resources.dart';
 import 'location_view.dart';
 
@@ -34,6 +37,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   RegistrationController registrationController =
       Get.find<RegistrationController>();
+  RegisterController ctr = Get.find<RegisterController>();    
+  List<Cities> cities = [];    
  // FocusNode searchFieldNode = FocusNode();
   bool business = true;
   bool personal = false;
@@ -354,6 +359,16 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   getData() async {
     await dataCollectionController.dataCollection();
+    for (var city in dataCollectionController.cities!) {
+      if( city.countryId == ctr.selectedCountry.value ){
+        cities.add(city);
+      }
+    }
+    // print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    // print(cities.toString());
+    setState(() {
+      
+    });
   }
 
   @override
@@ -447,7 +462,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           business ? buildBusinessTypeText() : Container(),
           business ? buildBusinessTypeOptions() : Container(),
           business && onlineBusiness ? buildWebsiteField() : Container(),
-          offlineBusiness ? buildLocationButton() : Container(),
+          (offlineBusiness == true && business == true) ? buildLocationButton() : Container(),
           business ? buildUploadImage() : Container(),
           // buildAgreeToTermsAndConditionsBox(),
           buildSubmitButton()
@@ -693,7 +708,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               return;
             }
           }
-          registrationController.registration();
+          registrationController.registration("${ctr.code.value}${ctr.phone.text}","${ctr.selectedCountry.value}");
         },
         child: Center(
           child: Text(
@@ -928,6 +943,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         business = false;
         personal = true;
         registrationController.accountType = false;
+        registrationController.location.value = "";
+        registrationController.location_lat.value = "";
+        registrationController.location_lng.value = "";
         setState(() {});
       },
       child: Container(
@@ -962,6 +980,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           makeCompulsoryField: true,
           hintTextSize: 12,
           hintText: 'Company Name'.tr,
@@ -976,6 +995,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Full Name'.tr,
           controller: registrationController.fullNameController,
@@ -989,6 +1009,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Instagram Link (Optional)'.tr,
           controller: registrationController.instagramController,
@@ -1002,6 +1023,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Website (Optional)'.tr,
           controller: registrationController.websiteController,
@@ -1015,6 +1037,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Contact No (Optional)'.tr,
           controller: registrationController.contactController,
@@ -1028,6 +1051,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Whatsapp (Optional)'.tr,
           controller: registrationController.whatsappController,
@@ -1041,6 +1065,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Twitter Link (Optional)'.tr,
           controller: registrationController.twitterController,
@@ -1106,7 +1131,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                 child: ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount:
-                                        dataCollectionController.cities!.length,
+                                        cities.length,
                                     itemBuilder: (BuildContext, index) {
                                       return InkWell(
                                         onTap: () {
@@ -1115,16 +1140,16 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           setState(() {
                                             registrationController
                                                     .finalSelectedCity.value =
-                                                GetStorage().read("lang") == "ar" ? dataCollectionController
-                                                    .cities![index].name!.ar
+                                                GetStorage().read("lang") == "ar" ? 
+                                                    cities[index].name!.ar
                                                     .toString() :
-                                                dataCollectionController
-                                                    .cities![index].name!.en
+                                                
+                                                    cities[index].name!.en
                                                     .toString();
                                           });
                                           var getCityId =
-                                              dataCollectionController
-                                                  .cities![selectedCityIndex]
+                                              
+                                                  cities[selectedCityIndex]
                                                   .id;
 
                                           print(
@@ -1152,11 +1177,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                     color: Colors.grey)),
                                             margin: const EdgeInsets.only(top: 2),
                                             child: Center(
-                                              child: Text( GetStorage().read("lang") == "ar" ? dataCollectionController
-                                                    .cities![index].name!.ar
+                                              child: Text( GetStorage().read("lang") == "ar" ? 
+                                                    cities[index].name!.ar
                                                     .toString() :
-                                                dataCollectionController
-                                                    .cities![index].name!.en
+                                                
+                                                    cities[index].name!.en
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -1387,9 +1412,54 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {
-          Get.to(() => const LocationView(),
-              arguments: {'From Register Screen': 'From Register Screen'});
+        onTap: () async{
+          bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the 
+    // App to enable the location services.
+    Get.snackbar("Alert".tr, "Location services are disabled.".tr);
+    return; 
+    // Future.error('');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try
+      // requesting permissions again (this is also where
+      // Android's shouldShowRequestPermissionRationale 
+      // returned true. According to Android guidelines
+      // your App should show an explanatory UI now.
+      Get.snackbar("Alert".tr, "Location permissions are denied".tr);
+      return; 
+      // Future.error('Location permissions are denied');
+    }
+  }
+  
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately. 
+    Get.snackbar("Alert".tr, "Location permissions are denied".tr);
+    return;
+    //  Future.error(
+    //   'Location permissions are permanently denied, we cannot request permissions.');
+  } 
+  openLoader();
+  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value){
+    Get.back();
+    Get.to(() => const LocationView(),
+              arguments: {'Screen': 'From Register Screen',
+              "lat": value.latitude,
+              "lng": value.longitude
+              
+              });
+  });
+          
 
           //   Get.toNamed(RoutesName.RegistrationDetails);
         },

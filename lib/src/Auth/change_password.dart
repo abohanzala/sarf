@@ -165,12 +165,13 @@ class _ChangePasswordState extends State<ChangePassword> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
       child: customTextField(
+        isPasswordObscureText: false,
           hintTextSize: 12,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent,
           controller: changePasswordController.otp,
-          hintText: 'ex 1234'.tr,
+          hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
           hintStyle: TextStyle(color: R.colors.black)),
     );
   }
@@ -196,6 +197,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             child: customTextField(
                 hintTextSize: 12,
+                isPasswordObscureText: true,
                 hintText: 'Password'.tr,
                 controller: changePasswordController.newPassword,
                 color: R.colors.lightGrey,
@@ -228,6 +230,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             child: customTextField(
                 hintTextSize: 12,
+                isPasswordObscureText: true,
                 hintText: 'Password'.tr,
                 controller: changePasswordController.confirmNewPassword,
                 color: R.colors.lightGrey,
@@ -273,7 +276,8 @@ class _ChangePasswordState extends State<ChangePassword> {
               );
               return;
             }
-            changePasswordController.changePassword();
+            
+            changePasswordController.changePassword(changePasswordController.otp.text == "١٢٣٤" ? "1234" : changePasswordController.otp.text, );
           }),
           title: 'Update'.tr,
           color: R.colors.buttonColor,

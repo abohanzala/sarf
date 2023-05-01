@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../services/notification_services.dart';
 import '../../src/widgets/loader.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
@@ -15,29 +18,34 @@ class LoginController extends GetxController {
   String id = '';
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
- 
-  Future login() async {
+   var code = "966".obs;
+  var flag = "admin/country/sa.png".obs;
+  var lenght = 9.obs;
+  var selectedCountry = 2.obs;
+ NotificationServices notificationServices = NotificationServices();
+  Future login(String mob) async {
     openLoader();
-    var a = phone.text;
-    final splitted = a.split('+');
+    // String? result = await PlatformDeviceId.getDeviceId;
+    String? result = await notificationServices.getDeviceToken();
+    debugPrint(result);
     var request = {};
     if(id == ''){
       request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
+      'mobile': mob,
       'password': password.text,
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+      'ios_device_id': Platform.isIOS == true ? result : '',
+      'android_device_id': Platform.isAndroid == true ? result : '',
     };
     }
     if(id.isNotEmpty){
        request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
+      'mobile': mob,
       'password': password.text,
       "user_id" : id,
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+      'ios_device_id': Platform.isIOS == true ? result : '',
+      'android_device_id': Platform.isAndroid == true ? result : '',
     };
     }
      
@@ -93,6 +101,8 @@ class LoginController extends GetxController {
         backgroundColor: R.colors.blue,
       );
       var userInfo = LoginModel.fromJson(response);
+      print("hereeeeeeee");
+      print(userInfo.toString());
       phone.clear();
       password.clear();
       id = '';
@@ -108,6 +118,8 @@ class LoginController extends GetxController {
       await GetStorage().write('groupId', userInfo.user!.groupId);
       await GetStorage().write('user_lang', userInfo.user!.locale);
       await GetStorage().write('user_type', userInfo.user!.userType);
+      await GetStorage().write('countryId', userInfo.user!.countryId);
+      await GetStorage().write('accountType', userInfo.user!.accountType);
       await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
           GetStorage().read('mobile'));
       Get.offAllNamed(RoutesName.base);

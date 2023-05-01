@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -27,7 +28,7 @@ class LocationView extends StatefulWidget {
 class _LocationViewState extends State<LocationView> {
   RegistrationController registrationController =
       Get.find<RegistrationController>();
-  ProfileController profileController = Get.find<ProfileController>();
+  ProfileController profileController = Get.put<ProfileController>(ProfileController());
   String label = '';
   String address = '';
   String lat = '';
@@ -36,64 +37,71 @@ class _LocationViewState extends State<LocationView> {
   var locationLngGiven;
 
   var screenDecider =
-      Get.arguments['From Profile Screen'] == 'From Profile Screen'
+      Get.arguments['Screen'] == 'From Profile Screen'
           ? 'From Profile Screen'
           : 'From Register Screen';
 
   CameraPosition? cameraPosition = CameraPosition(
     //innital position in map
-    target: LatLng(27.6602292, 85.308027), //initial position
-    zoom: 30.0, //initial zoom level
+    target: LatLng(Get.arguments['lat'], Get.arguments['lng']), //initial position
+    zoom: 20.0, //initial zoom level
   );
 
   List<Marker> marker = [];
   GoogleMapController? mapController; //contrller for Google map
 
-  LatLng startLocation = const LatLng(27.6602292, 85.308027);
+  LatLng startLocation =  LatLng(Get.arguments['lat'], Get.arguments['lng']);
   String location = "Search".tr;
-  BitmapDescriptor? customIcon;
+  // BitmapDescriptor? customIcon;
 
   @override
   void initState() {
+    // _determinePosition().then((value)async{
+    //   setState(() {
+    //     startLocation = LatLng(value.latitude, value.longitude);
+    //   });
+    //   locationLatGiven = value.latitude;
+  
+    
+    
+    //   locationLngGiven = value.longitude;
+    // LatLng latLng = LatLng(value.latitude, value.longitude);
+    //    handleTap(latLng);
+    //    cameraPosition = CameraPosition(
+    //   //innital position in map
+    //   target: LatLng(locationLatGiven, locationLngGiven), //initial position
+    //   zoom: 20.0, //initial zoom level
+    // );
+
+    // }).catchError((error){
+    //   debugPrint(error.toString());
+    // });
     // print(profileController.location_lng.value);
     // print(profileController.location_lat.value);
-    if (profileController.location_lat.value.isEmpty) {
-      locationLatGiven = 27.6602292;
-    } else {
-      locationLatGiven = double.parse(profileController.location_lat.value);
-    }
-    if (profileController.location_lng.value.isEmpty) {
-      locationLngGiven = 85.308027;
-    } else {
-      locationLngGiven = double.parse(profileController.location_lng.value);
-    }
-
-    cameraPosition = CameraPosition(
-      //innital position in map
-      target: LatLng(locationLatGiven, locationLngGiven), //initial position
-      zoom: 30.0, //initial zoom level
-    );
-    addMarker();
+    
+    
+    //  addMarker();
     super.initState();
   }
 
-  void addMarker() async {
-    final Uint8List markerIcon =
-        await getBytesFromAsset('assets/images/location.png', 300);
-    //BitmapDescriptor.fromBytes(markerIcon)
+ 
+  // void addMarker() async {
+  //   final Uint8List markerIcon =
+  //       await getBytesFromAsset('assets/images/location.png', 300);
+  //   //BitmapDescriptor.fromBytes(markerIcon)
 
-    customIcon = BitmapDescriptor.fromBytes(markerIcon);
-  }
+  //   customIcon = BitmapDescriptor.fromBytes(markerIcon);
+  // }
 
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
+  // Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  //   ByteData data = await rootBundle.load(path);
+  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+  //       targetWidth: width);
+  //   ui.FrameInfo fi = await codec.getNextFrame();
+  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+  //       .buffer
+  //       .asUint8List();
+  // }
 
   void handleTap(LatLng argument) async {
     debugPrint(argument.toString());
@@ -105,9 +113,11 @@ class _LocationViewState extends State<LocationView> {
         marker.add(Marker(
             markerId: MarkerId(argument.toString()),
             position: argument,
-            icon: customIcon!));
+            // icon: customIcon!
+            ));
+        // print(placemarks.first.toString());    
         location =
-            "${placemarks.first.administrativeArea}, ${placemarks.first.street}, ${placemarks.first.country}";
+            "${placemarks.first.administrativeArea},${placemarks.first.subAdministrativeArea},${placemarks.first.subLocality}, ${placemarks.first.thoroughfare}, ${placemarks.first.street}, ${placemarks.first.country}";
         address = location;
         lat = argument.latitude.toString();
         lng = argument.longitude.toString();
@@ -131,17 +141,18 @@ class _LocationViewState extends State<LocationView> {
                 zoomGesturesEnabled: true, //enable Zoom in, out on map
                 initialCameraPosition: cameraPosition!,
                 myLocationButtonEnabled: false,
-                myLocationEnabled: true,
-
+                myLocationEnabled: false,  
                 zoomControlsEnabled: false,
-                padding: const EdgeInsets.only(top: 100),
+                padding: const EdgeInsets.only(top: 130),
                 mapType: MapType.normal, //map type
                 onMapCreated: (controller) {
                   //method called when map is created
                   setState(() {
                     mapController = controller;
-                    //marker.add(Marker(markerId: const MarkerId('default'),position: startLocation));
+                    marker.add(Marker(markerId: const MarkerId('default'),position: startLocation));
+                    // handleTap(argument);
                   });
+                  handleTap(startLocation);
                 },
                 onTap: handleTap,
                 markers: Set.from(marker),
@@ -220,7 +231,7 @@ class _LocationViewState extends State<LocationView> {
               ),
             ],
           ),
-          customAppBar('Select Location'.tr, true, true, '', false),
+          customAppBar('Select Location'.tr, true, true, '', false,(){}),
           Container(
             margin: const EdgeInsets.only(top: 75),
             child: InkWell(

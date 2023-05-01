@@ -5,14 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:image_downloader/image_downloader.dart';
+
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/src/baseview/Invoices/fullscreen_img.dart';
-
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../constant/api_links.dart';
 import '../../../resources/resources.dart';
-import '../../utils/routes_name.dart';
 import '../../widgets/custom_appbar.dart';
 
 class InvoiceDetails extends StatefulWidget {
@@ -27,6 +28,8 @@ class InvoiceDetails extends StatefulWidget {
 
 class _InvoiceDetailsState extends State<InvoiceDetails> {
   MembersController ctr = Get.put<MembersController>(MembersController());
+  final ScreenshotController screenshotController = ScreenshotController();
+
   Future pickImage(ImageSource source) async {
     
     try {
@@ -59,7 +62,48 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            customAppBar('Invoice'.tr,true,false,'',true),
+            customAppBar('Invoice'.tr,true,false,'',true,() async{
+              final directory = (await getApplicationDocumentsDirectory()).path;
+    screenshotController.capture().then((Uint8List? image) async {
+      if (image != null) {
+        try {
+          String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+          final imagePath = await File('$directory/$fileName.png').create();
+          await imagePath.writeAsBytes(image);
+
+//           final pdf = pw.Document();
+
+//           final pdfImage = pw.MemoryImage(
+//   File(imagePath.path).readAsBytesSync(),
+// );
+
+// pdf.addPage(pw.Page(
+//   pageFormat: PdfPageFormat.a4,
+//   build: (pw.Context context) {
+//   return pw.Center(
+//     child: pw.Image(pdfImage),
+//   ); // Center
+// })); // Page
+         
+//    final output = await getTemporaryDirectory();
+//    String fileName2 = DateTime.now().microsecondsSinceEpoch.toString();
+//    final file = File("${output.path}/$fileName2.pdf");
+// // final file = File("example.pdf");
+// await file.writeAsBytes(await pdf.save());
+   
+
+          // final file = File("example.pdf");
+          // await file.writeAsBytes(await pdf.save());
+          // ignore: deprecated_member_use
+          Share.shareXFiles([XFile(imagePath.path)]);
+        } catch (error) {
+          debugPrint(error.toString());
+        }
+      }
+    }).catchError((onError) {
+      debugPrint('Error --->> $onError');
+    });
+            }),
             //appbarSearch(),
             //const SizedBox(height: 10,),
             if(ctr.loadingInvoiceDetails.value == true)
@@ -80,47 +124,58 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                       borderRadius: BorderRadius.circular(10),
                       color: R.colors.white,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: budgetName(),
-          ),
-          const SizedBox(height: 10,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Screenshot(
+                      controller: screenshotController,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        color: R.colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Invoice No'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-                            Text(ctr.inVoiceDetails.value.data!.createdDate!,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-                          ],
-                        ),
-                        const SizedBox(height: 5,),
-                        Text(widget.invoiceNum,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                        const SizedBox(height: 10,),
-                        Text('Customer Name'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-                         const SizedBox(height: 5,),
-                        Text(ctr.inVoiceDetails.value.data!.customer!.name!,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                        const SizedBox(height: 10,),
-                        Text('Description'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
-                         const SizedBox(height: 5,),
-                        Text(ctr.inVoiceDetails.value.data!.note ?? '',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
-                        const SizedBox(height: 10,),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: R.colors.lightGrey,
-                             ),
-                             child: Row(
+                             Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: budgetName(),
+                                ),
+                                const SizedBox(height: 10,),
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Net Total'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
-                                Text(ctr.inVoiceDetails.value.data!.amount.toString(),style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
+                                Text('Invoice No'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                                Text(ctr.inVoiceDetails.value.data!.createdDate!,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                               ],
-                             ),
+                            ),
+                            const SizedBox(height: 5,),
+                            Text(widget.invoiceNum,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            const SizedBox(height: 10,),
+                            Text('Customer Name'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                             const SizedBox(height: 5,),
+                            Text(ctr.inVoiceDetails.value.data!.customer!.name!,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            const SizedBox(height: 10,),
+                            Text("Receiver Name".tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                             const SizedBox(height: 5,),
+                            Text(ctr.inVoiceDetails.value.data!.user!.name!,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            const SizedBox(height: 10,),
+                            Text('Description'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                             const SizedBox(height: 5,),
+                            Text(ctr.inVoiceDetails.value.data!.note ?? '',style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            const SizedBox(height: 10,),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: R.colors.lightGrey,
+                                 ),
+                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Net Total'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
+                                    Text(ctr.inVoiceDetails.value.data!.amount.toString(),style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
+                                  ],
+                                 ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   

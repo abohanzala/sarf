@@ -38,7 +38,7 @@ class ProfileController extends GetxController {
   void onInit() {
     // GetStorage().write('lang', 'en');
     getAlertCount();
-    getProfile();
+    // getProfile();
     getAccounts();
     super.onInit();
   }

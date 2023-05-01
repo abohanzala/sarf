@@ -453,6 +453,7 @@ class _SettingsState extends State<Settings> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
       child: customTextField(
+        isPasswordObscureText: true,
           hintTextSize: 12,
           color: Colors.grey[300]!,
           height: 45,
@@ -467,6 +468,7 @@ class _SettingsState extends State<Settings> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
       child: customTextField(
+        isPasswordObscureText: true,
           hintTextSize: 12,
           color: Colors.grey[300]!,
           height: 45,
@@ -481,6 +483,7 @@ class _SettingsState extends State<Settings> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 20),
       child: customTextField(
+        isPasswordObscureText: true,
           hintTextSize: 12,
           color: Colors.grey[300]!,
           height: 45,

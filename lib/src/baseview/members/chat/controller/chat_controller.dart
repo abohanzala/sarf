@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import "package:get/get.dart" as getpackage;
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../../constant/api_links.dart';
 // import '../../../../../services/app_exceptions.dart';
@@ -75,6 +76,30 @@ class ChatController extends getpackage.GetxController{
       
     }
     return url;
+  }
+
+  Future createChat(String id, String msg) async {
+   
+
+    var   request = {
+      'language': GetStorage().read('lang'),
+      'provider_id': id,
+      'message': msg,
+      
+    };
+   
+     
+    debugPrint("This is my request====================$request");
+    var response =
+        await DioClient().post(ApiLinks.createChat, request).catchError((error) {
+          debugPrint(error.toString());
+     
+    });
+    debugPrint(response.toString());
+    if (response['success'] == true) {
+     debugPrint(response.toString());
+    }
+    return null;
   }
 
 }

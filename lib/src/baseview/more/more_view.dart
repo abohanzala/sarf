@@ -52,6 +52,8 @@ Future logout() async {
     await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
     await GetStorage().remove('user_type');
+    await GetStorage().remove('accountType');
+    await GetStorage().remove('countryId');
     
     await GetStorage().remove(
       'name',
@@ -89,6 +91,8 @@ Future logout() async {
   await GetStorage().remove('userId');
   await GetStorage().remove('groupId');
   await GetStorage().remove('user_type');
+  await GetStorage().remove('accountType');
+  await GetStorage().remove('countryId');
   await GetStorage().remove(
     'name',
   );
@@ -152,6 +156,7 @@ Future logout() async {
   }
 
   Future getData() async {
+    await profileController.getProfile();
     await profileController.getAlertCount();
     await profileController.getAccounts();
     // .catchError((error) async{

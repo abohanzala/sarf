@@ -4,12 +4,14 @@ import 'package:dio/dio.dart' as ddio;
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../services/notification_services.dart';
 import '../../src/baseview/base_controller.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
@@ -37,9 +39,9 @@ class RegistrationController extends GetxController {
   var location_lat = ''.obs;
   var location_lng = ''.obs;
   File? profileImage;
- 
+ NotificationServices notificationServices = NotificationServices();
 
-  Future registration() async {
+  Future registration(String mob,String country_id) async {
     openLoader();
 
     ddio.FormData formData = ddio.FormData();
@@ -53,13 +55,16 @@ class RegistrationController extends GetxController {
 
     
 
-    var a = registerController.phone.text;
-    final splitted = a.split('+');
+    
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
     formData.fields.add(MapEntry(
       'mobile',
-      splitted[1],
+      mob,
+    ));
+    formData.fields.add(MapEntry(
+      'country_id',
+      country_id,
     ));
     formData.fields.add(MapEntry(
         'account_type', accountType == true ? 0.toString() : 1.toString()));
@@ -121,9 +126,12 @@ class RegistrationController extends GetxController {
       'location_lng',
       location_lng.value,
     ));
-    formData.fields.add(const MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+    // String? result = await PlatformDeviceId.getDeviceId;
+    String? result = await notificationServices.getDeviceToken();
+    debugPrint(result);
+    formData.fields.add( MapEntry('ios_device_id', Platform.isIOS == true ? result : '',));
     formData.fields
-        .add(const MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+        .add( MapEntry('android_device_id', Platform.isAndroid == true ? result : ''));
     debugPrint(formData.fields.toString());
 
     // var request = {
@@ -216,6 +224,10 @@ class RegistrationController extends GetxController {
       await GetStorage().write('status', userInfo.user!.status);
       await GetStorage().write('groupId', userInfo.user!.groupId);
       await GetStorage().write('user_type', userInfo.user!.userType);
+      await GetStorage().write('countryId', userInfo.user!.countryId);
+      await GetStorage().write('accountType', userInfo.user!.accountType);
+      debugPrint("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer");
+      debugPrint(GetStorage().read("countryId").toString());
       await createFirebaseUser();
        MyBottomNavigationController ctr =
       Get.put<MyBottomNavigationController>(MyBottomNavigationController());

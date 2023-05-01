@@ -26,7 +26,7 @@ class ChangePasswordController extends GetxController {
     super.onInit();
   }
 
-  Future changePassword() async {
+  Future changePassword(String otpText) async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -35,13 +35,13 @@ class ChangePasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = forgotPasswordController.phone.text;
-    final splitted = a.split('+');
+    var a = "${forgotPasswordController.code}${forgotPasswordController.phone.text}";
+    
 
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
-      'otp': otp.text,
+      'mobile': a,
+      'otp': otpText,
       'new_password': newPassword.text,
       'confirm_password': confirmNewPassword.text,
     };

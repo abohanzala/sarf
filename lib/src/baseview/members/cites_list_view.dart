@@ -83,7 +83,7 @@ loadMembers(){
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          customAppBar('Cites'.tr,true,true,cityLenght,false),
+          customAppBar('Cites'.tr,true,true,cityLenght,false,(){}),
          // appbarSearch(),
          Transform(
           transform: Matrix4.translationValues(0, -20, 0),

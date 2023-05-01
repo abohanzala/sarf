@@ -30,11 +30,10 @@ class OtpController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = registerController.phone.text;
-    final splitted = a.split('+');
+    
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
+      'mobile': "${registerController.code}${registerController.phone.text}",
       'otp': otp,
     };
     debugPrint("This is my request====================$request");

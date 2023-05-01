@@ -6,7 +6,7 @@ import 'package:sarf/controllers/home/home_controller.dart';
 import '../../resources/resources.dart';
 
 
-Container customAppBar(String title,bool back,bool braket,String? braketText,bool share) {
+Container customAppBar(String title,bool back,bool braket,String? braketText,bool share,Function()? onTap) {
 
     return Container(
           padding: EdgeInsets.only(left: GetStorage().read('lang') == 'en' ? 16.w : 0, top: 20.h,right: GetStorage().read('lang') == 'en' ? 0 : 16.w),
@@ -70,7 +70,9 @@ Container customAppBar(String title,bool back,bool braket,String? braketText,boo
                 if(share)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Image.asset(R.images.icon3,width: 25,height: 25,color: R.colors.white,),
+                  child: GestureDetector(
+                    onTap: onTap,
+                    child: Image.asset(R.images.icon3,width: 25,height: 25,color: R.colors.white,)),
                 ),
 
               ],

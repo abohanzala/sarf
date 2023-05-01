@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:sarf/constant/api_links.dart';
 
+import '../../controllers/auth/data_collection_controller.dart';
 import '../../controllers/auth/register_controller.dart';
 import '../../resources/resources.dart';
 import '../utils/routes_name.dart';
@@ -22,6 +25,7 @@ class _RegistrationState extends State<Registration> {
   FocusNode searchFieldNode = FocusNode();
   bool checkBox = false;
   RegisterController registerController = Get.find<RegisterController>();
+  DataCollectionController ctr = Get.find<DataCollectionController>();
 
   @override
   void initState() {
@@ -92,7 +96,98 @@ class _RegistrationState extends State<Registration> {
         child: Column(
           children: [
             buildRegisterText(),
-            buildPhonefield(),
+            // buildPhonefield(),
+            Container(
+              margin: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Get.dialog(Dialog(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          width: Get.width * 0.80,
+                          decoration: BoxDecoration(
+                            color: R.colors.lightGrey,
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          child:  Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Text("data"),
+                                Expanded(child:
+                                 ListView.separated(
+                                  shrinkWrap: true,
+                                  itemCount: ctr.countries?.length ?? 0,
+                                  separatorBuilder: (context, index) {
+                                    return Divider(color: R.colors.grey,thickness: 1,);
+                                  },
+                                  itemBuilder: (context,index){
+                                    var singleData = ctr.countries?[index];
+                                  return GestureDetector(
+                                    onTap: (){
+                                      registerController.code.value = singleData.code ?? "966";
+                                      registerController.flag.value = singleData.flag ?? "admin/country/sa.png";
+                                      registerController.lenght.value = singleData.mobileNumberLength ?? 9;
+                                      registerController.selectedCountry.value = singleData.id ?? 2;
+                                      Get.back();
+                                    },
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
+                                          SizedBox(width: 5,),
+                                          Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
+
+
+                                        ],
+                                      ),
+                                      Text(singleData.code ?? ''),
+                                    ],
+                                    ),
+                                  );
+                                })),
+                              ],
+                              ),
+                          
+                        ),
+                      ));
+                    },
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Obx(() => Image.network("https://sarfapp.com/${registerController.flag.value}",width: 40,height: 40,)), 
+                          SizedBox(width: 5,),
+                          Obx(() => Text(registerController.code.value)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 5,),
+                   Expanded(
+            child: TextField(
+             // focusNode: searchFieldNode,
+             controller: registerController.phone,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                  hintText: 'Enter Mobile Number'.tr,
+                  hintStyle: TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'medium',
+                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                  border: InputBorder.none),
+            ),
+          )
+                ],
+              )),
+              SizedBox(height: 20,),
             buildPasswordField(),
             buildAgreeToTermsAndConditionsBox(),
             buildNextButton(),
@@ -183,6 +278,7 @@ class _RegistrationState extends State<Registration> {
                   height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
           Expanded(
             child: TextField(
+              obscureText: true,
              // focusNode: searchFieldNode,
              controller: registerController.password,
               keyboardType: TextInputType.emailAddress,
@@ -216,8 +312,7 @@ class _RegistrationState extends State<Registration> {
               'This is my phoneNumber===============${registerController.phone.text}');
           print(
               'This is my phoneNumber===============${registerController.phone.text}');
-          if (registerController.phone.text.isEmpty ||
-              registerController.phone.text == "+966" || registerController.phone.text.length != 13) {
+          if (registerController.phone.text.isEmpty) {
             Get.snackbar(
               'Alert'.tr,
               'Enter Mobile Number'.tr,
@@ -226,6 +321,16 @@ class _RegistrationState extends State<Registration> {
             );
             return;
           }
+          if (registerController.phone.text.length < registerController.lenght.value || registerController.phone.text.length > registerController.lenght.value ) {
+            Get.snackbar(
+              'Alert'.tr,
+              "Invalid mobile number".tr,
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+          }
+          // 
            if (registerController.password.text.isEmpty) {
             Get.snackbar(
               'Alert'.tr,
@@ -246,7 +351,7 @@ class _RegistrationState extends State<Registration> {
           }
           
            else {
-            registerController.register();
+            registerController.register("${registerController.code}${registerController.phone.text}");
           }
         },
         child: Center(
@@ -281,16 +386,18 @@ class _RegistrationState extends State<Registration> {
             'I Accept'.tr,
             style: TextStyle(fontSize: 17, color: Colors.grey),
           ),
-          // InkWell(
-          //   onTap: () {},
-          //   child: Text(
-          //     ' Terms & Conditions'.tr,
-          //     style: TextStyle(
-          //       color: Colors.grey,
-          //       fontSize: 17,
-          //     ),
-          //   ),
-          // ),
+          InkWell(
+            onTap: () {
+              Get.toNamed('terms_and_conditions');
+            },
+            child: Text(
+              '(Terms & Conditions)'.tr,
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 17,
+              ),
+            ),
+          ),
         ], //<Widget>[]
       ),
     );

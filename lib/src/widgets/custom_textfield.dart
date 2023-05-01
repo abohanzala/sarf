@@ -10,6 +10,7 @@ Widget customTextField(
     required TextEditingController controller,
     TextStyle? hintStyle,
     required Color color,
+    required bool isPasswordObscureText,
     required double height,
     double? hintTextSize,
     bool? makeCompulsoryField,
@@ -26,6 +27,7 @@ Widget customTextField(
       children: [
         Flexible(
           child: TextField(
+            obscureText: isPasswordObscureText,
             textAlign: textAlign ?? TextAlign.start,
             controller: controller,
             decoration: InputDecoration(

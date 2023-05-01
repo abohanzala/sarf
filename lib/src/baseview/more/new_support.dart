@@ -57,7 +57,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            customAppBar('Add New Support'.tr, true, false, '', false),
+            customAppBar('Add New Support'.tr, true, false, '', false,(){}),
             //appbarSearch(),
             //const SizedBox(height: 10,),
             Transform(

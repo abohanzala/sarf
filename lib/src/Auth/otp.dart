@@ -109,6 +109,7 @@ void initState() {
           top: 10,
         ),
         child: customTextField(
+          isPasswordObscureText: false,
             hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
             controller: otpControllerText,
             color: R.colors.lightGrey,

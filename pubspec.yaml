@@ -61,7 +61,10 @@ dependencies:
           url: https://github.com/faisalansari0367/flutterlocation
           path: packages/location
   geolocator: ^9.0.2
-  document_scanner_flutter: ^0.2.7
+  #document_scanner_flutter: ^0.2.7
+  cunning_document_scanner: ^1.1.2
+  gallery_saver: ^2.3.2
+
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
   cloud_firestore: ^4.3.1
@@ -79,7 +82,12 @@ dependencies:
   image_downloader: ^0.31.0
   mat_month_picker_dialog: ^1.1.0
   pdf: ^3.4.0
-  #platform_device_id: ^1.0.1
+  syncfusion_flutter_xlsio: ^21.1.39
+  platform_device_id: ^1.0.1
+  firebase_messaging: ^14.4.1
+  flutter_local_notifications: ^9.0.0
+  http: ^0.13.5
+  device_info_plus: ^8.2.2
   
   
 
@@ -111,22 +119,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/fonts/
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  
+ # fonts:
+ #   - family: arabic
+  #    fonts:
+ #       - asset: assets/fonts/arabic.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

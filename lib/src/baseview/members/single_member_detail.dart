@@ -9,6 +9,7 @@ import 'dart:io';
 import '../../../constant/api_links.dart';
 import '../../../controllers/common/profile_controller.dart';
 import '../../../resources/resources.dart';
+import '../../../services/notification_services.dart';
 import '../../widgets/custom_appbar.dart';
 import '../Invoices/invoice_details.dart';
 
@@ -26,6 +27,7 @@ class SingleMemberDetails extends StatefulWidget {
 class _SingleMemberDetailsState extends State<SingleMemberDetails> {
   MembersController ctr = Get.find<MembersController>();
   ProfileController ctrProfile = Get.find<ProfileController>();
+  NotificationServices notificationServices = NotificationServices();
 
 
 
@@ -92,7 +94,7 @@ launchPhone({required Uri u}) async {
         () => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            customAppBar(widget.title,true,false,'',false),
+            customAppBar(widget.title,true,false,'',false,(){}),
             //appbarSearch(),
             //const SizedBox(height: 10,),
             if(ctr.loadingMemDetails.value == true)
@@ -258,7 +260,16 @@ launchPhone({required Uri u}) async {
                                   ],
                                 ),
                                 GestureDetector(
-                                  onTap: () => Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),otherUserPhoto: ctr.memDetails.value.data!.photo ?? '',curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',)),
+                                  onTap: () async{ 
+                                    
+                                    var fcm = '';
+                                        await  notificationServices.getDeviceToken().then((value) => fcm = value);
+                                    
+                                    Get.to(() =>  ChatScreen(title: ctr.memDetails.value.data?.name ?? '',email: ctr.memDetails.value.data!.mobile.toString(),otherUserPhoto: ctr.memDetails.value.data!.photo ?? '',
+                                  curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',
+                                  userFcm: ctr.memDetails.value.data?.androidDeviceId == '' ? ctr.memDetails.value.data?.iosDeviceId ?? '' : ctr.memDetails.value.data?.androidDeviceId ?? ''  ,
+                                  currentFcm: fcm,
+                                  ));},
                                   child: Row(children: [
                                     Text('Chat'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
                                     const SizedBox(width: 4,),

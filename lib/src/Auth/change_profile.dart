@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
@@ -13,6 +14,7 @@ import '../../controllers/auth/data_collection_controller.dart';
 import '../../controllers/common/about_controller.dart';
 import '../../controllers/common/change_profile_controller.dart';
 import '../../controllers/common/profile_controller.dart';
+import '../../model/data_collection.dart';
 import '../../resources/resources.dart';
 import '../widgets/custom_textfield.dart';
 import '../widgets/loader.dart';
@@ -39,6 +41,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
   dynamic _pickImageError;
   final ImagePicker _picker = ImagePicker();
   bool isLoading = true;
+  List<Cities> cities = [];
 
   @override
   // ignore: must_call_super
@@ -59,6 +62,16 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Future getDataCollection() async {
     await dataCollectionController.dataCollection();
+     for (var city in dataCollectionController.cities!) {
+      if( city.countryId == GetStorage().read("countryId") ){
+        cities.add(city);
+      }
+    }
+    // print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    // print(cities.toString());
+    setState(() {
+      
+    });
   }
 
   @override
@@ -431,9 +444,57 @@ class _ChangeProfileState extends State<ChangeProfile> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {
-          Get.to(() => const LocationView(),
-              arguments: {'From Profile Screen': 'From Profile Screen'});
+        onTap: () async{
+                bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the 
+    // App to enable the location services.
+    Get.snackbar("Alert".tr, "Location services are disabled.".tr);
+    return; 
+    // Future.error('');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try
+      // requesting permissions again (this is also where
+      // Android's shouldShowRequestPermissionRationale 
+      // returned true. According to Android guidelines
+      // your App should show an explanatory UI now.
+      Get.snackbar("Alert".tr, "Location permissions are denied".tr);
+      return; 
+      // Future.error('Location permissions are denied');
+    }
+  }
+  
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately. 
+    Get.snackbar("Alert".tr, "Location permissions are denied".tr);
+    return;
+    //  Future.error(
+    //   'Location permissions are permanently denied, we cannot request permissions.');
+  } 
+  openLoader();
+  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value){
+    Get.back();
+    Get.to(() => const LocationView(),
+              arguments: {'Screen': 'From Profile Screen',
+              "lat": value.latitude,
+              "lng": value.longitude
+              
+              });
+  });
+          
+
+          // Get.to(() => const LocationView(),
+          //     arguments: {'Screen': 'From Profile Screen'});
         },
         child: Row(
           children: [
@@ -535,6 +596,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: 'Full Name *',
           controller: profileController.nameController,
           color: R.colors.lightGrey,
@@ -548,6 +610,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: 'bdscdscb',
           controller: profileController.userNameController,
           color: R.colors.lightGrey,
@@ -561,6 +624,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: '213412',
           controller: profileController.emailController,
           color: R.colors.lightGrey,
@@ -574,6 +638,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: 'Instagram Link (Optional)'.tr,
           controller: profileController.instaController,
           color: R.colors.lightGrey,
@@ -587,6 +652,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: 'Whatsapp (Optional)'.tr,
           controller: profileController.whatsappController,
           color: R.colors.lightGrey,
@@ -601,6 +667,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       child: customTextField(
           hintTextSize: 12,
           hintText: '@dsjnc',
+          isPasswordObscureText: false,
           controller: profileController.websiteController,
           color: R.colors.lightGrey,
           height: 45,
@@ -613,6 +680,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: 'Contact No (Optional)'.tr,
           controller: profileController.contactController,
           color: R.colors.lightGrey,
@@ -626,6 +694,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       margin: EdgeInsets.only(top: 20),
       child: customTextField(
           hintTextSize: 12,
+          isPasswordObscureText: false,
           hintText: 'Twitter Link (Optional)'.tr,
           controller: profileController.twitterController,
           color: R.colors.lightGrey,
@@ -690,7 +759,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                 child: ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount:
-                                        dataCollectionController.cities!.length,
+                                        cities.length,
                                     itemBuilder: (BuildContext, index) {
                                       return InkWell(
                                         onTap: () {
@@ -699,18 +768,18 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                           changeProfileController
                                                   .finalSelectedCity.value =
                                               GetStorage().read("lang") == "en" ?    
-                                              dataCollectionController
-                                                  .cities![selectedCityIndex]
+                                              
+                                                  cities[selectedCityIndex]
                                                   .name!
                                                   .en
-                                                  .toString() : dataCollectionController
-                                                  .cities![selectedCityIndex]
+                                                  .toString() : 
+                                                  cities[selectedCityIndex]
                                                   .name!
                                                   .ar
                                                   .toString() ;
                                           var getCityId =
-                                              dataCollectionController
-                                                  .cities![selectedCityIndex]
+                                              
+                                                  cities[selectedCityIndex]
                                                   .id;
 
                                           print(
@@ -739,10 +808,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                             margin: EdgeInsets.only(top: 2),
                                             child: Center(
                                               child: Text(
-                                               GetStorage().read("lang") == "en"? dataCollectionController
-                                                    .cities![index].name!.en
-                                                    .toString() : dataCollectionController
-                                                    .cities![index].name!.ar
+                                               GetStorage().read("lang") == "en"? 
+                                                    cities[index].name!.en
+                                                    .toString() : 
+                                                    cities[index].name!.ar
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,

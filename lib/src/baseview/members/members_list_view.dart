@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../model/members/members_list_new_model.dart';
 import '../../../resources/resources.dart';
+import '../../../services/notification_services.dart';
 import '../../widgets/custom_appbar.dart';
 
 class MembersListScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _MembersListScreenState extends State<MembersListScreen> {
   Future<ListMembersNewList?>? cityList;
   String membersLenght = "";
   ProfileController ctrProfile = Get.find<ProfileController>();
+  NotificationServices notificationServices = NotificationServices();
 
   _onChangeHandler(value ) {
         const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
@@ -133,7 +135,7 @@ launchPhone({required Uri u}) async {
       body:  Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            customAppBar('Members List'.tr,true,true,membersLenght,false),
+            customAppBar('Members List'.tr,true,true,membersLenght,false,(){}),
            // appbarSearch(),
            Transform(
           transform: Matrix4.translationValues(0, -20, 0),
@@ -371,7 +373,15 @@ launchPhone({required Uri u}) async {
                                         ],
                                       ),
                                       GestureDetector(
-                                        onTap: () => Get.to(() => ChatScreen(title: singleData.name!,email: singleData.mobile.toString(),otherUserPhoto: singleData.photo ?? '',curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',)) ,
+                                        onTap: () async{
+                                          var fcm = '';
+                                        await notificationServices.getDeviceToken().then((value) => fcm = value);
+                                         Get.to(() => ChatScreen(title: singleData.name!,email: singleData.mobile.toString(),
+                                        otherUserPhoto: singleData.photo ?? '',
+                                        curretUserPhoto: ctrProfile.profileModel?.user?.photo ?? '',
+                                        userFcm: singleData.androidDeviceId == '' ? singleData.iosDeviceId ?? '' : singleData.androidDeviceId ?? ''  ,
+                                        currentFcm: fcm,
+                                        )); },
                                         child: SizedBox(
                                           height: 40,
                                           child: Row(children: [

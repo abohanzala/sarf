@@ -182,7 +182,7 @@ loadMembers(){
                   ),
                   const SizedBox(width: 10,),
                           Text(
-                            'Invoice List'.tr,
+                            'Invoice List 2'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 17.sp,
@@ -268,7 +268,7 @@ loadMembers(){
           Flexible(
             fit: FlexFit.loose,
             child: Transform(
-              transform: Matrix4.translationValues(0, -40.h, 0),
+              transform: Matrix4.translationValues(0, -50.h, 0),
               child:  SingleChildScrollView(
                   child: Column(
                     children: [
@@ -300,12 +300,19 @@ loadMembers(){
                        
                       if(data.isNotEmpty){
 
-                       return Column(
-                          children: List.generate(data.length, (index) {
+                       return ListView.builder(
+                        shrinkWrap: true,
+                        // reverse: true,
+                        itemCount: data.length,
+                        primary: false,
+                        itemBuilder: (context,index){
                             var singleData = data[index];
+                            var id = (data.length - 1 ) - index;
+                            // print(index);
+                            // print(id);
                             return GestureDetector(
                               onTap: (){
-                                Get.to(() => InvoiceDetails(id: singleData.id.toString(),invoiceNum: singleData.id.toString(),reverse: false,) );
+                                Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${id + 1}",reverse: false,) );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -362,8 +369,8 @@ loadMembers(){
                                       ),
                                       SizedBox(height: 5.h),
                                       Text(
-                                        // "${index + 1}",
-                                         singleData!.id.toString(),
+                                         "${id + 1}",
+                                        //  singleData!.id.toString(),
                                         style: TextStyle(
                                           color: R.colors.black,
                                           fontSize: 18.sp,
@@ -379,14 +386,30 @@ loadMembers(){
                                           )),
                                       SizedBox(height: 5.h),
                                       Text(
-                                        singleData.customer?.name ?? '',
+                                        singleData?.customer?.name ?? '',
                                         style: TextStyle(
                                           color: R.colors.black,
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      SizedBox(height: 10.h),
+                                        SizedBox(height: 8.h),
+                                        Text('Receiver Name'.tr,
+                                            style: TextStyle(
+                                              color: R.colors.grey,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          singleData?.user?.name ?? '',
+                                          style: TextStyle(
+                                            color: R.colors.black,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10.h),
                                       Container(
                                         padding: EdgeInsets.symmetric(vertical: 10.w),
                                         width: double.infinity,
@@ -397,7 +420,7 @@ loadMembers(){
                                         child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              '${"Amount".tr} ${singleData.amount}',
+                                              '${"Amount".tr} ${singleData?.amount}',
                                               style: TextStyle(
                                                 color: R.colors.blueGradient1,
                                                 fontSize: 16.sp,
@@ -410,8 +433,7 @@ loadMembers(){
                                 ),
                               ),
                             );
-                          }),
-                        );
+                          });
                       }
                 }
                 return  Center(child:Text('No Data'.tr));

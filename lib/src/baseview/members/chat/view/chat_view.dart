@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -19,13 +20,17 @@ import 'package:sarf/src/baseview/members/chat/controller/chat_controller.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../resources/resources.dart';
+import '../../../../../services/notification_services.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   final String title;
   final String email;
   final String otherUserPhoto;
   final String curretUserPhoto;
-  const ChatScreen({super.key, required this.title, required this.email,required this.otherUserPhoto, required this.curretUserPhoto});
+  final String userFcm;
+  final String currentFcm;
+  const ChatScreen({super.key, required this.title, required this.email,required this.otherUserPhoto, required this.curretUserPhoto, required this.userFcm, required this.currentFcm});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -45,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
    File? image;
    FlutterSoundRecorder? _soundRecorder;
    ChatController ctr = Get.put<ChatController>(ChatController());
+   NotificationServices notificationServices = NotificationServices();
 
   @override
   void initState() {
@@ -138,6 +144,51 @@ class _ChatScreenState extends State<ChatScreen> {
         'message' : msg,
         'messageType': messageType,
         'time' : DateTime.now().toIso8601String(),
+      }).then((value){
+        notificationServices.getDeviceToken().then((value) async{
+          debugPrint('here');
+          var fcmToken = widget.currentFcm == value ? widget.userFcm : widget.currentFcm;
+
+           var data = {
+              'to' : fcmToken.toString(),
+              'notification' : {
+                'title' : 'New Message from'.tr + GetStorage().read("name")  ,
+                'body' : messageType == "audio" ? "audio" : messageType == "image" ? "image" : msg ,
+            },
+              
+              'data' : {
+                'type' : 'chat',
+                'title' : widget.title,
+                'email' : GetStorage().read('mobile'),
+                'otherUserPhoto' : widget.otherUserPhoto,
+                'curretUserPhoto' : widget.curretUserPhoto,
+                'userFcm' : widget.userFcm.toString(),
+                'currentFcm' : widget.currentFcm.toString(),
+                
+              }
+  //              final String title;
+  // final String email;
+  // final String otherUserPhoto;
+  // final String curretUserPhoto;
+  // final String userFcm;
+  // final String currentFcm;
+            };
+
+            await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            body: jsonEncode(data) ,
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+              }).onError((error, stackTrace){
+                debugPrint(error.toString());
+                throw error.toString() ;
+              });
+            
+        
+
+
+
+        });
       });
   }
   if (messageType == 'image') {

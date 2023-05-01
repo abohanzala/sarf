@@ -100,6 +100,7 @@ class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
           top: 10,
         ),
         child: customTextField(
+          isPasswordObscureText: false,
             hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
             controller: otpForgotPasswordController.otpControllerGet,
             color: R.colors.lightGrey,

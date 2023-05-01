@@ -73,6 +73,8 @@ Future getHome(String? id,int? day,int? month,int? year) async {
          await GetStorage().remove('user_token');
     await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
+    await GetStorage().remove('accountType');
+    await GetStorage().remove('countryId');
     await GetStorage().remove(
       'name',
     );

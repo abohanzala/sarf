@@ -50,6 +50,8 @@ class AppImages {
   String profile = "assets/images/profile.png";
   String privacyPolicyIconForSettings = "assets/images/privacyPolicyIconForSettings.png";
   String languageIcon = "assets/images/languageIcon.png";
+  String excelIcon = "assets/images/excel.png";
+  String pdfIcon = "assets/images/pdf.png";
   // String splashIcon = "assets/images/icon.jpeg";
   // String icOnBoard2 = "assets/images/ic_onboard2.png";
   // String onBoard2 = "assets/images/onboard2.png";

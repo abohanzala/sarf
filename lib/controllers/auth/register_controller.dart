@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sarf/controllers/auth/data_collection_controller.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -15,9 +16,15 @@ class RegisterController extends GetxController {
   var registerFormKey = GlobalKey<FormState>();
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
+  var code = "966".obs;
+  var flag = "admin/country/sa.png".obs;
+  var lenght = 9.obs;
+  var selectedCountry = 2.obs;
+  
+  
   var message;
 
-  Future register() async {
+  Future register(String phoneNumber) async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -26,11 +33,10 @@ class RegisterController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = phone.text;
-    final splitted = a.split('+');
+    
     var request = {
       'language': GetStorage().read('lang'),
-      'mobile': splitted[1],
+      'mobile': phoneNumber,
     };
     debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();

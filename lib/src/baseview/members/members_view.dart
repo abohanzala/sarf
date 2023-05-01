@@ -98,7 +98,7 @@ loadMembers(){
               body: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            customAppBar('Members List'.tr,false,true,membersLenght,false),
+            customAppBar('Members List'.tr,false,true,membersLenght,false,(){}),
             //appbarSearch(),
         
             Transform(

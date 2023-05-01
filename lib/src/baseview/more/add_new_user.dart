@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:document_scanner_flutter/configs/configs.dart';
-import 'package:document_scanner_flutter/document_scanner_flutter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +15,7 @@ import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:scan/scan.dart';
 
+import '../../../controllers/auth/data_collection_controller.dart';
 import '../../../controllers/viewers/viewers_controller.dart';
 import '../../utils/navigation_observer.dart';
 import '../../widgets/custom_appbar.dart';
@@ -30,6 +30,7 @@ class AddNewUserScreen extends StatefulWidget {
 class _AddNewUserScreenState extends State<AddNewUserScreen> with RouteAware  {
 
   ViewersController ctr = Get.find<ViewersController>();
+  DataCollectionController dataCtr = Get.find<DataCollectionController>();
   var registerFormKey = GlobalKey<FormState>();
   
   
@@ -146,42 +147,137 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> with RouteAware  {
                                 SizedBox(
                                   height: 10.h,
                                 ),
-                                IntlPhoneField(
-            countries: ["SA"],
-            // controller: ctr.phone,
-            showDropdownIcon: false,
-            flagsButtonPadding: EdgeInsets.only(left: 10),
-            onChanged: (number) {
-              ctr.phone.text = "966${number.number}";
+            //                     IntlPhoneField(
+            // countries: ["SA"],
+            // // controller: ctr.phone,
+            // showDropdownIcon: false,
+            // flagsButtonPadding: EdgeInsets.only(left: 10),
+            // onChanged: (number) {
+          //     ctr.phone.text = "966${number.number}";
               
-            },
-            invalidNumberMessage: 'Invalid mobile number'.tr,
-            initialCountryCode: 'SA',
-            onCountryChanged: (country) {},
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              // hintText: 'Enter Mobile Number'.tr,
-              label: Container(
-                margin: EdgeInsets.symmetric(horizontal: 0),
-                child: Text('Enter Mobile Number'.tr,
-                    style: TextStyle(
-                        color: Color(0xFF707070),
-                        fontFamily: 'regular',
-                        fontSize: 12)),
-              ),
-              isDense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-              // border: OutlineInputBorder(
-              //   borderRadius: BorderRadius.circular(5.0),
-              // ),
-              filled: true,
-             fillColor: R.colors.lightGrey,
+          //   },
+          //   invalidNumberMessage: 'Invalid mobile number'.tr,
+          //   initialCountryCode: 'SA',
+          //   onCountryChanged: (country) {},
+          //   decoration: InputDecoration(
+          //     border: InputBorder.none,
+          //     // hintText: 'Enter Mobile Number'.tr,
+          //     label: Container(
+          //       margin: EdgeInsets.symmetric(horizontal: 0),
+          //       child: Text('Enter Mobile Number'.tr,
+          //           style: TextStyle(
+          //               color: Color(0xFF707070),
+          //               fontFamily: 'regular',
+          //               fontSize: 12)),
+          //     ),
+          //     isDense: true,
+          //     contentPadding:
+          //         const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+          //     // border: OutlineInputBorder(
+          //     //   borderRadius: BorderRadius.circular(5.0),
+          //     // ),
+          //     filled: true,
+          //    fillColor: R.colors.lightGrey,
+          //   ),
+          // ),
+                                   Container(
+              margin: const EdgeInsets.only(left: 0, right: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8), color: const Color(0xFFEAEEF2)),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Get.dialog(Dialog(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          width: Get.width * 0.80,
+                          decoration: BoxDecoration(
+                            color: R.colors.lightGrey,
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          child:  Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Text("data"),
+                                Expanded(child:
+                                 ListView.separated(
+                                  shrinkWrap: true,
+                                  itemCount: dataCtr.countries?.length ?? 0,
+                                  separatorBuilder: (context, index) {
+                                    return Divider(color: R.colors.grey,thickness: 1,);
+                                  },
+                                  itemBuilder: (context,index){
+                                    var singleData = dataCtr.countries?[index];
+                                  return GestureDetector(
+                                    onTap: (){
+                                      ctr.code.value = singleData.code ?? "966";
+                                      ctr.flag.value = singleData.flag ?? "admin/country/sa.png";
+                                      ctr.lenght.value = singleData.mobileNumberLength ?? 9;
+                                      ctr.selectedCountry.value = singleData.id ?? 2;
+                                      Get.back();
+                                    },
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
+                                          const SizedBox(width: 5,),
+                                          Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
+
+
+                                        ],
+                                      ),
+                                      Text(singleData.code ?? ''),
+                                    ],
+                                    ),
+                                  );
+                                })),
+                              ],
+                              ),
+                          
+                        ),
+                      ));
+                    },
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Obx(() => Image.network("https://sarfapp.com/${ctr.flag.value}",width: 40,height: 40,)), 
+                          const SizedBox(width: 5,),
+                          Obx(() => Text(ctr.code.value)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 5,),
+                   Expanded(
+            child: TextFormField(
+             // focusNode: searchFieldNode,
+             validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Required Field".tr;
+                }
+                
+                return null;
+              },
+             controller: ctr.phone,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                  hintText: 'Enter Mobile Number'.tr,
+                  hintStyle: TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'medium',
+                      color: const Color(0xFF9A9A9A).withOpacity(0.8)),
+                  border: InputBorder.none),
             ),
-          ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
+          )
+                ],
+              )),
+              SizedBox(height: 10.h,),
                                 TextFormField(
                                    validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -223,8 +319,18 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> with RouteAware  {
                                       child: GestureDetector(
                                         onTap: () {
                                           if (registerFormKey.currentState!.validate()) {
+
+                                             if (ctr.phone.text.length < ctr.lenght.value || ctr.phone.text.length > ctr.lenght.value) {
+                   Get.snackbar(
+              'Alert'.tr,
+              "Invalid mobile number".tr,
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
+                }
                                                   
-                                                  ctr.postNewCustomInvoice(ctr.phone.text, ctr.password.text);
+                                                  ctr.postNewCustomInvoice("${ctr.code}${ctr.phone.text}", ctr.password.text);
                                                   
                                                   }
                                                                                 

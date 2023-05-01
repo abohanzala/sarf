@@ -49,6 +49,7 @@ class Data {
   String? createdDate;
   String? createdTime;
   Customer? customer;
+  Customer? user;
 
   Data(
       {this.id,
@@ -68,7 +69,10 @@ class Data {
       this.viewed,
       this.createdDate,
       this.createdTime,
-      this.customer});
+      this.customer,
+      this.user
+      
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -96,6 +100,9 @@ class Data {
     customer = json['customer'] != null
         ?  Customer.fromJson(json['customer'])
         : null;
+    user = json['user'] != null
+        ?  Customer.fromJson(json['user'])
+        : null;    
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +128,9 @@ class Data {
     data['created_time'] = createdTime;
     if (customer != null) {
       data['customer'] = customer!.toJson();
+    }
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
     return data;
   }

@@ -5,7 +5,8 @@ import '../../resources/resources.dart';
 
 
 openLoader(){
-  Get.dialog(Center(
+  Get.dialog(
+    Center(
     child: SizedBox(
       width: 50,
       height: 50,
@@ -14,5 +15,5 @@ openLoader(){
         color: R.colors.blue,
       ),
     ),
-  ));
+  ),barrierDismissible: false);
 }

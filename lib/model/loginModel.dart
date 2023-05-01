@@ -42,6 +42,7 @@ class User {
   String? theme;
   String? locale;
   int? userType;
+  int? countryId;
   int? accountType;
   int? isOnline;
   int? status;
@@ -75,6 +76,7 @@ class User {
       this.createdAt,
       this.updatedAt,
       this.groupId,
+      this.countryId,
       this.reason});
 
   User.fromJson(Map<String, dynamic> json) {
@@ -100,11 +102,13 @@ class User {
     updatedAt = json['updated_at'];
     reason = json['reason'];
     groupId = json['group_id'];
+    countryId = json['country_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['country_id'] = countryId;
     data['name'] = name;
     data['username'] = username;
     data['email'] = email;

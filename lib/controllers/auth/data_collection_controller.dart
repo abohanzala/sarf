@@ -16,6 +16,7 @@ class DataCollectionController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
   List<Cities>? cities = [];
   List<ExpenseType>? types = [];
+  List<Countries>? countries = [];
 
   @override
   void onInit() async{
@@ -70,10 +71,12 @@ class DataCollectionController extends GetxController {
     if (response['success'] == true) {
       cities?.clear();
       types?.clear();
+      countries?.clear();
       debugPrint(response.toString());
       var data = DataCollection.fromJson(response);
       cities = data.data!.cities;
       types = data.data!.expenseType!;
+      countries = data.data?.countries;
       // await GetStorage().write('user_token', userInfo.token);
       // await GetStorage().write('userId', userInfo.user!.id);
       // await GetStorage().write('name', userInfo.user!.name);

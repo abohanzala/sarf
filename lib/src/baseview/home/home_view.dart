@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
@@ -13,11 +14,18 @@ import 'package:sarf/src/baseview/Invoices/invoice_list_home.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xcel;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 import '../../../constant/api_links.dart';
 import '../../../controllers/common/profile_controller.dart';
+import '../../../controllers/invoice/invoice_controller.dart';
+import '../../../model/home/home_model.dart';
+import '../../../model/members/invoice_list_model.dart';
 import '../../../resources/resources.dart';
 import '../../../services/dio_client.dart';
+import '../../../services/notification_services.dart';
 import '../base_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,19 +37,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController ctr = Get.put<HomeController>(HomeController());
+  InvoiceController invCtr = Get.find<InvoiceController>();
+  
+  InvoiceList? invoices;
   ProfileController profileController = Get.put<ProfileController>(ProfileController());
   TextEditingController txt = TextEditingController();
   ScreenshotController screenshotController = ScreenshotController();
   DateTime date = DateTime.now();
   DateTime month = DateTime.now();
   DateTime day = DateTime.now();
+  NotificationServices notificationServices = NotificationServices();
+  List<ExpenseTypes> expenseTypes = [];
   //ScrollController scrollCtr = ScrollController();
   @override
   void initState() {
     getData();
     super.initState();
+   
+     notificationServices.requestNotificationPermission();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    // notificationServices.isTokenRefresh();
+    notificationServices.getDeviceToken().then((value){
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
   }
   getData() async{
+    
     await ctr.getHome(null,null,null,null).then((value) async{
       //print(ctr.budgets.first.id);
       if(ctr.budgets.isNotEmpty){
@@ -55,12 +80,23 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
       }
+
+       for (var expanse in ctr.expenseTypes) {
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    setState(() {
+      
+    });
       
     }).catchError((error) async{
     await GetStorage().remove('user_token');
     await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
     await GetStorage().remove('user_type');
+    await GetStorage().remove('accountType');
+    await GetStorage().remove('countryId');
     await GetStorage().remove(
       'name',
     );
@@ -83,6 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
       'status',
     );
      Get.offAllNamed(RoutesName.LogIn);
+    });
+    // await profileController.getProfile();
+    await invCtr.getInvoiceList('').then((value){
+      invoices = value;
+      return null;
     });
    
   }
@@ -518,11 +559,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisSpacing: 0,
                                 crossAxisSpacing: 10,
                               ),
-                              itemCount: ctr.expenseTypes.length,
+                              itemCount: expenseTypes.length,
                               itemBuilder: (context, index) {
-                                var singleExpanse = ctr.expenseTypes[index];
-                                return Obx(
-                                  () => GestureDetector(
+                                var singleExpanse = expenseTypes[index];
+                                
+                                   return Obx(
+                                  () =>  GestureDetector(
                                     onTap: (){
                                       Get.to(() => InvoiceListScreenHome( expanseId: singleExpanse.id.toString(),budgetId: ctr.selectedBudgetId.value.toString(),) );
                                     },
@@ -570,10 +612,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         const SizedBox(
-                                          height: 5,
+                                          height: 2,
                                         ),
                                         Text(
-                                          "${GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
+                                          "${ GetStorage().read("accountType") == 1 ? 'Personal'.tr : GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
                                           style: TextStyle(
                                               color: R.colors.blackSecondery),
                                         )
@@ -581,6 +623,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 );
+                                
+                               
                               })),
                       const SizedBox(
                         height: 15,
@@ -1065,27 +1109,195 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   borderRadius: BorderRadius.circular(10),
                                                   border: Border.all(
                                                       color: R.colors.grey, width: 1)),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    R.images.icon1,
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                        'Share Report'.tr,
-                                                        style: TextStyle(
-                                                            color: R.colors.black,
-                                                            fontSize: 12),
+                                              child: GestureDetector(
+                                                onTap: (){
+                                                  Get.bottomSheet(
+                                                    Container(
+                                                      padding: const EdgeInsets.all(20),
+                                                      decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                                      color: R.colors.white,
                                                       ),
-                                                    ],
-                                                  )
-                                                ],
+                                                      child: Column(mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Row(children: [
+                                                          GestureDetector(
+                                                            onTap: ()async{
+                                                              // debugPrint(invoices?.data?.length.toString());
+                                                              if(invoices?.data != null){
+
+                                                                    final xcel.Workbook workbook = xcel.Workbook();
+                                                                  final xcel.Worksheet sheet = workbook.worksheets[0];
+                                                                  sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
+                                                                  sheet.getRangeByIndex(1, 2).setText("Created at".tr);
+                                                                  sheet.getRangeByIndex(1, 3).setText("Customer".tr);
+                                                                  sheet.getRangeByIndex(1, 4).setText("Description".tr);
+                                                                  sheet.getRangeByIndex(1, 5).setText("Amount".tr);
+                                                                  for (var i = 0; i < invoices!.data!.length; i++) {
+                                                                    final item = invoices!.data![i];
+                                                                    var id = (invoices!.data!.length - 1 ) - i;
+                                                                    sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
+                                                                    sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
+                                                                    sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
+                                                                    sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
+                                                                    sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
+                                                                  }
+
+                                                                  final List<int> bytes = workbook.saveAsStream();
+                                                                   workbook.dispose();
+                                                                  //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
+                                                                  final directory = (await getApplicationDocumentsDirectory()).path;
+                                                                  String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                  final file = File('$directory/$fileName.xlsx');
+                                                                   await file.writeAsBytes(bytes,flush: true);
+                                                                  try{
+                                                                        Share.shareXFiles([XFile(file.path)]);
+                                                                      } catch (error) {
+                                                                        debugPrint(error.toString());
+                                                                      
+                                                                  }
+                                                                 
+                                                                Get.back();
+
+                                                              }
+                                                             
+                                                            },
+                                                            child: Image.asset(R.images.excelIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                          ),
+                                                          SizedBox(width: 20,),
+                                                           GestureDetector(
+                                                            onTap: () async{
+                                                              // A Suls Regular.ttf
+                                                              final  font = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                              final  ttf = pw.Font.ttf(font);
+                                                              // final data = await rootBundle.load("assets/fonts/arabic.ttf");
+
+                                                              //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
+
+                                                              //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
+                                                              if(invoices?.data != null){
+                                                                  final pdf = pw.Document();
+                                                                    pdf.addPage(pw.MultiPage(
+                                                                      pageFormat: PdfPageFormat.a4,
+                                                                      theme: pw.ThemeData.withFont(
+                                                                            base: ttf,
+                                                                          ),
+                                                                      build: (pw.Context context) {
+                                                                      return <pw.Widget>[
+                                                                        pw.Table(children: [
+                                                                          pw.TableRow(children: [
+                                                                            pw.Column(children: [
+                                                                              
+                                                                              pw.Text("Inv number".tr,
+                                                                               textDirection: pw.TextDirection.rtl,
+                                                                              )
+                                                                            ]),
+                                                                             pw.Column(children: [
+                                                                 
+                                                                              pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                            ]),
+
+                                                                             pw.Column(children: [
+                                                                 
+                                                                              pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                            ]),
+
+
+                                                                             pw.Column(children: [
+                                                                
+                                                                              pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                            ]),
+
+
+
+                                                                             pw.Column(children: [
+                                                                  
+                                                                              pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                            ]),
+                                                                            
+                                                                          ]),
+                                                                           for(var i = 0; i < invoices!.data!.length; i++)
+                                                                            pw.TableRow(children: [
+                                                                            pw.Column(children: [
+                                                                              
+                                                                              pw.Text("${((invoices!.data!.length - 1 ) - i + 1)}"),
+                                                                            ]),
+                                                                             pw.Column(children: [
+                                                                 
+                                                                              pw.Text(invoices!.data![i].createdDate.toString()),
+                                                                            ]),
+
+                                                                             pw.Column(children: [
+                                                                 
+                                                                              pw.Text(invoices!.data![i].customer?.name.toString() ?? ''),
+                                                                            ]),
+
+
+                                                                             pw.Column(children: [
+                                                                
+                                                                              pw.Text(invoices!.data![i].note ?? ''),
+                                                                            ]),
+
+
+
+                                                                             pw.Column(children: [
+                                                                  
+                                                                              pw.Text(invoices!.data![i].amount.toString()),
+                                                                            ]),
+                                                                            
+                                                                          ]),
+                                                                        ]),
+                                                                      //  pw.Table(children: <>) 
+                                                                      ]; // Center
+                                                                    })); // Page
+                                                                            
+                                                                      final output = await getTemporaryDirectory();
+                                                                      String fileName2 = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                      final file = File("${output.path}/$fileName2.pdf");
+                                                                    // final file = File("example.pdf");
+                                                                    await file.writeAsBytes(await pdf.save());
+
+                                                                    try{
+                                                                       Share.shareXFiles([XFile(file.path)]);
+                                                                          } catch (error) {
+                                                                            debugPrint(error.toString());
+                                                                          }
+
+                                                                    Get.back();                                                                  
+
+                                                              }
+                                                              
+
+                                                            },
+                                                            child: Image.asset(R.images.pdfIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                          ),
+                                                        ],),
+                                                      ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      R.images.icon1,
+                                                      width: 20,
+                                                      height: 20,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        Text(
+                                                          'Share Report'.tr,
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1094,6 +1306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Expanded(
                                         child: Container(
+                                          // width: Get.width * 0.25,
                                           padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),

@@ -46,8 +46,8 @@ this.barcode = barcode;
 if(widget.invoice){
   ctr.checkMobile = true;
 ctr.qrCode.value = barcode.code ?? '';
-var a = ctr.qrCode.value.split('966');
-ctr.mobile1.text = a[1];
+// var a = ctr.qrCode.value.split('966');
+ctr.mobile1.text = barcode.code ?? '';
 }
 
 controller.dispose();

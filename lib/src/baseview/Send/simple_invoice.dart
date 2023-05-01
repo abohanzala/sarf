@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:document_scanner_flutter/configs/configs.dart';
-import 'package:document_scanner_flutter/document_scanner_flutter.dart';
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+// import 'package:document_scanner_flutter/configs/configs.dart';
+// import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/resources/resources.dart';
@@ -35,16 +38,21 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
 
   void _startScan(BuildContext context) async {
     try{
-      var image = await DocumentScannerFlutter.launch(context,source: ScannerFileSource.CAMERA)?.catchError((error){
+      var image = await CunningDocumentScanner.getPictures().catchError((error){
         Get.snackbar("Error".tr, error.toString(),backgroundColor: R.colors.blue);
+        return error;
       });
 
     if (image != null) {
-      _scannedImage = image;
+      for (var img in image) {
+        _scannedImage = File(img);
       ctr.uploadImages.add(_scannedImage!);
+      }
+      
       setState(() {});
     }
     } on PlatformException catch (e) {
+      print("hereeeeee");
       Get.snackbar("Error".tr,e.toString());
       debugPrint('Failed to pick image: $e');
     }
@@ -114,7 +122,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
   void didPopNext() {
     if(ctr.checkMobile){
       // _onChangeHandler(ctr.mobile1.text);
-      ctr.mobileCheck("966${ctr.mobile1.text}").then((value){
+      ctr.mobileCheck(ctr.mobile1.text).then((value){
           if(value['message'] == 'User record available'){
             setState(() {
               name = value['user']['name'];
@@ -144,24 +152,12 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
         }
         setState(() => searchOnStoppedTyping =  Timer(duration, () {
           String val = '';
-       if(value.runtimeType == PhoneNumber){
-        
-         String a = value.number;
-
-        //  final splitted = a.split('+');
-        
-        val = a;
-        ctr.mobile1.text = val;
-         ctr.mobile1.selection =
-          TextSelection.collapsed(offset: ctr.mobile1.text.length);
-
-
-       }else{
+       
         val = value;
         ctr.mobile1.text = val;
          ctr.mobile1.selection =
           TextSelection.collapsed(offset: ctr.mobile1.text.length);
-       }
+       
 
         search(val);
 
@@ -184,18 +180,18 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
               searching = true;
             });
           }
-         await ctr.mobileCheck("966${ctr.mobile1.text}").then((value){
-          if(value['message'] == 'User record available'){
-            setState(() {
-              name = value['user']['name'];
-            });
-          }
-          if(value['message'] == 'User not found!'){
-            setState(() {
-              name = "User not found".tr;
-            });
-          }
-        });
+        //  await ctr.mobileCheck(ctr.mobile1.text).then((value){
+        //   if(value['message'] == 'User record available'){
+        //     setState(() {
+        //       name = value['user']['name'];
+        //     });
+        //   }
+        //   if(value['message'] == 'User not found!'){
+        //     setState(() {
+        //       name = "User not found".tr;
+        //     });
+        //   }
+        // });
         });
 
         //print(ctr.mobile1.text);
@@ -241,7 +237,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
               child: Align(
                 alignment: GetStorage().read('lang') == 'en' ? Alignment.centerLeft : Alignment.centerRight,
                 child: Text(
-                  'Send Invoice'.tr,
+                  'Send Invoice 2'.tr,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.sp,
@@ -277,104 +273,107 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                 //       fontSize: 14.sp,
                                 //     ),),
                                 //     const SizedBox(height: 5,),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: R.colors.lightGrey,
-                                        borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: IntlPhoneField(
-                                               controller: ctr.mobile1,
-                                              keyboardType: TextInputType.text,
-                                              disableLengthCheck: true,
-                                              onChanged: _onChangeHandler,
-                                                      countries: ["SA"],
-                                                      showDropdownIcon: false,
-                                                      flagsButtonPadding: const EdgeInsets.only(left: 10),
+                                    // Container(
+                                    //   padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+                                    //   decoration: BoxDecoration(
+                                    //     color: R.colors.lightGrey,
+                                    //     borderRadius: BorderRadius.circular(10)
+                                    //   ),
+                                    //   child: Row(
+                                    //     children: [
+                                    //       Expanded(
+                                    //         child: IntlPhoneField(
+                                    //            controller: ctr.mobile1,
+                                    //           keyboardType: TextInputType.text,
+                                    //           disableLengthCheck: true,
+                                    //           onChanged: _onChangeHandler,
+                                    //                   // countries: ["SA"],
+                                    //                   showDropdownIcon: false,
+                                    //                   flagsButtonPadding: const EdgeInsets.only(left: 10),
                                                      
-                                                      invalidNumberMessage: 'Invalid mobile number'.tr,
-                                                      initialCountryCode: 'SA',
-                                                      onCountryChanged: (country) {},
-                                                      decoration: InputDecoration(
-                                                        border: InputBorder.none,
-                                                        label: Container(
-                                                          margin: const EdgeInsets.symmetric(horizontal: 0),
-                                                          child: Text('Enter Mobile Number'.tr,
-                                                              style: const TextStyle(
-                                                                  color: Color(0xFF707070),
-                                                                  fontFamily: 'regular',
-                                                                  fontSize: 12)),
-                                                        ),
-                                                        isDense: false,
-                                                        contentPadding:
-                                                            const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                                                        // border: OutlineInputBorder(
-                                                        //   borderRadius: BorderRadius.circular(5.0),
-                                                        // ),
-                                                        // filled: true,
-                                                        //  fillColor: const Color(0xffF0F0F0)
-                                                      ),
-                                                    ),
+                                    //                   invalidNumberMessage: 'Invalid mobile number'.tr,
+                                    //                   initialCountryCode: 'SA',
+                                    //                   onCountryChanged: (country) {},
+                                    //                   decoration: InputDecoration(
+                                    //                     border: InputBorder.none,
+                                    //                     label: Container(
+                                    //                       margin: const EdgeInsets.symmetric(horizontal: 0),
+                                    //                       child: Text('Enter Mobile Number'.tr,
+                                    //                           style: const TextStyle(
+                                    //                               color: Color(0xFF707070),
+                                    //                               fontFamily: 'regular',
+                                    //                               fontSize: 12)),
+                                    //                     ),
+                                    //                     isDense: false,
+                                    //                     contentPadding:
+                                    //                         const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                                    //                     // border: OutlineInputBorder(
+                                    //                     //   borderRadius: BorderRadius.circular(5.0),
+                                    //                     // ),
+                                    //                     // filled: true,
+                                    //                     //  fillColor: const Color(0xffF0F0F0)
+                                    //                   ),
+                                    //                 ),
                                     
-                                          ),
+                                    //       ),
                                     
-                                           Padding(
-                                            padding: const EdgeInsets.only(bottom: 10),
-                                             child: GestureDetector(
-                                                                               onTap: (){
-                                                                                 Get.bottomSheet(Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-                                              decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                                                color: R.colors.white,
+                                    //        Padding(
+                                    //         padding: const EdgeInsets.only(bottom: 10),
+                                    //          child: GestureDetector(
+                                    //                                            onTap: (){
+                                    //                                              Get.bottomSheet(Container(
+                                    //           padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                                    //           decoration: BoxDecoration(
+                                    //             borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                    //             color: R.colors.white,
                                                 
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: (){
-                                                      Get.back();
-                                                      // qrCode = true;
-                                                      Get.to(() => const QRScannerScreen(invoice: true,) );
-                                                    },
-                                                    child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
-                                                    const SizedBox(height: 10,),
-                                                    Divider(color: R.colors.grey,thickness: 0.5,),
-                                                    const SizedBox(height: 10,),
-                                                    GestureDetector(
-                                                    onTap: (){
-                                                      pickImageQr();
+                                    //           ),
+                                    //           child: Column(
+                                    //             crossAxisAlignment: CrossAxisAlignment.start,
+                                    //             mainAxisSize: MainAxisSize.min,
+                                    //             children: [
+                                    //               GestureDetector(
+                                    //                 onTap: (){
+                                    //                   Get.back();
+                                    //                   // qrCode = true;
+                                    //                   Get.to(() => const QRScannerScreen(invoice: true,) );
+                                    //                 },
+                                    //                 child: Text("Camera".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                    //                 const SizedBox(height: 10,),
+                                    //                 Divider(color: R.colors.grey,thickness: 0.5,),
+                                    //                 const SizedBox(height: 10,),
+                                    //                 GestureDetector(
+                                    //                 onTap: (){
+                                    //                   pickImageQr();
                                                       
-                                                    },
-                                                    child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
-                                                ],
-                                              ),
+                                    //                 },
+                                    //                 child: Text("Gallery".tr,style: TextStyle(fontSize: 14,color: R.colors.black),)),
+                                    //             ],
+                                    //           ),
                                                                   
-                                                                                 ),
-                                                                                 );
+                                    //                                              ),
+                                    //                                              );
                                                                                  
-                                                                               },
-                                                                               child: Icon(
-                                                                                 Icons.qr_code,
-                                                                                 color: R.colors.blue,
-                                                                                 size: 25.sp,
-                                                                               ),
-                                                                             ),
-                                           )
+                                    //                                            },
+                                    //                                            child: Icon(
+                                    //                                              Icons.qr_code,
+                                    //                                              color: R.colors.blue,
+                                    //                                              size: 25.sp,
+                                    //                                            ),
+                                    //                                          ),
+                                    //        )
                                           
-                                        ],
-                                      ),
-                                    ),
-                                /*TextFormField(
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                TextFormField(
                                   //initialValue: ctr.mobile1.text,
+                                  
                                   controller: ctr.mobile1,
+                                  keyboardType: TextInputType.text,
                                   onChanged: _onChangeHandler,
                                   decoration: InputDecoration(
+                                    
                                     suffixIcon: GestureDetector(
                                       onTap: (){
                                         Get.bottomSheet(Container(
@@ -420,7 +419,12 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                     //'Mobile Number'.tr
                                     fillColor: R.colors.lightGrey,
                                     filled: true,
-                                    hintText: "9665----",
+                                    // hintText: 'Search 2'.tr,
+                                    labelText: 'Search 2'.tr,
+                                      labelStyle: TextStyle(
+                                        color: R.colors.grey,
+                                        fontSize: 14.sp,
+                                      ),
                                    
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide.none,
@@ -430,10 +434,10 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                       borderSide: BorderSide(
                                         color: R.colors.grey,
                                       ),
-                                      borderRadius: BorderRadius.circular(10),
+                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                ),*/
+                                ),
                                 Obx(
                                   () => Stack(
                                     children: [
@@ -537,8 +541,22 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                             width: 5,
                                           ),
                                           GestureDetector(
-                                            onTap: () {
-                                              _startScan(context);
+                                            onTap: () async{
+                                              DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                                              if(Platform.isAndroid){
+                                                 AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+                                              final status = await Permission.camera.request();
+                                               final status2 = androidInfo.version.sdkInt < 33 ? await Permission.storage.request() : await Permission.photos.request()  ;
+                                             
+                                              if(status == PermissionStatus.granted &&  status2 == PermissionStatus.granted ){
+                                                _startScan(context);
+                                              }else{
+                                                openAppSettings();
+                                                // Get.snackbar("Error".tr, "Permission not granted");
+                                              }
+                                              
+                                              }
+                                             
                                                       
                                               //  pickImage(ImageSource.gallery);
                                             },
@@ -653,7 +671,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                             // }
                                             FocusScope.of(context).unfocus();
                                 
-                                            String a = '966${ctr.mobile1.text}';
+                                            String a = ctr.mobile1.text;
                                             String b = replaceArabicNumber(ctr.amount2.text);
                                             // print(b);
                                             
@@ -719,14 +737,14 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                           subtitle: Text(singleData?.mobile ?? ''),
                                           onTap: (){
                                             FocusScope.of(context).unfocus();
-                                            var a = singleData?.mobile ?? '';
-                                            final spliited = a.split("966");
-                                            ctr.mobile1.text = spliited[1];
+                                            // var a = singleData?.mobile ?? '';
+                                            // final spliited = a.split("966");
+                                            ctr.mobile1.text = singleData?.mobile ?? '';
                                             ctr.mobile1.selection = TextSelection.collapsed(offset: ctr.mobile1.text.length);
                                             setState(() {
                                               searching = false;
                                             });
-                                            ctr.mobileCheck('966${ctr.mobile1.text}').then((value){
+                                            ctr.mobileCheck(ctr.mobile1.text).then((value){
                                                 if(value['message'] == 'User record available'){
                                                   setState(() {
                                                     name = value['user']['name'];
