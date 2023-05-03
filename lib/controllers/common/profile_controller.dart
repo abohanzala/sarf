@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -10,6 +11,7 @@ import '../../model/moreModel/profile.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
+import '../../services/notification_services.dart';
 import '../../src/baseview/base_controller.dart';
 import '../../src/utils/routes_name.dart';
 import '../../src/widgets/loader.dart';
@@ -25,6 +27,7 @@ class ProfileController extends GetxController {
   TextEditingController contactController = TextEditingController();
   TextEditingController whatsappController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
+  NotificationServices notificationServices = NotificationServices();
   var alertCount = 0.obs;
 
   var location = ''.obs;
@@ -258,13 +261,13 @@ class ProfileController extends GetxController {
 
   Future login(String phone, String password, String groupId) async {
     openLoader();
-    var result = '';
+    String? result = await notificationServices.getDeviceToken();
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phone,
       'password': password,
-      'ios_device_id': 'yewuihjkfhsdjkfhdkjfhdkf',
-      'android_device_id': 'kfhsdkjfhsdifhikfekjdjfhdk',
+      'ios_device_id': Platform.isIOS == true ? result : '',
+      'android_device_id': Platform.isAndroid == true ? result : '',
       "group_id": groupId
     };
     debugPrint("This is my request====================$request");
@@ -307,6 +310,7 @@ class ProfileController extends GetxController {
         }
       }
     });
+    debugPrint("hereeeeeeeeeeeererer");
     debugPrint(response.toString());
     if (response['success'] == true) {
       result = 'true';
@@ -329,6 +333,10 @@ class ProfileController extends GetxController {
       await GetStorage().write('photo', userInfo.user!.photo);
       await GetStorage().write('status', userInfo.user!.status);
       await GetStorage().write('groupId', userInfo.user!.groupId);
+      await GetStorage().write('user_lang', userInfo.user!.locale);
+      await GetStorage().write('user_type', userInfo.user!.userType);
+      await GetStorage().write('countryId', userInfo.user!.countryId);
+      await GetStorage().write('accountType', userInfo.user!.accountType);
       await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
           GetStorage().read('mobile'));
       MyBottomNavigationController ctr =

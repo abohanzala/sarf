@@ -86,39 +86,43 @@ class _HomeScreenState extends State<HomeScreen> {
         expenseTypes.add(expanse);
       }
     }
-    setState(() {
+    if(mounted){
+      setState(() {
       
     });
+    }
+    
       
     }).catchError((error) async{
-    await GetStorage().remove('user_token');
-    await GetStorage().remove('groupId');
-    await GetStorage().remove('userId');
-    await GetStorage().remove('user_type');
-    await GetStorage().remove('accountType');
-    await GetStorage().remove('countryId');
-    await GetStorage().remove(
-      'name',
-    );
-    await GetStorage().remove(
-      'username',
-    );
-    await GetStorage().remove(
-      'email',
-    );
-    await GetStorage().remove(
-      'firebase_email',
-    );
-    await GetStorage().remove(
-      'mobile',
-    );
-    await GetStorage().remove(
-      'photo',
-    );
-    await GetStorage().remove(
-      'status',
-    );
-     Get.offAllNamed(RoutesName.LogIn);
+      debugPrint(error.toString());
+    // await GetStorage().remove('user_token');
+    // await GetStorage().remove('groupId');
+    // await GetStorage().remove('userId');
+    // await GetStorage().remove('user_type');
+    // await GetStorage().remove('accountType');
+    // await GetStorage().remove('countryId');
+    // await GetStorage().remove(
+    //   'name',
+    // );
+    // await GetStorage().remove(
+    //   'username',
+    // );
+    // await GetStorage().remove(
+    //   'email',
+    // );
+    // await GetStorage().remove(
+    //   'firebase_email',
+    // );
+    // await GetStorage().remove(
+    //   'mobile',
+    // );
+    // await GetStorage().remove(
+    //   'photo',
+    // );
+    // await GetStorage().remove(
+    //   'status',
+    // );
+    //  Get.offAllNamed(RoutesName.LogIn);
     });
     // await profileController.getProfile();
     await invCtr.getInvoiceList('').then((value){
@@ -615,7 +619,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: 2,
                                         ),
                                         Text(
-                                          "${ GetStorage().read("accountType") == 1 ? 'Personal'.tr : GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
+                                          "${ GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
                                           style: TextStyle(
                                               color: R.colors.blackSecondery),
                                         )

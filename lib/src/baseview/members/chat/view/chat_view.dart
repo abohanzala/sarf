@@ -218,7 +218,7 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       }
       if(value == ''){
-        Get.snackbar("Error", 'Something went wrong try later');
+        Get.snackbar("Error".tr, 'Something went wrong try later'.tr);
       }
       image = null;
       

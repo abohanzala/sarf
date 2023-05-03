@@ -343,7 +343,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> with RouteAware  {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              'Save'.tr,
+                                              'Send'.tr,
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16.sp,

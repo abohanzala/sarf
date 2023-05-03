@@ -395,7 +395,7 @@ class _CustomInvoiceState extends State<CustomInvoice> with RouteAware  {
                                   decoration: InputDecoration(
                                     fillColor: R.colors.lightGrey,
                                     filled: true,
-                                    labelText: 'Amount'.tr,
+                                    labelText: 'Amount 2'.tr,
                                     labelStyle: TextStyle(
                                       color: R.colors.grey,
                                       fontSize: 14.sp,
