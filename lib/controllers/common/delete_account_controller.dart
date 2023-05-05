@@ -71,15 +71,32 @@ class DeleteAccountController extends GetxController {
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());
-      await GetStorage().remove('user_token');
-      await GetStorage().remove('userId');
-      await GetStorage().remove('name');
-      await GetStorage().remove('username');
-      await GetStorage().remove('email');
-      await GetStorage().remove('firebase_email');
-      await GetStorage().remove('mobile');
-      await GetStorage().remove('photo');
-      await GetStorage().remove('status');
+       await GetStorage().remove('user_token');
+    await GetStorage().remove('groupId');
+    await GetStorage().remove('userId');
+    await GetStorage().remove('accountType');
+    await GetStorage().remove('countryId');
+    await GetStorage().remove(
+      'name',
+    );
+    await GetStorage().remove(
+      'username',
+    );
+    await GetStorage().remove(
+      'email',
+    );
+    await GetStorage().remove(
+      'firebase_email',
+    );
+    await GetStorage().remove(
+      'mobile',
+    );
+    await GetStorage().remove(
+      'photo',
+    );
+    await GetStorage().remove(
+      'status',
+    );
       Get.offAllNamed(RoutesName.deleteAccount3);
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);

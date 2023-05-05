@@ -33,33 +33,6 @@ class FullScreenView extends StatefulWidget {
 
 class _FullScreenViewState extends State<FullScreenView> {
   final ScreenshotController screenshotController = ScreenshotController();
-  int _progress = 0;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    ImageDownloader.callback(onProgressUpdate: (String? imageId, int progress) {
-      
-      if(progress< 100){
-        setState(() {
-       
-          
-          _progress = progress;
-      
-        
-      });
-      }
-      if(progress == 100){
-         setState(() {
-       
-          
-          _progress = 0;
-      
-        
-      });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +79,12 @@ class _FullScreenViewState extends State<FullScreenView> {
                                                       await Dio().download(widget.url, imagePath);
                                                       await GallerySaver.saveImage(imagePath,toDcim: true);
                                                      Get.back();
-                                                     Get.snackbar("Alert".tr, "Saved in gallery".tr,backgroundColor: R.colors.white);
+                                                     Get.snackbar("Notice".tr, "Saved in gallery".tr,backgroundColor: R.colors.white);
 
                                                      } catch(error){
                                                       Get.back();
                                                       debugPrint(error.toString());
-                                                       Get.snackbar("Alert".tr, error.toString(),backgroundColor: R.colors.white);
+                                                       Get.snackbar("Error".tr, error.toString(),backgroundColor: R.colors.white);
                                                      }     
                                                         
 

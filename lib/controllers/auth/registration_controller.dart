@@ -247,16 +247,39 @@ class RegistrationController extends GetxController {
   }
 
   Future createFirebaseUser() async {
-    await firebase_auth.FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-            email: GetStorage().read('mobile') + '@gmail.com',
-            password: GetStorage().read('mobile'))
+    
+     await firebase_auth.FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: GetStorage().read('mobile') + '@gmail.com', password: GetStorage().read('mobile'))
         .then((value) {
-      //Get.snackbar("firebase-created", 'firebase-created');
-      //SnakeBars.showSuccessSnake(description: 'firebase reg');
-    }).catchError((error) {
-      Get.snackbar("firebase-error", error.toString());
-      // SnakeBars.showErrorSnake(description: error.toString());
+      // SnakeBars.showSuccessSnake(description: "FireBase signin");
+      //Get.snackbar('FireBase signin', '');
+    }).catchError((error) async {
+      if (error.code == 'user-not-found') {
+        await firebase_auth.FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: GetStorage().read('mobile') + '@gmail.com', password: GetStorage().read('mobile'))
+            .then((value) {
+          //  SnakeBars.showSuccessSnake(description: "FireBase Created");
+          // Get.snackbar('FireBase created', '');
+        }).catchError((error) {
+          // DialogBoxes.showErroDialog(description: error.code);
+        });
+      }
+      // DialogBoxes.showErroDialog(description: error.code);
+      debugPrint('Firebase signin ${error.code}');
     });
+    
+    
+    
+    // await firebase_auth.FirebaseAuth.instance
+    //     .createUserWithEmailAndPassword(
+    //         email: GetStorage().read('mobile') + '@gmail.com',
+    //         password: GetStorage().read('mobile'))
+    //     .then((value) {
+    //   //Get.snackbar("firebase-created", 'firebase-created');
+    //   //SnakeBars.showSuccessSnake(description: 'firebase reg');
+    // }).catchError((error) {
+    //   Get.snackbar("firebase-error", error.toString());
+    //   // SnakeBars.showErrorSnake(description: error.toString());
+    // });
   }
 }

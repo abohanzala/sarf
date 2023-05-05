@@ -203,9 +203,11 @@ class LocaleString extends Translations {
           "Location permissions are denied" : "Location permissions are denied",
           "Saved in gallery" : "Saved in gallery",
           "Receiver Name" : "Receiver Name",
+          "Notice" : "Notice"
         },
     
         'ar_SA': {
+          "Notice" : "إشعار",
           "Receiver Name" : "المرسل اليه",
           "Saved in gallery" : "تم الحفظ في المعرض",
           "Location permissions are denied" : "تم رفض أذونات الموقع",
