@@ -26,6 +26,18 @@ class ResetPasswordController extends GetxController {
     super.onInit();
   }
 
+   String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
+
+
   Future resetPassword() async {
     openLoader();
     //check validation
@@ -37,13 +49,15 @@ class ResetPasswordController extends GetxController {
     // validation ends
     var a = loginController.phone.text;
     final splitted = a.split('+');
-
+    String currentPass = replaceArabicNumber(currentPassword.text);
+    String newPass = replaceArabicNumber(newPassword.text);
+    String conformPass = replaceArabicNumber(confirmNewPassword.text);
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': loginController.phone.text,
-      'current_password': currentPassword.text,
-      'new_password': newPassword.text,
-      'confirm_password': confirmNewPassword.text,
+      'current_password': currentPass,
+      'new_password': newPass,
+      'confirm_password': conformPass,
     };
     print("This is my request====================${request}");
 

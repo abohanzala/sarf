@@ -113,10 +113,14 @@ class _SettingsState extends State<Settings> {
         child: Column(
           children: [
             buildLanguageTextAndLanguageOptions(),
-            buildDivider(),
-            buildChangeProfileTextAndIcon(),
+            
+            if(GetStorage().read("user_type") != 3) ...[
+              buildDivider(),
+              buildChangeProfileTextAndIcon(),
             buildDivider(),
             buildChangePrivacyPolicyTextAndIcon()
+            ],
+            
           ],
         ),
       ),

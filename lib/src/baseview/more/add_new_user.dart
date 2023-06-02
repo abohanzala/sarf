@@ -34,7 +34,13 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> with RouteAware  {
   var registerFormKey = GlobalKey<FormState>();
   
   
-
+@override 
+void initState() {
+    ctr.phone.clear();
+    ctr.password.clear();
+    ctr.otp.clear();
+    super.initState();
+  }
   
 
   
@@ -330,7 +336,8 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> with RouteAware  {
             return;
                 }
                                                   
-                                                  ctr.postNewCustomInvoice("${ctr.code}${ctr.phone.text}", ctr.password.text);
+                                                  // ctr.postNewCustomInvoice("${ctr.code}${ctr.phone.text}", ctr.password.text);
+                                                   ctr.register("${ctr.code}${ctr.phone.text}");
                                                   
                                                   }
                                                                                 

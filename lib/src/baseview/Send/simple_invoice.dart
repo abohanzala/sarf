@@ -10,14 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/resources/resources.dart';
 import 'package:sarf/src/baseview/Send/custom_invoice.dart';
 import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:scan/scan.dart';
 
 import '../../utils/navigation_observer.dart';
@@ -371,6 +369,9 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                   
                                   controller: ctr.mobile1,
                                   keyboardType: TextInputType.text,
+                                   onTap: (){
+                                        ctr.mobile1.selection = TextSelection.collapsed(offset: ctr.mobile1.text.length);
+                                      },
                                   onChanged: _onChangeHandler,
                                   decoration: InputDecoration(
                                     
@@ -727,6 +728,8 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                         itemCount: ctr.searchedUsers.value.data?.length,
                                         itemBuilder: (context,index){
                                           var singleData = ctr.searchedUsers.value.data?[index];
+                                          int numSpace = (singleData?.mobile?.length ?? 0) - 5 ;
+                                          var a = singleData?.mobile?.replaceRange(0, numSpace, '*' * numSpace);          
                                         return ListTile(
                                           leading: CircleAvatar(
                                             backgroundColor: R.colors.lightGrey,
@@ -734,7 +737,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                             backgroundImage: singleData?.photo == null ? null : NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") ,
                                           ),
                                           title: Text(singleData?.name ?? ''),
-                                          subtitle: Text(singleData?.mobile ?? ''),
+                                          subtitle: Text( a ?? '', textAlign: GetStorage().read("lang") == "en" ? TextAlign.left : TextAlign.right ,textDirection: TextDirection.ltr,),
                                           onTap: (){
                                             FocusScope.of(context).unfocus();
                                             // var a = singleData?.mobile ?? '';

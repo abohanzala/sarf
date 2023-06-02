@@ -28,18 +28,24 @@ class _MembersScreenState extends State<MembersScreen> {
   String membersLenght = '';
 
   _onChangeHandler(value ) {
+    searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
         const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
         if (searchOnStoppedTyping != null) {
             setState(() => searchOnStoppedTyping?.cancel()); // clear timer
         }
-        setState(() => searchOnStoppedTyping =  Timer(duration, () => search(value)));
+        setState(() => searchOnStoppedTyping =  Timer(duration, (){ 
+          
+          
+          search(value);
+          
+          }));
     }
 
     search(value) {
       // setState(() {
       //    membersLenght = '(0)';
       // });
-      FocusScope.of(context).unfocus();
+       FocusScope.of(context).unfocus();
         //print('hello world from search . the value is $value');
         if(value.isEmpty){
           
@@ -53,10 +59,11 @@ class _MembersScreenState extends State<MembersScreen> {
           
         }
 
-        
+
             membersList = ctr.getMembersList(searchValue.text);
             membersList?.then((value){
               setState(() {
+                
                 membersLenght = '(${value?.data?.length ?? 0})';
               });
                 
@@ -117,6 +124,9 @@ loadMembers(){
                                     border: Border.all(color: R.colors.lightBlue,width: 1) ),
                                     child:
                                     TextFormField(
+                                      onTap: (){
+                                        searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
+                                      },
                                       controller: searchValue,
                                       onChanged: _onChangeHandler,
                                       decoration: InputDecoration(

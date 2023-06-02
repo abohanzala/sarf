@@ -153,6 +153,9 @@ launchPhone({required Uri u}) async {
                                   border: Border.all(color: R.colors.lightBlue,width: 1) ),
                                   child:
                                   TextFormField(
+                                     onTap: (){
+                                        searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
+                                      },
                                     controller: searchValue,
                                     onChanged: _onChangeHandler,
                                     decoration: InputDecoration(

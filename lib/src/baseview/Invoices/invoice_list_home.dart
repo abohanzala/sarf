@@ -86,9 +86,11 @@ void dispose(){
 loadMembers(){
   membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId);
   membersList?.then((value){
-    setState(() {
+    if(mounted){
+      setState(() {
       membersLenght = '(${value?.data?.length ?? 0})';
     });
+    }
     
   });
 }
@@ -244,6 +246,9 @@ loadMembers(){
                 margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: TextFormField(
                   controller: searchValue,
+                   onTap: (){
+                                        searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
+                                      },
                   onChanged: _onChangeHandler,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(

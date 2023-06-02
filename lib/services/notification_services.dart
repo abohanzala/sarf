@@ -131,7 +131,7 @@ class NotificationServices {
 
   // function to show visible notification when app is active
   Future<void> showNotification(RemoteMessage message)async{
-
+    print(message.notification?.title.toString());
     AndroidNotificationChannel channel = AndroidNotificationChannel(
        Random.secure().nextInt(100000).toString(),
       "High Importance Notification" ,
@@ -213,7 +213,7 @@ class NotificationServices {
     
     // Get.to(() => const InvoiceListScreen());
 
-    if(message.data['type'] =='simple_invoice_add' || message.data['type'] == "custom_invoice_add"){
+    if(message.data['type'] =='simple_invoice_add' || message.data['type'] == "custom_invoice_add" || message.data['type'] == "invoice_attachment" ){
     //   var bNavCon = Get.find<MyBottomNavigationController>();
     // bNavCon.changeTabIndex(3);
     Get.to(() => InvoiceDetails(id: message.data['ref_id'], invoiceNum: message.data['ref_id'], reverse: true,  ) );

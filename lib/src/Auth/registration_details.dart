@@ -25,6 +25,7 @@ import '../../resources/resources.dart';
 import 'location_view.dart';
 
 class RegistrationDetails extends StatefulWidget {
+  
   const RegistrationDetails({Key? key}) : super(key: key);
 
   @override

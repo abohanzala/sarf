@@ -183,6 +183,7 @@ class ProfileController extends GetxController {
   }
 
   Future getAccounts() async {
+    accounts.value = UserAccounts();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
     // if (!isValid) {

@@ -23,17 +23,30 @@ class LoginController extends GetxController {
   var lenght = 9.obs;
   var selectedCountry = 2.obs;
  NotificationServices notificationServices = NotificationServices();
+
+String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
+
   Future login(String mob) async {
     openLoader();
     // String? result = await PlatformDeviceId.getDeviceId;
     String? result = await notificationServices.getDeviceToken();
-    debugPrint(result);
+    String pass = replaceArabicNumber(password.text);
+    debugPrint(pass);
     var request = {};
     if(id == ''){
       request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
-      'password': password.text,
+      'password': pass,
       'ios_device_id': Platform.isIOS == true ? result : '',
       'android_device_id': Platform.isAndroid == true ? result : '',
     };
@@ -42,7 +55,7 @@ class LoginController extends GetxController {
        request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
-      'password': password.text,
+      'password': pass,
       "user_id" : id,
       'ios_device_id': Platform.isIOS == true ? result : '',
       'android_device_id': Platform.isAndroid == true ? result : '',

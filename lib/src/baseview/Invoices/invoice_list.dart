@@ -240,6 +240,9 @@ loadMembers(){
                   ),
                   margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   child: TextFormField(
+                     onTap: (){
+                                        searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
+                                      },
                     controller: searchValue,
                     onChanged: _onChangeHandler,
                     decoration: InputDecoration(

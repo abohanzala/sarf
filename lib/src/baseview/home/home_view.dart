@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ import '../../../model/members/invoice_list_model.dart';
 import '../../../resources/resources.dart';
 import '../../../services/dio_client.dart';
 import '../../../services/notification_services.dart';
+import '../../utils/navigation_observer.dart';
 import '../base_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,7 +37,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with RouteAware {
   HomeController ctr = Get.put<HomeController>(HomeController());
   InvoiceController invCtr = Get.find<InvoiceController>();
   
@@ -51,6 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
   //ScrollController scrollCtr = ScrollController();
   @override
   void initState() {
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  });
+
     getData();
     super.initState();
    
@@ -80,8 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
       }
-
+        expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
       if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
         expenseTypes.add(expanse);
       }
@@ -137,7 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-
   _shareQrCode() async {
     final directory = (await getApplicationDocumentsDirectory()).path;
     screenshotController.capture().then((Uint8List? image) async {
@@ -156,6 +163,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }).catchError((onError) {
       debugPrint('Error --->> $onError');
     });
+  }
+
+  @override
+  void didPopNext() {
+    getData();
+    super.didPopNext();
   }
   
   @override
@@ -1104,249 +1117,260 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              padding: const EdgeInsets.all(4),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: R.colors.grey, width: 1)),
-                                              child: GestureDetector(
-                                                onTap: (){
-                                                  Get.bottomSheet(
-                                                    Container(
-                                                      padding: const EdgeInsets.all(20),
-                                                      decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                                                      color: R.colors.white,
-                                                      ),
-                                                      child: Column(mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Row(children: [
-                                                          GestureDetector(
-                                                            onTap: ()async{
-                                                              // debugPrint(invoices?.data?.length.toString());
-                                                              if(invoices?.data != null){
-
-                                                                    final xcel.Workbook workbook = xcel.Workbook();
-                                                                  final xcel.Worksheet sheet = workbook.worksheets[0];
-                                                                  sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
-                                                                  sheet.getRangeByIndex(1, 2).setText("Created at".tr);
-                                                                  sheet.getRangeByIndex(1, 3).setText("Customer".tr);
-                                                                  sheet.getRangeByIndex(1, 4).setText("Description".tr);
-                                                                  sheet.getRangeByIndex(1, 5).setText("Amount".tr);
-                                                                  for (var i = 0; i < invoices!.data!.length; i++) {
-                                                                    final item = invoices!.data![i];
-                                                                    var id = (invoices!.data!.length - 1 ) - i;
-                                                                    sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
-                                                                    sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
-                                                                    sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
-                                                                    sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
-                                                                    sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
-                                                                  }
-
-                                                                  final List<int> bytes = workbook.saveAsStream();
-                                                                   workbook.dispose();
-                                                                  //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
-                                                                  final directory = (await getApplicationDocumentsDirectory()).path;
-                                                                  String fileName = DateTime.now().microsecondsSinceEpoch.toString();
-                                                                  final file = File('$directory/$fileName.xlsx');
-                                                                   await file.writeAsBytes(bytes,flush: true);
-                                                                  try{
-                                                                        Share.shareXFiles([XFile(file.path)]);
-                                                                      } catch (error) {
-                                                                        debugPrint(error.toString());
-                                                                      
-                                                                  }
-                                                                 
-                                                                Get.back();
-
-                                                              }
-                                                             
-                                                            },
-                                                            child: Image.asset(R.images.excelIcon,width: 60,height: 60,fit: BoxFit.cover,),
-                                                          ),
-                                                          SizedBox(width: 20,),
-                                                           GestureDetector(
-                                                            onTap: () async{
-                                                              // A Suls Regular.ttf
-                                                              final  font = await rootBundle.load("assets/fonts/arabic.ttf");
-                                                              final  ttf = pw.Font.ttf(font);
-                                                              // final data = await rootBundle.load("assets/fonts/arabic.ttf");
-
-                                                              //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
-
-                                                              //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
-                                                              if(invoices?.data != null){
-                                                                  final pdf = pw.Document();
-                                                                    pdf.addPage(pw.MultiPage(
-                                                                      pageFormat: PdfPageFormat.a4,
-                                                                      theme: pw.ThemeData.withFont(
-                                                                            base: ttf,
-                                                                          ),
-                                                                      build: (pw.Context context) {
-                                                                      return <pw.Widget>[
-                                                                        pw.Table(children: [
-                                                                          pw.TableRow(children: [
-                                                                            pw.Column(children: [
-                                                                              
-                                                                              pw.Text("Inv number".tr,
-                                                                               textDirection: pw.TextDirection.rtl,
-                                                                              )
-                                                                            ]),
-                                                                             pw.Column(children: [
-                                                                 
-                                                                              pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
-                                                                            ]),
-
-                                                                             pw.Column(children: [
-                                                                 
-                                                                              pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
-                                                                            ]),
-
-
-                                                                             pw.Column(children: [
-                                                                
-                                                                              pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
-                                                                            ]),
-
-
-
-                                                                             pw.Column(children: [
-                                                                  
-                                                                              pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
-                                                                            ]),
+                                      SizedBox(
+                                        width : Get.width,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    border: Border.all(
+                                                        color: R.colors.grey, width: 1)),
+                                                child: GestureDetector(
+                                                  onTap: (){
+                                                    Get.bottomSheet(
+                                                      Container(
+                                                        padding: const EdgeInsets.all(20),
+                                                        decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                                        color: R.colors.white,
+                                                        ),
+                                                        child: Column(mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Row(children: [
+                                                            GestureDetector(
+                                                              onTap: ()async{
+                                                                debugPrint("here");
+                                                                debugPrint(invoices?.data.toString());
+                                                                Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // debugPrint(invoices?.data?.length.toString());
+                                                                if(invoices?.data != null){
+                                                                  Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
                                                                             
-                                                                          ]),
-                                                                           for(var i = 0; i < invoices!.data!.length; i++)
-                                                                            pw.TableRow(children: [
-                                                                            pw.Column(children: [
-                                                                              
-                                                                              pw.Text("${((invoices!.data!.length - 1 ) - i + 1)}"),
-                                                                            ]),
-                                                                             pw.Column(children: [
-                                                                 
-                                                                              pw.Text(invoices!.data![i].createdDate.toString()),
-                                                                            ]),
-
-                                                                             pw.Column(children: [
-                                                                 
-                                                                              pw.Text(invoices!.data![i].customer?.name.toString() ?? ''),
-                                                                            ]),
-
-
-                                                                             pw.Column(children: [
-                                                                
-                                                                              pw.Text(invoices!.data![i].note ?? ''),
-                                                                            ]),
-
-
-
-                                                                             pw.Column(children: [
-                                                                  
-                                                                              pw.Text(invoices!.data![i].amount.toString()),
-                                                                            ]),
+                                                                      final xcel.Workbook workbook = xcel.Workbook();
+                                                                    final xcel.Worksheet sheet = workbook.worksheets[0];
+                                                                    sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(1, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(1, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(1, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(1, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < invoices!.data!.length; i++) {
+                                                                      final item = invoices!.data![i];
+                                                                      var id = (invoices!.data!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
+                                                                    }
                                                                             
-                                                                          ]),
-                                                                        ]),
-                                                                      //  pw.Table(children: <>) 
-                                                                      ]; // Center
-                                                                    })); // Page
-                                                                            
-                                                                      final output = await getTemporaryDirectory();
-                                                                      String fileName2 = DateTime.now().microsecondsSinceEpoch.toString();
-                                                                      final file = File("${output.path}/$fileName2.pdf");
-                                                                    // final file = File("example.pdf");
-                                                                    await file.writeAsBytes(await pdf.save());
-
+                                                                    final List<int> bytes = workbook.saveAsStream();
+                                                                     workbook.dispose();
+                                                                    //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
+                                                                    final directory = (await getApplicationDocumentsDirectory()).path;
+                                                                    String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                    final file = File('$directory/$fileName.xlsx');
+                                                                     await file.writeAsBytes(bytes,flush: true);
                                                                     try{
-                                                                       Share.shareXFiles([XFile(file.path)]);
-                                                                          } catch (error) {
-                                                                            debugPrint(error.toString());
-                                                                          }
-
-                                                                    Get.back();                                                                  
-
-                                                              }
-                                                              
-
-                                                            },
-                                                            child: Image.asset(R.images.pdfIcon,width: 60,height: 60,fit: BoxFit.cover,),
-                                                          ),
-                                                        ],),
-                                                      ],
+                                                                          Share.shareXFiles([XFile(file.path)]);
+                                                                        } catch (error) {
+                                                                          Get.snackbar("error",error.toString(),backgroundColor: R.colors.blue);
+                                                                          debugPrint(error.toString());
+                                                                        
+                                                                    }
+                                                                   
+                                                                  Get.back();
+                                                                            
+                                                                }
+                                                               
+                                                              },
+                                                              child: Image.asset(R.images.excelIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                            ),
+                                                            SizedBox(width: 20,),
+                                                             GestureDetector(
+                                                              onTap: () async{
+                                                                debugPrint("here");
+                                                                debugPrint(invoices?.data.toString());
+                                                                Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // A Suls Regular.ttf
+                                                                final  font = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                final  ttf = pw.Font.ttf(font);
+                                                                // final data = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                            
+                                                                //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
+                                                                            
+                                                                //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
+                                                                if(invoices?.data != null){
+                                                                  Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                    final pdf = pw.Document();
+                                                                      pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < invoices!.data!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((invoices!.data!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(invoices!.data![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(invoices!.data![i].customer?.name.toString() ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(invoices!.data![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(invoices!.data![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      })); // Page
+                                                                              
+                                                                        final output = await getTemporaryDirectory();
+                                                                        String fileName2 = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                        final file = File("${output.path}/$fileName2.pdf");
+                                                                      // final file = File("example.pdf");
+                                                                      await file.writeAsBytes(await pdf.save());
+                                                                            
+                                                                      try{
+                                                                         Share.shareXFiles([XFile(file.path)]);
+                                                                            } catch (error) {
+                                                                              Get.snackbar("error",error.toString(),backgroundColor: R.colors.blue);
+                                                                              debugPrint(error.toString());
+                                                                            }
+                                                                            
+                                                                      Get.back();                                                                  
+                                                                            
+                                                                }
+                                                                
+                                                                            
+                                                              },
+                                                              child: Image.asset(R.images.pdfIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                            ),
+                                                          ],),
+                                                        ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    Image.asset(
-                                                      R.images.icon1,
-                                                      width: 20,
-                                                      height: 20,
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        Text(
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        R.images.icon1,
+                                                        width: 20,
+                                                        height: 20,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Flexible(
+                                                        child: Text(
                                                           'Share Report'.tr,
                                                           style: TextStyle(
                                                               color: R.colors.black,
-                                                              fontSize: 12),
+                                                              fontSize: 10),
+                                                              overflow: TextOverflow.ellipsis,
                                                         ),
-                                                      ],
-                                                    )
-                                                  ],
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          // width: Get.width * 0.25,
-                                          padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              border: Border.all(
-                                                  color: R.colors.grey, width: 1)),
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              _shareQrCode();
-                                            },
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  R.images.icon3,
-                                                  width: 20,
-                                                  height: 20,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text(
+                                            const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            // width: Get.width * 0.25,
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                border: Border.all(
+                                                    color: R.colors.grey, width: 1)),
+                                            child: GestureDetector(
+                                              onTap: (){
+                                                _shareQrCode();
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    R.images.icon3,
+                                                    width: 20,
+                                                    height: 20,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
                                                       'Share QR code'.tr,
                                                       style: TextStyle(
                                                           color: R.colors.black,
-                                                          fontSize: 12),
+                                                          fontSize: 10),
+                                                          overflow: TextOverflow.ellipsis,
                                                     ),
-                                                  ],
-                                                )
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                        ],
-                                        
+                                          ],
+                                          
+                                        ),
                                       ),
                                       
                                     ],

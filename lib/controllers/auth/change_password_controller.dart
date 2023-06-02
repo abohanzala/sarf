@@ -26,6 +26,17 @@ class ChangePasswordController extends GetxController {
     super.onInit();
   }
 
+  String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
+
   Future changePassword(String otpText) async {
     openLoader();
     //check validation
@@ -36,14 +47,15 @@ class ChangePasswordController extends GetxController {
     // loginFormKey.currentState!.save();
     // validation ends
     var a = "${forgotPasswordController.code}${forgotPasswordController.phone.text}";
-    
+    String newPass = replaceArabicNumber(newPassword.text);
+    String confirmPass = replaceArabicNumber(confirmNewPassword.text);
 
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': a,
       'otp': otpText,
-      'new_password': newPassword.text,
-      'confirm_password': confirmNewPassword.text,
+      'new_password': newPass,
+      'confirm_password': confirmPass,
     };
     debugPrint("This is my request====================$request");
 

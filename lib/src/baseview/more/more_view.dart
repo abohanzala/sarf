@@ -11,9 +11,11 @@ import 'package:sarf/resources/dummy.dart';
 import 'package:sarf/services/dio_client.dart';
 import 'package:sarf/src/Auth/change_profile.dart';
 import 'package:sarf/src/baseview/more/add_users.dart';
+import 'package:sarf/src/baseview/more/chat_list.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 import '../../../constant/api_links.dart';
+import '../../../controllers/auth/registration_controller.dart';
 import '../../../controllers/common/change_profile_controller.dart';
 import '../../../controllers/common/delete_account_controller.dart';
 import '../../../controllers/common/profile_controller.dart';
@@ -44,7 +46,8 @@ class _MoreScreenState extends State<MoreScreen>  with RouteAware {
   
 Future logout() async {
   // openLoader();
-
+  Get.find<LoginController>().id = '';
+  Get.find<RegistrationController>().isGroup = false;
   var response =
       await DioClient().get(ApiLinks.logout).catchError((error) async {
     //debugPrint(error.toString());
@@ -226,7 +229,11 @@ Future logout() async {
             ),
             const SizedBox(height: 10,),
                         if(GetStorage().read("user_type") != 3)
-                        buildMoreDetails()],
+                        buildMoreDetails(),
+                        if(GetStorage().read("user_type") == 3)
+                        const SizedBox(),
+                        
+                        ],
                     ),
                   )
                 ],
@@ -291,6 +298,8 @@ Future logout() async {
               buildDivider(),
               buildTermsAndConditionsOption(),
               buildDivider(),
+              chat(),
+              buildDivider(),
               buildPrivacyPolicyOption(),
               buildDivider(),
               buildShareOption(),
@@ -343,6 +352,29 @@ Future logout() async {
           children: [
             buildHelpAndSupportImage(),
             buildHelpAndSupportText(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget chat() {
+    return InkWell(
+      onTap: () {
+        Get.to(() => const ChatListScreen());
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 20),
+        child: Row(
+          children: [
+            Icon(Icons.chat,color: R.colors.blue,size: 20,),
+            Container(
+      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+      child: Text(
+        'Chat'.tr,
+        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
+      ),
+    )
           ],
         ),
       ),
@@ -586,7 +618,7 @@ Future logout() async {
         
         child: Column(
           children: [
-            if(GetStorage().read("user_type") != 3)
+            // if(GetStorage().read("user_type") != 3)
             buildNotificationAndSettingsIcon(),
             
             buildLogoutIconAndText()
@@ -618,6 +650,7 @@ Future logout() async {
               const SizedBox(
                 height: 5,
               ),
+              // if(GetStorage().read("user_type") != 3)
               buildViewProfileLinkButton()
             ],
           ),
@@ -722,6 +755,7 @@ Future logout() async {
     ProfileController homeController = Get.find<ProfileController>();
     return Row(
       children: [
+        if(GetStorage().read("user_type") != 3)
         Obx(
           () => GestureDetector(
             onTap: () => Get.toNamed(RoutesName.alerts),
@@ -806,6 +840,7 @@ Future logout() async {
                    children: [
                      GestureDetector(
                       onTap: (){
+                        Get.find<RegistrationController>().isGroup = true;
                         Get.to(() => const Registration());
                         
                       },

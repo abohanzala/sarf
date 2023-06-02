@@ -30,6 +30,7 @@ class RegistrationController extends GetxController {
   TextEditingController websiteController = TextEditingController();
   bool accountType = true;
   bool isOnline = false;
+  bool isGroup = false ;
   var cityId;
   var expense_typeId;
   var message;
@@ -41,10 +42,23 @@ class RegistrationController extends GetxController {
   File? profileImage;
  NotificationServices notificationServices = NotificationServices();
 
-  Future registration(String mob,String country_id) async {
+ String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
+
+  Future registration(String mob,String country_id,) async {
     openLoader();
 
     ddio.FormData formData = ddio.FormData();
+
+    String pass = replaceArabicNumber(registerController.password.text);
 
     if(profileImage != null){
       var file = profileImage;
@@ -70,7 +84,7 @@ class RegistrationController extends GetxController {
         'account_type', accountType == true ? 0.toString() : 1.toString()));
     formData.fields.add(MapEntry(
       'password',
-      registerController.password.text,
+      pass,
     ));
     formData.fields.add(MapEntry(
       'name',
@@ -88,11 +102,13 @@ class RegistrationController extends GetxController {
       expense_typeId.toString(),
     ));
     }
+    if(isGroup){
     if(GetStorage().read('groupId') != null && GetStorage().read('groupId') != '' ){
       formData.fields.add(MapEntry(
       'group_id',
       GetStorage().read('groupId').toString(),
     ));
+    }
     }
     formData.fields.add(MapEntry(
       'insta_link',

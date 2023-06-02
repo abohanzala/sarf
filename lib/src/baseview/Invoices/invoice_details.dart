@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/src/baseview/Invoices/fullscreen_img.dart';
 import 'package:screenshot/screenshot.dart';
@@ -29,6 +32,7 @@ class InvoiceDetails extends StatefulWidget {
 class _InvoiceDetailsState extends State<InvoiceDetails> {
   MembersController ctr = Get.put<MembersController>(MembersController());
   final ScreenshotController screenshotController = ScreenshotController();
+  File? _scannedImage;
 
   Future pickImage(ImageSource source) async {
     
@@ -47,6 +51,31 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
       debugPrint('Failed to pick image: $e');
     }
   }
+
+  void _startScan(BuildContext context) async {
+    try{
+      var image = await CunningDocumentScanner.getPictures().catchError((error){
+        Get.snackbar("Error".tr, error.toString(),backgroundColor: R.colors.blue);
+        return error;
+      });
+
+    if (image != null) {
+      for (var img in image) {
+        _scannedImage = File(img);
+      ctr.uploadImages.add(_scannedImage!);
+      }
+      
+      setState(() {});
+    }
+    } on PlatformException catch (e) {
+      print("hereeeeee");
+      Get.snackbar("Error".tr,e.toString());
+      debugPrint('Failed to pick image: $e');
+    }
+    
+  }
+
+
   @override
   void initState() {
     ctr.getInvoiceDetail(widget.id);
@@ -368,6 +397,43 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                             ),
                                         ),
                                   ),
+                                      const SizedBox(width: 5,),
+                                       GestureDetector(
+                                            onTap: () async{
+                                              DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                                              if(Platform.isAndroid){
+                                                 AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+                                              final status = await Permission.camera.request();
+                                               final status2 = androidInfo.version.sdkInt < 33 ? await Permission.storage.request() : await Permission.photos.request()  ;
+                                             
+                                              if(status == PermissionStatus.granted &&  status2 == PermissionStatus.granted ){
+                                                _startScan(context);
+                                              }else{
+                                                openAppSettings();
+                                                // Get.snackbar("Error".tr, "Permission not granted");
+                                              }
+                                              
+                                              }
+                                             
+                                                      
+                                              //  pickImage(ImageSource.gallery);
+                                            },
+                                            child: Container(
+                                                height: 60,
+                                                width: 60,
+                                                margin:
+                                                    const EdgeInsets.only(right: 10, top: 1),
+                                                padding: const EdgeInsets.all(18),
+                                                decoration: BoxDecoration(
+                                                  color: R.colors.grey,
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: Icon(
+                                                  Icons.qr_code_scanner_rounded,
+                                                  //size: 28.sp,
+                                                  color: R.colors.white,
+                                                )),
+                                          ),
                                       const SizedBox(width: 5,),
                
                                       Expanded(

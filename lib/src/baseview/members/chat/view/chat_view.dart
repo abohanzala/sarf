@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -69,6 +71,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String chatID(int currentID, int userID){
+    print(widget.currentFcm);
+    print(widget.userFcm);
   if (currentID > userID ) {
     return '$userID$currentID';
   }
@@ -139,21 +143,43 @@ class _ChatScreenState extends State<ChatScreen> {
     final String msg = message.text;
     message.clear();
     FocusScope.of(context).unfocus();
-      await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
-        'sender' : currentUser,
-        'message' : msg,
-        'messageType': messageType,
-        'time' : DateTime.now().toIso8601String(),
-      }).then((value){
-        notificationServices.getDeviceToken().then((value) async{
+
+     FirebaseFirestore.instance
+          .collection('messages').doc(chatId).set({
+            'lastMessage': msg,
+            'messageType': messageType,
+            currentUser: true,
+            chatUser: true,
+            'userId' : currentUser,
+            'userId2' : chatUser,
+            'chatUserName': widget.title,
+            'currentUserName': GetStorage().read("name"),
+            'otherUserPhoto' : widget.otherUserPhoto,
+            'curretUserPhoto' : widget.curretUserPhoto,
+            'userFcm' : widget.userFcm.toString(),
+            'currentFcm' : widget.currentFcm.toString(),
+            
+          })
+          .then((value){
+            FirebaseFirestore.instance
+            .collection('messages').doc(chatId).collection('chats').add(
+            {
+              'sender' : currentUser,
+              'message' : msg,
+              'messageType': messageType,
+              'time' : DateTime.now().toIso8601String(),
+            }
+            // SetOptions(merge: false),}
+          ).then((value){
+             notificationServices.getDeviceToken().then((value2) async{
           debugPrint('here');
-          var fcmToken = widget.currentFcm == value ? widget.userFcm : widget.currentFcm;
+          var fcmToken = widget.currentFcm == value2 ? widget.userFcm : widget.currentFcm;
 
            var data = {
               'to' : fcmToken.toString(),
               'notification' : {
-                'title' : 'New Message from'.tr + GetStorage().read("name")  ,
-                'body' : messageType == "audio" ? "audio" : messageType == "image" ? "image" : msg ,
+                'title' : 'New Message from'.tr + " "+ GetStorage().read("name")  ,
+                'body' : messageType == "audio" ? "audio".tr : messageType == "image" ? "image".tr : msg ,
             },
               
               'data' : {
@@ -189,7 +215,64 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
         });
-      });
+          });
+          }).catchError((error){
+            debugPrint(error.toString());
+            Get.snackbar('Error'.tr, error.toString());
+          });
+
+
+  //     await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
+  //       'sender' : currentUser,
+  //       'message' : msg,
+  //       'messageType': messageType,
+  //       'time' : DateTime.now().toIso8601String(),
+  //     }).then((value){
+  //       notificationServices.getDeviceToken().then((value) async{
+  //         debugPrint('here');
+  //         var fcmToken = widget.currentFcm == value ? widget.userFcm : widget.currentFcm;
+
+  //          var data = {
+  //             'to' : fcmToken.toString(),
+  //             'notification' : {
+  //               'title' : 'New Message from'.tr + " " + " " + GetStorage().read("name")  ,
+  //               'body' : messageType == "audio" ? "audio" : messageType == "image" ? "image" : msg ,
+  //           },
+              
+  //             'data' : {
+  //               'type' : 'chat',
+  //               'title' : widget.title,
+  //               'email' : GetStorage().read('mobile'),
+  //               'otherUserPhoto' : widget.otherUserPhoto,
+  //               'curretUserPhoto' : widget.curretUserPhoto,
+  //               'userFcm' : widget.userFcm.toString(),
+  //               'currentFcm' : widget.currentFcm.toString(),
+                
+  //             }
+  // //              final String title;
+  // // final String email;
+  // // final String otherUserPhoto;
+  // // final String curretUserPhoto;
+  // // final String userFcm;
+  // // final String currentFcm;
+  //           };
+
+  //           await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+  //           body: jsonEncode(data) ,
+  //             headers: {
+  //               'Content-Type': 'application/json; charset=UTF-8',
+  //               'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+  //             }).onError((error, stackTrace){
+  //               debugPrint(error.toString());
+  //               throw error.toString() ;
+  //             });
+            
+        
+
+
+
+  //       });
+  //     });
   }
   if (messageType == 'image') {
     sendImageFile();
@@ -203,21 +286,99 @@ class _ChatScreenState extends State<ChatScreen> {
   //image = null;
   debugPrint(image.toString());
 
-    await ctr.uploadFirebaseFile(image!,'${const Uuid().v1()}.jpg').then((value) async{
+    await ctr.uploadFirebaseFile(image!,'${const Uuid().v1()}.jpg').then((val) async{
       //print("photo----------$value");
-      if(value != ''){
-         await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
-        'sender' : currentUser,
-        'message' : "${ApiLinks.assetBasePath}$value",
-        'messageType': messageType,
-        'time' : DateTime.now().toIso8601String(),
-      }).then((value){
-        image = null;
-      }).catchError((error){
-        debugPrint(error.toString());
-      });
+      if(val != ''){
+      //    await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
+      //   'sender' : currentUser,
+      //   'message' : "${ApiLinks.assetBasePath}$value",
+      //   'messageType': messageType,
+      //   'time' : DateTime.now().toIso8601String(),
+      // }).then((value){
+      //   image = null;
+      // }).catchError((error){
+      //   debugPrint(error.toString());
+      // });
+        FirebaseFirestore.instance
+          .collection('messages').doc(chatId).set({
+            'lastMessage': "${ApiLinks.assetBasePath}$val",
+            'messageType': messageType,
+            currentUser: true,
+            chatUser: true,
+            'userId' : currentUser,
+            'userId2' : chatUser,
+            'chatUserName': widget.title,
+            'currentUserName': GetStorage().read("name"),
+            'otherUserPhoto' : widget.otherUserPhoto,
+            'curretUserPhoto' : widget.curretUserPhoto,
+            'userFcm' : widget.userFcm.toString(),
+            'currentFcm' : widget.currentFcm.toString(),
+            
+          })
+          .then((value){
+            FirebaseFirestore.instance
+            .collection('messages').doc(chatId).collection('chats').add(
+            {
+              'sender' : currentUser,
+              'message' : "${ApiLinks.assetBasePath}$val",
+              'messageType': messageType,
+              'time' : DateTime.now().toIso8601String(),
+            }
+            // SetOptions(merge: false),}
+          ).then((value){
+             notificationServices.getDeviceToken().then((value2) async{
+          debugPrint('here');
+          var fcmToken = widget.currentFcm == value2 ? widget.userFcm : widget.currentFcm;
+
+           var data = {
+              'to' : fcmToken.toString(),
+              'notification' : {
+                'title' : 'New Message from'.tr + " " + GetStorage().read("name")  ,
+                'body' : messageType == "audio" ? "audio".tr : messageType == "image" ? "image".tr : val ,
+            },
+              
+              'data' : {
+                'type' : 'chat',
+                'title' : widget.title,
+                'email' : GetStorage().read('mobile'),
+                'otherUserPhoto' : widget.otherUserPhoto,
+                'curretUserPhoto' : widget.curretUserPhoto,
+                'userFcm' : widget.userFcm.toString(),
+                'currentFcm' : widget.currentFcm.toString(),
+                
+              }
+  //              final String title;
+  // final String email;
+  // final String otherUserPhoto;
+  // final String curretUserPhoto;
+  // final String userFcm;
+  // final String currentFcm;
+            };
+
+            await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            body: jsonEncode(data) ,
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+              }).onError((error, stackTrace){
+                debugPrint(error.toString());
+                throw error.toString() ;
+              });
+            
+        
+
+
+
+        });
+          });
+          }).catchError((error){
+            debugPrint(error.toString());
+            Get.snackbar('Error'.tr, error.toString());
+          });
+
+
       }
-      if(value == ''){
+      if(val == ''){
         Get.snackbar("Error".tr, 'Something went wrong try later'.tr);
       }
       image = null;
@@ -244,21 +405,98 @@ class _ChatScreenState extends State<ChatScreen> {
  void sendAudioFile(File file) async{
   debugPrint('here');
   messageType = 'audio';
-  await ctr.uploadFirebaseFile(file,const Uuid().v1()).then((value) async{
+  await ctr.uploadFirebaseFile(file,const Uuid().v1()).then((val) async{
       //print("photo----------$value");
-      if(value != ''){
-         await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
-        'sender' : currentUser,
-        'message' : "${ApiLinks.assetBasePath}$value",
-        'messageType': messageType,
-        'time' : DateTime.now().toIso8601String(),
-      }).then((value){
-        // image = null;
-      }).catchError((error){
-        debugPrint(error.toString());
-      });
+      if(val != ''){
+      //    await FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').add({
+      //   'sender' : currentUser,
+      //   'message' : "${ApiLinks.assetBasePath}$value",
+      //   'messageType': messageType,
+      //   'time' : DateTime.now().toIso8601String(),
+      // }).then((value){
+      //   // image = null;
+      // }).catchError((error){
+      //   debugPrint(error.toString());
+      // });
+       FirebaseFirestore.instance
+          .collection('messages').doc(chatId).set({
+            'lastMessage': "${ApiLinks.assetBasePath}$val",
+            'messageType': messageType,
+            currentUser: true,
+            chatUser: true,
+            'userId' : currentUser,
+            'userId2' : chatUser,
+            'chatUserName': widget.title,
+            'currentUserName': GetStorage().read("name"),
+            'otherUserPhoto' : widget.otherUserPhoto,
+            'curretUserPhoto' : widget.curretUserPhoto,
+            'userFcm' : widget.userFcm.toString(),
+            'currentFcm' : widget.currentFcm.toString(),
+            
+          })
+          .then((value){
+            FirebaseFirestore.instance
+            .collection('messages').doc(chatId).collection('chats').add(
+            {
+              'sender' : currentUser,
+              'message' : "${ApiLinks.assetBasePath}$val",
+              'messageType': messageType,
+              'time' : DateTime.now().toIso8601String(),
+            }
+            // SetOptions(merge: false),}
+          ).then((value){
+             notificationServices.getDeviceToken().then((value2) async{
+          debugPrint('here');
+          var fcmToken = widget.currentFcm == value2 ? widget.userFcm : widget.currentFcm;
+
+           var data = {
+              'to' : fcmToken.toString(),
+              'notification' : {
+                'title' : 'New Message from'.tr + " " + GetStorage().read("name")  ,
+                'body' : messageType == "audio" ? "audio".tr : messageType == "image" ? "image".tr : val ,
+            },
+              
+              'data' : {
+                'type' : 'chat',
+                'title' : widget.title,
+                'email' : GetStorage().read('mobile'),
+                'otherUserPhoto' : widget.otherUserPhoto,
+                'curretUserPhoto' : widget.curretUserPhoto,
+                'userFcm' : widget.userFcm.toString(),
+                'currentFcm' : widget.currentFcm.toString(),
+                
+              }
+  //              final String title;
+  // final String email;
+  // final String otherUserPhoto;
+  // final String curretUserPhoto;
+  // final String userFcm;
+  // final String currentFcm;
+            };
+
+            await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            body: jsonEncode(data) ,
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+              }).onError((error, stackTrace){
+                debugPrint(error.toString());
+                throw error.toString() ;
+              });
+            
+        
+
+
+
+        });
+          });
+          }).catchError((error){
+            debugPrint(error.toString());
+            Get.snackbar('Error'.tr, error.toString());
+          });
+
       }
-      if(value == ''){
+      if(val == ''){
         Get.snackbar("Error", 'Something went wrong try later');
       }
       // image = null;
@@ -333,7 +571,8 @@ class _ChatScreenState extends State<ChatScreen> {
           const SizedBox(height: 20,),
           Expanded(child:
           StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('chatroom').doc(chatId).collection('chats').orderBy('time', descending: false).snapshots(),
+                stream: FirebaseFirestore.instance
+            .collection('messages').doc(chatId).collection('chats').orderBy('time', descending: false).snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
                   if (snapshot.hasData) {
                     var data = snapshot.data!.docs;

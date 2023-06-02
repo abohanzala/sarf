@@ -24,6 +24,17 @@ class DeleteAccountController extends GetxController {
     super.onInit();
   }
 
+   String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
+
   Future deleteAccount() async {
     openLoader();
     //check validation
@@ -35,11 +46,11 @@ class DeleteAccountController extends GetxController {
     // validation ends
     // var a = forgotPasswordController.phone.text;
     // final splitted = a.split('+');
-
+    String pass = replaceArabicNumber(passwordController.text);
     var request = {
       'language': GetStorage().read('lang'),
       'reason': reasonForDeletingAccountController.text,
-      'password': passwordController.text,
+      'password': pass,
     };
     print("This is my request====================${request}");
 

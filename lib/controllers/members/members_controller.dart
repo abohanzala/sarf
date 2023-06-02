@@ -109,6 +109,7 @@ void onInit(){
     //   "language": GetStorage().read('lang'),
     //   "expense_type_id": id,
     // };
+    debugPrint(request.toString());
     var response =
         await DioClient().post(ApiLinks.cityList,request).catchError((error) {
       if (error is BadRequestException) {
@@ -131,6 +132,7 @@ void onInit(){
 
       }
     }); 
+    debugPrint(response.toString());
     if (response['success'] == true) {
      
       debugPrint(response.toString());
