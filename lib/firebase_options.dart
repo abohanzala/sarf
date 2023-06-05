@@ -49,12 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
+  // static const FirebaseOptions android = FirebaseOptions(
+  //   apiKey: 'AIzaSyByj9DBlX5vIy_oO3tkqyRRh6LEgxVTdKc',
+  //   appId: '1:970811725126:android:7719770e4bb71778e60147',
+  //   messagingSenderId: '970811725126',
+  //   projectId: 'sarfapp-62651',
+  //   storageBucket: 'sarfapp-62651.appspot.com',
+  // );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyByj9DBlX5vIy_oO3tkqyRRh6LEgxVTdKc',
-    appId: '1:970811725126:android:7719770e4bb71778e60147',
-    messagingSenderId: '970811725126',
-    projectId: 'sarfapp-62651',
-    storageBucket: 'sarfapp-62651.appspot.com',
+    apiKey: "AIzaSyDElDCUAwVQH60SwwyCpQowaiOKJkOytqE",
+    appId: '1:651573448048:android:aa25f85a1d5d5bae1c13b5',
+    messagingSenderId: '651573448048',
+    projectId: 'sarf-70217',
+    storageBucket: 'sarf-70217.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

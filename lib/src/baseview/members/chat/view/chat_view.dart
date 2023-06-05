@@ -204,7 +204,7 @@ class _ChatScreenState extends State<ChatScreen> {
             body: jsonEncode(data) ,
               headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+                'Authorization' : 'key=AAAAl7TNzXA:APA91bFWFqIp6Stalq87OUCBqx_dhmF4ORJYsKKnhzuePyxgJ9DCMPHFWy9c7WkJR9YvR1h42eFHHMdikcGn9ty7fu45TaaBLVcOdzumfYWknYdIa8Ui90xKOx_86jJt-Js96mWfHhAv'
               }).onError((error, stackTrace){
                 debugPrint(error.toString());
                 throw error.toString() ;
@@ -359,7 +359,7 @@ class _ChatScreenState extends State<ChatScreen> {
             body: jsonEncode(data) ,
               headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+                'Authorization' : 'key=AAAAl7TNzXA:APA91bFWFqIp6Stalq87OUCBqx_dhmF4ORJYsKKnhzuePyxgJ9DCMPHFWy9c7WkJR9YvR1h42eFHHMdikcGn9ty7fu45TaaBLVcOdzumfYWknYdIa8Ui90xKOx_86jJt-Js96mWfHhAv'
               }).onError((error, stackTrace){
                 debugPrint(error.toString());
                 throw error.toString() ;
@@ -478,7 +478,7 @@ class _ChatScreenState extends State<ChatScreen> {
             body: jsonEncode(data) ,
               headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : 'key=AAAA4gjjVUY:APA91bFjL_LCInSPLL57Lr7StsfwviPm49LtH2Mr4OOk5X8ryQ_5ODD10GLc22FCKpH6dA7D_m1Z6Y33zx1jM86RcCQTCfpWLsvO3y_5U8dRqJOg00QVxs-i-O9cn17PJu954vrFDVvt'
+                'Authorization' : 'key=AAAAl7TNzXA:APA91bFWFqIp6Stalq87OUCBqx_dhmF4ORJYsKKnhzuePyxgJ9DCMPHFWy9c7WkJR9YvR1h42eFHHMdikcGn9ty7fu45TaaBLVcOdzumfYWknYdIa8Ui90xKOx_86jJt-Js96mWfHhAv'
               }).onError((error, stackTrace){
                 debugPrint(error.toString());
                 throw error.toString() ;
