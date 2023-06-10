@@ -158,7 +158,8 @@ Future getHome(String? id,int? day,int? month,int? year) async {
         totalExpansesMontly.value = data.data!.totalExpensesMonthly.toString();
         totalExpansesYearly.value = data.data!.totalExpensesYearly.toString();
         qrCode.value = "${GetStorage().read('mobile')}$selectedBudgetNumbder";
-        //print(budgets.first.name);
+        // debugPrint(data.data!.totalInvoicesDaily.toString());
+        // debugPrint("090999999999999999999999999999999");
         
        // return data;
     } else {

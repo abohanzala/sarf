@@ -84,10 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
           ctr.selectedBudgetNumbder.value = "";    
           ctr.selectedBudgetName.value = ctr.budgets.first.name.toString() == 'Expenses' ? GetStorage().read('name') : ctr.budgets.first.name.toString() ;
           ctr.qrCode.value = "${GetStorage().read('mobile')}";
-        }
-      });
-      }
-        expenseTypes.clear();
+          expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
         debugPrint(expanse.invoiceSumAmount.toString());
       if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
@@ -99,6 +96,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       
     });
     }
+        }
+      });
+      }
+       
     
       
     }).catchError((error) async{
@@ -173,6 +174,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   
   @override
   Widget build(BuildContext context) {
+  //  debugPrint(ctr.totalInvoicesDaily.value);
+  //  debugPrint("0000000000000000000000000000000000000000000000000000000");
     return WillPopScope(
       onWillPop: () async{
         // exit(0);
@@ -525,7 +528,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                             ctr.selectedBudgetName.value = singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? '' ;    
                                             debugPrint(
                                                 ctr.selectedBudgetId.value);
-                                            ctr.getHome(singleData.id.toString(),day.day,month.month,date.year);
+                                            ctr.getHome(singleData.id.toString(),day.day,month.month,date.year).then((value){
+                                              expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                                            });
                                           },
                                           child: Container(
                                             height: GetStorage().read("lang") == 'en'? 80: 80,
@@ -747,7 +763,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         day = pickedDate;
                       });
                       Get.back();  
-                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year);
+                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                      });
                    
                     }
                                                       
@@ -786,7 +815,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       });
     }
     Get.back();  
-                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year);
+                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                      });
                                                       
                                                     },
                                                     child:  Container(
@@ -836,7 +878,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                   Navigator.pop(context);
     
                   Get.back();  
-                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year);
+                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                      });
     
                   // Do something with the dateTime selected.
                   // Remember that you need to use dateTime.year to get the year
@@ -876,7 +931,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                         day = DateTime.now();
                                                         
                                                       });
-                      ctr.getHome(ctr.selectedBudgetId.value, null, null, null);  
+                      ctr.getHome(ctr.selectedBudgetId.value, null, null, null).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                      });  
                                                     },
                                                     child: Container(
                                                       width: 100,
