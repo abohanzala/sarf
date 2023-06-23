@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -37,12 +38,16 @@ String replaceArabicNumber(String input) {
 
   Future login(String mob) async {
     openLoader();
+    print("here");
     // String? result = await PlatformDeviceId.getDeviceId;
     String? result = await notificationServices.getDeviceToken();
     String pass = replaceArabicNumber(password.text);
+
     debugPrint(pass);
+    
     var request = {};
-    if(id == ''){
+    if(id == '' && !kIsWeb){
+      print("here22");
       request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
@@ -50,8 +55,18 @@ String replaceArabicNumber(String input) {
       'ios_device_id': Platform.isIOS == true ? result : '',
       'android_device_id': Platform.isAndroid == true ? result : '',
     };
+    }else{
+      print("here21");
+      request = {
+      'language': GetStorage().read('lang'),
+      'mobile': mob,
+      'password': pass,
+      
+    };
     }
-    if(id.isNotEmpty){
+
+    if(id.isNotEmpty && !kIsWeb){
+      print("here25");
        request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
@@ -60,6 +75,18 @@ String replaceArabicNumber(String input) {
       'ios_device_id': Platform.isIOS == true ? result : '',
       'android_device_id': Platform.isAndroid == true ? result : '',
     };
+    }else{
+      print("here26");
+      if(id.isNotEmpty && kIsWeb){
+        request = {
+      'language': GetStorage().read('lang'),
+      'mobile': mob,
+      'password': pass,
+      "user_id" : id,
+      
+    };
+      }
+      
     }
      
     debugPrint("This is my request====================$request");

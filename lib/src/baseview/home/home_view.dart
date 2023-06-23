@@ -28,6 +28,7 @@ import '../../../resources/resources.dart';
 import '../../../services/dio_client.dart';
 import '../../../services/notification_services.dart';
 import '../../utils/navigation_observer.dart';
+import '../Invoices/invoice_members_home.dart';
 import '../base_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     await ctr.getHome(null,null,null,null).then((value) async{
       //print(ctr.budgets.first.id);
       if(ctr.budgets.isNotEmpty){
-        ctr.getHome(ctr.budgets.first.id.toString(),null,null,null).then((value){
+        ctr.getHome(ctr.budgets.first.id.toString(),day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year).then((value){
         if(ctr.budgets.isNotEmpty){
           ctr.selectedBudgetIndex.value = 1;
           ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
@@ -528,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                             ctr.selectedBudgetName.value = singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? '' ;    
                                             debugPrint(
                                                 ctr.selectedBudgetId.value);
-                                            ctr.getHome(singleData.id.toString(),day.day,month.month,date.year).then((value){
+                                            ctr.getHome(singleData.id.toString(),day.day == DateTime.now().day ? null : day.day,month.month == DateTime.now().month ? null :month.month ,date.year == DateTime.now().year ? null : date.year ).then((value){
                                               expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
         debugPrint(expanse.invoiceSumAmount.toString());
@@ -599,7 +600,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                    return Obx(
                                   () =>  GestureDetector(
                                     onTap: (){
-                                      Get.to(() => InvoiceListScreenHome( expanseId: singleExpanse.id.toString(),budgetId: ctr.selectedBudgetId.value.toString(),) );
+                                      Get.to(() => InvoiceMembersHomeListScreen( expanseId: singleExpanse.id.toString(),budgetId: ctr.selectedBudgetId.value.toString(),) );
                                     },
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -759,11 +760,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
      
                   if (pickedDate != null) {
                     
-                      setState(() {
+                      
                         day = pickedDate;
-                      });
+                      
                       Get.back();  
-                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year).then((value){
+                      ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year).then((value){
                         expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
         debugPrint(expanse.invoiceSumAmount.toString());
@@ -771,11 +772,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         expenseTypes.add(expanse);
       }
     }
-    if(mounted){
-      setState(() {
-      
-    });
-    }
+    
                       });
                    
                     }
@@ -810,12 +807,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       lastDate: DateTime(2050)
     );                                                if(selected != null){
     
-      setState(() {
+      
       month = selected;
-      });
+      
     }
     Get.back();  
-                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year).then((value){
+                      ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year).then((value){
                         expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
         debugPrint(expanse.invoiceSumAmount.toString());
@@ -823,11 +820,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         expenseTypes.add(expanse);
       }
     }
-    if(mounted){
-      setState(() {
-      
-    });
-    }
+    
                       });
                                                       
                                                     },
@@ -872,13 +865,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                 selectedDate: date,
                 onChanged: (DateTime dateTime) {
                   // close the dialog when year is selected.
-                  setState(() {
+                  
                     date = dateTime;
-                  });
+                  
                   Navigator.pop(context);
     
                   Get.back();  
-                      ctr.getHome(ctr.selectedBudgetId.value, day.day, month.month, date.year).then((value){
+                      ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year).then((value){
                         expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
         debugPrint(expanse.invoiceSumAmount.toString());
@@ -886,11 +879,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         expenseTypes.add(expanse);
       }
     }
-    if(mounted){
-      setState(() {
-      
-    });
-    }
+    
                       });
     
                   // Do something with the dateTime selected.
@@ -939,11 +928,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         expenseTypes.add(expanse);
       }
     }
-    if(mounted){
-      setState(() {
-      
-    });
-    }
+    
                       });  
                                                     },
                                                     child: Container(
@@ -1015,11 +1000,16 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                             height: 80,
                                             child:  Container(
                                             color: R.colors.white,
-                                            child: QrImage(
-                                                      data: ctr.qrCode.value,
+                                            child: QrImageView(
+                                              data: ctr.qrCode.value,
                                                       version: QrVersions.auto,
                                                       size: 100.0,
-                                                    ),
+                                              ),
+                                            // QrImage(
+                                            //           data: ctr.qrCode.value,
+                                            //           version: QrVersions.auto,
+                                            //           size: 100.0,
+                                            //         ),
                                           ),
                                           ),
                                            const SizedBox(
@@ -1110,7 +1100,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               fontSize: 12),
                                                         ),
                                                         Text(
-                                                          " : ${ctr.totalInvoicesDaily}",
+                                                          " : ${ctr.totalInvoicesDaily.value}",
                                                           style: TextStyle(
                                                               color: R.colors.black,
                                                               fontSize: 12),
@@ -1129,7 +1119,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               fontSize: 12),
                                                         ),
                                                         Text(
-                                                          " : ${ctr.totalExpansesDaily}",
+                                                          " : ${ctr.totalExpansesDaily.value}",
                                                           style: TextStyle(
                                                               color: R.colors.black,
                                                               fontSize: 12),
@@ -1149,7 +1139,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               fontSize: 12),
                                                         ),
                                                         Text(
-                                                          " : ${ctr.totalInvoicesMontly}",
+                                                          " : ${ctr.totalInvoicesMontly.value}",
                                                           style: TextStyle(
                                                               color: R.colors.black,
                                                               fontSize: 12),
@@ -1168,7 +1158,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               fontSize: 12),
                                                         ),
                                                         Text(
-                                                          " : ${ctr.totalExpansesMontly}",
+                                                          " : ${ctr.totalExpansesMontly.value}",
                                                           style: TextStyle(
                                                               color: R.colors.black,
                                                               fontSize: 12),

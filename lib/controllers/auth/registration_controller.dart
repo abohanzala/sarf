@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart' as ddio;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -145,9 +146,15 @@ class RegistrationController extends GetxController {
     // String? result = await PlatformDeviceId.getDeviceId;
     String? result = await notificationServices.getDeviceToken();
     debugPrint(result);
-    formData.fields.add( MapEntry('ios_device_id', Platform.isIOS == true ? result : '',));
-    formData.fields
+    if(!kIsWeb){
+       formData.fields.add( MapEntry('ios_device_id', Platform.isIOS == true ? result : '',));
+    }
+   
+    if(!kIsWeb){
+       formData.fields
         .add( MapEntry('android_device_id', Platform.isAndroid == true ? result : ''));
+    }
+   
     debugPrint(formData.fields.toString());
 
     // var request = {

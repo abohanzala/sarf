@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -9,6 +11,7 @@ import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
 import '../../controllers/auth/otp_controller.dart';
 import '../../controllers/auth/otp_forgot_password_controller.dart';
+import '../../controllers/auth/register_controller.dart';
 import '../../resources/resources.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -20,12 +23,40 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController otpControllerText = TextEditingController();
+  RegisterController registerController = Get.find<RegisterController>();
   OtpController otpController = Get.find<OtpController>();
   OtpForgotPasswordController otpForgotPasswordController =
       Get.find<OtpForgotPasswordController>();
+      Timer? timer;
+int start = 30;
+
+void startTimer() {
+  const oneSec = Duration(seconds: 1);
+  timer = Timer.periodic(
+    oneSec,
+    (Timer timer) {
+      if (start == 0) {
+        setState(() {
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          start--;
+        });
+      }
+    },
+  );
+}
+
+@override
+void dispose() {
+  timer?.cancel();
+  super.dispose();
+}
 @override
 void initState() {
     otpController.otpControllerGet.clear();
+    startTimer();
     
     super.initState();
   }      
@@ -93,6 +124,7 @@ void initState() {
             buildOtpText(),
             buildTimeText(),
             buildOtpTextField(),
+            if(start == 0)
             buildResendLinkButton(),
             buildNextButton(),
           ],
@@ -110,7 +142,7 @@ void initState() {
         ),
         child: customTextField(
           isPasswordObscureText: false,
-            hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
+            hintText: "Enter OTP".tr,
             controller: otpControllerText,
             color: R.colors.lightGrey,
             height: 45,
@@ -133,16 +165,21 @@ void initState() {
   }
 
   Widget buildResendLinkButton() {
-    return Container(
-      margin: EdgeInsets.only(top: 30, bottom: 10),
-      child: Center(
-        child: Text(
-          'Resend'.tr,
-          style: TextStyle(
-              decoration: TextDecoration.underline,
-              fontFamily: 'semibold',
-              fontSize: 14,
-              color: R.colors.buttonColor),
+    return GestureDetector(
+      onTap: (){
+        registerController.register("${registerController.code}${registerController.phone.text}");
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 30, bottom: 10),
+        child: Center(
+          child: Text(
+            'Resend'.tr,
+            style: TextStyle(
+                decoration: TextDecoration.underline,
+                fontFamily: 'semibold',
+                fontSize: 14,
+                color: R.colors.buttonColor),
+          ),
         ),
       ),
     );
@@ -153,7 +190,7 @@ void initState() {
       margin: EdgeInsets.only(top: 5),
       child: customTitle(
         textAlign: TextAlign.center,
-        text: 'timeDummy'.tr,
+        text: "00:${  start < 10 ? "0$start" : start  }",
         color: R.colors.grey,
         size: 18,
         fontFamily: 'bold',

@@ -9,6 +9,7 @@ import 'package:sarf/model/members/invoice_list_model.dart';
 import 'package:sarf/services/app_exceptions.dart';
 
 import '../../constant/api_links.dart';
+import '../../model/invoice/invoice_members_model.dart';
 import '../../model/invoice/searched_mobile_model.dart';
 import '../../services/dio_client.dart';
 import '../../src/widgets/loader.dart';
@@ -182,7 +183,167 @@ class InvoiceController extends getpackage.GetxController {
     }
   }
 
-  Future<InvoiceList?> getInvoiceList(String query) async {
+
+  Future<InvoiceMemberListModel?> getInvoiceMemberList(String query) async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    //  openLoader();
+    var request = {};
+    if(query == ''){
+    request = {
+      "language": GetStorage().read('lang'),
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "query_string": query,
+    };
+   }
+    var response = await DioClient()
+        .post(ApiLinks.invoiceMemList,request)
+        .catchError((error) {
+          debugPrint(error.toString());
+      if (error is BadRequestException) {
+        // print(error.toString());
+      } else {
+        //print(error.toString());
+
+        if (error is BadRequestException) {
+          // print(error.toString());
+
+        } else if (error is FetchDataException) {
+          // print(error.toString());
+
+        } else if (error is ApiNotRespondingException) {
+          //print(error.message.toString());
+        }
+      }
+    });
+    if(response == null ) return null;
+    if (response['success'] == true) {
+      // getpackage.Get.back();
+      debugPrint(response.toString());
+      var membersList = InvoiceMemberListModel.fromJson(response);
+      //print(membersList.data?.first.expenseName);
+      return membersList;
+    } else {
+      // getpackage.Get.back();
+      debugPrint('here');
+    }
+    return null;
+  }
+
+  
+  
+  
+  Future<InvoiceMemberListModel?> getInvoiceMemberListHome(String query,String expanseId,String bId) async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    //  openLoader();
+   var request = {};
+    if(query == ''){
+    request = {
+      "language": GetStorage().read('lang'),
+      "expense_type_id" : expanseId,
+      "budget_id" : bId,
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "query_string": query,
+      "expense_type_id" : expanseId,
+      "budget_id" : bId,
+    };
+   }
+   debugPrint(request.toString());
+    var response = await DioClient()
+        .post(ApiLinks.invoiceMemList,request)
+        .catchError((error) {
+          debugPrint(error.toString());
+      if (error is BadRequestException) {
+        // print(error.toString());
+      } else {
+        //print(error.toString());
+
+        if (error is BadRequestException) {
+          // print(error.toString());
+
+        } else if (error is FetchDataException) {
+          // print(error.toString());
+
+        } else if (error is ApiNotRespondingException) {
+          //print(error.message.toString());
+        }
+      }
+    });
+    if(response == null ) return null;
+    if (response['success'] == true) {
+      // getpackage.Get.back();
+      debugPrint(response.toString());
+      var membersList = InvoiceMemberListModel.fromJson(response);
+      //print(membersList.data?.first.expenseName);
+      return membersList;
+    } else {
+      // getpackage.Get.back();
+      debugPrint('here');
+    }
+    return null;
+  }
+
+
+
+   Future<InvoiceList?> getInvoiceListMember(String query,String memberID) async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+    //  openLoader();
+    var request = {};
+    if(query == ''){
+    request = {
+      "language": GetStorage().read('lang'),
+      "member_id": memberID
+      
+    };
+   }else{
+    request = {
+      "language": GetStorage().read('lang'),
+      "query_string": query,
+      "member_id": memberID
+    };
+   }
+    var response = await DioClient()
+        .post("${ApiLinks.invoiceListNew}",request)
+        .catchError((error) {
+          debugPrint(error.toString());
+      if (error is BadRequestException) {
+        // print(error.toString());
+      } else {
+        //print(error.toString());
+
+        if (error is BadRequestException) {
+          // print(error.toString());
+
+        } else if (error is FetchDataException) {
+          // print(error.toString());
+
+        } else if (error is ApiNotRespondingException) {
+          //print(error.message.toString());
+        }
+      }
+    });
+    if(response == null ) return null;
+    if (response['success'] == true) {
+      // getpackage.Get.back();
+      debugPrint(response.toString());
+      var membersList = InvoiceList.fromJson(response);
+      //print(membersList.data?.first.expenseName);
+      return membersList;
+    } else {
+      // getpackage.Get.back();
+      debugPrint('here');
+    }
+    return null;
+  }
+
+  Future<InvoiceList?> getInvoiceList(String query,) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     //  openLoader();
     var request = {};
@@ -231,7 +392,60 @@ class InvoiceController extends getpackage.GetxController {
     return null;
   }
 
-  Future<InvoiceList?> getInvoiceListHome(String query,String expenseId,String bId) async {
+  //  Future<InvoiceList?> getInvoiceListHome(String query,String expenseId,String bId) async {
+  //   //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+  //   //  openLoader();
+  //   var request = {};
+  //   if(query == ''){
+  //   request = {
+  //     "language": GetStorage().read('lang'),
+  //     "expense_id" : expenseId,
+  //     "budget_id" : bId,
+      
+  //   };
+  //  }else{
+  //   request = {
+  //     "language": GetStorage().read('lang'),
+  //     "query_string": query,
+  //     "expense_id" : expenseId,
+  //     "budget_id" : bId,
+  //   };
+  //  }
+  //   var response = await DioClient()
+  //       .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
+  //       .catchError((error) {
+  //         debugPrint(error.toString());
+  //     if (error is BadRequestException) {
+  //       // print(error.toString());
+  //     } else {
+  //       //print(error.toString());
+
+  //       if (error is BadRequestException) {
+  //         // print(error.toString());
+
+  //       } else if (error is FetchDataException) {
+  //         // print(error.toString());
+
+  //       } else if (error is ApiNotRespondingException) {
+  //         //print(error.message.toString());
+  //       }
+  //     }
+  //   });
+  //   if(response == null ) return null;
+  //   if (response['success'] == true) {
+  //     // getpackage.Get.back();
+  //     debugPrint(response.toString());
+  //     var membersList = InvoiceList.fromJson(response);
+  //     //print(membersList.data?.first.expenseName);
+  //     return membersList;
+  //   } else {
+  //     // getpackage.Get.back();
+  //     debugPrint('here');
+  //   }
+  //   return null;
+  // }
+
+  Future<InvoiceList?> getInvoiceListHome(String query,String expenseId,String bId,String memberID) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
     // expense_id
@@ -239,21 +453,23 @@ class InvoiceController extends getpackage.GetxController {
     if(query == ''){
     request = {
       "language": GetStorage().read('lang'),
-      "expense_id" : expenseId,
+      "expense_type_id" : expenseId,
       "budget_id" : bId,
+      "member_id": memberID
       
     };
    }else{
     request = {
       "language": GetStorage().read('lang'),
       "query_string": query,
-      "expense_id" : expenseId,
+      "expense_type_id" : expenseId,
       "budget_id" : bId,
+      "member_id": memberID
     };
    }
    debugPrint(request.toString());
     var response = await DioClient()
-        .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
+        .post("${ApiLinks.invoiceListNew}",request)
         .catchError((error) {
           debugPrint(error.toString());
       if (error is BadRequestException) {

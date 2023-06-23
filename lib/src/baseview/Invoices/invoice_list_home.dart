@@ -16,7 +16,8 @@ import 'invoice_details.dart';
 class InvoiceListScreenHome extends StatefulWidget {
   final String expanseId;
   final String budgetId;
-  const InvoiceListScreenHome({super.key, required this.expanseId, required this.budgetId});
+  final String memberID;
+  const InvoiceListScreenHome({super.key, required this.expanseId, required this.budgetId, required this.memberID});
 
   @override
   State<InvoiceListScreenHome> createState() => _InvoiceListScreenHomeState();
@@ -46,7 +47,7 @@ class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> with Rout
         //print('hello world from search . the value is $value');
         if(value.isEmpty){
           
-            membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId);
+            membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId,widget.memberID);
             membersList?.then((value){
               setState(() {
                 membersLenght = '(${value?.data?.length ?? 0})';
@@ -57,7 +58,7 @@ class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> with Rout
         }
 
         
-            membersList = ctr.getInvoiceListHome(searchValue.text,widget.expanseId,widget.budgetId);
+            membersList = ctr.getInvoiceListHome(searchValue.text,widget.expanseId,widget.budgetId,widget.memberID);
             membersList?.then((value){
               setState(() {
                 membersLenght = '(${value?.data?.length ?? 0})';
@@ -84,7 +85,7 @@ void dispose(){
   super.dispose();
 }  
 loadMembers(){
-  membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId);
+  membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId,widget.memberID);
   membersList?.then((value){
     if(mounted){
       setState(() {
@@ -220,7 +221,7 @@ loadMembers(){
                           Get.bottomSheet(const InvoiceBottomSheet()).then((value){
                             if(ctr.filter != 0){
                               setState(() {
-                                membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId);
+                                membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId,widget.memberID);
                               });
                             }
                           });

@@ -151,6 +151,11 @@ Future getHome(String? id,int? day,int? month,int? year) async {
         }
         }
         currency.value = data.data!.currency.toString();
+        print("gg");
+        print(selectedBudgetId+"id");
+        print(data.data!.totalInvoicesDaily.toString()+"daily");
+        print(data.data!.totalInvoicesMontly.toString()+"montly");
+        print("gg");
         totalInvoicesDaily.value = data.data!.totalInvoicesDaily.toString();
         totalInvoicesMontly.value = data.data!.totalInvoicesMontly.toString();
         totalInvoicesYearly.value = data.data!.totalInvoicesYearly.toString();

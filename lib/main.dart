@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,9 +35,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await GetStorage.init();
-  await Firebase.initializeApp(
+  if(kIsWeb){
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(apiKey: "AIzaSyDKFFTbmaRWUQZowARirHYS0p8HzKhxz60", appId: "1:651573448048:web:87803a6dfc19537f1c13b5", messagingSenderId: "651573448048", projectId: "sarf-70217")
+    );
+  }else{
+    await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  }
+  
   Get.put<LoginController>(LoginController());
   Get.put<RegisterController>(RegisterController());
   Get.put<OtpController>(OtpController());

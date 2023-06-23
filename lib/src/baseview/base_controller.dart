@@ -8,6 +8,8 @@ import 'package:sarf/src/baseview/Send/simple_invoice.dart';
 import 'package:sarf/src/baseview/home/home_view.dart';
 import 'package:sarf/src/baseview/members/members_view.dart';
 import 'package:sarf/src/baseview/more/more_view.dart';
+
+import 'Invoices/invoice_members.dart';
 // import 'package:warid_container_admin/app/modules/More/views/more_view.dart';
 // import 'package:warid_container_admin/app/modules/Orders/controllers/orders_controller.dart';
 // import 'package:warid_container_admin/app/modules/Orders/views/orders_view.dart';
@@ -31,7 +33,8 @@ class MyBottomNavigationController extends GetxController {
     const HomeScreen(),
     const MembersScreen(),
     const SimpleInvoice(),
-    const InvoiceListScreen(),
+    // const InvoiceListScreen(),
+    const InvoiceMembersListScreen(),
     const MoreScreen()
   ];
 
