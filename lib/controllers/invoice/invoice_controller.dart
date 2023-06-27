@@ -9,6 +9,7 @@ import 'package:sarf/model/members/invoice_list_model.dart';
 import 'package:sarf/services/app_exceptions.dart';
 
 import '../../constant/api_links.dart';
+import '../../model/invoice/invoice_members_home.dart';
 import '../../model/invoice/invoice_members_model.dart';
 import '../../model/invoice/searched_mobile_model.dart';
 import '../../services/dio_client.dart';
@@ -236,7 +237,7 @@ class InvoiceController extends getpackage.GetxController {
   
   
   
-  Future<InvoiceMemberListModel?> getInvoiceMemberListHome(String query,String expanseId,String bId) async {
+  Future<InvoiceMemberListModelHome?> getInvoiceMemberListHome(String query,String expanseId,String bId) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     //  openLoader();
    var request = {};
@@ -280,7 +281,7 @@ class InvoiceController extends getpackage.GetxController {
     if (response['success'] == true) {
       // getpackage.Get.back();
       debugPrint(response.toString());
-      var membersList = InvoiceMemberListModel.fromJson(response);
+      var membersList = InvoiceMemberListModelHome.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {

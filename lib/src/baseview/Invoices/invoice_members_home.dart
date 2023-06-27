@@ -12,6 +12,7 @@ import 'package:sarf/src/baseview/members/single_member_detail.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controllers/invoice/invoice_controller.dart';
+import '../../../model/invoice/invoice_members_home.dart';
 import '../../../model/invoice/invoice_members_model.dart';
 import '../../../model/members/members_list_new_model.dart';
 import '../../../resources/resources.dart';
@@ -34,7 +35,7 @@ class _InvoiceMembersHomeListScreenState extends State<InvoiceMembersHomeListScr
 
   TextEditingController searchValue = TextEditingController();
   Timer? searchOnStoppedTyping;
-  Future<InvoiceMemberListModel?>? cityList;
+  Future<InvoiceMemberListModelHome?>? cityList;
   String totalReceive = "";
   String totalAmount = "";
     String totalMembers = "";
@@ -242,7 +243,7 @@ launchPhone({required Uri u}) async {
                           children: [
                             Flexible(
                               child: Text(
-                                "${"Total invoices received".tr} ($totalReceive)",
+                                "${"Total invoices received 2".tr} ($totalReceive)",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12.sp,
@@ -353,7 +354,7 @@ launchPhone({required Uri u}) async {
           ),
           const SizedBox(height: 10,),
                   Expanded(
-                    child: FutureBuilder<InvoiceMemberListModel?>(
+                    child: FutureBuilder<InvoiceMemberListModelHome?>(
                     future: cityList,
                     builder: (contaxt,snapshot){
                       if(snapshot.connectionState == ConnectionState.waiting){
@@ -361,7 +362,7 @@ launchPhone({required Uri u}) async {
                       }
                       if(snapshot.hasData){
                         
-                        List<InvoiceMember> data = snapshot.data!.data!;
+                        List<InvoiceMemberHome> data = snapshot.data!.data!;
                         if(data.isNotEmpty){
                          return ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
