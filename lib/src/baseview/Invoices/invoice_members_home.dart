@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/common/profile_controller.dart';
+import 'package:sarf/controllers/home/home_controller.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
 import 'package:sarf/src/baseview/members/chat/view/chat_view.dart';
 import 'package:sarf/src/baseview/members/qr_code_scanner.dart';
@@ -266,16 +268,16 @@ launchPhone({required Uri u}) async {
                              ),
                           ],
                         ),
-                        // SizedBox(height: 5,),
-                        // Text(
-                        //         "${"Total members count".tr} ($totalMembers)",
-                        //         style: TextStyle(
-                        //           color: Colors.black,
-                        //           fontSize: 12.sp,
-                        //           fontWeight: FontWeight.bold,
-                        //           overflow: TextOverflow.ellipsis
-                        //         ),
-                        //                                    ),
+                        SizedBox(height: 5,),
+                        Text(
+                                "${"Total members count 2".tr} ($totalMembers)",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis
+                                ),
+                                                           ),
                
               ],
             ),
@@ -353,7 +355,7 @@ launchPhone({required Uri u}) async {
             child: budgetName(),
           ),
           const SizedBox(height: 10,),
-                  Expanded(
+                  Flexible(
                     child: FutureBuilder<InvoiceMemberListModelHome?>(
                     future: cityList,
                     builder: (contaxt,snapshot){
@@ -368,6 +370,7 @@ launchPhone({required Uri u}) async {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       itemCount: data.length,
                       shrinkWrap: true,
+                      // reverse: true,
                       itemBuilder: (context,index){
                         var singleData = data[index];
                       return GestureDetector(
@@ -410,7 +413,9 @@ launchPhone({required Uri u}) async {
                                     children: [
                                       Text('Receiver'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                       const SizedBox(width: 10,),
-                                      Text(singleData.name ?? '',style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                      Text(
+                                        Get.find<HomeController>().selectedBudgetName.value
+                                         ?? '',style: TextStyle(color: R.colors.black,fontSize: 14),),
                                     ],
                                   ),
                                   const SizedBox(height: 5,),

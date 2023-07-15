@@ -169,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   void didPopNext() {
-    getData();
+   debugPrint(ctr.selectedBudgetName.value);
+    // getData();
     super.didPopNext();
   }
   

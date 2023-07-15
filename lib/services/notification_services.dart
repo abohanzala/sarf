@@ -216,7 +216,7 @@ class NotificationServices {
     if(message.data['type'] =='simple_invoice_add' || message.data['type'] == "custom_invoice_add" || message.data['type'] == "invoice_attachment" ){
     //   var bNavCon = Get.find<MyBottomNavigationController>();
     // bNavCon.changeTabIndex(3);
-    Get.to(() => InvoiceDetails(id: message.data['ref_id'], invoiceNum: message.data['ref_id'], reverse: true,  ) );
+    Get.to(() => InvoiceDetails(id: message.data['ref_id'], invoiceNum: message.data['ref_id'], reverse: true,isHome: false,  ) );
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) => MessageScreen(
       //       id: message.data['id'] ,

@@ -335,7 +335,7 @@ launchPhone({required Uri u}) async {
                     children: [
                       Text( data.amount.toString(),style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                       GestureDetector(
-                        onTap: () => Get.to( () => InvoiceDetails(id: data.id.toString(),invoiceNum: data.id.toString(),reverse: false, )),
+                        onTap: () => Get.to( () => InvoiceDetails(id: data.id.toString(),invoiceNum: data.id.toString(),reverse: false,isHome: false )),
                         child: Text('Details'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,
                         decoration: TextDecoration.underline,fontWeight: FontWeight.w500,
                         ),

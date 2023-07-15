@@ -53,7 +53,7 @@ class ChangePasswordController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': a,
-      'otp': otpText,
+      'otp': replaceArabicNumber(otpText),
       'new_password': newPass,
       'confirm_password': confirmPass,
     };

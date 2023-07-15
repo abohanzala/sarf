@@ -20,6 +20,16 @@ class OtpController extends GetxController {
     // GetStorage().write('lang', 'en');
     super.onInit();
   }
+  String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
 
   Future otp(String otp) async {
     openLoader();
@@ -34,7 +44,7 @@ class OtpController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': "${registerController.code}${registerController.phone.text}",
-      'otp': otp,
+      'otp': replaceArabicNumber(otp),
     };
     debugPrint("This is my request====================$request");
 

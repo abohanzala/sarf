@@ -218,14 +218,18 @@ class LocaleString extends Translations {
           "Amounts": "Amounts",
           "Invoices 2": "Invoices",
           "Total members count": "Total members count",
+          "Sender": "Sender",
+          "Total members count 2": "Total members count"
         },
     
         'ar_SA': {
           // اجمالي المبالغ
           // "Amounts": "كميات",
+          "Sender": "مرسل",
           "Total members count": "عدد المرسل اليه",
+          "Total members count 2": "عدد مقدم الخدمه",
           "Amounts": "اجمالي المبالغ",
-          "Receiver": "المتلقي",
+          "Receiver": "المستلم",
           "Total amount": "المبلغ الإجمالي",
           "Send Invoices": "إرسال الفواتير",
           "Send Invoices 2": "استلام الفواتير",

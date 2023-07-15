@@ -22,7 +22,16 @@ class OtpForgotPasswordController extends GetxController {
     // GetStorage().write('lang', 'en');
     super.onInit();
   }
+  String replaceArabicNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    // print("$input");
+    return input;
+  }
   Future otp() async {
     openLoader();
     //check validation
@@ -37,7 +46,7 @@ class OtpForgotPasswordController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': splitted[1],
-      'otp': otpControllerGet.text,
+      'otp': replaceArabicNumber(otpControllerGet.text),
     };
     debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();

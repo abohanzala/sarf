@@ -48,12 +48,13 @@ var code = "966".obs;
 Future postNewCustomInvoice(String mobile,  String userPassword,String otpVal) async {
     openLoader();
 String pass = replaceArabicNumber(userPassword);
+String otpv = replaceArabicNumber(otpVal);
 debugPrint(mobile);    
    var request = {
       "language": GetStorage().read('lang'),
       "mobile": mobile,
       "password": pass,
-      "otp" : otpVal
+      "otp" : otpv
     };
 
 

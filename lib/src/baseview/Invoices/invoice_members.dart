@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/common/profile_controller.dart';
 import 'package:sarf/controllers/members/members_controller.dart';
@@ -335,7 +336,7 @@ launchPhone({required Uri u}) async {
               child: budgetName(),
             ),
             const SizedBox(height: 10,),
-                    Expanded(
+                    Flexible(
                       child: FutureBuilder<InvoiceMemberListModel?>(
                       future: cityList,
                       builder: (contaxt,snapshot){
@@ -350,6 +351,7 @@ launchPhone({required Uri u}) async {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         itemCount: data.length,
                         shrinkWrap: true,
+                        // reverse: true,
                         itemBuilder: (context,index){
                           var singleData = data[index];
                         return GestureDetector(
@@ -390,9 +392,9 @@ launchPhone({required Uri u}) async {
                                     const SizedBox(height: 8,),
                                      Row(
                                       children: [
-                                        Text('Receiver'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
+                                        Text('Sender'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                         const SizedBox(width: 10,),
-                                        Text(singleData.name ?? '',style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                        Text(GetStorage().read("name") ?? '',style: TextStyle(color: R.colors.black,fontSize: 14),),
                                       ],
                                     ),
                                     const SizedBox(height: 5,),

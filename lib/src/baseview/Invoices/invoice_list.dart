@@ -304,7 +304,7 @@ loadMembers(){
                             var id = (data.length - 1 ) - index;
                             return GestureDetector(
                               onTap: (){
-                                Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${id + 1}",reverse: true,) );
+                                Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${id + 1}",reverse: true,isHome: false) );
                               },
                               child: Container(
                                 decoration: BoxDecoration(

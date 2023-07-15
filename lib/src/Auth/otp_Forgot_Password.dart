@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -20,6 +22,40 @@ class OtpForgotPasswordScreen extends StatefulWidget {
 class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
   OtpForgotPasswordController otpForgotPasswordController =
       Get.find<OtpForgotPasswordController>();
+    Timer? timer;
+int start = 30;
+
+void startTimer() {
+  const oneSec = Duration(seconds: 1);
+  timer = Timer.periodic(
+    oneSec,
+    (Timer timer) {
+      if (start == 0) {
+        setState(() {
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          start--;
+        });
+      }
+    },
+  );
+}
+
+@override
+void initState() {
+    
+    startTimer();
+    super.initState();
+  }    
+
+@override
+void dispose() {
+   
+    timer?.cancel();
+    super.dispose();
+  }        
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +120,7 @@ class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
             buildOtpText(),
             buildTimeText(),
             buildOtpTextField(),
+            if(start == 0)
             buildResendLinkButton(),
             buildNextButton(),
           ],
@@ -144,7 +181,7 @@ class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
       margin: EdgeInsets.only(top: 5),
       child: customTitle(
         textAlign: TextAlign.center,
-        text: 'timeDummy'.tr,
+        text: "00:${  start < 10 ? "0$start" : start  }",
         color: R.colors.grey,
         size: 18,
         fontFamily: 'bold',

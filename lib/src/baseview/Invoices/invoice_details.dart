@@ -16,6 +16,7 @@ import 'package:sarf/src/baseview/Invoices/fullscreen_img.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../constant/api_links.dart';
+import '../../../controllers/home/home_controller.dart';
 import '../../../resources/resources.dart';
 import '../../widgets/custom_appbar.dart';
 
@@ -23,7 +24,8 @@ class InvoiceDetails extends StatefulWidget {
   final String id;
   final String invoiceNum;
   final bool reverse;
-  const InvoiceDetails({super.key, required this.id, required this.invoiceNum, required this.reverse});
+  final bool isHome;
+  const InvoiceDetails({super.key, required this.id, required this.invoiceNum, required this.reverse, required this.isHome});
 
   @override
   State<InvoiceDetails> createState() => _InvoiceDetailsState();
@@ -180,9 +182,12 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                              const SizedBox(height: 5,),
                             Text(ctr.inVoiceDetails.value.data!.customer!.name!,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                             const SizedBox(height: 10,),
-                            Text("Receiver Name".tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+                            Text(
+                              // "Receiver Name".tr,
+                            widget.isHome == true? 'Receiver'.tr : "Receiver Name".tr,
+                              style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                              const SizedBox(height: 5,),
-                            Text(ctr.inVoiceDetails.value.data!.user!.name!,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                            Text(widget.isHome == true ? Get.find<HomeController>().selectedBudgetName.value : ctr.inVoiceDetails.value.data!.user!.name!,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                             const SizedBox(height: 10,),
                             Text('Description'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                              const SizedBox(height: 5,),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -21,17 +23,40 @@ class UserOtpScreen extends StatefulWidget {
 class _UserOtpScreenState extends State<UserOtpScreen> {
   TextEditingController otpControllerText = TextEditingController();
   ViewersController ctr = Get.find<ViewersController>();
+     Timer? timer;
+int start = 30;
+
+void startTimer() {
+  const oneSec = Duration(seconds: 1);
+  timer = Timer.periodic(
+    oneSec,
+    (Timer timer) {
+      if (start == 0) {
+        setState(() {
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          start--;
+        });
+      }
+    },
+  );
+}
+
+
  
 @override
 void initState() {
     
-    
+    startTimer();
     super.initState();
   }    
 
 @override
 void dispose() {
     otpControllerText.dispose();
+    timer?.cancel();
     super.dispose();
   }    
   @override
@@ -98,6 +123,7 @@ void dispose() {
             buildOtpText(),
             buildTimeText(),
             buildOtpTextField(),
+            if(start == 0)
             buildResendLinkButton(),
             buildNextButton(),
           ],
@@ -158,7 +184,7 @@ void dispose() {
       margin: EdgeInsets.only(top: 5),
       child: customTitle(
         textAlign: TextAlign.center,
-        text: 'timeDummy'.tr,
+        text: "00:${  start < 10 ? "0$start" : start  }",
         color: R.colors.grey,
         size: 18,
         fontFamily: 'bold',

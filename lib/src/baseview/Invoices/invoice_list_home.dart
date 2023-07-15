@@ -8,6 +8,7 @@ import 'package:sarf/controllers/auth/data_collection_controller.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/model/members/invoice_list_model.dart';
 
+import '../../../controllers/home/home_controller.dart';
 import '../../../resources/resources.dart';
 import '../../utils/navigation_observer.dart';
 import '../../widgets/custom_appbar.dart';
@@ -318,7 +319,7 @@ loadMembers(){
                             // print(id);
                             return GestureDetector(
                               onTap: (){
-                                Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${id + 1}",reverse: false,) );
+                                Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${id + 1}",reverse: false,isHome: true) );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -400,7 +401,9 @@ loadMembers(){
                                         ),
                                       ),
                                         SizedBox(height: 8.h),
-                                        Text('Receiver Name'.tr,
+                                        Text(
+                                          // 'Receiver Name'.tr,
+                                          'Receiver'.tr,
                                             style: TextStyle(
                                               color: R.colors.grey,
                                               fontSize: 16.sp,
@@ -408,7 +411,8 @@ loadMembers(){
                                             )),
                                         SizedBox(height: 5.h),
                                         Text(
-                                          singleData?.user?.name ?? '',
+                                          //  singleData?.user?.name ?? '',
+                                           Get.find<HomeController>().selectedBudgetName.value ?? '',
                                           style: TextStyle(
                                             color: R.colors.black,
                                             fontSize: 18.sp,
