@@ -50,6 +50,7 @@ class InvoiceMemberHome {
   int? accountType;
   int? isOnline;
   int? status;
+  int? newInvoice;
   String? groupId;
   // String? linkWith;
   String? androidDeviceId;
@@ -81,6 +82,7 @@ class InvoiceMemberHome {
       this.accountType,
       this.isOnline,
       this.status,
+      this.newInvoice,
       this.groupId,
       // this.linkWith,
       this.androidDeviceId,
@@ -112,6 +114,7 @@ class InvoiceMemberHome {
     accountType = json['account_type'];
     isOnline = json['is_online'];
     status = json['status'];
+    newInvoice = json['user_unview_invoice_count'];
     groupId = json['group_id'];
     // linkWith = json['link_with'];
     androidDeviceId = json['android_device_id'];
@@ -147,6 +150,7 @@ class InvoiceMemberHome {
     data['account_type'] = accountType;
     data['is_online'] = isOnline;
     data['status'] = status;
+    data['user_unview_invoice_count'] = newInvoice;
     data['group_id'] = groupId;
     // data['link_with'] = linkWith;
     data['android_device_id'] = androidDeviceId;

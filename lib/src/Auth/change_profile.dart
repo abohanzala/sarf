@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -169,6 +170,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 buildInstaField(),
                 buildContactNoField(),
                 //  buildEmailField(),
+                if(kIsWeb == false)
                 buildLocationButton(),
                 buildUploadImage(),
                 buildUpdateButton()
@@ -409,10 +411,14 @@ class _ChangeProfileState extends State<ChangeProfile> {
             child: changeProfileController.changeProfileImage != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.file(
+                    child: kIsWeb == true ? Image.network(
+                      changeProfileController.changeProfileImage!.path,
+                      fit: BoxFit.cover,
+                    )  : Image.file(
                       File(changeProfileController.changeProfileImage!.path),
                       fit: BoxFit.cover,
-                    ))
+                    )
+                    )
                 : profileController.profileModel!.user!.photo != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(100),

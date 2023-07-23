@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
@@ -463,7 +464,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           business ? buildBusinessTypeText() : Container(),
           business ? buildBusinessTypeOptions() : Container(),
           business && onlineBusiness ? buildWebsiteField() : Container(),
-          (offlineBusiness == true && business == true) ? buildLocationButton() : Container(),
+          (offlineBusiness == true && business == true && kIsWeb == false) ? buildLocationButton() : Container(),
           business ? buildUploadImage() : Container(),
           // buildAgreeToTermsAndConditionsBox(),
           buildSubmitButton()
@@ -569,7 +570,14 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   margin: const EdgeInsets.only(top: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.file(
+                    child: kIsWeb == true ? Image.network(
+                      
+                        _imageFile!.path,
+                      
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
+                    ) : Image.file(
                       File(
                         _imageFile!.path,
                       ),
@@ -830,7 +838,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   }
 
   Widget buildOfflineBusinessButton() {
-    return InkWell(
+    return kIsWeb == true ? Container() : InkWell(
       onTap: () {
         onlineBusiness = false;
         offlineBusiness = true;

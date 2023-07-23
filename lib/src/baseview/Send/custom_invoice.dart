@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -470,6 +471,7 @@ class _CustomInvoiceState extends State<CustomInvoice> with RouteAware  {
                                         const SizedBox(
                                           width: 5,
                                         ),
+                                        if(kIsWeb == false)
                                         GestureDetector(
                                           onTap: ()async{
                                              DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -532,7 +534,12 @@ class _CustomInvoiceState extends State<CustomInvoice> with RouteAware  {
                                                         child: ClipRRect(
                                                           borderRadius:
                                                               BorderRadius.circular(5),
-                                                          child: Image.file(
+                                                          child: kIsWeb == true? Image.network(
+                                                            singleFile.path,
+                                                            height: 25.h,
+                                                            width: 25.w,
+                                                            fit: BoxFit.cover,
+                                                          ) : Image.file(
                                                             singleFile,
                                                             height: 25.h,
                                                             width: 25.w,

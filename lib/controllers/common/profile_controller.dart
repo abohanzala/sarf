@@ -114,8 +114,11 @@ class ProfileController extends GetxController {
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       debugPrint(response.toString());
+      // debugPrint();
+      debugPrint(response.toString());
       profileModel = ProfileModel.fromJson(response);
       print('This is ===================$profileModel');
+      // print('This is ===================${profileModel!.user!.userDetail!.cityId!.id.toString()}');
       nameController.text = profileModel!.user!.name == null
           ? ''
           : nameController.text = profileModel!.user!.name!;

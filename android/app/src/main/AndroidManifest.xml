@@ -10,6 +10,7 @@
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+   <uses-permission android:name="android.permission.RECEIVE_SMS"/>
    
    <application
         android:usesCleartextTraffic="true"
@@ -45,7 +46,13 @@
             android:value="2" />
         <meta-data
            android:name="com.google.firebase.messaging.default_notification_channel_id"
-           android:value="high_importance_channel" />    
+           android:value="high_importance_channel" />  
+        <receiver android:name="com.shounakmulay.telephony.sms.IncomingSmsReceiver"
+		    android:permission="android.permission.BROADCAST_SMS" android:exported="true">
+		    <intent-filter>
+			<action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+		    </intent-filter>
+		</receiver>     
     </application>
     
 </manifest>

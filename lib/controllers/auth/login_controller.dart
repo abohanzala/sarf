@@ -65,7 +65,7 @@ String replaceArabicNumber(String input) {
     };
     }
 
-    if(id.isNotEmpty && !kIsWeb){
+    if(id != "" && !kIsWeb){
       print("here25");
        request = {
       'language': GetStorage().read('lang'),
@@ -77,7 +77,7 @@ String replaceArabicNumber(String input) {
     };
     }else{
       print("here26");
-      if(id.isNotEmpty && kIsWeb){
+      if(id != "" && kIsWeb){
         request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
@@ -92,6 +92,7 @@ String replaceArabicNumber(String input) {
     debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
+          print("hhgg");
           debugPrint(error.toString());
       if (error is BadRequestException) {
         Get.back();

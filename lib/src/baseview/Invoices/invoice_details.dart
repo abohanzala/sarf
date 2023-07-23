@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -403,6 +404,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                         ),
                                   ),
                                       const SizedBox(width: 5,),
+                                      if(kIsWeb == false)
                                        GestureDetector(
                                             onTap: () async{
                                               DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -462,7 +464,13 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
-                                              child: Image.file(
+                                              child: kIsWeb == true ?
+                                              Image.network(
+                                              singleFile.path,
+                                              height: 25.h,
+                                              width: 25.w,
+                                            )
+                                               : Image.file(
                                               singleFile,
                                               height: 25.h,
                                               width: 25.w,

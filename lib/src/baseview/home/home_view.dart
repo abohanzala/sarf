@@ -170,6 +170,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   @override
   void didPopNext() {
    debugPrint(ctr.selectedBudgetName.value);
+   ctr.getHome(ctr.selectedBudgetId.value.toString(),day.day == DateTime.now().day ? null : day.day,month.month == DateTime.now().month ? null :month.month ,date.year == DateTime.now().year ? null : date.year ).then((value){
+                                              expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                                            });
     // getData();
     super.didPopNext();
   }

@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as ddio;
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import 'package:sarf/controllers/common/profile_controller.dart';
 import 'package:sarf/src/Auth/change_password.dart';
@@ -36,10 +38,22 @@ class ChangeProfileController extends GetxController {
     ddio.FormData formData = ddio.FormData();
 
     if (changeProfileImage != null) {
-      var file = changeProfileImage;
+      if(kIsWeb){
+          var file = changeProfileImage;
+          var xfile = XFile(changeProfileImage!.path);
+      String fileName = file!.path.split('/').last;
+      formData.files.add(MapEntry("photo",
+          await ddio.MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
+                return value.cast();
+              }), filename: fileName)));
+      
+      }else{
+        var file = changeProfileImage;
       String fileName = file!.path.split('/').last;
       formData.files.add(MapEntry("photo",
           await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+      }
+      
     }
 
     formData.fields

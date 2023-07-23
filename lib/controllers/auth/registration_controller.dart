@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
 import '../../constant/api_links.dart';
@@ -56,16 +57,30 @@ class RegistrationController extends GetxController {
 
   Future registration(String mob,String country_id,) async {
     openLoader();
-
+    debugPrint("here");
     ddio.FormData formData = ddio.FormData();
 
     String pass = replaceArabicNumber(registerController.password.text);
 
     if(profileImage != null){
       var file = profileImage;
+      var xfile = XFile(profileImage!.path);
     String fileName = file!.path.split('/').last;
-    formData.files.add(MapEntry("photo",
+    if (kIsWeb) {
+      // await xFile.readAsBytes().then((value) {
+      //           return value.cast();
+      //         }),
+      formData.files.add(MapEntry("photo",
+        await ddio.MultipartFile.fromBytes(
+          await xfile.readAsBytes().then((value) {
+                return value.cast();
+              }),
+           filename: fileName)));
+    }else{
+         formData.files.add(MapEntry("photo",
         await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+    }
+   
     }
 
     

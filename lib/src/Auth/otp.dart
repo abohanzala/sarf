@@ -9,6 +9,7 @@ import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
+import 'package:telephony/telephony.dart';
 import '../../controllers/auth/otp_controller.dart';
 import '../../controllers/auth/otp_forgot_password_controller.dart';
 import '../../controllers/auth/register_controller.dart';
@@ -29,6 +30,7 @@ class _OtpScreenState extends State<OtpScreen> {
       Get.find<OtpForgotPasswordController>();
       Timer? timer;
 int start = 30;
+Telephony telephony = Telephony.instance;
 
 void startTimer() {
   const oneSec = Duration(seconds: 1);
@@ -57,7 +59,32 @@ void dispose() {
 void initState() {
     otpController.otpControllerGet.clear();
     startTimer();
-    
+//     telephony.listenIncomingSms(
+//     onNewMessage: (SmsMessage message) {
+//         print(message.address); //+977981******67, sender nubmer
+//         print(message.body); //Your OTP code is 34567
+//         print(message.date); //1659690242000, timestamp
+        
+//         String sms = message.body.toString(); //get the message
+
+//         if(message.address == "+977981******67"){
+//               //verify SMS is sent for OTP with sender number
+//               String otpcode = sms.replaceAll(new RegExp(r'[^0-9]'),'');
+//               //prase code from the OTP sms
+//               // otpbox.set(otpcode.split("")); 
+//               //split otp code to list of number
+//               //and populate to otb boxes
+
+//               setState(() {
+//                   //refresh UI
+//               });
+
+//         }else{
+//             print("Normal message.");
+//         }
+//     },
+//     listenInBackground: false,
+// );
     super.initState();
   }      
   @override

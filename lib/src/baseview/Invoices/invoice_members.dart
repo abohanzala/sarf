@@ -17,6 +17,7 @@ import '../../../model/invoice/invoice_members_model.dart';
 import '../../../model/members/members_list_new_model.dart';
 import '../../../resources/resources.dart';
 import '../../../services/notification_services.dart';
+import '../../utils/navigation_observer.dart';
 import '../../widgets/custom_appbar.dart';
 import 'invoice_list.dart';
 
@@ -27,7 +28,7 @@ class InvoiceMembersListScreen extends StatefulWidget {
   State<InvoiceMembersListScreen> createState() => _InvoiceMembersListScreenState();
 }
 
-class _InvoiceMembersListScreenState extends State<InvoiceMembersListScreen> {
+class _InvoiceMembersListScreenState extends State<InvoiceMembersListScreen> with RouteAware {
   InvoiceController ctr = Get.find<InvoiceController>();
 
   TextEditingController searchValue = TextEditingController();
@@ -94,6 +95,9 @@ class _InvoiceMembersListScreenState extends State<InvoiceMembersListScreen> {
 }
 @override
 void initState() {
+   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  });
     loadMembers();
     super.initState();
   }
@@ -101,7 +105,19 @@ void initState() {
 void dispose(){
   searchOnStoppedTyping?.cancel();
   super.dispose();
-}  
+} 
+
+@override
+  void didPopNext() {
+    
+    super.didPopNext();
+
+    loadMembers();
+    
+   
+
+     
+  }
 loadMembers()async{
    ctrProfile.getProfile().then((value){
                 // print(ctrProfile.profileModel?.user?.name ?? 'asssssssssssssssssssssssss');
@@ -112,12 +128,14 @@ loadMembers()async{
                var receive = value?.data?.fold(0, (previousValue, element) => previousValue +(element.invoicesCount ?? 0) );
               var total = value?.data?.fold(0, (previousValue, element) => previousValue +(element.invoicesSumAmount ?? 0) );
               var mem = value?.data?.fold(0, (previousValue, element) => previousValue +(element.invoicesCount! > 0 ? 1 : 0) );
-              setState(() {
+              if (mounted) {
+                setState(() {
                 // membersLenght = '(${value?.data?.length ?? 0})';
                 totalReceive = receive == null ? "0" : receive.toString();
                 totalAmount = total == null ? "0" : total.toString();
                 totalMembers = mem == null ? "0" : mem.toString();
               });
+              }
             });
 }
 
@@ -346,14 +364,17 @@ launchPhone({required Uri u}) async {
                         if(snapshot.hasData){
                           
                           List<InvoiceMember> data = snapshot.data!.data!;
+                          
                           if(data.isNotEmpty){
+                            var sortedUsersDesc = data.map((user) => user).toList()
+                          ..sort((a, b) => b.newInvoice!.compareTo(a.newInvoice!));
                            return ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        itemCount: data.length,
+                        itemCount: sortedUsersDesc.length,
                         shrinkWrap: true,
                         // reverse: true,
                         itemBuilder: (context,index){
-                          var singleData = data[index];
+                          var singleData = sortedUsersDesc[index];
                         return GestureDetector(
                           onTap: () => Get.to(() =>  InvoiceListScreen(memberId: singleData.id.toString(),)),
                           child: Container(
@@ -399,10 +420,24 @@ launchPhone({required Uri u}) async {
                                     ),
                                     const SizedBox(height: 5,),
                                     Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Invoices 2'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
+                                        Row(
+                                          children: [
+                                             Text('Invoices 2'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14),),
                                         const SizedBox(width: 10,),
                                         Text("${singleData.invoicesCount ?? 0}",style: TextStyle(color: R.colors.black,fontSize: 14),),
+                                          ],
+                                        ),
+                                        if(singleData.newInvoice! > 0)
+                                        Container(
+                                          width: 15,
+                                          height: 15,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: R.colors.themeColor
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 5,),

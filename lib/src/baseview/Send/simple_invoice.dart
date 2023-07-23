@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 // import 'package:document_scanner_flutter/configs/configs.dart';
 // import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
@@ -375,7 +376,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                   onChanged: _onChangeHandler,
                                   decoration: InputDecoration(
                                     
-                                    suffixIcon: GestureDetector(
+                                    suffixIcon: kIsWeb == true ? SizedBox()  : GestureDetector(
                                       onTap: (){
                                         Get.bottomSheet(Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
@@ -541,6 +542,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                           const SizedBox(
                                             width: 5,
                                           ),
+                                          if(kIsWeb == false)
                                           GestureDetector(
                                             onTap: () async{
                                               DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -603,7 +605,12 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
                                                         child: ClipRRect(
                                                           borderRadius:
                                                               BorderRadius.circular(5),
-                                                          child: Image.file(
+                                                          child:kIsWeb == true ? Image.network(
+                                                            singleFile.path,
+                                                            height: 25.h,
+                                                            width: 25.w,
+                                                            fit: BoxFit.cover,
+                                                          ) : Image.file(
                                                             singleFile,
                                                             height: 25.h,
                                                             width: 25.w,

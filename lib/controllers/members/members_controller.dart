@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarf/model/members/city_list_model.dart';
 
 import '../../constant/api_links.dart';
@@ -58,23 +60,24 @@ void onInit(){
       if (error is BadRequestException) {
         
         
-       // print(error.toString());
+        print(error.toString());
       } else {
 
-        //print(error.toString());
+        print(error.toString());
         
     if (error is BadRequestException) {
-     // print(error.toString());
+     print(error.toString());
       
     } else if (error is FetchDataException) {
-     // print(error.toString());
+      print(error.toString());
       
     } else if (error is ApiNotRespondingException) {
-      //print(error.message.toString());
+      print(error.message.toString());
     }
 
       }
     }); 
+    print(response);
     if (response['success'] == true) {
      
       debugPrint(response.toString());
@@ -303,13 +306,31 @@ Future postInvoiceAttach(String id) async {
   openLoader();
     deo.FormData formData = deo.FormData();
     
-for (var i = 0; i < uploadImages.length; i++) {
-  var file = uploadImages[i];
-  String fileName = file.path.split('/').last;
-  formData.files.add(
-    MapEntry("file_attach[$i]", await deo.MultipartFile.fromFile(file.path, filename: fileName))
-   );
-}
+// for (var i = 0; i < uploadImages.length; i++) {
+//   var file = uploadImages[i];
+//   String fileName = file.path.split('/').last;
+//   formData.files.add(
+//     MapEntry("file_attach[$i]", await deo.MultipartFile.fromFile(file.path, filename: fileName))
+//    );
+// }
+if (kIsWeb) {
+       for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      var xfile = XFile(uploadImages[i].path);
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("file_attach[$i]",
+          await deo.MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
+                return value.cast();
+              }), filename: fileName)));
+    }
+    }else{
+       for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("file_attach[$i]",
+          await deo.MultipartFile.fromFile(file.path, filename: fileName)));
+    }
+    }
   formData.fields.add(MapEntry('language', GetStorage().read('lang').toString()));
   formData.fields.add(MapEntry('invoice_id', id));
   debugPrint(formData.fields.toString());

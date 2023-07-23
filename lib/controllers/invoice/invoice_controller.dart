@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getpackage;
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarf/model/members/invoice_list_model.dart';
 import 'package:sarf/services/app_exceptions.dart';
 
@@ -37,13 +39,25 @@ class InvoiceController extends getpackage.GetxController {
     openLoader();
 
     FormData formData = FormData();
-
-    for (var i = 0; i < uploadImages.length; i++) {
+    if (kIsWeb) {
+       for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      var xfile = XFile(uploadImages[i].path);
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("file_attach[$i]",
+          await MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
+                return value.cast();
+              }), filename: fileName)));
+    }
+    }else{
+       for (var i = 0; i < uploadImages.length; i++) {
       var file = uploadImages[i];
       String fileName = file.path.split('/').last;
       formData.files.add(MapEntry("file_attach[$i]",
           await MultipartFile.fromFile(file.path, filename: fileName)));
     }
+    }
+   
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
     formData.fields.add(MapEntry('mobile', mobile));
@@ -111,11 +125,29 @@ class InvoiceController extends getpackage.GetxController {
 
     FormData formData = FormData();
 
-    for (var i = 0; i < uploadImages.length; i++) {
+    // for (var i = 0; i < uploadImages.length; i++) {
+    //   var file = uploadImages[i];
+    //   String fileName = file.path.split('/').last;
+    //   formData.files.add(MapEntry("file_attach[$i]",
+    //       await MultipartFile.fromFile(file.path, filename: fileName)));
+    // }
+     if (kIsWeb) {
+       for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      var xfile = XFile(uploadImages[i].path);
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("file_attach[$i]",
+          await MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
+                return value.cast();
+              }), filename: fileName)));
+    }
+    }else{
+       for (var i = 0; i < uploadImages.length; i++) {
       var file = uploadImages[i];
       String fileName = file.path.split('/').last;
       formData.files.add(MapEntry("file_attach[$i]",
           await MultipartFile.fromFile(file.path, filename: fileName)));
+    }
     }
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
