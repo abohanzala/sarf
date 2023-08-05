@@ -430,7 +430,7 @@ loadMembers(){
                                         child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              '${"Amount".tr} ${singleData?.amount}',
+                                              '${"AMOUNT".tr} ${singleData?.amount}',
                                               style: TextStyle(
                                                 color: R.colors.blueGradient1,
                                                 fontSize: 16.sp,

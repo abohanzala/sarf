@@ -203,7 +203,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                  child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Net Total'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
+                                    Text('AMOUNT'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
                                     Text(ctr.inVoiceDetails.value.data!.amount.toString(),style: TextStyle(color: R.colors.themeColor,fontSize: 14,fontWeight: FontWeight.w500),),
                                   ],
                                  ),

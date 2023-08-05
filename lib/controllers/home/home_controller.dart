@@ -132,11 +132,12 @@ Future getHome(String? id,int? day,int? month,int? year) async {
       }
     });
     if(response == null) return; 
+    debugPrint(response.toString());
     if (response['success'] == true) {
       loading.value = false;
       budgets.clear();
       expenseTypes.clear();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
         var data = HomeData.fromJson(response);
         //print( " asasasasasas ${data.data?.budgets?.length.toString()}" );
         if(data.data != null){

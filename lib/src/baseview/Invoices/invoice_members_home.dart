@@ -533,7 +533,7 @@ launchPhone({required Uri u}) async {
                                         children: [
                                           GestureDetector(
                                             onTap: (){
-                                              launchUrls('//https://twitter.com/${singleData.userDetail?.twitterLink}');
+                                              launchUrls('https://twitter.com/${singleData.userDetail?.twitterLink}');
                                             },
                                             child: Image.asset(R.images.twitter,width: 30,height: 30,)),
                                           const SizedBox(width: 5,),

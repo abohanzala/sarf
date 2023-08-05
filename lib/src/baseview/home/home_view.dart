@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     });
   }
   getData() async{
-    
+    expenseTypes.clear();
     await ctr.getHome(null,null,null,null).then((value) async{
       //print(ctr.budgets.first.id);
       if(ctr.budgets.isNotEmpty){
@@ -135,10 +135,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     //  Get.offAllNamed(RoutesName.LogIn);
     });
     // await profileController.getProfile();
-    await invCtr.getInvoiceList('').then((value){
-      invoices = value;
-      return null;
-    });
+   
    
   }
   @override
@@ -168,9 +165,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  void didPopNext() {
+  void didPopNext() async{
+    expenseTypes.clear();
    debugPrint(ctr.selectedBudgetName.value);
-   ctr.getHome(ctr.selectedBudgetId.value.toString(),day.day == DateTime.now().day ? null : day.day,month.month == DateTime.now().month ? null :month.month ,date.year == DateTime.now().year ? null : date.year ).then((value){
+   await ctr.getHome(ctr.selectedBudgetId.value.toString(),day.day == DateTime.now().day ? null : day.day,month.month == DateTime.now().month ? null :month.month ,date.year == DateTime.now().year ? null : date.year ).then((value){
                                               expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
         debugPrint(expanse.invoiceSumAmount.toString());
@@ -1215,6 +1213,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                             GestureDetector(
                                                               onTap: ()async{
                                                                 debugPrint("here");
+                                                                 await invCtr.getInvoiceList('').then((value){
+      invoices = value;
+      return null;
+    });
                                                                 debugPrint(invoices?.data.toString());
                                                                 Get.snackbar("enter func","",backgroundColor: R.colors.blue);
                                                                 // debugPrint(invoices?.data?.length.toString());
@@ -1264,6 +1266,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                              GestureDetector(
                                                               onTap: () async{
                                                                 debugPrint("here");
+                                                                 await invCtr.getInvoiceList('').then((value){
+      invoices = value;
+      return null;
+    });
                                                                 debugPrint(invoices?.data.toString());
                                                                 Get.snackbar("enter func","",backgroundColor: R.colors.blue);
                                                                 // A Suls Regular.ttf

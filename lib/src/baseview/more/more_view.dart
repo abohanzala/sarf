@@ -159,7 +159,13 @@ Future logout() async {
   }
 
   Future getData() async {
-    await profileController.getProfile();
+    await profileController.getProfile().then((value){
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
     await profileController.getAlertCount();
     await profileController.getAccounts();
     // .catchError((error) async{
@@ -189,13 +195,9 @@ Future logout() async {
     // );
     //  Get.offAllNamed(RoutesName.LogIn);
     // });
-    await profileController.getProfile().then((value){
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
+    // await profileController.getProfile().then((value){
+      
+    // });
 
     
         

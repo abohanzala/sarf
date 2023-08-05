@@ -9,7 +9,7 @@ import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
-import 'package:telephony/telephony.dart';
+// import 'package:telephony/telephony.dart';
 import '../../controllers/auth/otp_controller.dart';
 import '../../controllers/auth/otp_forgot_password_controller.dart';
 import '../../controllers/auth/register_controller.dart';
@@ -30,7 +30,7 @@ class _OtpScreenState extends State<OtpScreen> {
       Get.find<OtpForgotPasswordController>();
       Timer? timer;
 int start = 30;
-Telephony telephony = Telephony.instance;
+// Telephony telephony = Telephony.instance;
 
 void startTimer() {
   const oneSec = Duration(seconds: 1);
