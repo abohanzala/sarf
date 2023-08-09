@@ -377,7 +377,8 @@ launchPhone({required Uri u}) async {
                     future: cityList,
                     builder: (contaxt,snapshot){
                       if(snapshot.connectionState == ConnectionState.waiting){
-                        return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
+                        return SizedBox();
+                        // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
                       }
                       if(snapshot.hasData){
                         

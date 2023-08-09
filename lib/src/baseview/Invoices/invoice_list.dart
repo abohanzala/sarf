@@ -272,16 +272,18 @@ loadMembers(){
           ),
           const SizedBox(height: 10,),
                       if(isSearch)
-                      Center(child: SizedBox(
-                        height: 100,
-                        width: 100,
-                        child: CircularProgressIndicator(color: R.colors.blue,)),),
+                      SizedBox(),
+                      // Center(child: SizedBox(
+                      //   height: 100,
+                      //   width: 100,
+                      //   child: CircularProgressIndicator(color: R.colors.blue,)),),
                       if(!isSearch)
                       FutureBuilder<InvoiceList?>(
                               future: membersList,
                               builder: (contaxt,snapshot){
                 if(snapshot.connectionState == ConnectionState.waiting){
-                      return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
+                      return SizedBox(); 
+                      // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
                 }
                 if(snapshot.hasData){
                       //ctr.filter != ''

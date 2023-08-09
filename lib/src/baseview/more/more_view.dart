@@ -214,9 +214,12 @@ Future logout() async {
       },
       child: Scaffold(
         backgroundColor: R.colors.lightGrey,
-        body: isLoading == true
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
+        body:
+        //  isLoading == true
+        //     ? SizedBox()
+        //     // const Center(child: CircularProgressIndicator())
+        //     : 
+            Column(
                 children: [
                   buildBackGroundImage(),
                   Expanded(
@@ -645,7 +648,7 @@ Future logout() async {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                profileController.profileModel!.user!.name!.tr,
+                '${profileController.profileModel?.user?.name ?? ""}',
                 style: TextStyle(
                     color: R.colors.white, fontFamily: 'bold', fontSize: 16),
               ),

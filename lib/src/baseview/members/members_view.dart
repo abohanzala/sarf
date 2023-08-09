@@ -184,7 +184,8 @@ loadMembers(){
                       future: membersList,
                       builder: (contaxt,snapshot){
                         if(snapshot.connectionState == ConnectionState.waiting){
-                          return Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
+                          return SizedBox(); 
+                          // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
                         }
                         if(snapshot.hasData){
                           
@@ -222,7 +223,9 @@ loadMembers(){
                                         children: [
                                           Text('Type'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12),),
                                           const SizedBox(height: 5,),
-                                          Text("${GetStorage().read('lang') == 'en' ? singleData?.expenseName ?? '' : singleData?.expenseNameAr ?? ''} " ,style: TextStyle(color: R.colors.black,fontSize: 16),),
+                                          Flexible(child: Text("${GetStorage().read('lang') == 'en' ? singleData?.expenseName ?? '' : singleData?.expenseNameAr ?? ''} " 
+                                          ,overflow: TextOverflow.ellipsis
+                                          ,style: TextStyle(color: R.colors.black,fontSize: 16),)),
                                           const SizedBox(height: 5,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

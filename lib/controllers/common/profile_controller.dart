@@ -150,6 +150,12 @@ class ProfileController extends GetxController {
       location.value = profileModel!.user!.userDetail?.location == null
           ? ''
           : profileModel!.user!.userDetail?.location ?? '';
+          if (profileModel!.user!.name != null) {
+            
+            await GetStorage().write('name', profileModel!.user!.name);
+            debugPrint("${GetStorage().read('name')}");  
+          }
+        
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);

@@ -26,6 +26,7 @@ class ChangeProfileController extends GetxController {
   bool isOnline = false;
   File? changeProfileImage;
   var finalSelectedCity = ''.obs;
+  var finalSelectedCityId = '';
 
   @override
   void onInit() {
@@ -70,10 +71,13 @@ class ChangeProfileController extends GetxController {
     // ));
     formData.fields
         .add(MapEntry('name', profileController.nameController.text));
+    print(
 
+      " asdasd ${profileController.profileModel!.user!.userDetail!.cityId!.id.toString()} "
+       );
     formData.fields.add(MapEntry(
       'city_id',
-      profileController.profileModel!.user!.userDetail!.cityId!.id.toString(),
+      finalSelectedCityId == "" ? profileController.profileModel!.user!.userDetail!.cityId!.id.toString() : finalSelectedCityId,
     ));
     formData.fields.add(MapEntry(
       'expense_type_id',
@@ -163,6 +167,7 @@ class ChangeProfileController extends GetxController {
     // if (response == null) return;
     debugPrint("This is my response==================$response");
     if (response['success'] == true) {
+      finalSelectedCityId = '';
       debugPrint(response.toString());
       Get.back();
        Get.snackbar(

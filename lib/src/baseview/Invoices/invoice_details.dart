@@ -141,7 +141,8 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
             if(ctr.loadingInvoiceDetails.value == true)
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Center(child: SizedBox(width: 50,height: 50,child: CircularProgressIndicator(color: R.colors.blue),),),
+              child:SizedBox(), 
+              // Center(child: SizedBox(width: 50,height: 50,child: CircularProgressIndicator(color: R.colors.blue),),),
             ),
             if(ctr.loadingInvoiceDetails.value == false && ctr.inVoiceDetails.value.data == null)
             Center(child: Text('No Data'.tr,style: TextStyle(fontSize: 16),),),

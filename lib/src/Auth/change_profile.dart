@@ -787,9 +787,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                               
                                                   cities[selectedCityIndex]
                                                   .id;
-
+                                          changeProfileController.finalSelectedCityId = getCityId.toString();
                                           print(
-                                              "This is my selctedCity Id ============${getCityId}");
+                                              "This is my selctedCity Id ============${getCityId} ${cities[selectedCityIndex]
+                                                  .name?.ar}");
 
                                           setState(() {
                                             changeProfileController

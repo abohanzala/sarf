@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
           ctr.selectedBudgetIndex.value = 1;
           ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
           ctr.selectedBudgetNumbder.value = "";    
-          ctr.selectedBudgetName.value = ctr.budgets.first.name.toString() == 'Expenses' ? GetStorage().read('name') : ctr.budgets.first.name.toString() ;
+          ctr.selectedBudgetName.value =  GetStorage().read('name');
           ctr.qrCode.value = "${GetStorage().read('mobile')}";
           expenseTypes.clear();
        for (var expanse in ctr.expenseTypes) {
@@ -200,18 +200,22 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       child: Scaffold(
         body: SafeArea(
             child: Obx(
-          () => ctr.loading.value == true
-              ? Center(
-                  child: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(
-                      //backgroundColor: AppColors.whiteClr,
-                      color: R.colors.blue,
-                    ),
-                  ),
-                )
-              : Container(
+          () =>
+          //  ctr.loading.value == true
+          //      ?
+          //      SizedBox()
+          //       // Center(
+          //     //     child: SizedBox(
+          //     //       width: 50,
+          //     //       height: 50,
+          //     //       child: CircularProgressIndicator(
+          //     //         //backgroundColor: AppColors.whiteClr,
+          //     //         color: R.colors.blue,
+          //     //       ),
+          //     //     ),
+          //     //   )
+          //     : 
+              Container(
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
@@ -539,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                             ctr.selectedBudgetId.value =
                                                 singleData.id.toString();
                                             ctr.selectedBudgetNumbder.value = singleData.number == '#0' ? '' : singleData.number ?? '' ;    
-                                            ctr.selectedBudgetName.value = singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? '' ;    
+                                            ctr.selectedBudgetName.value = index == 0 ? GetStorage().read('name') : singleData.name ?? '' ;    
                                             debugPrint(
                                                 ctr.selectedBudgetId.value);
                                             ctr.getHome(singleData.id.toString(),day.day == DateTime.now().day ? null : day.day,month.month == DateTime.now().month ? null :month.month ,date.year == DateTime.now().year ? null : date.year ).then((value){
@@ -575,7 +579,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  "${singleData.name == 'Expenses' ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number == '#0' ? '' : singleData.number ?? ''}",
+                                                  "${ index == 0 ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number == '#0' ? '' : singleData.number ?? ''}",
                                                   style: const TextStyle(
                                                       fontSize: 14),
                                                       overflow: TextOverflow.ellipsis,
