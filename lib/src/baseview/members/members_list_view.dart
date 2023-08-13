@@ -112,7 +112,7 @@ void launchUrls(String url) async {
   
 
   
-    await launchUrl(Uri.parse(url)).catchError((erorr){
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication).catchError((erorr){
       debugPrint(erorr.toString());
       Get.snackbar('Error'.tr, 'Could not launch'.tr);
     });
@@ -285,36 +285,62 @@ launchPhone({required Uri u}) async {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(child: Row(
-                                  children: [
-                                    Icon(Icons.location_on_sharp,size: 20,color: R.colors.black,),
-                                    const SizedBox(width: 8,),
-                                    Flexible(
-                                      child: Text(ctr.memDetails.value.data?.userDetail?.location ?? '',
-                                      style:TextStyle(color: R.colors.black,fontSize: 14),
-                                      overflow: TextOverflow.ellipsis,
-                                      ),
-                                    )
-                                  ],
+                                Expanded(child: GestureDetector(
+                                  onTap: (){
+                                    // print(singleData.userDetail?.locationLat);
+                                    double lat = 0.0;
+                                    double lng = 0.0;
+                                    if(singleData.userDetail?.locationLat != null){
+                                      lat = double.parse(singleData.userDetail!.locationLat!);
+                                    }
+                                    if(singleData.userDetail?.locationLng != null){
+                                      lng = double.parse(singleData.userDetail!.locationLng!);
+                                    }
+                                    if(
+                                      singleData.userDetail?.locationLng == null || singleData.userDetail?.locationLat == null
+                                    ){
+                                      print("here");
+                                      Get.snackbar("Error".tr, 'No Direction'.tr);
+                                      return;
+                                    }
+                                    if(singleData.userDetail?.locationLng != null && singleData.userDetail?.locationLat != null ){
+                                      navigateTo(lat, lng);
+                                    }
+                                    
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.location_on_sharp,size: 20,color: R.colors.black,),
+                                      const SizedBox(width: 8,),
+                                      Flexible(
+                                        child: Text(singleData.userDetail?.location ?? '',
+                                        style:TextStyle(color: R.colors.black,fontSize: 14),
+                                        overflow: TextOverflow.ellipsis,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 )),
                                 const SizedBox(width: 3,),
                                 GestureDetector(
                                   onTap: (){
+                                    // print(singleData.userDetail?.location);
                                     double lat = 0.0;
                                     double lng = 0.0;
-                                    if(ctr.memDetails.value.data?.userDetail?.locationLat != null){
-                                      lat = double.parse(ctr.memDetails.value.data!.userDetail!.locationLat!);
+                                    if(singleData.userDetail?.locationLat != null){
+                                      lat = double.parse(singleData.userDetail!.locationLat!);
                                     }
-                                    if(ctr.memDetails.value.data?.userDetail?.locationLng != null){
-                                      lng = double.parse(ctr.memDetails.value.data!.userDetail!.locationLng!);
+                                    if(singleData.userDetail?.locationLng != null){
+                                      lng = double.parse(singleData.userDetail!.locationLng!);
                                     }
                                     if(
-                                      ctr.memDetails.value.data?.userDetail?.locationLng == null || ctr.memDetails.value.data?.userDetail?.locationLat == null
+                                      singleData.userDetail?.locationLng == null || singleData.userDetail?.locationLat == null
                                     ){
+                                      print("here");
                                       Get.snackbar("Error".tr, 'No Direction'.tr);
                                       return;
                                     }
-                                    if(ctr.memDetails.value.data?.userDetail?.locationLng != null && ctr.memDetails.value.data?.userDetail?.locationLat != null ){
+                                    if(singleData.userDetail?.locationLng != null && singleData.userDetail?.locationLat != null ){
                                       navigateTo(lat, lng);
                                     }
                                     

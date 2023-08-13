@@ -20,7 +20,7 @@ class SupportController extends getpackage.GetxController {
   var selectedTypeName = ''.obs;
   var selectedTypeIndex = 0.obs;
   var selectedTypeId = ''.obs;
-  var supportStatus = '1'.obs;
+  var supportStatus = '0'.obs;
   TextEditingController txt = TextEditingController();
   List<File> uploadImages = <File>[].obs;
   var isLoadingSupport = false.obs;
@@ -33,7 +33,7 @@ class SupportController extends getpackage.GetxController {
     
     super.onInit();
     await getSupportTypes();
-    await getSupport('1');
+    await getSupport('0');
   }
 
   Future getSupportTypes() async {
@@ -84,7 +84,7 @@ class SupportController extends getpackage.GetxController {
         //   }
       }
     });
-    // print(response);
+     print(response);
     if (response == null) return;
 
     if (response['success'] == true) {
@@ -169,6 +169,7 @@ class SupportController extends getpackage.GetxController {
       selectedTypeIndex.value = 0;
       selectedTypeName.value = '';
       txt.clear();
+      // await getSupport('1');
       getpackage.Get.back();
       getpackage.Get.snackbar('Success'.tr, response['message'].toString());
       //files.clear();
@@ -188,6 +189,7 @@ class SupportController extends getpackage.GetxController {
   }
 
   Future getSupport(String id) async {
+    supportList.clear();
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
     print('here');
@@ -196,6 +198,7 @@ class SupportController extends getpackage.GetxController {
       "language": GetStorage().read('lang'),
       "status": id,
     };
+    print(request);
     var response = await DioClient()
         .post(ApiLinks.getSupport, request)
         .catchError((error) {
@@ -313,11 +316,11 @@ class SupportController extends getpackage.GetxController {
     if (response == null) return;
     if (response['success'] == true) {
       supportList.clear();
-      isLoadingSupportDetails.value = false;
+      
       debugPrint(response.toString());
       var data = SupportDetails.fromJson(response);
       supportDetails.value = data;
-
+      isLoadingSupportDetails.value = false;
       //print(budgets.first.name);
 
       // return data;

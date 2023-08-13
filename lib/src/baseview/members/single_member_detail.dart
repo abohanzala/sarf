@@ -47,7 +47,7 @@ void launchUrls(String url) async {
   
 
   
-    await launchUrl(Uri.parse(url)).catchError((erorr){
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication).catchError((erorr){
       debugPrint(erorr.toString());
       Get.snackbar('Error'.tr, 'Could not launch'.tr);
     });

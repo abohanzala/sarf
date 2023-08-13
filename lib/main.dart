@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
+import 'package:sarf/controllers/support/support_controller.dart';
 import 'package:sarf/firebase_options.dart';
 import 'package:sarf/src/utils/navigation_observer.dart';
 import 'controllers/auth/change_password_controller.dart';
@@ -58,6 +59,7 @@ void main() async {
   Get.put<TermsAndConditionsController>(TermsAndConditionsController());
   Get.put<PrivacyController>(PrivacyController());
   Get.put<AboutController>(AboutController());
+  Get.put<SupportController>(SupportController());
   
   if( await GetStorage().read('lang') == null){
     

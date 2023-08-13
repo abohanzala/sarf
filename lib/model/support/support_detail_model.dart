@@ -144,8 +144,8 @@ class SupportDetailName {
 class SingleDetail {
   int? id;
   String? message;
-  String? supportId;
-  String? userId;
+  int? supportId;
+  int? userId;
   String? type;
   String? status;
   String? createdAt;

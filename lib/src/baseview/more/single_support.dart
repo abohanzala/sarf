@@ -11,7 +11,7 @@ import '../../widgets/custom_appbar.dart';
 class SingleSupport extends StatefulWidget {
   final String title;
   final String id;
-  final String date;
+  final String? date;
   const SingleSupport({super.key, required this.title, required this.id, required this.date});
 
   @override
@@ -90,7 +90,7 @@ class _SingleSupportState extends State<SingleSupport> {
                   
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(widget.date,style: TextStyle(color: R.colors.black,fontSize: 18.sp,fontWeight: FontWeight.w500),),
+                    child: Text(ctr.supportDetails.value.data!.createdDate ?? "",style: TextStyle(color: R.colors.black,fontSize: 18.sp,fontWeight: FontWeight.w500),),
                   ),
       
                 ],
@@ -143,7 +143,8 @@ class _SingleSupportState extends State<SingleSupport> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(ctr.supportDetails.value.data?.type == "0" ? "Business".tr : "Personal".tr,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                                      // Text(ctr.supportDetails.value.data?.type == "0" ? "Business".tr : "Personal".tr,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
+                                      Text(GetStorage().read('lang') == "ar" ? ctr.supportDetails.value.data?.supportType?.name?.ar ?? ""  : ctr.supportDetails.value.data?.supportType?.name?.en ?? "" ,style: TextStyle(color: R.colors.black,fontSize: 14,fontWeight: FontWeight.w500),),
                                       Text(ctr.supportDetails.value.data?.status == "0" ? "Pending".tr : "Success".tr,style:  TextStyle(color: ctr.supportDetails.value.data?.status == "0"? Color(0XFFF4BD05) : Color(0XFF2CC91F),fontSize: 14,fontWeight: FontWeight.w500),),
                                   ],),
       

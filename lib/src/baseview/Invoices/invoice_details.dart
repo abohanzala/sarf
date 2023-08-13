@@ -224,7 +224,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                 children: [
                   Padding(
                padding: const EdgeInsets.symmetric(horizontal: 12),
-               child: Text( widget.reverse == true ? 'Sent Attachments'.tr : 'Received Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+               child: Text( GetStorage().read("userId").toString() == ctr.inVoiceDetails.value.data?.userId.toString() ? 'Sent Attachments'.tr : 'Received Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                        ),
                        const SizedBox(height: 8,),
                        Padding(
@@ -294,10 +294,11 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                 thickness: 0.1,
                ),
                        ),
-                       const SizedBox(height: 10,), 
+                       const SizedBox(height: 10,),
+              if(ctr.inVoiceDetails.value.data?.invoiceFiles?.isNotEmpty == true)          
               Padding(
                padding: const EdgeInsets.symmetric(horizontal: 12),
-               child: Text( widget.reverse == true ? 'Received Attachments'.tr: 'Sent Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
+               child: Text(  GetStorage().read("userId").toString() == ctr.inVoiceDetails.value.data?.userId.toString() ? 'Received Attachments'.tr: 'Sent Attachments'.tr,style: TextStyle(color: R.colors.grey,fontSize: 14,fontWeight: FontWeight.w500),),
                        ),
                        const SizedBox(height: 8,),
                        

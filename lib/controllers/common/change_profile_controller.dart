@@ -35,6 +35,7 @@ class ChangeProfileController extends GetxController {
   }
 
   Future updateProfile() async {
+    print(profileController.location_lat.value.toString());
     openLoader();
     ddio.FormData formData = ddio.FormData();
 
@@ -71,10 +72,7 @@ class ChangeProfileController extends GetxController {
     // ));
     formData.fields
         .add(MapEntry('name', profileController.nameController.text));
-    print(
-
-      " asdasd ${profileController.profileModel!.user!.userDetail!.cityId!.id.toString()} "
-       );
+    
     formData.fields.add(MapEntry(
       'city_id',
       finalSelectedCityId == "" ? profileController.profileModel!.user!.userDetail!.cityId!.id.toString() : finalSelectedCityId,
@@ -118,9 +116,9 @@ class ChangeProfileController extends GetxController {
       'location_lng',
       profileController.location_lat.value,
     ));
-    formData.fields.add(MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
-    formData.fields
-        .add(MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+    // formData.fields.add(MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
+    // formData.fields
+    //     .add(MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
     debugPrint(formData.fields.toString());
 
     // var request = {

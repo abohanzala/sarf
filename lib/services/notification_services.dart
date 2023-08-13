@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_firebase_notifications/message_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sarf/controllers/support/support_controller.dart';
+import 'package:sarf/src/baseview/more/single_support.dart';
 
 import '../src/baseview/Invoices/invoice_details.dart';
 import '../src/baseview/Invoices/invoice_list.dart';
@@ -207,7 +209,7 @@ class NotificationServices {
 
 
   void handleMessage(BuildContext context, RemoteMessage message) {
-     print(message.notification.toString());
+     print(message.data);
     // print(message.notification?.body.toString());
     // print(message.data.toString());
     
@@ -217,6 +219,21 @@ class NotificationServices {
     //   var bNavCon = Get.find<MyBottomNavigationController>();
     // bNavCon.changeTabIndex(3);
     Get.to(() => InvoiceDetails(id: message.data['ref_id'], invoiceNum: message.data['ref_id'], reverse: true,isHome: false,  ) );
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => MessageScreen(
+      //       id: message.data['id'] ,
+      //     )));
+    }
+    if(message.data['type'] =='support_success' || message.data['type'] == "support_reply" || message.data['type'] == "support_add" ){
+      print("ffff");
+      Get.to(() => SingleSupport(title: message.data['ref_id'].toString(),id: message.data['ref_id'].toString(),date: "",));
+      // var ctr = Get.find<SupportController>();
+    // bNavCon.changeTabIndex(3);
+    // ctr.getSupportDetails(message.data['ref_id']).then((value){
+    //   var date = ctr.supportDetails.value.data?.createdDate;
+      
+    // });
+    // // Get.to(() => InvoiceDetails(id: message.data['ref_id'], invoiceNum: message.data['ref_id'], reverse: true,isHome: false,  ) );
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) => MessageScreen(
       //       id: message.data['id'] ,
