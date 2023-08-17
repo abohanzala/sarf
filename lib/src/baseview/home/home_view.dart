@@ -1222,7 +1222,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       return null;
     });
                                                                 debugPrint(invoices?.data.toString());
-                                                                Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
                                                                 // debugPrint(invoices?.data?.length.toString());
                                                                 if(invoices?.data != null){
                                                                   Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
@@ -1275,7 +1275,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       return null;
     });
                                                                 debugPrint(invoices?.data.toString());
-                                                                Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
                                                                 // A Suls Regular.ttf
                                                                 final  font = await rootBundle.load("assets/fonts/arabic.ttf");
                                                                 final  ttf = pw.Font.ttf(font);
@@ -1339,7 +1339,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                                             
                                                                                pw.Column(children: [
                                                                    
-                                                                                pw.Text(invoices!.data![i].customer?.name.toString() ?? ''),
+                                                                                pw.Text(invoices!.data![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
                                                                               ]),
                                                                             
                                                                             

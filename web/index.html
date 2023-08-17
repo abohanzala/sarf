@@ -18,19 +18,52 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Sarf">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="sarf">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="logo.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="logo.png"/>
 
-  <title>sarf</title>
+  <title>Sarf</title>
   <link rel="manifest" href="manifest.json">
+
+  <script type="text/javascript">
+    window.flutterWebRenderer = "html";
+</script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
+import { collection, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+// import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDKFFTbmaRWUQZowARirHYS0p8HzKhxz60",
+  authDomain: "sarf-70217.firebaseapp.com",
+  projectId: "sarf-70217",
+  storageBucket: "sarf-70217.appspot.com",
+  messagingSenderId: "651573448048",
+  appId: "1:651573448048:web:87803a6dfc19537f1c13b5",
+  measurementId: "G-0CTREGF5QN"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+  </script>
 
   <script>
     // The value below is injected by flutter build, do not touch.
@@ -49,32 +82,8 @@
       });
     }
     </script>
-  <script type="text/javascript">
-    window.flutterWebRenderer = "html";
-</script>
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDKFFTbmaRWUQZowARirHYS0p8HzKhxz60",
-  authDomain: "sarf-70217.firebaseapp.com",
-  projectId: "sarf-70217",
-  storageBucket: "sarf-70217.appspot.com",
-  messagingSenderId: "651573448048",
-  appId: "1:651573448048:web:87803a6dfc19537f1c13b5",
-  measurementId: "G-0CTREGF5QN"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-  </script>
+ 
+ 
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

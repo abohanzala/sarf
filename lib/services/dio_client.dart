@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'app_exceptions.dart';
+import 'package:flutter/foundation.dart';
 
 class DioClient {
   // ignore: constant_identifier_names
@@ -18,6 +19,14 @@ class DioClient {
       var token = storage.read('user_token');
       if (token != null) {
         dio.options.headers['Authorization'] = 'Bearer $token';
+      }
+      if (kIsWeb) {
+        // Access-Control-Allow-Origin: *"
+        dio.options.headers['Access-Control-Allow-Origin'] = '*';
+        dio.options.headers['Content-Type'] = 'application/json';
+        dio.options.headers['Accept'] = '*/*';
+        //  dio.options.headers['"Access-Control-Allow-Methods"'] = "GET,PUT,PATCH,POST,DELETE";
+        // dio.options.headers['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept";
       }
       var response = await dio
           .get(api)
@@ -41,6 +50,14 @@ class DioClient {
       var token = storage.read('user_token');
       if (token != null) {
         dio.options.headers['Authorization'] = 'Bearer $token';
+      }
+      if (kIsWeb) {
+        // Access-Control-Allow-Origin: *"
+        dio.options.headers['Access-Control-Allow-Origin'] = '*';
+        dio.options.headers['Content-Type'] = 'application/json';
+        dio.options.headers['Accept'] = '*/*';
+        // dio.options.headers['"Access-Control-Allow-Methods"'] = "GET,PUT,PATCH,POST,DELETE";
+        // dio.options.headers['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept";
       }
       var response = await dio
           .post(api, data: payload)

@@ -161,18 +161,28 @@ class _ChangeProfileState extends State<ChangeProfile> {
           child: Container(
             margin: EdgeInsets.only(left: 15, right: 15),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 5,),
+                Text('Name'.tr,),
                 buildNameField(),
+                Text('Select City'.tr,),
                 buildSelectCityDropDown(),
                 //  buildUserNameField(),
+                Text("Whatsapp (Optional)".tr),
                 buildWhatsappField(),
+                Text("Twitter Link (Optional)".tr),
                 buildTwitterField(),
+                Text("Instagram Link (Optional)".tr),
                 buildInstaField(),
+                Text('Contact No (Optional)'.tr),
                 buildContactNoField(),
-                //  buildEmailField(),
+                Text("Website (Optional)".tr),
+                buildWebsiteField(),
                 if(kIsWeb == false)
+                Text("Location".tr),
                 buildLocationButton(),
-                buildUploadImage(),
+                Center(child: buildUploadImage()),
                 buildUpdateButton()
               ],
             ),
@@ -443,7 +453,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildLocationButton() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: EdgeInsets.only(top: 10),
       height: 50,
       decoration: BoxDecoration(
         color: R.colors.lightGrey,
@@ -540,7 +550,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildSelectCityDropDown() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       height: 45,
       decoration: BoxDecoration(
         color: R.colors.lightGrey,
@@ -599,7 +609,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildNameField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
@@ -613,7 +623,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildUserNameField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
@@ -627,7 +637,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildEmailField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
@@ -641,11 +651,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildInstaField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
-          hintText: 'Instagram Link (Optional)'.tr,
+          hintText: "Enter profile name".tr,
           controller: profileController.instaController,
           color: R.colors.lightGrey,
           height: 45,
@@ -655,7 +665,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildWhatsappField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
@@ -669,10 +679,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildWebsiteField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
-          hintText: '@dsjnc',
+          hintText: 'https://www.google.com',
           isPasswordObscureText: false,
           controller: profileController.websiteController,
           color: R.colors.lightGrey,
@@ -683,7 +693,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildContactNoField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
@@ -697,11 +707,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
   Widget buildTwitterField() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 10),
       child: customTextField(
           hintTextSize: 12,
           isPasswordObscureText: false,
-          hintText: 'Twitter Link (Optional)'.tr,
+          hintText: "Enter profile name".tr,
           controller: profileController.twitterController,
           color: R.colors.lightGrey,
           height: 45,

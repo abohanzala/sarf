@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
           builder: BotToastInit(),
           // navigatorObservers: [BotToastNavigatorObserver()],
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Sarf',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),

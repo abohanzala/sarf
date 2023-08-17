@@ -161,8 +161,8 @@ String replaceArabicNumber(String input) {
       await GetStorage().write('user_type', userInfo.user!.userType);
       await GetStorage().write('countryId', userInfo.user!.countryId);
       await GetStorage().write('accountType', userInfo.user!.accountType);
-      await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
-          GetStorage().read('mobile'));
+      // await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com',
+      //     GetStorage().read('mobile'));
       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();
