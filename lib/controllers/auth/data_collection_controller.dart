@@ -72,7 +72,7 @@ class DataCollectionController extends GetxController {
       cities?.clear();
       types?.clear();
       countries?.clear();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var data = DataCollection.fromJson(response);
       cities = data.data!.cities;
       types = data.data!.expenseType!;

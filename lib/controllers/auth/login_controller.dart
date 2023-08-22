@@ -38,16 +38,16 @@ String replaceArabicNumber(String input) {
 
   Future login(String mob) async {
     openLoader();
-    print("here");
+    // print("here");
     // String? result = await PlatformDeviceId.getDeviceId;
     String? result = await notificationServices.getDeviceToken();
     String pass = replaceArabicNumber(password.text);
 
-    debugPrint(pass);
+    // debugPrint(pass);
     
     var request = {};
     if(id == '' && !kIsWeb){
-      print("here22");
+      // print("here22");
       request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
@@ -56,7 +56,7 @@ String replaceArabicNumber(String input) {
       'android_device_id': Platform.isAndroid == true ? result : '',
     };
     }else{
-      print("here21");
+      // print("here21");
       request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
@@ -66,7 +66,7 @@ String replaceArabicNumber(String input) {
     }
 
     if(id != "" && !kIsWeb){
-      print("here25");
+      // print("here25");
        request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
@@ -76,7 +76,7 @@ String replaceArabicNumber(String input) {
       'android_device_id': Platform.isAndroid == true ? result : '',
     };
     }else{
-      print("here26");
+      // print("here26");
       if(id != "" && kIsWeb){
         request = {
       'language': GetStorage().read('lang'),
@@ -89,11 +89,11 @@ String replaceArabicNumber(String input) {
       
     }
      
-    debugPrint("This is my request====================$request");
+    // debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
-          print("hhgg");
-          debugPrint(error.toString());
+          // print("hhgg");
+          // debugPrint(error.toString());
       if (error is BadRequestException) {
         Get.back();
         var apiError = json.decode(error.message!);
@@ -131,10 +131,10 @@ String replaceArabicNumber(String input) {
         }
       }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.snackbar(
         'Success'.tr,
         'Login Successfully'.tr,
@@ -142,8 +142,8 @@ String replaceArabicNumber(String input) {
         backgroundColor: R.colors.blue,
       );
       var userInfo = LoginModel.fromJson(response);
-      print("hereeeeeeee");
-      print(userInfo.toString());
+      // print("hereeeeeeee");
+      // print(userInfo.toString());
       phone.clear();
       password.clear();
       id = '';
@@ -207,7 +207,7 @@ String replaceArabicNumber(String input) {
         });
       }
       // DialogBoxes.showErroDialog(description: error.code);
-      debugPrint('Firebase signin ${error.code}');
+      // debugPrint('Firebase signin ${error.code}');
     });
 
     //  final user = _auth.currentUser;
@@ -229,7 +229,7 @@ String replaceArabicNumber(String input) {
           email: GetStorage().read('mobile') + '@gmail.com',
           password: GetStorage().read('mobile'));
     } catch (e) {
-      debugPrint('Firebase signUp $e');
+      // debugPrint('Firebase signUp $e');
     }
   }
 }

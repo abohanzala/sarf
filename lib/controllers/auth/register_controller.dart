@@ -38,7 +38,7 @@ class RegisterController extends GetxController {
       'language': GetStorage().read('lang'),
       'mobile': phoneNumber,
     };
-    debugPrint("This is my request====================$request");
+    //  debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
 
     var response =
@@ -52,22 +52,22 @@ class RegisterController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        // debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
     message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
-    debugPrint(response.toString());
+    // debugPrint("This is my response==================$response");
+    // debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
-      debugPrint(response.toString());
+      //  debugPrint(response.toString());
       Get.offNamed(RoutesName.OtpScreen);
       //   userInfo = UserInfo.fromMap(response);S
       //  await  storage.write('user_token', userInfo.token);

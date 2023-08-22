@@ -56,20 +56,20 @@ class ForgotPasswordController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('///////////////////$message');
+        // debugPrint('///////////////////$message');
         //HandlingErrors().handleError(error);
       }
     });
     message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    // debugPrint("This is my response==================$response");
     if (response['success'] == true) {
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.toNamed(RoutesName.ChangePassword);
       //   userInfo = UserInfo.fromMap(response);S
       //  await  storage.write('user_token', userInfo.token);

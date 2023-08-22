@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sarf/resources/resources.dart';
 
 import '../../resources/images.dart';
@@ -16,6 +18,23 @@ class BaseView extends StatefulWidget {
 
 class _BaseViewState extends State<BaseView> {
  var bNavCon = Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+ @override
+ void initState() {
+  // print("her");
+  super.initState();
+  bNavCon.changeTabIndex(0);
+    if (kIsWeb &&  GetStorage().read("user_type") != 3) {
+      // print("her");
+      bNavCon.changeTabIndex(2);
+    }
+    if (GetStorage().read("accountType") == 0 && GetStorage().read("user_type") != 3) {
+      bNavCon.changeTabIndex(2);
+    }
+    if (!kIsWeb && GetStorage().read("accountType") == 1) {
+      bNavCon.changeTabIndex(0);
+    }
+    
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -61,6 +61,7 @@ void main() async {
   Get.put<AboutController>(AboutController());
   Get.put<SupportController>(SupportController());
   
+  
   if( await GetStorage().read('lang') == null){
     
     await GetStorage().write('lang', 'ar');

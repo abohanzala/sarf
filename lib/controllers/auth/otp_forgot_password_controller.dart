@@ -48,7 +48,7 @@ class OtpForgotPasswordController extends GetxController {
       'mobile': splitted[1],
       'otp': replaceArabicNumber(otpControllerGet.text),
     };
-    debugPrint("This is my request====================$request");
+    // debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
 
     var response = await DioClient()
@@ -63,20 +63,20 @@ class OtpForgotPasswordController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        // debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    // debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.toNamed(RoutesName.ChangePassword);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);

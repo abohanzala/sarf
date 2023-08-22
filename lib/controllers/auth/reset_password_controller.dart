@@ -59,7 +59,7 @@ class ResetPasswordController extends GetxController {
       'new_password': newPass,
       'confirm_password': conformPass,
     };
-    print("This is my request====================${request}");
+    // print("This is my request====================${request}");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -75,21 +75,21 @@ class ResetPasswordController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        // print(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        // debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
     message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    // debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       Get.toNamed(RoutesName.LogIn);
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);

@@ -35,7 +35,7 @@ class MoreScreen extends StatefulWidget {
 
 
 class _MoreScreenState extends State<MoreScreen>  with RouteAware {
-  ProfileController profileController = Get.find<ProfileController>();
+  ProfileController profileController = Get.put<ProfileController>(ProfileController());
   DeleteAccountController delController =  Get.put<DeleteAccountController>(DeleteAccountController());
   ChangeProfileController changeProfileController = Get.put<ChangeProfileController>(ChangeProfileController());
   
