@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -44,7 +45,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
       // });
 
     } on PlatformException catch (e) {
-      debugPrint('Failed to pick image: $e');
+      // debugPrint('Failed to pick image: $e');
     }
   }
 
@@ -66,7 +67,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                 width: Get.width,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                margin: const EdgeInsets.symmetric(horizontal: 12),
+                margin:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11 : 12 : 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: R.colors.white,
@@ -242,6 +243,7 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          if(!kIsWeb)
                           GestureDetector(
                             onTap: () {
                               pickImage(ImageSource.camera);
@@ -346,7 +348,12 @@ class _NewSupportScreenState extends State<NewSupportScreen> {
                                                 child: ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  child: Image.file(
+                                                  child:kIsWeb == true ? Image.network(
+                                                    singleImage.path,
+                                                    fit: BoxFit.cover,
+                                                    width: 80,
+                                                    height: 80,
+                                                  ) : Image.file(
                                                     singleImage,
                                                     fit: BoxFit.cover,
                                                     width: 80,

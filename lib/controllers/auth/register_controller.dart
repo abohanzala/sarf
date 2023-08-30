@@ -67,7 +67,7 @@ class RegisterController extends GetxController {
     // debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
-      //  debugPrint(response.toString());
+        // debugPrint(response.toString());
       Get.offNamed(RoutesName.OtpScreen);
       //   userInfo = UserInfo.fromMap(response);S
       //  await  storage.write('user_token', userInfo.token);

@@ -430,7 +430,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width/3 : 0),
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width/3 : 0 : 0),
         child: Column(
           children: [buildRegistrationDetailsText(), buildForm()],
         ),

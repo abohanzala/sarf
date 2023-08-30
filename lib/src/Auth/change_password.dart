@@ -107,7 +107,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               bottomRight: Radius.circular(20),
             )),
         child: kIsWeb == true ? Padding(
-          padding:  EdgeInsets.symmetric(horizontal: Get.width/3),
+          padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 : 0),
           child: Column(
             children: [
               buildOtpText(),

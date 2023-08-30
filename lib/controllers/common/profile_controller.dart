@@ -60,7 +60,7 @@ class ProfileController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
     };
-    print("This is my request====================$request");
+    // print("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -75,12 +75,12 @@ class ProfileController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        print(apiError.toString());
+        // print(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong===============${error.toString()}');
+        // debugPrint('Something went Wrong===============${error.toString()}');
         await GetStorage().remove('user_token');
     await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
@@ -111,13 +111,13 @@ class ProfileController extends GetxController {
     });
     if (response == null) return;
     message = response['message'];
-    debugPrint("This is my response==================$response");
+    // debugPrint("This is my response==================$response");
     if (response['success'] == true) {
-      debugPrint(response.toString());
-      // debugPrint();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
+      // // debugPrint();
+      // debugPrint(response.toString());
       profileModel = ProfileModel.fromJson(response);
-      print('This is ===================$profileModel');
+      // print('This is ===================$profileModel');
       // print('This is ===================${profileModel!.user!.userDetail!.cityId!.id.toString()}');
       nameController.text = profileModel!.user!.name == null
           ? ''
@@ -153,7 +153,7 @@ class ProfileController extends GetxController {
           if (profileModel!.user!.name != null) {
             
             await GetStorage().write('name', profileModel!.user!.name);
-            debugPrint("${GetStorage().read('name')}");  
+            // debugPrint("${GetStorage().read('name')}");  
           }
         
       update();
@@ -214,23 +214,23 @@ class ProfileController extends GetxController {
         .catchError((error) {
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
-        debugPrint('Something went Wrong===============${error.toString()}');
+        // debugPrint('Something went Wrong===============${error.toString()}');
         //HandlingErrors().handleError(error);
       }
     });
     //message = response['message'];
     if (response == null) return;
-    debugPrint("This ==================$response");
+    // debugPrint("This ==================$response");
     if (response['success'] == true) {
       //debugPrint("This ==================$response");
       var data = UserAccounts.fromJson(response);
       accounts.value = data;
     } else {
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
     }
     return null;
     // return null;
@@ -246,14 +246,14 @@ class ProfileController extends GetxController {
         .catchError((error) {
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
       } else {
-        debugPrint('Something went Wrong===============${error.toString()}');
+        // debugPrint('Something went Wrong===============${error.toString()}');
       }
     });
 
     if (response == null) return;
-    debugPrint("This ==================$response");
+    // debugPrint("This ==================$response");
     if (response != null) {
       if (response['success'] == true) {
         var data = AlertsCount.fromJson(response);
@@ -262,7 +262,7 @@ class ProfileController extends GetxController {
         }
       } else {
         alertCount.value = 0;
-        debugPrint(response.toString());
+        // debugPrint(response.toString());
       }
     }
     return null;
@@ -280,7 +280,7 @@ class ProfileController extends GetxController {
       'android_device_id': Platform.isAndroid == true ? result : '',
       "group_id": groupId
     };
-    debugPrint("This is my request====================$request");
+    // debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
       if (error is BadRequestException) {
@@ -320,12 +320,12 @@ class ProfileController extends GetxController {
         }
       }
     });
-    debugPrint("hereeeeeeeeeeeererer");
-    debugPrint(response.toString());
+    // debugPrint("hereeeeeeeeeeeererer");
+    // debugPrint(response.toString());
     if (response['success'] == true) {
       result = 'true';
       Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.snackbar(
         'Success'.tr,
         'Login Successfully'.tr,
@@ -397,7 +397,7 @@ class ProfileController extends GetxController {
         });
       }
       // DialogBoxes.showErroDialog(description: error.code);
-      debugPrint('Firebase signin ${error.code}');
+      // debugPrint('Firebase signin ${error.code}');
     });
 
     //  final user = _auth.currentUser;
@@ -419,7 +419,7 @@ class ProfileController extends GetxController {
           email: GetStorage().read('mobile') + '@gmail.com',
           password: GetStorage().read('mobile'));
     } catch (e) {
-      debugPrint('Firebase signUp $e');
+      // debugPrint('Firebase signUp $e');
     }
   }
 }

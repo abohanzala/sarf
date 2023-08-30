@@ -63,17 +63,17 @@ class AlertsController extends GetxController{
 
       }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if(response == null) return; 
     if (response['success'] == true) {
       isLoadingAlert.value = false;
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
         var data = Notifications.fromJson(response);
         alerts.value = data;
        
     } else {
       isLoadingAlert.value = false;
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -128,11 +128,11 @@ class AlertsController extends GetxController{
 
       }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if(response == null) return; 
     if (response['success'] == true) {
       isLoadingAlert.value = false;
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       
         alerts.value = Notifications();
        
@@ -144,7 +144,7 @@ class AlertsController extends GetxController{
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -159,7 +159,7 @@ Future readAlert(String id) async {
    };
     var response =
         await DioClient().post(ApiLinks.readAlert, request).catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
     //   if (error is BadRequestException) {
     //     isLoadingAlert.value = false;
     //      var apiError = json.decode(error.message!);
@@ -200,7 +200,7 @@ Future readAlert(String id) async {
 
     //   }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if(response == null) return; 
     if (response['success'] == true) {
       // isLoadingAlert.value = false;
@@ -216,7 +216,7 @@ Future readAlert(String id) async {
       //     snackPosition: SnackPosition.TOP,
       //     backgroundColor: R.colors.themeColor,
       //   );
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }

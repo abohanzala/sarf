@@ -88,7 +88,7 @@ class _RegistrationState extends State<Registration> {
 
   buildRegistrationCard() {
     return Positioned(
-      top: 250,
+      top: kIsWeb == true ? Get.width > 500 ? 200 : 150 : 250,
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -97,105 +97,111 @@ class _RegistrationState extends State<Registration> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: kIsWeb == true ? Padding(
-          padding:  EdgeInsets.symmetric(horizontal: Get.width/3),
+          padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 : 0),
           child: Column(
             children: [
-              buildRegisterText(),
-              // buildPhonefield(),
-              Container(
-                margin: EdgeInsets.only(left: 15, right: 15),
-                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
-                child: Row(
+              Expanded(child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: (){
-                        Get.dialog(Dialog(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                            width: Get.width * 0.80,
-                            decoration: BoxDecoration(
-                              color: R.colors.lightGrey,
-                              borderRadius: BorderRadius.circular(10)
-                            ),
-                            child:  Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Text("data"),
-                                  Expanded(child:
-                                   ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: ctr.countries?.length ?? 0,
-                                    separatorBuilder: (context, index) {
-                                      return Divider(color: R.colors.grey,thickness: 1,);
-                                    },
-                                    itemBuilder: (context,index){
-                                      var singleData = ctr.countries?[index];
-                                    return GestureDetector(
-                                      onTap: (){
-                                        registerController.code.value = singleData.code ?? "966";
-                                        registerController.flag.value = singleData.flag ?? "admin/country/sa.png";
-                                        registerController.lenght.value = singleData.mobileNumberLength ?? 9;
-                                        registerController.selectedCountry.value = singleData.id ?? 2;
-                                        Get.back();
+                    buildRegisterText(),
+                // buildPhonefield(),
+                Container(
+                  margin: EdgeInsets.only(left: 15, right: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Get.dialog(Dialog(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                              width: Get.width * 0.80,
+                              decoration: BoxDecoration(
+                                color: R.colors.lightGrey,
+                                borderRadius: BorderRadius.circular(10)
+                              ),
+                              child:  Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Text("data"),
+                                    Expanded(child:
+                                     ListView.separated(
+                                      shrinkWrap: true,
+                                      itemCount: ctr.countries?.length ?? 0,
+                                      separatorBuilder: (context, index) {
+                                        return Divider(color: R.colors.grey,thickness: 1,);
                                       },
-                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
-                                            SizedBox(width: 5,),
-                                            Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
-        
-        
-                                          ],
+                                      itemBuilder: (context,index){
+                                        var singleData = ctr.countries?[index];
+                                      return GestureDetector(
+                                        onTap: (){
+                                          registerController.code.value = singleData.code ?? "966";
+                                          registerController.flag.value = singleData.flag ?? "admin/country/sa.png";
+                                          registerController.lenght.value = singleData.mobileNumberLength ?? 9;
+                                          registerController.selectedCountry.value = singleData.id ?? 2;
+                                          Get.back();
+                                        },
+                                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
+                                              SizedBox(width: 5,),
+                                              Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
+                  
+                  
+                                            ],
+                                          ),
+                                          Text(singleData.code ?? ''),
+                                        ],
                                         ),
-                                        Text(singleData.code ?? ''),
-                                      ],
-                                      ),
-                                    );
-                                  })),
-                                ],
-                                ),
-                            
+                                      );
+                                    })),
+                                  ],
+                                  ),
+                              
+                            ),
+                          ));
+                        },
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Obx(() => Image.network("https://sarfapp.com/${registerController.flag.value}",width: 40,height: 40,)), 
+                              SizedBox(width: 5,),
+                              Obx(() => Text(registerController.code.value)),
+                            ],
                           ),
-                        ));
-                      },
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Obx(() => Image.network("https://sarfapp.com/${registerController.flag.value}",width: 40,height: 40,)), 
-                            SizedBox(width: 5,),
-                            Obx(() => Text(registerController.code.value)),
-                          ],
                         ),
                       ),
-                    ),
-                    SizedBox(width: 5,),
-                     Expanded(
-              child: TextField(
-               // focusNode: searchFieldNode,
-               controller: registerController.phone,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                    hintText: 'Enter Mobile Number'.tr,
-                    hintStyle: TextStyle(
-                        fontSize: 10,
-                        fontFamily: 'medium',
-                        color: Color(0xFF9A9A9A).withOpacity(0.8)),
-                    border: InputBorder.none),
-              ),
-            )
+                      SizedBox(width: 5,),
+                       Expanded(
+                child: TextField(
+                 // focusNode: searchFieldNode,
+                 controller: registerController.phone,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Mobile Number'.tr,
+                      hintStyle: TextStyle(
+                          fontSize: 10,
+                          fontFamily: 'medium',
+                          color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                      border: InputBorder.none),
+                ),
+                          )
+                    ],
+                  )),
+                  SizedBox(height: 20,),
+                buildPasswordField(),
+                buildAgreeToTermsAndConditionsBox(),
+                buildNextButton(),
                   ],
-                )),
-                SizedBox(height: 20,),
-              buildPasswordField(),
-              buildAgreeToTermsAndConditionsBox(),
-              buildNextButton(),
+                ),
+              ))
             ],
           ),
         ) :  Column(

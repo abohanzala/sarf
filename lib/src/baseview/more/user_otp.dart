@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -83,6 +84,8 @@ void dispose() {
     return Image.asset(
       'assets/images/backgroundImage.png',
       width: MediaQuery.of(context).size.width,
+      height: kIsWeb == true ? 200 : null,
+      fit: BoxFit.fill,
     );
   }
 
@@ -118,15 +121,18 @@ void dispose() {
             color: Color(0xFFFFFFFF),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        child: Column(
-          children: [
-            buildOtpText(),
-            buildTimeText(),
-            buildOtpTextField(),
-            if(start == 0)
-            buildResendLinkButton(),
-            buildNextButton(),
-          ],
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11 : 0 : 0),
+          child: Column(
+            children: [
+              buildOtpText(),
+              buildTimeText(),
+              buildOtpTextField(),
+              if(start == 0)
+              buildResendLinkButton(),
+              buildNextButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -202,12 +208,12 @@ void dispose() {
       ),
       child: InkWell(
         onTap: () {
-          print(
-              'This is my phoneNumber===============${otpControllerText.text.toString()}');
+          // print(
+          //     'This is my phoneNumber===============${otpControllerText.text.toString()}');
           ctr.otp.text =
               otpControllerText.text.toString();
-          print(
-              'This is my phoneNumber===============${ctr.otp}');
+          // print(
+          //     'This is my phoneNumber===============${ctr.otp}');
 
           if (otpControllerText.text.isEmpty) {
             Get.snackbar(

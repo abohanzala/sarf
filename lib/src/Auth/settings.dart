@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -69,27 +70,30 @@ class _SettingsState extends State<Settings> {
         onTap: () {
           Navigator.pop(context);
         },
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFFFFFFF)),
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(R.images.arrowBlue)),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              'Settings'.tr,
-              style: TextStyle(
-                  color: R.colors.white, fontFamily: 'bold', fontSize: 16),
-            )
-          ],
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+          child: Row(
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Color(0xFFFFFFFF)),
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(R.images.arrowBlue)),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Settings'.tr,
+                style: TextStyle(
+                    color: R.colors.white, fontFamily: 'bold', fontSize: 16),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -100,28 +104,31 @@ class _SettingsState extends State<Settings> {
       top: 100,
       right: 20,
       left: 20,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            )),
-        child: Column(
-          children: [
-            buildLanguageTextAndLanguageOptions(),
-            
-            if(GetStorage().read("user_type") != 3) ...[
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              )),
+          child: Column(
+            children: [
+              buildLanguageTextAndLanguageOptions(),
+              
+              if(GetStorage().read("user_type") != 3) ...[
+                buildDivider(),
+                buildChangeProfileTextAndIcon(),
               buildDivider(),
-              buildChangeProfileTextAndIcon(),
-            buildDivider(),
-            buildChangePrivacyPolicyTextAndIcon()
+              buildChangePrivacyPolicyTextAndIcon()
+              ],
+              
             ],
-            
-          ],
+          ),
         ),
       ),
     );

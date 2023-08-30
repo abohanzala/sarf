@@ -115,27 +115,30 @@ class _ChangeProfileState extends State<ChangeProfile> {
         onTap: () {
           Navigator.pop(context);
         },
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFFFFFFF)),
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(R.images.arrowBlue)),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              'Change Profile'.tr,
-              style: TextStyle(
-                  color: R.colors.white, fontFamily: 'bold', fontSize: 16),
-            )
-          ],
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+          child: Row(
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Color(0xFFFFFFFF)),
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(R.images.arrowBlue)),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Change Profile'.tr,
+                style: TextStyle(
+                    color: R.colors.white, fontFamily: 'bold', fontSize: 16),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -146,45 +149,48 @@ class _ChangeProfileState extends State<ChangeProfile> {
       top: 100,
       right: 20,
       left: 20,
-      child: Container(
-        height: MediaQuery.of(context).size.height - 100,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            )),
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(left: 15, right: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 5,),
-                Text('Name'.tr,),
-                buildNameField(),
-                Text('Select City'.tr,),
-                buildSelectCityDropDown(),
-                //  buildUserNameField(),
-                Text("Whatsapp (Optional)".tr),
-                buildWhatsappField(),
-                Text("Twitter Link (Optional)".tr),
-                buildTwitterField(),
-                Text("Instagram Link (Optional)".tr),
-                buildInstaField(),
-                Text('Contact No (Optional)'.tr),
-                buildContactNoField(),
-                Text("Website (Optional)".tr),
-                buildWebsiteField(),
-                if(kIsWeb == false)
-                Text("Location".tr),
-                buildLocationButton(),
-                Center(child: buildUploadImage()),
-                buildUpdateButton()
-              ],
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+        child: Container(
+          height: MediaQuery.of(context).size.height - 100,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              )),
+          child: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(left: 15, right: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 5,),
+                  Text('Name'.tr,),
+                  buildNameField(),
+                  Text('Select City'.tr,),
+                  buildSelectCityDropDown(),
+                  //  buildUserNameField(),
+                  Text("Whatsapp (Optional)".tr),
+                  buildWhatsappField(),
+                  Text("Twitter Link (Optional)".tr),
+                  buildTwitterField(),
+                  Text("Instagram Link (Optional)".tr),
+                  buildInstaField(),
+                  Text('Contact No (Optional)'.tr),
+                  buildContactNoField(),
+                  Text("Website (Optional)".tr),
+                  buildWebsiteField(),
+                  if(kIsWeb == false)
+                  Text("Location".tr),
+                  buildLocationButton(),
+                  Center(child: buildUploadImage()),
+                  buildUpdateButton()
+                ],
+              ),
             ),
           ),
         ),
@@ -461,7 +467,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
       ),
       child: InkWell(
         onTap: () async{
-                bool serviceEnabled;
+          if (!kIsWeb) {
+             bool serviceEnabled;
   LocationPermission permission;
 
   // Test if location services are enabled.
@@ -509,6 +516,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
   });
           
 
+          }
+               
           // Get.to(() => const LocationView(),
           //     arguments: {'Screen': 'From Profile Screen'});
         },

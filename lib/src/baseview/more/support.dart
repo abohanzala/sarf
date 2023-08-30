@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -81,160 +82,163 @@ class _SupportState extends State<Support> with RouteAware {
                         )
                       : 
                       Transform(
-                        transform: Matrix4.translationValues(0, -30, 0),
-                        child: Column(
-                          children: [
-          //                    Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 12),
-          //   child: budgetName(),
-          // ),
-                const SizedBox(height: 10,),
-                            SizedBox(
-                              height: Get.height * 0.70,
-                              child: SingleChildScrollView(
-                                child: ListView.builder(
-                                    itemCount: ctr.supportList.length,
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      var singleData = ctr.supportList[index];
-                                      return Container(
-                                        width: Get.width,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 16),
-                                        margin: const EdgeInsets.only(bottom: 10),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            color: R.colors.white),
-                                        child: IntrinsicHeight(
-                                          child: Row(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'ID'.tr,
-                                                    style: TextStyle(
-                                                        color: R.colors.grey,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                  Text(
-                                                    singleData.id.toString(),
-                                                    style: TextStyle(
-                                                        color: R.colors.black,
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    'Type'.tr,
-                                                    style: TextStyle(
-                                                        color: R.colors.grey,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                  // Text(
-                                                  //   singleData.type == "0"
-                                                  //       ? "Business".tr
-                                                  //       : "Personal".tr,
-                                                  //   style: TextStyle(
-                                                  //       color: R.colors.black,
-                                                  //       fontSize: 14,
-                                                  //       fontWeight: FontWeight.w500),
-                                                  // ),
-                                                   Text(
-                                                    GetStorage().read("lang") == "ar" ?  singleData.supportType?.name?.ar ?? "" : 
-                                                       singleData.supportType?.name?.en ?? "" ,
-                                                    style: TextStyle(
-                                                        color: R.colors.black,
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Spacer(
-                                                flex: 2,
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Date'.tr,
-                                                    style: TextStyle(
-                                                        color: R.colors.grey,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                  Text(
-                                                    singleData.createdDate.toString(),
-                                                    style: TextStyle(
-                                                        color: R.colors.black,
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    'Status'.tr,
-                                                    style: TextStyle(
-                                                        color: R.colors.grey,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w500),
-                                                  ),
-                                                  Text(
-                                                    singleData.status == "0"
-                                                        ? "Pending".tr
-                                                        : "Success".tr,
-                                                    style:  TextStyle(
-                                                        color: singleData.status == "0" ? Color(0XFFF4BD05) : Color(0XFF2CC91F),
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.w700),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              VerticalDivider(
-                                                color: R.colors.lightBlue4,
-                                                thickness: 0.3,
-                                              ),
-                                              const Spacer(),
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  GestureDetector(
-                                                      onTap: () =>
-                                                          Get.to(() => SingleSupport(
-                                                                title:
-                                                                    'Support ID  :  ${singleData.id.toString()}',
-                                                                id: singleData.id
-                                                                    .toString(),
-                                                                date: singleData
-                                                                    .createdDate
-                                                                    .toString(),
-                                                              )),
-                                                      child: Icon(
-                                                        Icons.remove_red_eye,
-                                                        color: R.colors.themeColor,
-                                                      ))
-                                                ],
-                                              ),
-                                               const Spacer(),
-                                            ],
+                        transform: Matrix4.translationValues(0, -20, 0),
+                        child: Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11 : 0 : 0 ),
+                          child: Column(
+                            children: [
+                                  //                    Padding(
+                                  //   padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  //   child: budgetName(),
+                                  // ),
+                                        const SizedBox(height: 10,),
+                              SizedBox(
+                                height: Get.height * 0.75,
+                                child: SingleChildScrollView(
+                                  child: ListView.builder(
+                                      itemCount: ctr.supportList.length,
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        var singleData = ctr.supportList[index];
+                                        return Container(
+                                          width: Get.width,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 16),
+                                          margin: const EdgeInsets.only(bottom: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: R.colors.white),
+                                          child: IntrinsicHeight(
+                                            child: Row(
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'ID'.tr,
+                                                      style: TextStyle(
+                                                          color: R.colors.grey,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    Text(
+                                                      singleData.id.toString(),
+                                                      style: TextStyle(
+                                                          color: R.colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      'Type'.tr,
+                                                      style: TextStyle(
+                                                          color: R.colors.grey,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    // Text(
+                                                    //   singleData.type == "0"
+                                                    //       ? "Business".tr
+                                                    //       : "Personal".tr,
+                                                    //   style: TextStyle(
+                                                    //       color: R.colors.black,
+                                                    //       fontSize: 14,
+                                                    //       fontWeight: FontWeight.w500),
+                                                    // ),
+                                                     Text(
+                                                      GetStorage().read("lang") == "ar" ?  singleData.supportType?.name?.ar ?? "" : 
+                                                         singleData.supportType?.name?.en ?? "" ,
+                                                      style: TextStyle(
+                                                          color: R.colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const Spacer(
+                                                  flex: 2,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Date'.tr,
+                                                      style: TextStyle(
+                                                          color: R.colors.grey,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    Text(
+                                                      singleData.createdDate.toString(),
+                                                      style: TextStyle(
+                                                          color: R.colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      'Status'.tr,
+                                                      style: TextStyle(
+                                                          color: R.colors.grey,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    Text(
+                                                      singleData.status == "0"
+                                                          ? "Pending".tr
+                                                          : "Success".tr,
+                                                      style:  TextStyle(
+                                                          color: singleData.status == "0" ? Color(0XFFF4BD05) : Color(0XFF2CC91F),
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const Spacer(),
+                                                VerticalDivider(
+                                                  color: R.colors.lightBlue4,
+                                                  thickness: 0.3,
+                                                ),
+                                                const Spacer(),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    GestureDetector(
+                                                        onTap: () =>
+                                                            Get.to(() => SingleSupport(
+                                                                  title:
+                                                                      'Support ID  :  ${singleData.id.toString()}',
+                                                                  id: singleData.id
+                                                                      .toString(),
+                                                                  date: singleData
+                                                                      .createdDate
+                                                                      .toString(),
+                                                                )),
+                                                        child: Icon(
+                                                          Icons.remove_red_eye,
+                                                          color: R.colors.themeColor,
+                                                        ))
+                                                  ],
+                                                ),
+                                                 const Spacer(),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }),
+                                        );
+                                      }),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
             ),
@@ -246,34 +250,37 @@ class _SupportState extends State<Support> with RouteAware {
 
   Widget buildBackArrowAndSupportText() {
     return Positioned(
-      top: 80,
+      top: 20,
       left: GetStorage().read("lang") == "en" ? 12 : null,
       right: GetStorage().read("lang") != "en" ? 12 : null,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
         },
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: const Color(0xFFFFFFFF)),
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(R.images.arrowBlue)),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Text(
-              'Support'.tr,
-              style: TextStyle(
-                  color: R.colors.white, fontFamily: 'bold', fontSize: 16),
-            ),
-          ],
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11 : 0 : 0 ),
+          child: Row(
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: const Color(0xFFFFFFFF)),
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(R.images.arrowBlue)),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Support'.tr,
+                style: TextStyle(
+                    color: R.colors.white, fontFamily: 'bold', fontSize: 16),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -281,24 +288,27 @@ class _SupportState extends State<Support> with RouteAware {
 
   Widget buildAddNewButton() {
     return Positioned(
-      top: 80,
+      top: 20,
       //right: 12,
       left: GetStorage().read("lang") != "en" ? 12 : null,
       right: GetStorage().read("lang") == "en" ? 12 : null,
-      child: Container(
-        child: customButton(
-          optionalNavigateIcon: false,
-          margin: 0,
-          width: MediaQuery.of(context).size.width / 3.5,
-          titleTextAlign: TextAlign.center,
-          title: 'Add New'.tr,
-          color: R.colors.black,
-          textColor: R.colors.white,
-          height: 35,
-          borderColour: R.colors.transparent,
-          onPress: (() {
-            Get.toNamed(RoutesName.newSupport);
-          }),
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11 : 0 : 0 ),
+        child: Container(
+          child: customButton(
+            optionalNavigateIcon: false,
+            margin: 0,
+            width: MediaQuery.of(context).size.width / 3.5,
+            titleTextAlign: TextAlign.center,
+            title: 'Add New'.tr,
+            color: R.colors.black,
+            textColor: R.colors.white,
+            height: 35,
+            borderColour: R.colors.transparent,
+            onPress: (() {
+              Get.toNamed(RoutesName.newSupport);
+            }),
+          ),
         ),
       ),
     );
@@ -306,12 +316,12 @@ class _SupportState extends State<Support> with RouteAware {
 
   Widget buildBackGroundImage() {
     return Container(
-      height: MediaQuery.of(context).size.height / 4.2,
+      height: 150,
       child: Stack(alignment: Alignment.topLeft, children: [
         Image.asset(
           R.images.backgroundImageChangePassword,
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 5,
+          height: 120,
           fit: BoxFit.cover,
         ),
         buildBackArrowAndSupportText(),
@@ -325,23 +335,26 @@ class _SupportState extends State<Support> with RouteAware {
     return Positioned(
       right: 12,
       left: 12,
-      top: 130,
-      child: Container(
-        //margin: EdgeInsets.only(left: 15, right: 15),
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: R.colors.white),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              buildPendingOption(),
-              const SizedBox(
-                width: 10,
-              ),
-              buildSuccessOption()
-            ],
+      top: 80,
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11 : 0 : 0 ),
+        child: Container(
+          //margin: EdgeInsets.only(left: 15, right: 15),
+          height: 50,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10), color: R.colors.white),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                buildPendingOption(),
+                const SizedBox(
+                  width: 10,
+                ),
+                buildSuccessOption()
+              ],
+            ),
           ),
         ),
       ),

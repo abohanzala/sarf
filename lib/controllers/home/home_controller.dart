@@ -53,7 +53,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
     "monthly_filter" : month,
     "yearly_filter" : year,
    };
-   debugPrint(request.toString());
+  //  debugPrint(request.toString());
     var response =
         await DioClient().post(ApiLinks.getHome, request).catchError((error) async{
       if (error is BadRequestException) {
@@ -132,7 +132,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
       }
     });
     if(response == null) return; 
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if (response['success'] == true) {
       loading.value = false;
       budgets.clear();
@@ -152,11 +152,11 @@ Future getHome(String? id,int? day,int? month,int? year) async {
         }
         }
         currency.value = data.data!.currency.toString();
-        print("gg");
-        print(selectedBudgetId+"id");
-        print(data.data!.totalInvoicesDaily.toString()+"daily");
-        print(data.data!.totalInvoicesMontly.toString()+"montly");
-        print("gg");
+        // print("gg");
+        // print(selectedBudgetId+"id");
+        // print(data.data!.totalInvoicesDaily.toString()+"daily");
+        // print(data.data!.totalInvoicesMontly.toString()+"montly");
+        // print("gg");
         totalInvoicesDaily.value = data.data!.totalInvoicesDaily.toString();
         totalInvoicesMontly.value = data.data!.totalInvoicesMontly.toString();
         totalInvoicesYearly.value = data.data!.totalInvoicesYearly.toString();
@@ -169,7 +169,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
         
        // return data;
     } else {
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -228,13 +228,13 @@ Future getHome(String? id,int? day,int? month,int? year) async {
     }); 
     if (response['success'] == true) {
       Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       getHome(null,null,null,null);
       Get.back();
 
     } else {
       Get.back();
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -250,7 +250,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
    };
     var response =
         await DioClient().post(ApiLinks.budgetDelete, request).catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
     //   if (error is BadRequestException) {
     //     Get.back();
        
@@ -310,7 +310,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
       // Get.back();
       Get.back();
        Get.snackbar('Error'.tr, response['message']);
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -325,7 +325,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
    };
     var response =
         await DioClient().post(ApiLinks.resetBudget, request).catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
     //   if (error is BadRequestException) {
     //     Get.back();
        
@@ -368,7 +368,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
 
     //   }
     }); 
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if(response == null) return;
     if (response['success'] == true) {
       //Get.back();
@@ -386,7 +386,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
     } else {
        Get.back();
        Get.snackbar('Error'.tr, response['message']);
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }

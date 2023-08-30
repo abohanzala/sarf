@@ -64,9 +64,9 @@ class InvoiceController extends getpackage.GetxController {
     formData.fields.add(MapEntry('amount', amount));
     formData.fields.add(MapEntry('note', note));
     formData.fields.add(const MapEntry('paid_status', "0"));
-    debugPrint(formData.fields.toString());
+    // debugPrint(formData.fields.toString());
 
-    //debugPrint(formData.files.first.toString());
+    // debugPrint(formData.files.first.toString());
 
     //Dio http = API.getInstance();
     var response = await DioClient()
@@ -76,12 +76,12 @@ class InvoiceController extends getpackage.GetxController {
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         getpackage.Get.snackbar('Error'.tr, "Something wnet wrong".tr);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
@@ -89,7 +89,7 @@ class InvoiceController extends getpackage.GetxController {
 
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    debugPrint("aaaaaaaaaaa$response");
+    // debugPrint("aaaaaaaaaaa$response");
     // Navigator.of(getpackage.Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
@@ -107,7 +107,7 @@ class InvoiceController extends getpackage.GetxController {
 
     } else {
       //uploadImages.clear();
-      debugPrint('here');
+      // debugPrint('here');
       (response.containsKey('validation_errors'))
           ? getpackage.Get.snackbar(response['message'].toString(),
               response['validation_errors'].toString())
@@ -156,9 +156,9 @@ class InvoiceController extends getpackage.GetxController {
     formData.fields.add(MapEntry('amount', amount));
     formData.fields.add(MapEntry('note', note));
     
-    debugPrint(formData.fields.toString());
+    // debugPrint(formData.fields.toString());
 
-    //debugPrint(formData.files.first.toString());
+    // debugPrint(formData.files.first.toString());
 
     //Dio http = API.getInstance();
     var response = await DioClient()
@@ -168,12 +168,12 @@ class InvoiceController extends getpackage.GetxController {
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         getpackage.Get.snackbar('Error'.tr, 'Something went wrong'.tr);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
@@ -181,7 +181,7 @@ class InvoiceController extends getpackage.GetxController {
 
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    debugPrint("aaaaaaaaaaa$response");
+    // debugPrint("aaaaaaaaaaa$response");
     // Navigator.of(getpackage.Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
@@ -203,7 +203,7 @@ class InvoiceController extends getpackage.GetxController {
 
     } else {
       //uploadImages.clear();
-      debugPrint('here');
+      // debugPrint('here');
       (response.containsKey('validation_errors'))
           ? getpackage.Get.snackbar(response['message'].toString(),
               response['validation_errors'].toString())
@@ -235,7 +235,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.invoiceMemList,request)
         .catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -255,13 +255,13 @@ class InvoiceController extends getpackage.GetxController {
     if(response == null ) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var membersList = InvoiceMemberListModel.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
       // getpackage.Get.back();
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -288,11 +288,11 @@ class InvoiceController extends getpackage.GetxController {
       "budget_id" : bId,
     };
    }
-   debugPrint(request.toString());
+  //  debugPrint(request.toString());
     var response = await DioClient()
         .post(ApiLinks.invoiceMemList,request)
         .catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -312,13 +312,13 @@ class InvoiceController extends getpackage.GetxController {
     if(response == null ) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var membersList = InvoiceMemberListModelHome.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
       // getpackage.Get.back();
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -345,7 +345,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post("${ApiLinks.invoiceListNew}",request)
         .catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -365,13 +365,13 @@ class InvoiceController extends getpackage.GetxController {
     if(response == null ) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
       // getpackage.Get.back();
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -394,7 +394,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
         .catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -414,13 +414,13 @@ class InvoiceController extends getpackage.GetxController {
     if(response == null ) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
       // getpackage.Get.back();
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -447,7 +447,7 @@ class InvoiceController extends getpackage.GetxController {
   //   var response = await DioClient()
   //       .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
   //       .catchError((error) {
-  //         debugPrint(error.toString());
+          // debugPrint(error.toString());
   //     if (error is BadRequestException) {
   //       // print(error.toString());
   //     } else {
@@ -467,13 +467,13 @@ class InvoiceController extends getpackage.GetxController {
   //   if(response == null ) return null;
   //   if (response['success'] == true) {
   //     // getpackage.Get.back();
-  //     debugPrint(response.toString());
+      // debugPrint(response.toString());
   //     var membersList = InvoiceList.fromJson(response);
   //     //print(membersList.data?.first.expenseName);
   //     return membersList;
   //   } else {
   //     // getpackage.Get.back();
-  //     debugPrint('here');
+      // debugPrint('here');
   //   }
   //   return null;
   // }
@@ -500,11 +500,11 @@ class InvoiceController extends getpackage.GetxController {
       "member_id": memberID
     };
    }
-   debugPrint(request.toString());
+  //  debugPrint(request.toString());
     var response = await DioClient()
         .post("${ApiLinks.invoiceListNew}",request)
         .catchError((error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -523,12 +523,12 @@ class InvoiceController extends getpackage.GetxController {
     });
     if(response == null ) return null;
     if (response['success'] == true) {
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -546,7 +546,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.mobileCheckInvoice, request)
         .catchError((error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
       //   if (error is BadRequestException) {
       //     isLoadingSupportDetails.value = false;
       //      var apiError = json.decode(error.message!);
@@ -587,7 +587,7 @@ class InvoiceController extends getpackage.GetxController {
 
       //   }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if (response == null) return;
     if (response['success'] == true) {
       // print(response['message']);
@@ -605,7 +605,7 @@ class InvoiceController extends getpackage.GetxController {
       // return data;
     } else {
       data = response;
-      debugPrint('here');
+      // debugPrint('here');
     }
     return data;
   }
@@ -618,7 +618,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.getUserList, request)
         .catchError((error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
      
     });
     // debugPrint(response.toString());
@@ -627,11 +627,11 @@ class InvoiceController extends getpackage.GetxController {
       // debugPrint(response.toString());
       var data = SearchedMobileList.fromJson(response);
       searchedUsers.value = data;
-      debugPrint(searchedUsers.value.data.toString());
+      // debugPrint(searchedUsers.value.data.toString());
       
     } else {
       searchedUsers.value = SearchedMobileList();
-      debugPrint('here error');
+      // debugPrint('here error');
     }
     return null;
   }

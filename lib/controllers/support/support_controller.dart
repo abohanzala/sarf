@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getpackage;
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarf/model/support/support_list_model.dart';
 import 'package:sarf/model/support/support_types.dart';
 import 'package:sarf/src/widgets/loader.dart';
@@ -42,7 +44,7 @@ class SupportController extends getpackage.GetxController {
     var response = await DioClient()
         .get("${ApiLinks.getSupportTypes}${GetStorage().read('lang')}")
         .catchError((error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
       if (error is BadRequestException) {
         //     //loading.value = false;
         //      var apiError = json.decode(error.message!);
@@ -84,7 +86,7 @@ class SupportController extends getpackage.GetxController {
         //   }
       }
     });
-     print(response);
+    //  print(response);
     if (response == null) return;
 
     if (response['success'] == true) {
@@ -95,9 +97,9 @@ class SupportController extends getpackage.GetxController {
           supportTypes.add(supportType);
         }
       }
-      print(supportTypes.first.name?.en);
+      // print(supportTypes.first.name?.en);
     } else {
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -122,18 +124,31 @@ class SupportController extends getpackage.GetxController {
     //  print(request);
 
     FormData formData = FormData();
-
-    for (var i = 0; i < uploadImages.length; i++) {
+    if (kIsWeb) {
+       for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      var xfile = XFile(uploadImages[i].path);
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("files[$i]",
+          await MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
+                return value.cast();
+              }), filename: fileName)));
+    }
+    }else{
+      for (var i = 0; i < uploadImages.length; i++) {
       var file = uploadImages[i];
       String fileName = file.path.split('/').last;
       formData.files.add(MapEntry("files[$i]",
           await MultipartFile.fromFile(file.path, filename: fileName)));
     }
+    }
+
+    
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
     formData.fields.add(MapEntry('type', selectedTypeId.value));
     formData.fields.add(MapEntry('message', message));
-    debugPrint(formData.fields.toString());
+    // debugPrint(formData.fields.toString());
 
     //debugPrint(formData.files.first.toString());
 
@@ -144,12 +159,12 @@ class SupportController extends getpackage.GetxController {
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         getpackage.Get.snackbar('Error'.tr, 'Something went wrong'.tr);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
@@ -157,7 +172,7 @@ class SupportController extends getpackage.GetxController {
 
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    debugPrint("aaaaaaaaaaa$response");
+    // debugPrint("aaaaaaaaaaa$response");
     // Navigator.of(getpackage.Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
@@ -175,7 +190,7 @@ class SupportController extends getpackage.GetxController {
       //files.clear();
 
     } else {
-      debugPrint('here');
+      // debugPrint('here');
       (response.containsKey('validation_errors'))
           ? getpackage.Get.snackbar(response['message'].toString(),
               response['validation_errors'].toString())
@@ -192,13 +207,13 @@ class SupportController extends getpackage.GetxController {
     supportList.clear();
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
-    print('here');
+    // print('here');
     isLoadingSupport.value = true;
     var request = {
       "language": GetStorage().read('lang'),
       "status": id,
     };
-    print(request);
+    // print(request);
     var response = await DioClient()
         .post(ApiLinks.getSupport, request)
         .catchError((error) {
@@ -240,13 +255,16 @@ class SupportController extends getpackage.GetxController {
         }
       }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if (response == null) return;
     if (response['success'] == true) {
+      // print("here2");
       supportList.clear();
       isLoadingSupport.value = false;
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
+      // print("here3");
       var data = SupportList.fromJson(response);
+      // print("here4");
       //print( " asasasasasas ${data.data?.budgets?.length.toString()}" );
       if (data.data!.isNotEmpty) {
         for (var support in data.data!) {
@@ -258,7 +276,7 @@ class SupportController extends getpackage.GetxController {
       // return data;
     } else {
       isLoadingSupport.value = false;
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -312,12 +330,12 @@ class SupportController extends getpackage.GetxController {
         }
       }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if (response == null) return;
     if (response['success'] == true) {
       supportList.clear();
       
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       var data = SupportDetails.fromJson(response);
       supportDetails.value = data;
       isLoadingSupportDetails.value = false;
@@ -325,7 +343,7 @@ class SupportController extends getpackage.GetxController {
 
       // return data;
     } else {
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }
@@ -342,7 +360,7 @@ class SupportController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.supportReply, request)
         .catchError((error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
       //   if (error is BadRequestException) {
       //     isLoadingSupportDetails.value = false;
       //      var apiError = json.decode(error.message!);
@@ -383,7 +401,7 @@ class SupportController extends getpackage.GetxController {
 
       //   }
     });
-    debugPrint(response.toString());
+    // debugPrint(response.toString());
     if (response == null) return;
     if (response['success'] == true) {
       getSupportDetails(id);
@@ -397,7 +415,7 @@ class SupportController extends getpackage.GetxController {
 
       // return data;
     } else {
-      debugPrint('here');
+      // debugPrint('here');
     }
     return null;
   }

@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -257,64 +258,67 @@ Future logout() async {
       child: Container(
         margin: const EdgeInsets.only(left: 15, right: 15),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              buildSubscribeButton(),
-              const SizedBox(height: 10,),
-              GestureDetector(
-                onTap: () => Get.to(() => const AddUsersScreen() ),
-                child: GestureDetector(
-                  child: Container(
-                    
-                    width: Get.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
-                    decoration: BoxDecoration(
-                      color: R.colors.white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     // color: R.colors.lightGrey,
-                      //     blurRadius: 2,
-                      //     spreadRadius: 2,
-                      //     offset: Offset(0,2),
-                      //   )
-                      // ],
-                      borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-              
-                            Icon(Icons.group,color: R.colors.themeColor,),
-                            const SizedBox(width: 5,),
-                            Text('Users'.tr,style: TextStyle(color: R.colors.themeColor),),
-                        ],),
-                        Icon(Icons.arrow_forward_ios,color: R.colors.themeColor,),
-                      ],
-                    ),
-                  )
-                  
-                  ),
-              ),
+          child: Padding(
+            padding:  EdgeInsets.symmetric(horizontal:  kIsWeb == true ? Get.width > 750 ? Get.width * 0.11: 0 : 0),
+            child: Column(
+              children: [
+                buildSubscribeButton(),
                 const SizedBox(height: 10,),
-              buildHelpAndSupportOption(),
-              buildDivider(),
-              buildTermsAndConditionsOption(),
-              buildDivider(),
-              chat(),
-              buildDivider(),
-              buildPrivacyPolicyOption(),
-              buildDivider(),
-              buildShareOption(),
-              buildDivider(),
-              buildRateOption(),
-              buildDivider(),
-              buildAboutOption(),
-              buildDivider(),
-              buildDeleteAccountOption()
-            ],
+                GestureDetector(
+                  onTap: () => Get.to(() => const AddUsersScreen() ),
+                  child: GestureDetector(
+                    child: Container(
+                      
+                      width: Get.width,
+                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
+                      decoration: BoxDecoration(
+                        color: R.colors.white,
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     // color: R.colors.lightGrey,
+                        //     blurRadius: 2,
+                        //     spreadRadius: 2,
+                        //     offset: Offset(0,2),
+                        //   )
+                        // ],
+                        borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                
+                              Icon(Icons.group,color: R.colors.themeColor,),
+                              const SizedBox(width: 5,),
+                              Text('Users'.tr,style: TextStyle(color: R.colors.themeColor),),
+                          ],),
+                          Icon(Icons.arrow_forward_ios,color: R.colors.themeColor,),
+                        ],
+                      ),
+                    )
+                    
+                    ),
+                ),
+                  const SizedBox(height: 10,),
+                buildHelpAndSupportOption(),
+                buildDivider(),
+                buildTermsAndConditionsOption(),
+                buildDivider(),
+                chat(),
+                buildDivider(),
+                buildPrivacyPolicyOption(),
+                buildDivider(),
+                buildShareOption(),
+                buildDivider(),
+                buildRateOption(),
+                buildDivider(),
+                buildAboutOption(),
+                buildDivider(),
+                buildDeleteAccountOption()
+              ],
+            ),
           ),
         ),
       ),
@@ -611,23 +615,26 @@ Future logout() async {
       Image.asset(
         R.images.backgroundImageChangePassword,
         width: MediaQuery.of(context).size.width,
-        height: Get.height * 0.23,
+        height: Get.height * 0.25,
         fit: BoxFit.cover,
       ),
       buildOptions(),
       Positioned(
-        top: 80,
-        right: GetStorage().read('lang') == 'en' ?  30 : null,
+        top: kIsWeb == true ? Get.width > 750? 30 : 30 : 80,
+        right: GetStorage().read('lang') == 'en' ? kIsWeb == true ? Get.width > 750? 30 : 10 :  30 : null,
         //left: GetStorage().read('lang') == 'en' ?  0 : 30 ,
-        left: GetStorage().read('lang') != 'en' ?  30 : null,
+        left: GetStorage().read('lang') != 'en' ? kIsWeb == true ? Get.width > 750? 30 : 10 : 30 : null,
         
-        child: Column(
-          children: [
-            // if(GetStorage().read("user_type") != 3)
-            buildNotificationAndSettingsIcon(),
-            
-            buildLogoutIconAndText()
-          ],
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11: 0 : 0),
+          child: Column(
+            children: [
+              // if(GetStorage().read("user_type") != 3)
+              buildNotificationAndSettingsIcon(),
+              
+              buildLogoutIconAndText()
+            ],
+          ),
         ),
       )
     ]);
@@ -635,31 +642,34 @@ Future logout() async {
 
   Widget buildOptions() {
     return Positioned(
-      top: 70,
-      left: GetStorage().read('lang') == 'en' ?  30 : 0 ,
-      right: GetStorage().read('lang') == 'en' ?  0 : 30,
-      child: Row(
-        children: [
-          buildImage(),
-          const SizedBox(
-            width: 15,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${profileController.profileModel?.user?.name ?? ""}',
-                style: TextStyle(
-                    color: R.colors.white, fontFamily: 'bold', fontSize: 16),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              // if(GetStorage().read("user_type") != 3)
-              buildViewProfileLinkButton()
-            ],
-          ),
-        ],
+      top: kIsWeb == true ? Get.width > 750? 20 : 20 :70,
+      left: GetStorage().read('lang') == 'en' ? kIsWeb == true ? Get.width > 750? 30 : 10 : 30 : 0 ,
+      right: GetStorage().read('lang') == 'en' ?  0 : kIsWeb == true ? Get.width > 750? 30 : 10 :30,
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width * 0.11: 0 : 0),
+        child: Row(
+          children: [
+            buildImage(),
+            const SizedBox(
+              width: 15,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${profileController.profileModel?.user?.name ?? ""}',
+                  style: TextStyle(
+                      color: R.colors.white, fontFamily: 'bold', fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                // if(GetStorage().read("user_type") != 3)
+                buildViewProfileLinkButton()
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
