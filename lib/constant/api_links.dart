@@ -54,4 +54,5 @@ class ApiLinks {
   static const String createChat = '$base/chat/add';
   static const String invoiceMemList = '$base/pre_invoice_members';
   static const String invoiceListNew = '$base/invoice_list_new';
+  static const String reportGenrate = '$base/generate_report';
 }

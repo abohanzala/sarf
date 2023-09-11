@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sarf/model/home/home_model.dart';
 
 import '../../constant/api_links.dart';
+import '../../model/home/report_model.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
@@ -33,6 +34,8 @@ var totalExpansesMontly = ''.obs;
 var totalExpansesYearly = ''.obs;
 // var expanse = 'All'.obs;
 // var expansesId = '0'.obs;
+List<ReceivedInvoices>? receivedInvoices = [];
+List<ReceivedInvoices>? sendInvoices = [];
 
 
 @override
@@ -42,20 +45,101 @@ void onInit() async{
   
 }
 
-Future getHome(String? id,int? day,int? month,int? year) async {
+Future genrateReport(String? id,String? day,String? today)async {
+    //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
+   // openLoader();
+  //  loading.value = true;
+   var request = {
+    "language": GetStorage().read('lang'),
+    "budget_id": id,
+    "from_date" : day,
+    "to_date" : today,
+    
+   };
+    debugPrint(request.toString());
+    var response =
+        await DioClient().post(ApiLinks.reportGenrate, request).catchError((error) async{
+      if (error is BadRequestException) {
+        // loading.value = false;
+         var apiError = json.decode(error.message!);
+        Get.snackbar(
+          'Error'.tr,
+          apiError["reason"].toString(),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+       // print(error.toString());
+      } 
+      
+     
+      
+      
+      else {
+        // loading.value = false;
+      if (error is BadRequestException) {
+      var message = error.message;
+      Get.snackbar(
+          'Error'.tr,
+          message.toString(),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+    } else if (error is FetchDataException) {
+      var message = error.message;
+      Get.snackbar(
+          'Error'.tr,
+          message.toString(),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+    } else if (error is ApiNotRespondingException) {
+      
+      Get.snackbar(
+          'Error'.tr,
+          'Oops! It took longer to respond.'.tr,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
+    }
+
+      }
+    });
+    if(response == null) return; 
+    // debugPrint(response.toString());
+    if (response['success'] == true) {
+      receivedInvoices?.clear();
+      sendInvoices?.clear();
+
+      var data = GenrateReportModel.fromJson(response);
+      print(data.receivedInvoices?.first.amount);
+      receivedInvoices = data.receivedInvoices;
+      sendInvoices = data.sendInvoices;
+      // debugPrint(response.toString());
+        // debugPrint(data.data!.totalInvoicesDaily.toString());
+        // debugPrint("090999999999999999999999999999999");
+        
+       // return data;
+    } else {
+      // debugPrint('here');
+    }
+    // return null;
+  }
+
+Future getHome(String? id,String? day,String? today)async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
    // openLoader();
    loading.value = true;
    var request = {
     "language": GetStorage().read('lang'),
     "budget_id": id,
-    "daily_filter" : day,
-    "monthly_filter" : month,
-    "yearly_filter" : year,
+    "from_date" : day,
+    "to_date" : today,
+    
    };
-  //  debugPrint(request.toString());
+    debugPrint(request.toString());
     var response =
         await DioClient().post(ApiLinks.getHome, request).catchError((error) async{
+          print(error.toString());
       if (error is BadRequestException) {
         loading.value = false;
          var apiError = json.decode(error.message!);
@@ -131,8 +215,9 @@ Future getHome(String? id,int? day,int? month,int? year) async {
 
       }
     });
+    debugPrint(response.toString());
     if(response == null) return; 
-    // debugPrint(response.toString());
+     
     if (response['success'] == true) {
       loading.value = false;
       budgets.clear();
@@ -229,7 +314,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
     if (response['success'] == true) {
       Get.back();
       // debugPrint(response.toString());
-      getHome(null,null,null,null);
+      getHome(null,null,null,);
       Get.back();
 
     } else {
@@ -303,7 +388,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
       selectedBudgetName = "".obs;
       qrCode.value = '';
       Get.back();
-      getHome(null,null,null,null);
+      getHome(null,null,null);
       //Get.back();
 
     } else {
@@ -380,7 +465,7 @@ Future getHome(String? id,int? day,int? month,int? year) async {
       selectedBudgetName = "".obs;
       qrCode.value = '';
       Get.back();
-      getHome(null,null,null,null);
+      getHome(null,null,null);
       //Get.back();
 
     } else {

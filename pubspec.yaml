@@ -89,6 +89,7 @@ dependencies:
   flutter_local_notifications: ^9.0.0
   http: ^0.13.5
   device_info_plus: ^8.2.2
+  universal_html: ^2.2.4
  # telephony: ^0.2.0
   
   
