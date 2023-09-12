@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -58,6 +59,8 @@ class _RegistrationState extends State<Registration> {
     return Image.asset(
       'assets/images/backgroundImage.png',
       width: MediaQuery.of(context).size.width,
+      height: kIsWeb == true ? 200 : null,
+      fit: BoxFit.fill,
     );
   }
 
@@ -85,7 +88,7 @@ class _RegistrationState extends State<Registration> {
 
   buildRegistrationCard() {
     return Positioned(
-      top: 250,
+      top: kIsWeb == true ? Get.width > 500 ? 200 : 150 : 250,
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -93,7 +96,115 @@ class _RegistrationState extends State<Registration> {
             color: Color(0xFFFFFFFF),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        child: Column(
+        child: kIsWeb == true ? Padding(
+          padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 : 0),
+          child: Column(
+            children: [
+              Expanded(child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildRegisterText(),
+                // buildPhonefield(),
+                Container(
+                  margin: EdgeInsets.only(left: 15, right: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Get.dialog(Dialog(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                              width: Get.width * 0.80,
+                              decoration: BoxDecoration(
+                                color: R.colors.lightGrey,
+                                borderRadius: BorderRadius.circular(10)
+                              ),
+                              child:  Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Text("data"),
+                                    Expanded(child:
+                                     ListView.separated(
+                                      shrinkWrap: true,
+                                      itemCount: ctr.countries?.length ?? 0,
+                                      separatorBuilder: (context, index) {
+                                        return Divider(color: R.colors.grey,thickness: 1,);
+                                      },
+                                      itemBuilder: (context,index){
+                                        var singleData = ctr.countries?[index];
+                                      return GestureDetector(
+                                        onTap: (){
+                                          registerController.code.value = singleData.code ?? "966";
+                                          registerController.flag.value = singleData.flag ?? "admin/country/sa.png";
+                                          registerController.lenght.value = singleData.mobileNumberLength ?? 9;
+                                          registerController.selectedCountry.value = singleData.id ?? 2;
+                                          Get.back();
+                                        },
+                                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
+                                              SizedBox(width: 5,),
+                                              Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
+                  
+                  
+                                            ],
+                                          ),
+                                          Text(singleData.code ?? ''),
+                                        ],
+                                        ),
+                                      );
+                                    })),
+                                  ],
+                                  ),
+                              
+                            ),
+                          ));
+                        },
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Obx(() => Image.network("https://sarfapp.com/${registerController.flag.value}",width: 40,height: 40,)), 
+                              SizedBox(width: 5,),
+                              Obx(() => Text(registerController.code.value)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                       Expanded(
+                child: TextField(
+                 // focusNode: searchFieldNode,
+                 controller: registerController.phone,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Mobile Number'.tr,
+                      hintStyle: TextStyle(
+                          fontSize: 10,
+                          fontFamily: 'medium',
+                          color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                      border: InputBorder.none),
+                ),
+                          )
+                    ],
+                  )),
+                  SizedBox(height: 20,),
+                buildPasswordField(),
+                buildAgreeToTermsAndConditionsBox(),
+                buildNextButton(),
+                  ],
+                ),
+              ))
+            ],
+          ),
+        ) :  Column(
           children: [
             buildRegisterText(),
             // buildPhonefield(),
@@ -228,8 +339,8 @@ class _RegistrationState extends State<Registration> {
             onChanged: (number) {
               phone.text = number.completeNumber;
               registerController.phone.text = phone.text;
-              print(
-                  'This is my phoneNumber===============${registerController.phone}');
+              // print(
+              //     'This is my phoneNumber===============${registerController.phone}');
             },
             initialCountryCode: 'SA',
             invalidNumberMessage: "Invalid mobile number".tr,
@@ -308,10 +419,10 @@ class _RegistrationState extends State<Registration> {
       ),
       child: InkWell(
         onTap: () {
-          print(
-              'This is my phoneNumber===============${registerController.phone.text}');
-          print(
-              'This is my phoneNumber===============${registerController.phone.text}');
+          // print(
+          //     'This is my phoneNumber===============${registerController.phone.text}');
+          // print(
+          //     'This is my phoneNumber===============${registerController.phone.text}');
           if (registerController.phone.text.isEmpty) {
             Get.snackbar(
               'Alert'.tr,
@@ -369,7 +480,7 @@ class _RegistrationState extends State<Registration> {
 
   buildAgreeToTermsAndConditionsBox() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: EdgeInsets.only(top: 30,left: kIsWeb == true ? 20: 0,right: kIsWeb == true ? 20: 0 ),
       child: Row(
         children: <Widget>[
           Checkbox(

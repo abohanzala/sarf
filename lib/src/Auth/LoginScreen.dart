@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -76,6 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Image.asset(
       'assets/images/backgroundImage.png',
       width: MediaQuery.of(context).size.width,
+      height: kIsWeb == true ? 200 : null,
+      fit: BoxFit.fill,
     );
   }
 
@@ -107,7 +110,126 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      child: Column(
+      child: kIsWeb == true ? Padding(
+        padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 :  0 ),
+        child: Column(
+          children: [
+            buildLoginTextAndLanguageOptions(),
+            Form(
+              key: loginFormKey,
+              child: Column(
+                children: [
+                  //  buildPhoneFieldForLogin(),
+                  Container(
+                margin: EdgeInsets.only(left: 15, right: 15),
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        Get.dialog(Dialog(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            width: Get.width * 0.80,
+                            decoration: BoxDecoration(
+                              color: R.colors.lightGrey,
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            child:  Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Text("data"),
+                                  Expanded(child:
+                                   ListView.separated(
+                                    shrinkWrap: true,
+                                    itemCount: ctr.countries?.length ?? 0,
+                                    separatorBuilder: (context, index) {
+                                      return Divider(color: R.colors.grey,thickness: 1,);
+                                    },
+                                    itemBuilder: (context,index){
+                                      var singleData = ctr.countries?[index];
+                                    return GestureDetector(
+                                      onTap: (){
+                                        loginController.code.value = singleData.code ?? "966";
+                                        loginController.flag.value = singleData.flag ?? "admin/country/sa.png";
+                                        loginController.lenght.value = singleData.mobileNumberLength ?? 9;
+                                        loginController.selectedCountry.value = singleData.id ?? 2;
+                                        Get.back();
+                                      },
+                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
+                                            SizedBox(width: 5,),
+                                            Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
+        
+        
+                                          ],
+                                        ),
+                                        Text(singleData.code ?? ''),
+                                      ],
+                                      ),
+                                    );
+                                  })),
+                                ],
+                                ),
+                            
+                          ),
+                        ));
+                      },
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Obx(() => Image.network("https://sarfapp.com/${loginController.flag.value}",width: 40,height: 40,)), 
+                            SizedBox(width: 5,),
+                            Obx(() => Text(loginController.code.value)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5,),
+                     Expanded(
+              child: TextFormField(
+               // focusNode: searchFieldNode,
+               validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required Field".tr;
+                  }
+                  
+                  return null;
+                },
+               controller: loginController.phone,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                    hintText: 'Enter Mobile Number'.tr,
+                    hintStyle: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'medium',
+                        color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                    border: InputBorder.none),
+              ),
+            )
+                  ],
+                )),
+                SizedBox(height: 20,),
+                  buildPasswordField(),
+                ],
+              ),
+            ),
+            buildForgotPassword(),
+            buildNextButton(),
+            buildDontHaveAnAccount(),
+            SizedBox(height: 100,),
+            // Spacer()
+          ],
+        ),
+      )  : Column(
         children: [
           buildLoginTextAndLanguageOptions(),
           Form(
@@ -163,8 +285,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
                                           SizedBox(width: 5,),
                                           Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
-
-
+      
+      
                                         ],
                                       ),
                                       Text(singleData.code ?? ''),
@@ -334,8 +456,8 @@ class _LoginScreenState extends State<LoginScreen> {
             onChanged: (number) {
               phone.text = number.completeNumber;
               loginController.phone.text = phone.text;
-              debugPrint(
-                  'This is my phoneNumber===============${loginController.phone.text}');
+              // debugPrint(
+              //     'This is my phoneNumber===============${loginController.phone.text}');
             },
             invalidNumberMessage: 'Invalid mobile number'.tr,
             initialCountryCode: 'SA',
@@ -378,8 +500,8 @@ class _LoginScreenState extends State<LoginScreen> {
             onChanged: (number) {
               phone.text = number.completeNumber;
               forgotPasswordController.phone.text = phone.text;
-              print(
-                  'This is my phoneNumber===============${forgotPasswordController.phone}');
+              // print(
+              //     'This is my phoneNumber===============${forgotPasswordController.phone}');
             },
             initialCountryCode: 'SA',
             invalidNumberMessage: 'Invalid mobile number'.tr,
@@ -482,8 +604,8 @@ class _LoginScreenState extends State<LoginScreen> {
       child: InkWell(
         onTap: () {
           //  Get.toNamed(RoutesName.Base);
-          print(
-              'This is my phoneNumber before apiCall===============${loginController.phone}');
+          // print(
+          //     'This is my phoneNumber before apiCall===============${loginController.phone}');
 
           if (loginFormKey.currentState!.validate()) {
             if (loginController.phone.text.length < loginController.lenght.value || loginController.phone.text.length > loginController.lenght.value) {
@@ -729,8 +851,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: InkWell(
         onTap: () {
-          print(
-              'This is my phoneNumber===============${forgotPasswordController.phone}');
+          // print(
+          //     'This is my phoneNumber===============${forgotPasswordController.phone}');
           if (forgotPasswordController.phone.text.isEmpty ) {
             Get.snackbar(
               'Alert'.tr,

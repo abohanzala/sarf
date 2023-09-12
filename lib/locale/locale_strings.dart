@@ -222,9 +222,17 @@ class LocaleString extends Translations {
           "Total members count 2": "Total members count",
           "AMOUNT": "Amount",
           "Enter profile name" : "Enter profile name",
+          "To": "To",
+          "From" : "From",
+          "Show": "Show",
+          "Total" : "Total"
         },
     
         'ar_SA': {
+          "Total" : "الاجمالي",
+          "Show": "بحث",
+          "To": "إلى",
+          "From" : "من",
           "Enter profile name" : "ادخل اسم المستخدم فقط",
           "AMOUNT": "مبلغ الفاتورة",
           // اجمالي المبالغ

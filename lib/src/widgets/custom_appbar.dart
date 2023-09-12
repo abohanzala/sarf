@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ import '../../resources/resources.dart';
 Container customAppBar(String title,bool back,bool braket,String? braketText,bool share,Function()? onTap) {
 
     return Container(
-          padding: EdgeInsets.only(left: GetStorage().read('lang') == 'en' ? 16.w : 0, top: 20.h,right: GetStorage().read('lang') == 'en' ? 0 : 16.w),
+          padding: EdgeInsets.only(left: GetStorage().read('lang') == 'en' ? kIsWeb == true ? 0 : 16.w : 0, top: 20.h,right: GetStorage().read('lang') == 'en' ? 0 : kIsWeb == true ? 0 : 16.w),
           height: 100,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -23,59 +24,62 @@ Container customAppBar(String title,bool back,bool braket,String? braketText,boo
             ),
             //borderRadius: BorderRadius.circular(10),
           ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                
-                Row(
-                  children: [
-                    if(back) ...[
-                  GestureDetector(
-                    onTap: () => Get.back() ,
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: R.colors.white,
+          child: Padding(
+            padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0 ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  
+                  Row(
+                    children: [
+                      if(back) ...[
+                    GestureDetector(
+                      onTap: () => Get.back() ,
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: R.colors.white,
+                        ),
+                        child: Icon(Icons.arrow_back_ios,color: R.colors.black,size: 20,),
                       ),
-                      child: Icon(Icons.arrow_back_ios,color: R.colors.black,size: 20,),
+                    ),
+                    const SizedBox(width: 10,),
+                  ],
+                  
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 10,),
-                ],
-                
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                if(braket) ...[
-                  const SizedBox(width: 5,),
-                  Text(braketText!,style:TextStyle(
-                    color: R.colors.black,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),)
-                ],
+                  if(braket) ...[
+                    const SizedBox(width: 5,),
+                    Text(braketText!,style:TextStyle(
+                      color: R.colors.black,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),)
                   ],
-                ),
-
-                if(share)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: GestureDetector(
-                    onTap: onTap,
-                    child: Image.asset(R.images.icon3,width: 25,height: 25,color: R.colors.white,)),
-                ),
-
-              ],
+                    ],
+                  ),
+          
+                  if(share)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: GestureDetector(
+                      onTap: onTap,
+                      child: Image.asset(R.images.icon3,width: 25,height: 25,color: R.colors.white,)),
+                  ),
+          
+                ],
+              ),
             ),
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -105,7 +106,20 @@ class _ChangePasswordState extends State<ChangePassword> {
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
             )),
-        child: Column(
+        child: kIsWeb == true ? Padding(
+          padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 : 0),
+          child: Column(
+            children: [
+              buildOtpText(),
+              buildOtpField(),
+              buildDivider(),
+              buildNewPasswordField(),
+              buildConfirmNewPasswordField(),
+              buildUpdateButton()
+              //buildUpdateButton()
+            ],
+          ),
+        ) : Column(
           children: [
             buildOtpText(),
             buildOtpField(),

@@ -35,7 +35,7 @@ class ChangeProfileController extends GetxController {
   }
 
   Future updateProfile() async {
-    print(profileController.location_lat.value.toString());
+    // print(profileController.location_lat.value.toString());
     openLoader();
     ddio.FormData formData = ddio.FormData();
 
@@ -119,12 +119,12 @@ class ChangeProfileController extends GetxController {
     // formData.fields.add(MapEntry('ios_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
     // formData.fields
     //     .add(MapEntry('android_device_id', 'yewuihjkfhsdjkfhdkjfhdkf'));
-    debugPrint(formData.fields.toString());
+    // debugPrint(formData.fields.toString());
 
     // var request = {
     //   'language': GetStorage().read('lang'),
     // };
-    print("This is my request====================${formData.fields[3].value}");
+    // print("This is my request====================${formData.fields[3].value}");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -146,7 +146,7 @@ class ChangeProfileController extends GetxController {
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
-        print(apiError.toString());
+        // print(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
@@ -157,16 +157,16 @@ class ChangeProfileController extends GetxController {
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
-        debugPrint('This is error=================${error.toString()}');
+        // debugPrint('This is error=================${error.toString()}');
         //HandlingErrors().handleError(error);
       }
     });
     message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    // debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       finalSelectedCityId = '';
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.back();
        Get.snackbar(
         'Success'.tr,

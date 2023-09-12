@@ -57,7 +57,7 @@ class ChangePasswordController extends GetxController {
       'new_password': newPass,
       'confirm_password': confirmPass,
     };
-    debugPrint("This is my request====================$request");
+    // debugPrint("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -73,18 +73,18 @@ class ChangePasswordController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        // debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
     message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    // debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       Get.toNamed(RoutesName.LogIn);
       otp.clear();
@@ -92,7 +92,7 @@ class ChangePasswordController extends GetxController {
       confirmNewPassword.clear();
       forgotPasswordController.toString();
 
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);

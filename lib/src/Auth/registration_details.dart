@@ -254,7 +254,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         }
       });
     } else {
-      print('singleImage///////');
+      // print('singleImage///////');
       try {
         final XFile? pickedFile = await _picker.pickImage(
           source: source,
@@ -262,10 +262,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         setState(() {
           _imageFile = pickedFile!;
           registrationController.profileImage = File(_imageFile!.path);
-          print(
-              'SetStateCalling=========================${registrationController.profileImage}');
-          print(
-              "This is my ImagePath=====================${registrationController.profileImage!.path}");
+          // print(
+          //     'SetStateCalling=========================${registrationController.profileImage}');
+          // print(
+          //     "This is my ImagePath=====================${registrationController.profileImage!.path}");
           //    _setImageFileListFromFile(pickedFile);
         });
       } catch (e) {
@@ -391,6 +391,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         Image.asset(
           'assets/images/backgroundImage.png',
           width: MediaQuery.of(context).size.width,
+          height: kIsWeb == true ? 200 : null,
+      fit: BoxFit.fill,
         ),
         buildBackArrowContainer()
       ],
@@ -427,8 +429,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      child: Column(
-        children: [buildRegistrationDetailsText(), buildForm()],
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width/3 : 0 : 0),
+        child: Column(
+          children: [buildRegistrationDetailsText(), buildForm()],
+        ),
       ),
     );
   }
@@ -494,12 +499,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           ),
           InkWell(
             onTap: () {
-              print(
-                  "This is  Location==================${registrationController.location}");
-              print(
-                  "This is  lat==================${registrationController.location_lat}");
-              print(
-                  "This is  lng==================${registrationController.location_lng}");
+              // print(
+              //     "This is  Location==================${registrationController.location}");
+              // print(
+              //     "This is  lat==================${registrationController.location_lat}");
+              // print(
+              //     "This is  lng==================${registrationController.location_lng}");
               //  Get.toNamed('terms_and_conditions');
             },
             child: Container(
@@ -653,8 +658,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           }
           if (registrationController.accountType == false && registrationController.fullNameController.text.isEmpty) {
             
-              debugPrint(
-                  "This is fullName =============${registrationController.fullNameController.text}");
+              // debugPrint(
+              //     "This is fullName =============${registrationController.fullNameController.text}");
               Get.snackbar(
                 'Alert'.tr,
                 'Please Enter Name'.tr,
@@ -703,11 +708,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             }
           }
           if (registrationController.accountType == false) {
-            print(
-                "This is fullName =============${registrationController.fullNameController.text}");
+            // print(
+            //     "This is fullName =============${registrationController.fullNameController.text}");
             if (registrationController.fullNameController.text.isEmpty) {
-              print(
-                  "This is fullName =============${registrationController.fullNameController.text}");
+              // print(
+              //     "This is fullName =============${registrationController.fullNameController.text}");
               Get.snackbar(
                 'Alert'.tr,
                 'Please Enter Name'.tr,
@@ -1145,7 +1150,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                       return InkWell(
                                         onTap: () {
                                           selectedCityIndex = index;
-                                          print(selectedCityIndex);
+                                          // print(selectedCityIndex);
                                           setState(() {
                                             registrationController
                                                     .finalSelectedCity.value =
@@ -1161,8 +1166,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                   cities[selectedCityIndex]
                                                   .id;
 
-                                          print(
-                                              "This is my selctedCity Id ============${getCityId}");
+                                          // print(
+                                          //     "This is my selctedCity Id ============${getCityId}");
 
                                           setState(() {
                                             registrationController.cityId =
@@ -1276,7 +1281,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                     return InkWell(
                                       onTap: () {
                                         selectedTypeIndex = index;
-                                        print(selectedTypeIndex);
+                                        // print(selectedTypeIndex);
                                         registrationController
                                                 .finalSelectedType.value =
                                             GetStorage().read("lang") == "ar" ?  dataCollectionController
@@ -1289,8 +1294,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         var getTypeId = dataCollectionController
                                             .types![index].id
                                             .toString();
-                                        print(
-                                            "This is my typeCity Id ============${getTypeId}");
+                                        // print(
+                                        //     "This is my typeCity Id ============${getTypeId}");
                                         setState(() {
                                           registrationController
                                               .expense_typeId = getTypeId;

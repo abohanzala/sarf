@@ -31,7 +31,7 @@ class OtpController extends GetxController {
     return input;
   }
 
-  Future otp(String otp) async {
+  Future otp(String otps) async {
     openLoader();
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
@@ -40,13 +40,16 @@ class OtpController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    
+    // print("sfsf");
+    // print(otps);
+    // var a = replaceArabicNumber(otps);
+    // print(a);
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': "${registerController.code}${registerController.phone.text}",
-      'otp': replaceArabicNumber(otp),
+      'otp': replaceArabicNumber(otps),
     };
-    debugPrint("This is my request====================$request");
+    //  debugPrint("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -62,20 +65,20 @@ class OtpController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        // debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
+    //  debugPrint("This is my response==================$response");
     if (response['success'] == true) {
       Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.offNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
       //  await  storage.write('user_token', userInfo.token);

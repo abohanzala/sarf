@@ -49,7 +49,7 @@ Future postNewCustomInvoice(String mobile,  String userPassword,String otpVal) a
     openLoader();
 String pass = replaceArabicNumber(userPassword);
 String otpv = replaceArabicNumber(otpVal);
-debugPrint(mobile);    
+// debugPrint(mobile);    
    var request = {
       "language": GetStorage().read('lang'),
       "mobile": mobile,
@@ -65,12 +65,12 @@ debugPrint(mobile);
       Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.snackbar('Error'.tr, 'Something wnet wrong'.tr);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
@@ -78,7 +78,7 @@ debugPrint(mobile);
 
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    debugPrint("aaaaaaaaaaa$response");
+    // debugPrint("aaaaaaaaaaa$response");
     // Navigator.of(Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
@@ -98,7 +98,7 @@ debugPrint(mobile);
 
     } else {
       //uploadImages.clear();
-      debugPrint('here');
+      // debugPrint('here');
       (response.containsKey('validation_errors'))
           ? Get.snackbar(response['message'].toString(),
               response['validation_errors'].toString())
@@ -128,12 +128,12 @@ debugPrint(mobile);
       
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.snackbar('Error'.tr, 'Something went wrong'.tr);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
@@ -141,7 +141,7 @@ debugPrint(mobile);
 
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    debugPrint("aaaaaaaaaaa$response");
+    // debugPrint("aaaaaaaaaaa$response");
     // Navigator.of(Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
@@ -157,7 +157,7 @@ debugPrint(mobile);
 
     } else {
       //uploadImages.clear();
-      debugPrint('here');
+      // debugPrint('here');
       (response.containsKey('validation_errors'))
           ? Get.snackbar(response['message'].toString(),
               response['validation_errors'].toString())
@@ -183,12 +183,12 @@ debugPrint(mobile);
       Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.snackbar('Error'.tr, 'Something went wrong'.tr);
-        debugPrint("aaaaaaaa${error.toString()}");
+        // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
@@ -196,7 +196,7 @@ debugPrint(mobile);
 
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    debugPrint("aaaaaaaaaaa$response");
+    // debugPrint("aaaaaaaaaaa$response");
     // Navigator.of(Get.context!).pop();
     if (response == null) return;
     if (response['success']) {
@@ -209,7 +209,7 @@ debugPrint(mobile);
 
     } else {
       //uploadImages.clear();
-      debugPrint('here');
+      // debugPrint('here');
       if(response['message'] == 'data_not_found'){
         userData.value = ViewerModel();
       }
@@ -230,7 +230,7 @@ Future register(String phoneNumber) async {
       'language': GetStorage().read('lang'),
       'mobile': phoneNumber,
     };
-    debugPrint("This is my request====================$request");
+    // debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
 
     var response =
@@ -244,22 +244,22 @@ Future register(String phoneNumber) async {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
-        debugPrint('Something went Wrong');
+        // debugPrint('Something went Wrong');
         //HandlingErrors().handleError(error);
       }
     });
     message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response==================$response");
-    debugPrint(response.toString());
+    // debugPrint("This is my response==================$response");
+    // debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       Get.to(() => const UserOtpScreen() );
       // Get.offNamed(RoutesName.OtpScreen);
       //   userInfo = UserInfo.fromMap(response);S

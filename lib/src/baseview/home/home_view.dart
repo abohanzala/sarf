@@ -18,6 +18,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xcel;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:universal_html/html.dart' show AnchorElement;
+import "dart:convert";
 
 import '../../../constant/api_links.dart';
 import '../../../controllers/common/profile_controller.dart';
@@ -48,17 +50,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   TextEditingController txt = TextEditingController();
   ScreenshotController screenshotController = ScreenshotController();
   DateTime date = DateTime.now();
+  DateTime todate = DateTime.now();
   DateTime month = DateTime.now();
+  DateTime tomonth = DateTime.now();
   DateTime day = DateTime.now();
+  DateTime today = DateTime.now();
   NotificationServices notificationServices = NotificationServices();
   List<ExpenseTypes> expenseTypes = [];
   //ScrollController scrollCtr = ScrollController();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
-    });
-
+    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  });
+  day = DateTime(date.year,date.month - 1, date.day);
     getData();
     super.initState();
 
@@ -68,74 +73,72 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     // notificationServices.isTokenRefresh();
     notificationServices.getDeviceToken().then((value) {
       if (kDebugMode) {
-        print('device token');
-        print(value);
+        // print('device token');
+        // print(value);
       }
     });
   }
 
   getData() async {
     expenseTypes.clear();
-    await ctr.getHome(null, null, null, null).then((value) async {
+    await ctr.getHome(null,null,null).then((value) async{
       //print(ctr.budgets.first.id);
-      if (ctr.budgets.isNotEmpty) {
-        ctr
-            .getHome(
-                ctr.budgets.first.id.toString(),
-                day.day == DateTime.now().day ? null : day.day,
-                month.month == DateTime.now().month ? null : month.month,
-                date.year == DateTime.now().year ? null : date.year)
-            .then((value) {
-          if (ctr.budgets.isNotEmpty) {
-            ctr.selectedBudgetIndex.value = 1;
-            ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
-            ctr.selectedBudgetNumbder.value = "";
-            ctr.selectedBudgetName.value = GetStorage().read('name');
-            ctr.qrCode.value = "${GetStorage().read('mobile')}";
-            expenseTypes.clear();
-            for (var expanse in ctr.expenseTypes) {
-              debugPrint(expanse.invoiceSumAmount.toString());
-              if (expanse.invoiceSumAmount != null &&
-                  expanse.invoiceSumAmount! > 0) {
-                expenseTypes.add(expanse);
-              }
-            }
-            if (mounted) {
-              setState(() {});
-            }
-          }
-        });
+      if(ctr.budgets.isNotEmpty){
+        ctr.getHome(ctr.budgets.first.id.toString(), day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+        if(ctr.budgets.isNotEmpty){
+          ctr.selectedBudgetIndex.value = 1;
+          ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
+          ctr.selectedBudgetNumbder.value = "";    
+          ctr.selectedBudgetName.value =  GetStorage().read('name');
+          ctr.qrCode.value = "${GetStorage().read('mobile')}";
+          expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        // debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
       }
-    }).catchError((error) async {
-      debugPrint(error.toString());
-      // await GetStorage().remove('user_token');
-      // await GetStorage().remove('groupId');
-      // await GetStorage().remove('userId');
-      // await GetStorage().remove('user_type');
-      // await GetStorage().remove('accountType');
-      // await GetStorage().remove('countryId');
-      // await GetStorage().remove(
-      //   'name',
-      // );
-      // await GetStorage().remove(
-      //   'username',
-      // );
-      // await GetStorage().remove(
-      //   'email',
-      // );
-      // await GetStorage().remove(
-      //   'firebase_email',
-      // );
-      // await GetStorage().remove(
-      //   'mobile',
-      // );
-      // await GetStorage().remove(
-      //   'photo',
-      // );
-      // await GetStorage().remove(
-      //   'status',
-      // );
-      //  Get.offAllNamed(RoutesName.LogIn);
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+        }
+      });
+      }
+       
+    
+      
+    }).catchError((error) async{
+      // debugPrint(error.toString());
+    // await GetStorage().remove('user_token');
+    // await GetStorage().remove('groupId');
+    // await GetStorage().remove('userId');
+    // await GetStorage().remove('user_type');
+    // await GetStorage().remove('accountType');
+    // await GetStorage().remove('countryId');
+    // await GetStorage().remove(
+    //   'name',
+    // );
+    // await GetStorage().remove(
+    //   'username',
+    // );
+    // await GetStorage().remove(
+    //   'email',
+    // );
+    // await GetStorage().remove(
+    //   'firebase_email',
+    // );
+    // await GetStorage().remove(
+    //   'mobile',
+    // );
+    // await GetStorage().remove(
+    //   'photo',
+    // );
+    // await GetStorage().remove(
+    //   'status',
+    // );
+    //  Get.offAllNamed(RoutesName.LogIn);
     });
     // await profileController.getProfile();
   }
@@ -158,34 +161,24 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
           // ignore: deprecated_member_use
           Share.shareXFiles([XFile(imagePath.path)]);
         } catch (error) {
-          debugPrint(error.toString());
+          // debugPrint(error.toString());
         }
       }
     }).catchError((onError) {
-      debugPrint('Error --->> $onError');
+      // debugPrint('Error --->> $onError');
     });
   }
 
   @override
   void didPopNext() async {
     expenseTypes.clear();
-    debugPrint(ctr.selectedBudgetName.value);
-    await ctr
-        .getHome(
-            ctr.selectedBudgetId.value.toString(),
-            day.day == DateTime.now().day ? null : day.day,
-            month.month == DateTime.now().month ? null : month.month,
-            date.year == DateTime.now().year ? null : date.year)
-        .then((value) {
-      expenseTypes.clear();
-      for (var expanse in ctr.expenseTypes) {
-        debugPrint(expanse.invoiceSumAmount.toString());
-        if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0) {
-          expenseTypes.add(expanse);
-        }
-      }
-      if (mounted) {
-        setState(() {});
+  //  debugPrint(ctr.selectedBudgetName.value);
+   await ctr.getHome(ctr.selectedBudgetId.value.toString(), day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                              expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        // debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
       }
     });
     // getData();
@@ -260,27 +253,3630 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                 'Select a budget'.tr);
                                             return;
                                           }
-                                          Get.dialog(Dialog(
-                                            child: Container(
-                                              padding: const EdgeInsets.all(16),
+                                          ctr.addBudget(txt.text).then((value) {
+                                            txt.clear();
+                                          });
+                                        })
+                                      ],
+                                    ),
+                                  ),
+                                ));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: R.colors.black),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(50),
+                                          color: R.colors.white),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'New budget'.tr,
+                                      style: TextStyle(
+                                        color: R.colors.white,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 12
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(
+                                      "#${ctr.budgets.length}",
+                                      style: TextStyle(
+                                        color: R.colors.white,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 12
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                             SizedBox(
+                              width: GetStorage().read('lang') == "en" ? 10 : 10,
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                  // physics: NeverScrollableScrollPhysics(),
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  padding:  EdgeInsets.only(right: GetStorage().read("lang") != "en" ? 7:0,left: GetStorage().read("lang") == "en" ? 7:0 ),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: ctr.budgets.length,
+                                  itemBuilder: (context, index) {
+                                    var singleData = ctr.budgets[index];
+                                    return Obx(
+                                      () => Container(
+                                        height: GetStorage().read("lang") == 'en'? 100: 100,
+                                        margin: const EdgeInsets.only(left: 2),
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: (ctr.selectedBudgetIndex
+                                                            .value -
+                                                        1) ==
+                                                    index
+                                                ? R.colors.blue.withOpacity(0.2)
+                                                : null),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            ctr.selectedBudgetIndex.value =
+                                                (index + 1);
+                                            ctr.selectedBudgetId.value =
+                                                singleData.id.toString();
+                                            ctr.selectedBudgetNumbder.value = singleData.number == '#0' ? '' : singleData.number ?? '' ;    
+                                            ctr.selectedBudgetName.value = index == 0 ? GetStorage().read('name') : singleData.name ?? '' ;    
+                                            // debugPrint(
+                                            //     ctr.selectedBudgetId.value);
+                                            ctr.getHome(singleData.id.toString(), day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                              expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        // debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    if(mounted){
+      setState(() {
+      
+    });
+    }
+                                            });
+                                          },
+                                          child: Container(
+                                            height: GetStorage().read("lang") == 'en'? 80: 80,
+                                            width: GetStorage().read("lang") == 'en'? 80: 80,
+                                            padding: const EdgeInsets.all(5),
+                                            //margin: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              //borderRadius: BorderRadius.circular(50),
+                                              border: Border.all(
+                                                  color: R.colors.blue, width: 3),
+                                              color: R.colors.white,
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "${ index == 0 ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number == '#0' ? '' : singleData.number ?? ''}",
+                                                  style: const TextStyle(
+                                                      fontSize: 14),
+                                                      overflow: TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.center,    
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+
+
+                      if(!kIsWeb) ...[
+                        Expanded(
+                          flex:  3,
+                          child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent:
+                                kIsWeb == true ? Get.width > 750 ? MediaQuery.of(context).size.width / 6 : MediaQuery.of(context).size.width / 2 :
+                                    MediaQuery.of(context).size.width / 2,
+                                childAspectRatio: 3,
+                                mainAxisSpacing: 0,
+                                crossAxisSpacing: 10,
+                              ),
+                              itemCount: expenseTypes.length,
+                              itemBuilder: (context, index) {
+                                var singleExpanse = expenseTypes[index];
+                                
+                                   return Obx(
+                                  () =>  GestureDetector(
+                                    onTap: (){
+                                      Get.to(() => InvoiceMembersHomeListScreen( expanseId: singleExpanse.id.toString(),budgetId: ctr.selectedBudgetId.value.toString(),) );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: Get.width,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              border: Border.all(
+                                                  color: R.colors.blue, width: 1),
+                                              color: R.colors.white),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 5),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              if(singleExpanse.unviewInvoice != null && singleExpanse.unviewInvoice! > 0 ) ...[
+                                                Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: const BoxDecoration(
+                                                    color: Colors.red,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 10,),
+                                              ],
+                                              Text(
+                                                ctr.currency.value,
+                                                style:
+                                                    TextStyle(color: R.colors.blue),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                "${singleExpanse.invoiceSumAmount ?? 0}",
+                                                style:
+                                                    TextStyle(color: R.colors.blue),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          "${ GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
+                                          style: TextStyle(
+                                              color: R.colors.blackSecondery),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                                
+                               
+                              })),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      ],
+    
+    // -------------------------------------------------------------------------------------------------
+                      if(kIsWeb == true)...[
+                       Expanded(
+                        // flex: 3,
+                         child: SingleChildScrollView(
+                           child: Column(
+                             children: [
+                              GridView.builder(
+                                shrinkWrap: true,
+                                primary: false,
+                                physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent:
+                                    kIsWeb == true ? Get.width > 750 ? MediaQuery.of(context).size.width / 6 : MediaQuery.of(context).size.width / 2 :
+                                        MediaQuery.of(context).size.width / 2,
+                                    childAspectRatio: 3,
+                                    mainAxisSpacing: 0,
+                                    crossAxisSpacing: 10,
+                                  ),
+                                  itemCount: expenseTypes.length,
+                                  itemBuilder: (context, index) {
+                                    var singleExpanse = expenseTypes[index];
+                                    
+                                       return Obx(
+                                      () =>  GestureDetector(
+                                        onTap: (){
+                                          Get.to(() => InvoiceMembersHomeListScreen( expanseId: singleExpanse.id.toString(),budgetId: ctr.selectedBudgetId.value.toString(),) );
+                                        },
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: Get.width,
                                               decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: R.colors.blue, width: 1),
                                                   color: R.colors.white),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 5),
+                                              child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
+                                                  if(singleExpanse.unviewInvoice != null && singleExpanse.unviewInvoice! > 0 ) ...[
+                                                    Container(
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration: const BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10,),
+                                                  ],
                                                   Text(
-                                                      "Are you sure you want to delete this budget"
-                                                          .tr),
-                                                  const SizedBox(
-                                                    height: 10,
+                                                    ctr.currency.value,
+                                                    style:
+                                                        TextStyle(color: R.colors.blue),
                                                   ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    "${singleExpanse.invoiceSumAmount ?? 0}",
+                                                    style:
+                                                        TextStyle(color: R.colors.blue),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              "${ GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
+                                              style: TextStyle(
+                                                  color: R.colors.blackSecondery),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                    
+                                   
+                                  }),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                                if(Get.width > 750)
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SizedBox(
+                                           width : Get.width > 750 ? Get.width  * 0.3 : Get.width * 0.40,
+                                           child: Row(
+                                             children: [
+                                               Expanded(
+                                                 child: Container(
+                                                   height: 60,
+                                                   padding: const EdgeInsets.all(4),
+                                                   decoration: BoxDecoration(
+                                                       borderRadius: BorderRadius.circular(10),
+                                                       border: Border.all(
+                                                           color: R.colors.grey, width: 1)),
+                                                   child: GestureDetector(
+                                                     onTap: (){
+                                                       Get.bottomSheet(
+                                                         Container(
+                                                           padding: const EdgeInsets.all(20),
+                                                           decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                                           color: R.colors.white,
+                                                           ),
+                                                           child: Column(mainAxisSize: MainAxisSize.min,
+                                                           children: [
+                                                             Row(children: [
+                                                               GestureDetector(
+                                                                 onTap: ()async{
+                                                                   // debugPrint("here");
+                                                                  await ctr.genrateReport(ctr.selectedBudgetId.value,   day.toIso8601String(),    today.toIso8601String());
+    //                                                              await invCtr.getInvoiceList('').then((value){
+    //   invoices = value;
+    //   return null;
+    // });
+                                                                // debugPrint(invoices?.data.toString());
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // debugPrint(invoices?.data?.length.toString());
+                                                                final xcel.Workbook workbook = xcel.Workbook();
+                                                                    final xcel.Worksheet sheet = workbook.worksheets[0];
+                                                                if(ctr.receivedInvoices!.isNotEmpty){
+                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                            
+                                                                      
+                                                                    sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(1, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(1, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(1, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(1, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < ctr.receivedInvoices!.length; i++) {
+                                                                      final item = ctr.receivedInvoices![i];
+                                                                      var id = (ctr.receivedInvoices!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
+                                                                    }
+                                                                    var total = ctr.receivedInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                      sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 4).setText("Total".tr);
+                                                                      sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 5).setText(total.toString());
+                                                                  
+                                                                  
+                                                                    if (ctr.sendInvoices!.isNotEmpty) {
+                                                                       var ind = ctr.receivedInvoices!.length + 6;
+                                                                      sheet.getRangeByIndex(ind, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(ind, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(ind, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(ind, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(ind, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < ctr.sendInvoices!.length; i++) {
+                                                                      final item = ctr.sendInvoices![i];
+                                                                      var id = (ctr.sendInvoices!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2 + ind, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 5).setText(item.amount.toString());
+                                                                    }
+                                                                    var total = ctr.sendInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                      sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 4).setText("Total".tr);
+                                                                      sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 5).setText(total.toString());
+                                                                    }  
+                                                                    final List<int> bytes = workbook.saveAsStream();
+                                                                     workbook.dispose();
+                                                                    //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
+                                                                   AnchorElement(
+          href:
+              'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}')
+        ..setAttribute('download', 'report.xlsx')
+        ..click();
+                                                                   
+                                                                  Get.back();
+                                                                            
+                                                                }
+                                                                  
+                                                                 },
+                                                                 child: Image.asset(R.images.excelIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                               ),
+                                                               SizedBox(width: 20,),
+                                                                GestureDetector(
+                                                                 onTap: () async{
+                                                                   // debugPrint("here");
+                                                                    await ctr.genrateReport(ctr.selectedBudgetId.value,   day.toIso8601String(),    today.toIso8601String());
+                                                                // print(ctr.receivedInvoices.toString());
+    //                                                              await invCtr.getInvoiceList('').then((value){
+    //   invoices = value;
+    //   return null;
+    // });
+                                                                // debugPrint(invoices?.data.toString());
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // A Suls Regular.ttf
+                                                                var total = ctr.receivedInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                var total2 = ctr.sendInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                final  font = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                final  ttf = pw.Font.ttf(font);
+                                                                // final data = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                            
+                                                                //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
+                                                                            
+                                                                //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
+                                                                final pdf = pw.Document();
+                                                                if(ctr.receivedInvoices!.isNotEmpty){
+                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                    
+                                                                      pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < ctr.receivedInvoices!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((ctr.receivedInvoices!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.receivedInvoices![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.receivedInvoices![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(ctr.receivedInvoices![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(ctr.receivedInvoices![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("",
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("", textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("",  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Total".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(total.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      })); // Page
+                                                                         if (ctr.sendInvoices!.isNotEmpty) {
+                                                                           pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < ctr.sendInvoices!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((ctr.sendInvoices!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.sendInvoices![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.sendInvoices![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(ctr.sendInvoices![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(ctr.sendInvoices![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("",
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("", textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("",  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Total".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(total2.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      }));
+                                                                         }
+                                                                         List<int> bytes = await pdf.save();
+                                                                         AnchorElement(
+          href:
+              'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}')
+        ..setAttribute('download', 'report.pdf')
+        ..click();
+                             
+                                                                            
+                                                                      Get.back();                                                                  
+                                                                            
+                                                                }
+                                                                   
+                                                                               
+                                                                 },
+                                                                 child: Image.asset(R.images.pdfIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                               ),
+                                                             ],),
+                                                           ],
+                                                           ),
+                                                         ),
+                                                       );
+                                                     },
+                                                     child: Row(
+                                                       children: [
+                                                         Image.asset(
+                                                           R.images.icon1,
+                                                           width: 20,
+                                                           height: 20,
+                                                         ),
+                                                         const SizedBox(
+                                                           width: 5,
+                                                         ),
+                                                         Flexible(
+                                                           child: Text(
+                                                             'Share Report'.tr,
+                                                             style: TextStyle(
+                                                                 color: R.colors.black,
+                                                                 fontSize: 10),
+                                                                 overflow: TextOverflow.ellipsis,
+                                                           ),
+                                                         )
+                                                       ],
+                                                     ),
+                                                   ),
+                                                 ),
+                                               ),
+                                               const SizedBox(
+                                             width: 10,
+                                           ),
+                                           Expanded(
+                                             child: Container(
+                                               height: 60,
+                                               // width: Get.width * 0.25,
+                                               padding: const EdgeInsets.all(4),
+                                               decoration: BoxDecoration(
+                                                   borderRadius: BorderRadius.circular(10),
+                                                   border: Border.all(
+                                                       color: R.colors.grey, width: 1)),
+                                               child: GestureDetector(
+                                                 onTap: (){
+                                                   _shareQrCode();
+                                                 },
+                                                 child: Row(
+                                                   children: [
+                                                     Image.asset(
+                                                       R.images.icon3,
+                                                       width: 20,
+                                                       height: 20,
+                                                     ),
+                                                     const SizedBox(
+                                                       width: 5,
+                                                     ),
+                                                     Flexible(
+                                                       child: Text(
+                                                         'Share QR code'.tr,
+                                                         style: TextStyle(
+                                                             color: R.colors.black,
+                                                             fontSize: 10),
+                                                             overflow: TextOverflow.ellipsis,
+                                                       ),
+                                                     )
+                                                   ],
+                                                 ),
+                                               ),
+                                             ),
+                                           ),
+                                             ],
+                                             
+                                           ),
+                                         ),
+                                         SizedBox(width: 10,),
+                               Container(
+                               width: Get.width > 750 ?  Get.width * 0.3 : Get.width * 0.50,
+                                         padding: const EdgeInsets.all(8),
+                                         decoration: BoxDecoration(
+                                             borderRadius: BorderRadius.circular(10),
+                                             border: Border.all(
+                                                 color: R.colors.grey, width: 1)),
+                                         child: Row(
+                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                           children: [
+                                             Row(
+                                               children: [
+                                                  Image.asset(
+                                               R.images.icon2,
+                                               width: 25,
+                                               height: 25,
+                                             ),
+                                             const SizedBox(
+                                               width: 5,
+                                             ),
+                            
+                                             Column(
+                                               crossAxisAlignment:
+                                                   CrossAxisAlignment.start,
+                                               children: [
+                                                 Row(
+                                                   children: [
+                                                     Text(
+                                                       'Total Invoices Yearly'.tr,
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                     Text(
+                                                       " : ${ctr.totalInvoicesYearly}",
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                   ],
+                                                 ),
+                                                 const SizedBox(
+                                                   height: 5,
+                                                 ),
+                                                 Row(
+                                                   children: [
+                                                     Text(
+                                                       'Total Expenses Yearly'.tr,
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                     Text(
+                                                       " : ${ctr.totalExpansesYearly}",
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                   ],
+                                                 ),
+                                               ],
+                                             )
+                            
+                                               ],
+                                             ),
+                                            GestureDetector(
+                                             onTap: () {
+                                               Get.bottomSheet(
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                            decoration:  BoxDecoration(
+                                              color: R.colors.white,
+                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
+                                            ),
+                                            child: Column(children: [
+                                              Expanded(child: SingleChildScrollView(child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(height: 10,),
                                                   Row(
+                                                    children: [
+                                                      Expanded(child: Text("From".tr),),
+                                                      SizedBox(width: 20,),
+                                                      Expanded(child: Text("To".tr),),
+                                                    ],
+                                                  ),
+                                                 
+                                                  // Text("Day".tr), 
+                                                  const SizedBox(height: 10,),  
+                                                  Row(
+                                                    children: [
+                                                     
+                                                      Expanded(
+                                                        child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+                                                          return GestureDetector(
+                                                                                                          onTap: () async {
+                                                        
+                                                         DateTime? pickedDate = await showDatePicker(
+                                                                            context: context,
+                                                                            initialDate: day,
+                                                                            firstDate: DateTime(1950),
+                                                                            //DateTime.now() - not to allow to choose before today.
+                                                                            lastDate: DateTime.now());
+                                                           
+                                                                        if (pickedDate != null) {
+                                                                          
+                                                                            
+                                                                              day = pickedDate;
+                                                                            setState(() {
+                                                                              
+                                                                            });
+                                                                            // Get.back();  
+                                                                            ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          
+                                                                            });
+                                                                         
+                                                                          }
+                                                        
+                                                                                                          },
+                                                                                                          child:  Container(
+                                                        padding: const EdgeInsets.all(8),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(color: R.colors.black,width: 1),
+                                                          borderRadius: BorderRadius.circular(10)
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text("${day.day}-${day.month}-${day.year}"),
+                                                            Icon(Icons.arrow_drop_down,color: R.colors.black,),
+                                                          ],
+                                                        ),
+                                                                                                          ),
+                                                                                                        );
+                                                        },)
+                                                      ),
+                                                      SizedBox(width: 20,),
+                                                       Expanded(
+                                                        child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+                                                          return GestureDetector(
+                                                          onTap: () async {
+                                                            
+                                                             DateTime? pickedDate = await showDatePicker(
+                                                                            context: context,
+                                                                            initialDate: today,
+                                                                            firstDate: DateTime(1950),
+                                                                            //DateTime.now() - not to allow to choose before today.
+                                                                            lastDate: DateTime.now());
+                                                           
+                                                                        if (pickedDate != null) {
+                                                                          
+                                                                            setState(() {
+                                                                              
+                                                                            });
+                                                                              today = pickedDate;
+                                                                            
+                                                                            // Get.back();  
+                                                                            ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          
+                                                                            });
+                                                                         
+                                                                          }
+                                                            
+                                                          },
+                                                          child:  Container(
+                                                            padding: const EdgeInsets.all(8),
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(color: R.colors.black,width: 1),
+                                                              borderRadius: BorderRadius.circular(10)
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Text("${today.day}-${today.month}-${today.year}"),
+                                                                Icon(Icons.arrow_drop_down,color: R.colors.black,),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                        },)
+                                                      ),
+                                                      
+                                                    ],
+                                                  ),
+    //                                               SizedBox(height: 10,),
+                                                  
+    //                                               const SizedBox(height: 10,),
+    //                                               Text("Month".tr), 
+    //                                               const SizedBox(height: 10,),  
+    //                                               Row(
+    //                                                 children: [
+    //                                                   Expanded(
+    //                                                     child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+    //                                                       return GestureDetector(
+    //                                                       onTap: () async {
+    //                                                      final selected = await showMonthPicker(
+    //                                                         context: context,
+    //                                                         initialDate: month,
+    //                                                         firstDate: DateTime(1970),
+    //                                                         lastDate: DateTime(2050)
+    //                                                       );                                                if(selected != null){
+                                                          
+                                                            
+    //                                                         month = selected;
+    //                                                         setState(() {
+                                                                              
+    //                                                                         });
+    //                                                       }
+    //                                                       // Get.back();  
+    //                                                                         ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                           expenseTypes.clear();
+    //                                                          for (var expanse in ctr.expenseTypes) {
+    //                                                           // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                         if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                           expenseTypes.add(expanse);
+    //                                                         }
+    //                                                       }
+                                                          
+    //                                                                         });
+                                                            
+    //                                                       },
+    //                                                       child:  Container(
+    //                                                         padding: const EdgeInsets.all(8),
+    //                                                         decoration: BoxDecoration(
+    //                                                           border: Border.all(color: R.colors.black,width: 1),
+    //                                                           borderRadius: BorderRadius.circular(10)
+    //                                                         ),
+    //                                                         child: Row(
+    //                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                           children: [
+    //                                                             Text("${month.month}"),
+    //                                                             Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                           ],
+    //                                                         ),
+    //                                                       ),
+    //                                                     );
+    //                                                     },)
+    //                                                   ),
+    //                                                   SizedBox(width: 20,),
+    //                                                   Expanded(
+    //                                                 child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+    //                                                   return GestureDetector(
+    //                                                   onTap: () async {
+    //                                                  final selected = await showMonthPicker(
+    //                                                     context: context,
+    //                                                     initialDate: tomonth,
+    //                                                     firstDate: DateTime(1970),
+    //                                                     lastDate: DateTime(2050)
+    //                                                   );                                                if(selected != null){
+                                                      
+                                                        
+    //                                                     tomonth = selected;
+    //                                                     setState(() {
+                                                                              
+    //                                                                         });
+    //                                                   }
+    //                                                   // Get.back();  
+    //                                                                     ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                       expenseTypes.clear();
+    //                                                      for (var expanse in ctr.expenseTypes) {
+    //                                                       // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                     if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                       expenseTypes.add(expanse);
+    //                                                     }
+    //                                                   }
+                                                      
+    //                                                                     });
+                                                        
+    //                                                   },
+    //                                                   child:  Container(
+    //                                                     padding: const EdgeInsets.all(8),
+    //                                                     decoration: BoxDecoration(
+    //                                                       border: Border.all(color: R.colors.black,width: 1),
+    //                                                       borderRadius: BorderRadius.circular(10)
+    //                                                     ),
+    //                                                     child: Row(
+    //                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                       children: [
+    //                                                         Text("${tomonth.month}"),
+    //                                                         Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                       ],
+    //                                                     ),
+    //                                                   ),
+    //                                                 );
+    //                                                 },)
+    //                                               ),
+    //                                                 ],
+    //                                               ),
+    //                                               SizedBox(height: 10,),
+    
+    // //                                              
+    //                                               Text("Year".tr), 
+    //                                               const SizedBox(height: 10,),  
+    //                                               Row(
+    //                                                 children: [
+    //                                                   Expanded(
+    //                                                     child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+    //                                                       return GestureDetector(
+    //                                                       onTap: () async {
+    //                                                        showDialog(
+    //                                                           context: context,
+    //                                                           builder: (BuildContext context) {
+                                                                
+    //                                                             return AlertDialog(
+    //                                                               // title: Text("Select Year"),
+    //                                                               content: Container( // Need to use container to add size constraint.
+    //                                                                 width: 300,
+    //                                                                 height: 300,
+    //                                                                 child: YearPicker(
+    //                                                                   firstDate: DateTime(DateTime.now().year - 100, 1),
+    //                                                                   lastDate: DateTime(DateTime.now().year , 1),
+    //                                                                   initialDate: DateTime.now(),
+    //                                                                   // save the selected date to _selectedDate DateTime variable.
+    //                                                                   // It's used to set the previous selected date when
+    //                                                                   // re-showing the dialog.
+    //                                                                   selectedDate: date,
+    //                                                                   onChanged: (DateTime dateTime) {
+    //                                                                     // close the dialog when year is selected.
+                                                                        
+    //                                                                       date = dateTime;
+                                                                        
+    //                                                                     Navigator.pop(context);
+    //                                                       setState(() {
+                                                                              
+    //                                                                         });
+    //                                                                     // Get.back();  
+    //                                                                         ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                           expenseTypes.clear();
+    //                                                          for (var expanse in ctr.expenseTypes) {
+    //                                                           // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                         if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                           expenseTypes.add(expanse);
+    //                                                         }
+    //                                                       }
+                                                          
+    //                                                                         });
+                                                          
+    //                                                                     // Do something with the dateTime selected.
+    //                                                                     // Remember that you need to use dateTime.year to get the year
+    //                                                                   },
+    //                                                                 ),
+    //                                                               ),
+    //                                                             );
+    //                                                           },
+    //                                                         );
+                                                            
+    //                                                       },
+    //                                                       child:  Container(
+    //                                                         padding: const EdgeInsets.all(8),
+    //                                                         decoration: BoxDecoration(
+    //                                                           border: Border.all(color: R.colors.black,width: 1),
+    //                                                           borderRadius: BorderRadius.circular(10)
+    //                                                         ),
+    //                                                         child: Row(
+    //                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                           children: [
+    //                                                             Text("${date.year}".tr),
+    //                                                             Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                           ],
+    //                                                         ),
+    //                                                       ),
+    //                                                     );
+    //                                                     },)
+    //                                                   ),
+    //                                                   SizedBox(width: 20,),
+    //                                                     Expanded(
+    //                                                 child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+    //                                                   return GestureDetector(
+    //                                                   onTap: () async {
+    //                                                    showDialog(
+    //                                                       context: context,
+    //                                                       builder: (BuildContext context) {
+                                                            
+    //                                                         return AlertDialog(
+    //                                                           // title: Text("Select Year"),
+    //                                                           content: Container( // Need to use container to add size constraint.
+    //                                                             width: 300,
+    //                                                             height: 300,
+    //                                                             child: YearPicker(
+    //                                                               firstDate: DateTime(DateTime.now().year - 100, 1),
+    //                                                               lastDate: DateTime(DateTime.now().year , 1),
+    //                                                               initialDate: DateTime.now(),
+    //                                                               // save the selected date to _selectedDate DateTime variable.
+    //                                                               // It's used to set the previous selected date when
+    //                                                               // re-showing the dialog.
+    //                                                               selectedDate: todate,
+    //                                                               onChanged: (DateTime dateTime) {
+    //                                                                 // close the dialog when year is selected.
+                                                                    
+    //                                                                   todate = dateTime;
+    //                                                                 setState(() {
+                                                                              
+    //                                                                         });
+    //                                                                 Navigator.pop(context);
+                                                      
+    //                                                                 // Get.back();  
+    //                                                                     ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                       expenseTypes.clear();
+    //                                                      for (var expanse in ctr.expenseTypes) {
+    //                                                       // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                     if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                       expenseTypes.add(expanse);
+    //                                                     }
+    //                                                   }
+                                                      
+    //                                                                     });
+                                                      
+    //                                                                 // Do something with the dateTime selected.
+    //                                                                 // Remember that you need to use dateTime.year to get the year
+    //                                                               },
+    //                                                             ),
+    //                                                           ),
+    //                                                         );
+    //                                                       },
+    //                                                     );
+                                                        
+    //                                                   },
+    //                                                   child:  Container(
+    //                                                     padding: const EdgeInsets.all(8),
+    //                                                     decoration: BoxDecoration(
+    //                                                       border: Border.all(color: R.colors.black,width: 1),
+    //                                                       borderRadius: BorderRadius.circular(10)
+    //                                                     ),
+    //                                                     child: Row(
+    //                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                       children: [
+    //                                                         Text("${todate.year}".tr),
+    //                                                         Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                       ],
+    //                                                     ),
+    //                                                   ),
+    //                                                 );
+    //                                                 },)
+    //                                               ),
+    //                                                 ],
+    //                                               ),
+    
+                                                  SizedBox(height: 20,),
+    
+                                                  Row(
+                                                    children: [
+                                                     
+                                                        GestureDetector(
+                                                        onTap: (){
+                                                          // print(GetStorage().read("user_token"));
+                                                           
+                                                           ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          Get.back();
+                                                          
+                                                                            });
+                                                                             
+                                                         
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                            color: R.colors.blue
+                                                            ),
+                                                            child: Center(child: Text('Show'.tr),),
+                                                        ),
+                                                      ),
+                                                       SizedBox(height: 20,),  
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          // print(GetStorage().read("user_token"));
+                                                          Get.back();  
+                                                          setState(() {
+                                                            date = DateTime.now();
+                                                            todate = DateTime.now();
+                                                            month = DateTime.now();
+                                                            tomonth = DateTime.now();
+                                                            day = DateTime.now();
+                                                            today = DateTime.now();
+                                                            
+                                                          });
+                      ctr.getHome(ctr.selectedBudgetId.value, null, null).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        // debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    
+                      });  
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                            color: R.colors.blue
+                                                            ),
+                                                            child: Center(child: Text('Reset'.tr),),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  
+                                                ],
+                                              ),))
+                                            ]),
+                                          ),
+                                        );
+                                             },
+                                              child: Container(
+                                               width: 50,
+                                               padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                               decoration: BoxDecoration(
+                                                 color: R.colors.lightBlue3,
+                                                 borderRadius: BorderRadius.circular(10),
+                                               ),
+                                               child: Row(
+                                                 mainAxisAlignment: MainAxisAlignment.center,
+                                                 children: [
+                                                   // Text(ctr.expanse.value,style: TextStyle(color: R.colors.black),),
+                                                   Icon(Icons.search,color: R.colors.black,)
+                                                 ],
+                                               ),
+                                              ),
+                                            ),
+                                             
+                                           ],
+                                         ),
+                                       ),
+                             ],
+                           ),
+                           if(Get.width <= 750)
+                           Column(
+                             children: [
+                               SizedBox(
+                                           width : Get.width ,
+                                           child: Row(
+                                             children: [
+                                               Expanded(
+                                                 child: Container(
+                                                   height: 60,
+                                                   padding: const EdgeInsets.all(4),
+                                                   decoration: BoxDecoration(
+                                                       borderRadius: BorderRadius.circular(10),
+                                                       border: Border.all(
+                                                           color: R.colors.grey, width: 1)),
+                                                   child: GestureDetector(
+                                                     onTap: (){
+                                                       Get.bottomSheet(
+                                                         Container(
+                                                           padding: const EdgeInsets.all(20),
+                                                           decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                                           color: R.colors.white,
+                                                           ),
+                                                           child: Column(mainAxisSize: MainAxisSize.min,
+                                                           children: [
+                                                             Row(children: [
+                                                               GestureDetector(
+                                                                 onTap: ()async{
+                                                                   // debugPrint("here");
+                                                                   await ctr.genrateReport(ctr.selectedBudgetId.value,   day.toIso8601String(),    today.toIso8601String());
+    //                                                              await invCtr.getInvoiceList('').then((value){
+    //   invoices = value;
+    //   return null;
+    // });
+                                                                // debugPrint(invoices?.data.toString());
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // debugPrint(invoices?.data?.length.toString());
+                                                                final xcel.Workbook workbook = xcel.Workbook();
+                                                                    final xcel.Worksheet sheet = workbook.worksheets[0];
+                                                                if(ctr.receivedInvoices!.isNotEmpty){
+                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                            
+                                                                      
+                                                                    sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(1, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(1, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(1, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(1, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < ctr.receivedInvoices!.length; i++) {
+                                                                      final item = ctr.receivedInvoices![i];
+                                                                      var id = (ctr.receivedInvoices!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
+                                                                    }
+                                                                    var total = ctr.receivedInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                      sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 4).setText("Total".tr);
+                                                                      sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 5).setText(total.toString());
+                                                                  
+                                                                  
+                                                                    if (ctr.sendInvoices!.isNotEmpty) {
+                                                                       var ind = ctr.receivedInvoices!.length + 6;
+                                                                      sheet.getRangeByIndex(ind, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(ind, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(ind, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(ind, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(ind, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < ctr.sendInvoices!.length; i++) {
+                                                                      final item = ctr.sendInvoices![i];
+                                                                      var id = (ctr.sendInvoices!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2 + ind, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 5).setText(item.amount.toString());
+                                                                    }
+                                                                    var total = ctr.sendInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                      sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 4).setText("Total".tr);
+                                                                      sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 5).setText(total.toString());
+                                                                    }  
+                                                                    final List<int> bytes = workbook.saveAsStream();
+                                                                     workbook.dispose();
+                                                                    //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
+                                                                   AnchorElement(
+          href:
+              'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}')
+        ..setAttribute('download', 'report.xlsx')
+        ..click();
+                                                                   
+                                                                  Get.back();
+                                                                            
+                                                                }
+                                                                  
+                                                                 },
+                                                                 child: Image.asset(R.images.excelIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                               ),
+                                                               SizedBox(width: 20,),
+                                                                GestureDetector(
+                                                                 onTap: () async{
+                                                                   // debugPrint("here");
+                                                                   await ctr.genrateReport(ctr.selectedBudgetId.value,   day.toIso8601String(),    today.toIso8601String());
+                                                                // print(ctr.receivedInvoices.toString());
+    //                                                              await invCtr.getInvoiceList('').then((value){
+    //   invoices = value;
+    //   return null;
+    // });
+                                                                // debugPrint(invoices?.data.toString());
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // A Suls Regular.ttf
+                                                                var total = ctr.receivedInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                var total2 = ctr.sendInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                final  font = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                final  ttf = pw.Font.ttf(font);
+                                                                // final data = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                            
+                                                                //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
+                                                                            
+                                                                //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
+                                                                final pdf = pw.Document();
+                                                                if(ctr.receivedInvoices!.isNotEmpty){
+                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                    
+                                                                      pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < ctr.receivedInvoices!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((ctr.receivedInvoices!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.receivedInvoices![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.receivedInvoices![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(ctr.receivedInvoices![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(ctr.receivedInvoices![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("",
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("", textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("",  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Total".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(total.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      })); // Page
+                                                                         if (ctr.sendInvoices!.isNotEmpty) {
+                                                                           pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < ctr.sendInvoices!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((ctr.sendInvoices!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.sendInvoices![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.sendInvoices![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(ctr.sendInvoices![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(ctr.sendInvoices![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("",
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("", textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("",  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Total".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(total2.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      }));
+                                                                         }
+                                                                         List<int> bytes = await pdf.save();
+                                                                         AnchorElement(
+          href:
+              'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}')
+        ..setAttribute('download', 'report.pdf')
+        ..click();
+                             
+                                                                            
+                                                                      Get.back();                                                                  
+                                                                            
+                                                                }
+                                                                   
+                                                                               
+                                                                 },
+                                                                 child: Image.asset(R.images.pdfIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                               ),
+                                                             ],),
+                                                           ],
+                                                           ),
+                                                         ),
+                                                       );
+                                                     },
+                                                     child: Row(
+                                                       children: [
+                                                         Image.asset(
+                                                           R.images.icon1,
+                                                           width: 20,
+                                                           height: 20,
+                                                         ),
+                                                         const SizedBox(
+                                                           width: 5,
+                                                         ),
+                                                         Flexible(
+                                                           child: Text(
+                                                             'Share Report'.tr,
+                                                             style: TextStyle(
+                                                                 color: R.colors.black,
+                                                                 fontSize: 10),
+                                                                 overflow: TextOverflow.ellipsis,
+                                                           ),
+                                                         )
+                                                       ],
+                                                     ),
+                                                   ),
+                                                 ),
+                                               ),
+                                               const SizedBox(
+                                             width: 10,
+                                           ),
+                                           Expanded(
+                                             child: Container(
+                                               height: 60,
+                                               // width: Get.width * 0.25,
+                                               padding: const EdgeInsets.all(4),
+                                               decoration: BoxDecoration(
+                                                   borderRadius: BorderRadius.circular(10),
+                                                   border: Border.all(
+                                                       color: R.colors.grey, width: 1)),
+                                               child: GestureDetector(
+                                                 onTap: (){
+                                                   _shareQrCode();
+                                                 },
+                                                 child: Row(
+                                                   children: [
+                                                     Image.asset(
+                                                       R.images.icon3,
+                                                       width: 20,
+                                                       height: 20,
+                                                     ),
+                                                     const SizedBox(
+                                                       width: 5,
+                                                     ),
+                                                     Flexible(
+                                                       child: Text(
+                                                         'Share QR code'.tr,
+                                                         style: TextStyle(
+                                                             color: R.colors.black,
+                                                             fontSize: 10),
+                                                             overflow: TextOverflow.ellipsis,
+                                                       ),
+                                                     )
+                                                   ],
+                                                 ),
+                                               ),
+                                             ),
+                                           ),
+                                             ],
+                                             
+                                           ),
+                                         ),
+                                         SizedBox(height: 10,),
+                               Container(
+                               width: Get.width ,
+                                         padding: const EdgeInsets.all(8),
+                                         decoration: BoxDecoration(
+                                             borderRadius: BorderRadius.circular(10),
+                                             border: Border.all(
+                                                 color: R.colors.grey, width: 1)),
+                                         child: Row(
+                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                           children: [
+                                             Row(
+                                               children: [
+                                                  Image.asset(
+                                               R.images.icon2,
+                                               width: 25,
+                                               height: 25,
+                                             ),
+                                             const SizedBox(
+                                               width: 5,
+                                             ),
+                            
+                                             Column(
+                                               crossAxisAlignment:
+                                                   CrossAxisAlignment.start,
+                                               children: [
+                                                 Row(
+                                                   children: [
+                                                     Text(
+                                                       'Total Invoices Yearly'.tr,
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                     Text(
+                                                       " : ${ctr.totalInvoicesYearly}",
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                   ],
+                                                 ),
+                                                 const SizedBox(
+                                                   height: 5,
+                                                 ),
+                                                 Row(
+                                                   children: [
+                                                     Text(
+                                                       'Total Expenses Yearly'.tr,
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                     Text(
+                                                       " : ${ctr.totalExpansesYearly}",
+                                                       style: TextStyle(
+                                                           color: R.colors.black,
+                                                           fontSize: 12),
+                                                     ),
+                                                   ],
+                                                 ),
+                                               ],
+                                             )
+                            
+                                               ],
+                                             ),
+                                            GestureDetector(
+                                             onTap: () {
+                                              Get.bottomSheet(
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                            decoration:  BoxDecoration(
+                                              color: R.colors.white,
+                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
+                                            ),
+                                            child: Column(children: [
+                                              Expanded(child: SingleChildScrollView(child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(height: 10,),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(child: Text("From".tr),),
+                                                      SizedBox(width: 20,),
+                                                      Expanded(child: Text("To".tr),),
+                                                    ],
+                                                  ),
+                                                 
+                                                  // Text("Day".tr), 
+                                                  const SizedBox(height: 10,),  
+                                                  Row(
+                                                    children: [
+                                                     
+                                                      Expanded(
+                                                        child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+                                                          return GestureDetector(
+                                                                                                          onTap: () async {
+                                                        
+                                                         DateTime? pickedDate = await showDatePicker(
+                                                                            context: context,
+                                                                            initialDate: day,
+                                                                            firstDate: DateTime(1950),
+                                                                            //DateTime.now() - not to allow to choose before today.
+                                                                            lastDate: DateTime.now());
+                                                           
+                                                                        if (pickedDate != null) {
+                                                                          
+                                                                            
+                                                                              day = pickedDate;
+                                                                            setState(() {
+                                                                              
+                                                                            });
+                                                                            // Get.back();  
+                                                                            ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          
+                                                                            });
+                                                                         
+                                                                          }
+                                                        
+                                                                                                          },
+                                                                                                          child:  Container(
+                                                        padding: const EdgeInsets.all(8),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(color: R.colors.black,width: 1),
+                                                          borderRadius: BorderRadius.circular(10)
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text("${day.day}-${day.month}-${day.year}"),
+                                                            Icon(Icons.arrow_drop_down,color: R.colors.black,),
+                                                          ],
+                                                        ),
+                                                                                                          ),
+                                                                                                        );
+                                                        },)
+                                                      ),
+                                                      SizedBox(width: 20,),
+                                                       Expanded(
+                                                        child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+                                                          return GestureDetector(
+                                                          onTap: () async {
+                                                            
+                                                             DateTime? pickedDate = await showDatePicker(
+                                                                            context: context,
+                                                                            initialDate: today,
+                                                                            firstDate: DateTime(1950),
+                                                                            //DateTime.now() - not to allow to choose before today.
+                                                                            lastDate: DateTime.now());
+                                                           
+                                                                        if (pickedDate != null) {
+                                                                          
+                                                                            
+                                                                              today = pickedDate;
+                                                                            setState(() {
+                                                                              
+                                                                            });
+                                                                            // Get.back();  
+                                                                            ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          
+                                                                            });
+                                                                         
+                                                                          }
+                                                            
+                                                          },
+                                                          child:  Container(
+                                                            padding: const EdgeInsets.all(8),
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(color: R.colors.black,width: 1),
+                                                              borderRadius: BorderRadius.circular(10)
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Text("${today.day}-${today.month}-${today.year}"),
+                                                                Icon(Icons.arrow_drop_down,color: R.colors.black,),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                        },)
+                                                      ),
+                                                      
+                                                    ],
+                                                  ),
+    //                                               SizedBox(height: 10,),
+                                                  
+    //                                               const SizedBox(height: 10,),
+    //                                               Text("Month".tr), 
+    //                                               const SizedBox(height: 10,),  
+    //                                               Row(
+    //                                                 children: [
+    //                                                   Expanded(
+    //                                                     child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    //                                                       return GestureDetector(
+    //                                                       onTap: () async {
+    //                                                      final selected = await showMonthPicker(
+    //                                                         context: context,
+    //                                                         initialDate: month,
+    //                                                         firstDate: DateTime(1970),
+    //                                                         lastDate: DateTime(2050)
+    //                                                       );                                                if(selected != null){
+                                                          
+                                                            
+    //                                                         month = selected;
+    //                                                         setState(() {
+                                                                              
+    //                                                                         });
+    //                                                       }
+    //                                                       // Get.back();  
+    //                                                                         ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                           expenseTypes.clear();
+    //                                                          for (var expanse in ctr.expenseTypes) {
+    //                                                           // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                         if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                           expenseTypes.add(expanse);
+    //                                                         }
+    //                                                       }
+                                                          
+    //                                                                         });
+                                                            
+    //                                                       },
+    //                                                       child:  Container(
+    //                                                         padding: const EdgeInsets.all(8),
+    //                                                         decoration: BoxDecoration(
+    //                                                           border: Border.all(color: R.colors.black,width: 1),
+    //                                                           borderRadius: BorderRadius.circular(10)
+    //                                                         ),
+    //                                                         child: Row(
+    //                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                           children: [
+    //                                                             Text("${month.month}"),
+    //                                                             Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                           ],
+    //                                                         ),
+    //                                                       ),
+    //                                                     );
+    //                                                     },)
+    //                                                   ),
+    //                                                   SizedBox(width: 20,),
+    //                                                   Expanded(
+    //                                                 child: StatefulBuilder(builder: (BuildContext context, StateSetter  setState) {
+    //                                                   return GestureDetector(
+    //                                                   onTap: () async {
+    //                                                  final selected = await showMonthPicker(
+    //                                                     context: context,
+    //                                                     initialDate: tomonth,
+    //                                                     firstDate: DateTime(1970),
+    //                                                     lastDate: DateTime(2050)
+    //                                                   );                                                if(selected != null){
+                                                      
+                                                        
+    //                                                     tomonth = selected;
+    //                                                     setState(() {
+                                                                              
+    //                                                                         });
+    //                                                   }
+    //                                                   // Get.back();  
+    //                                                                     ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                       expenseTypes.clear();
+    //                                                      for (var expanse in ctr.expenseTypes) {
+    //                                                       // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                     if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                       expenseTypes.add(expanse);
+    //                                                     }
+    //                                                   }
+                                                      
+    //                                                                     });
+                                                        
+    //                                                   },
+    //                                                   child:  Container(
+    //                                                     padding: const EdgeInsets.all(8),
+    //                                                     decoration: BoxDecoration(
+    //                                                       border: Border.all(color: R.colors.black,width: 1),
+    //                                                       borderRadius: BorderRadius.circular(10)
+    //                                                     ),
+    //                                                     child: Row(
+    //                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                       children: [
+    //                                                         Text("${tomonth.month}"),
+    //                                                         Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                       ],
+    //                                                     ),
+    //                                                   ),
+    //                                                 );
+    //                                                 },)
+    //                                               ),
+    //                                                 ],
+    //                                               ),
+    //                                               SizedBox(height: 10,),
+    
+    // //                                              
+    //                                               Text("Year".tr), 
+    //                                               const SizedBox(height: 10,),  
+    //                                               Row(
+    //                                                 children: [
+    //                                                   Expanded(
+    //                                                     child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState ) {
+    //                                                       return GestureDetector(
+    //                                                       onTap: () async {
+    //                                                        showDialog(
+    //                                                           context: context,
+    //                                                           builder: (BuildContext context) {
+                                                                
+    //                                                             return AlertDialog(
+    //                                                               // title: Text("Select Year"),
+    //                                                               content: Container( // Need to use container to add size constraint.
+    //                                                                 width: 300,
+    //                                                                 height: 300,
+    //                                                                 child: YearPicker(
+    //                                                                   firstDate: DateTime(DateTime.now().year - 100, 1),
+    //                                                                   lastDate: DateTime(DateTime.now().year , 1),
+    //                                                                   initialDate: DateTime.now(),
+    //                                                                   // save the selected date to _selectedDate DateTime variable.
+    //                                                                   // It's used to set the previous selected date when
+    //                                                                   // re-showing the dialog.
+    //                                                                   selectedDate: date,
+    //                                                                   onChanged: (DateTime dateTime) {
+    //                                                                     // close the dialog when year is selected.
+                                                                        
+    //                                                                       date = dateTime;
+    //                                                                     setState(() {
+                                                                              
+    //                                                                         });
+    //                                                                     Navigator.pop(context);
+                                                          
+    //                                                                     // Get.back();  
+    //                                                                         ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                           expenseTypes.clear();
+    //                                                          for (var expanse in ctr.expenseTypes) {
+    //                                                           // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                         if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                           expenseTypes.add(expanse);
+    //                                                         }
+    //                                                       }
+                                                          
+    //                                                                         });
+                                                          
+    //                                                                     // Do something with the dateTime selected.
+    //                                                                     // Remember that you need to use dateTime.year to get the year
+    //                                                                   },
+    //                                                                 ),
+    //                                                               ),
+    //                                                             );
+    //                                                           },
+    //                                                         );
+                                                            
+    //                                                       },
+    //                                                       child:  Container(
+    //                                                         padding: const EdgeInsets.all(8),
+    //                                                         decoration: BoxDecoration(
+    //                                                           border: Border.all(color: R.colors.black,width: 1),
+    //                                                           borderRadius: BorderRadius.circular(10)
+    //                                                         ),
+    //                                                         child: Row(
+    //                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                           children: [
+    //                                                             Text("${date.year}".tr),
+    //                                                             Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                           ],
+    //                                                         ),
+    //                                                       ),
+    //                                                     );
+    //                                                     },)
+    //                                                   ),
+    //                                                   SizedBox(width: 20,),
+    //                                                     Expanded(
+    //                                                 child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+    //                                                   return GestureDetector(
+    //                                                   onTap: () async {
+    //                                                    showDialog(
+    //                                                       context: context,
+    //                                                       builder: (BuildContext context) {
+                                                            
+    //                                                         return AlertDialog(
+    //                                                           // title: Text("Select Year"),
+    //                                                           content: Container( // Need to use container to add size constraint.
+    //                                                             width: 300,
+    //                                                             height: 300,
+    //                                                             child: YearPicker(
+    //                                                               firstDate: DateTime(DateTime.now().year - 100, 1),
+    //                                                               lastDate: DateTime(DateTime.now().year , 1),
+    //                                                               initialDate: DateTime.now(),
+    //                                                               // save the selected date to _selectedDate DateTime variable.
+    //                                                               // It's used to set the previous selected date when
+    //                                                               // re-showing the dialog.
+    //                                                               selectedDate: todate,
+    //                                                               onChanged: (DateTime dateTime) {
+    //                                                                 // close the dialog when year is selected.
+                                                                    
+    //                                                                   todate = dateTime;
+    //                                                                 setState(() {
+                                                                              
+    //                                                                         });
+    //                                                                 Navigator.pop(context);
+                                                      
+    //                                                                 // Get.back();  
+    //                                                                     ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                       expenseTypes.clear();
+    //                                                      for (var expanse in ctr.expenseTypes) {
+    //                                                       // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                     if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                       expenseTypes.add(expanse);
+    //                                                     }
+    //                                                   }
+                                                      
+    //                                                                     });
+                                                      
+    //                                                                 // Do something with the dateTime selected.
+    //                                                                 // Remember that you need to use dateTime.year to get the year
+    //                                                               },
+    //                                                             ),
+    //                                                           ),
+    //                                                         );
+    //                                                       },
+    //                                                     );
+                                                        
+    //                                                   },
+    //                                                   child:  Container(
+    //                                                     padding: const EdgeInsets.all(8),
+    //                                                     decoration: BoxDecoration(
+    //                                                       border: Border.all(color: R.colors.black,width: 1),
+    //                                                       borderRadius: BorderRadius.circular(10)
+    //                                                     ),
+    //                                                     child: Row(
+    //                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                       children: [
+    //                                                         Text("${todate.year}".tr),
+    //                                                         Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                       ],
+    //                                                     ),
+    //                                                   ),
+    //                                                 );
+    //                                                 },)
+    //                                               ),
+    //                                                 ],
+    //                                               ),
+    
+                                                  SizedBox(height: 20,),
+    
+                                                  Row(
+                                                    children: [
+                                                       GestureDetector(
+                                                        onTap: (){
+                                                          // print(GetStorage().read("user_token"));
+                                                           
+                                                           ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          Get.back();
+                                                          
+                                                                            });
+                                                                             
+                                                         
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                            color: R.colors.blue
+                                                            ),
+                                                            child: Center(child: Text('Show'.tr),),
+                                                        ),
+                                                      ),
+                                                       SizedBox(width: 20,), 
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          // print(GetStorage().read("user_token"));
+                                                          Get.back();  
+                                                          setState(() {
+                                                            date = DateTime.now();
+                                                            todate = DateTime.now();
+                                                            month = DateTime.now();
+                                                            tomonth = DateTime.now();
+                                                            day = DateTime.now();
+                                                            today = DateTime.now();
+                                                            
+                                                          });
+                      ctr.getHome(ctr.selectedBudgetId.value, null, null).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        // debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    
+                      });  
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                            color: R.colors.blue
+                                                            ),
+                                                            child: Center(child: Text('Reset'.tr),),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  
+                                                ],
+                                              ),))
+                                            ]),
+                                          ),
+                                        );
+                                             },
+                                              child: Container(
+                                               width: 50,
+                                               padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                               decoration: BoxDecoration(
+                                                 color: R.colors.lightBlue3,
+                                                 borderRadius: BorderRadius.circular(10),
+                                               ),
+                                               child: Row(
+                                                 mainAxisAlignment: MainAxisAlignment.center,
+                                                 children: [
+                                                   // Text(ctr.expanse.value,style: TextStyle(color: R.colors.black),),
+                                                   Icon(Icons.search,color: R.colors.black,)
+                                                 ],
+                                               ),
+                                              ),
+                                            ),
+                                             
+                                           ],
+                                         ),
+                                       ),
+                             ],
+                           ),
+                            
+                                              const SizedBox(
+                           height: 15,
+                                              ),
+                                              Center(
+                           child: SizedBox(
+                             width: Get.width > 750 ? Get.width * 0.15 : Get.width * 0.40 ,
+                             child: Row(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               // crossAxisAlignment: CrossAxisAlignment.stretch,
+                               children: [
+                                 Expanded(
+                                   flex: 2,
+                                   child: Container(
+                                     // width: Get.width * 0.35,
+                                     padding: const EdgeInsets.all(4),
+                                     decoration: BoxDecoration(
+                                         borderRadius: BorderRadius.circular(10),
+                                         border:
+                                             Border.all(color: R.colors.grey, width: 1)),
+                                     child: Column(
+                                       mainAxisAlignment: MainAxisAlignment.center,
+                                       children: [
+                                         Screenshot(controller: screenshotController, child: Column(
+                                           children: [
+                                             SizedBox(
+                                               width: 80,
+                                               height: 80,
+                                               child:  Container(
+                                               color: R.colors.white,
+                                               child: QrImageView(
+                                                 data: ctr.qrCode.value,
+                                                         version: QrVersions.auto,
+                                                         size: 100.0,
+                                                 ),
+                                               // QrImage(
+                                               //           data: ctr.qrCode.value,
+                                               //           version: QrVersions.auto,
+                                               //           size: 100.0,
+                                               //         ),
+                                             ),
+                                             ),
+                                              const SizedBox(
+                                           height: 5,
+                                         ),
+                                         Text(
+                                           '${ctr.selectedBudgetName}',
+                                          //  textDirection: TextDirection.rtl ,
+                                           // - ${'QR code'.tr
+                                           
+                                           style: TextStyle(color: R.colors.grey,),
+                                         ),
+                                         // const SizedBox(
+                                         //   height: 5,
+                                         // ),
+                                         // Text(
+                                         //   'Username #1',
+                                         //   style: TextStyle(color: R.colors.black),
+                                         // ),
+                                         const SizedBox(
+                                           height: 5,
+                                         ),
+                                                     
+                                           ],
+                                         )),
+                                         //  SizedBox(
+                                         //   width: 100,
+                                         //   height: 100,
+                                         //   child: Screenshot(
+                                         //     controller: screenshotController,
+                                         //     child: Container(
+                                         //       color: R.colors.white,
+                                         //       child: QrImage(
+                                         //                 data: ctr.qrCode.value,
+                                         //                 version: QrVersions.auto,
+                                         //                 size: 100.0,
+                                         //               ),
+                                         //     ),
+                                         //   ),
+                                         // ),
+                                        
+                                         Text(
+                                           ctr.qrCode.value,
+                                           textDirection: TextDirection.ltr ,
+                                           style: TextStyle(color: R.colors.black),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                                 // const SizedBox(
+                                 //   width: 10,
+                                 // ),
+                                 // Expanded(
+                                 //   flex: 3,
+                                 //   child: SizedBox(
+                                 //      width: Get.width,
+                                 //     child: Column(
+                                 //       children: [
+                                 //         Container(
+                                 //           padding: const EdgeInsets.all(8),
+                                 //           decoration: BoxDecoration(
+                                 //               borderRadius: BorderRadius.circular(10),
+                                 //               border: Border.all(
+                                 //                   color: R.colors.grey, width: 1)),
+                                 //           child: Column(
+                                 //             children: [
+                                 //               Row(
+                                 //                 children: [
+                                 //                   // Image.asset(
+                                 //                   //   R.images.icon2,
+                                 //                   //   width: 25,
+                                 //                   //   height: 25,
+                                 //                   // ),
+                                 //                   // const SizedBox(
+                                 //                   //   width: 5,
+                                 //                   // ),
+                                 //                   Column(
+                                 //                     crossAxisAlignment:
+                                 //                         CrossAxisAlignment.start,
+                                 //                     children: [
+                                 //                       Text("Daily".tr),
+                                 //                       SizedBox(height: 5,),
+                                 //                       Row(
+                                 //                         children: [
+                                                           
+                                 //                           Text(
+                                 //                             'Total Invoices'.tr,
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                           Text(
+                                 //                             " : ${ctr.totalInvoicesDaily.value}",
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                         ],
+                                 //                       ),
+                                 //                       const SizedBox(
+                                 //                         height: 5,
+                                 //                       ),
+                                 //                       Row(
+                                 //                         children: [
+                                 //                           Text(
+                                 //                             'Total Expenses'.tr,
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                           Text(
+                                 //                             " : ${ctr.totalExpansesDaily.value}",
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                         ],
+                                 //                       ),
+                                 //                       SizedBox(height: 5,),
+                                 //                        Text("Monthly".tr),
+                                 //                       SizedBox(height: 5,),
+                                 //                       Row(
+                                 //                         children: [
+                                                           
+                                 //                           Text(
+                                 //                             'Total Invoices'.tr,
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                           Text(
+                                 //                             " : ${ctr.totalInvoicesMontly.value}",
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                         ],
+                                 //                       ),
+                                 //                       const SizedBox(
+                                 //                         height: 5,
+                                 //                       ),
+                                 //                       Row(
+                                 //                         children: [
+                                 //                           Text(
+                                 //                             'Total Expenses'.tr,
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                           Text(
+                                 //                             " : ${ctr.totalExpansesMontly.value}",
+                                 //                             style: TextStyle(
+                                 //                                 color: R.colors.black,
+                                 //                                 fontSize: 12),
+                                 //                           ),
+                                 //                         ],
+                                 //                       ),
+                                 //                     ],
+                                 //                   )
+                                 //                 ],
+                                 //               ),
+                                 //             ],
+                                 //           ),
+                                 //         ),
+                                 //         const SizedBox(
+                                 //           height: 8,
+                                 //         ),
+                                         
+                                         
+                                 //       ],
+                                 //     ),
+                                 //   ),
+                                 // )
+                               ],
+                             ),
+                           ),
+                                              ),
+                             ],
+                           ),
+                         ),
+                       ),
+                      ],
+                      if(kIsWeb == false) ...[
+                        Container(
+                        width: Get.width,
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: R.colors.grey, width: 1)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                           Image.asset(
+                                        R.images.icon2,
+                                        width: 25,
+                                        height: 25,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+    
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Total Invoices Yearly'.tr,
+                                                style: TextStyle(
+                                                    color: R.colors.black,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                " : ${ctr.totalInvoicesYearly}",
+                                                style: TextStyle(
+                                                    color: R.colors.black,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Total Expenses Yearly'.tr,
+                                                style: TextStyle(
+                                                    color: R.colors.black,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                " : ${ctr.totalExpansesYearly}",
+                                                style: TextStyle(
+                                                    color: R.colors.black,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+    
+                                        ],
+                                      ),
+                                     GestureDetector(
+                                      onTap: () {
+                                        Get.bottomSheet(
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                            decoration:  BoxDecoration(
+                                              color: R.colors.white,
+                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
+                                            ),
+                                            child: Column(children: [
+                                              Expanded(child: SingleChildScrollView(child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(height: 10,),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(child: Text("From".tr),),
+                                                      SizedBox(width: 20,),
+                                                      Expanded(child: Text("To".tr),),
+                                                    ],
+                                                  ),
+                                                 
+                                                  // Text("Day".tr), 
+                                                  const SizedBox(height: 10,),  
+                                                  Row(
+                                                    children: [
+                                                     
+                                                      Expanded(
+                                                        child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                                                          return GestureDetector(
+                                                                                                          onTap: () async {
+                                                        
+                                                         DateTime? pickedDate = await showDatePicker(
+                                                                            context: context,
+                                                                            initialDate: day,
+                                                                            firstDate: DateTime(1950),
+                                                                            //DateTime.now() - not to allow to choose before today.
+                                                                            lastDate: DateTime.now());
+                                                           
+                                                                        if (pickedDate != null) {
+                                                                          
+                                                                            
+                                                                              day = pickedDate;
+                                                                            setState(() {
+                                                                              
+                                                                            });
+                                                                            // Get.back();  
+                                                                            ctr.getHome(ctr.selectedBudgetId.value, day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          
+                                                                            });
+                                                                         
+                                                                          }
+                                                        
+                                                                                                          },
+                                                                                                          child:  Container(
+                                                        padding: const EdgeInsets.all(8),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(color: R.colors.black,width: 1),
+                                                          borderRadius: BorderRadius.circular(10)
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text("${day.day}-${day.month}-${day.year}"),
+                                                            Icon(Icons.arrow_drop_down,color: R.colors.black,),
+                                                          ],
+                                                        ),
+                                                                                                          ),
+                                                                                                        );
+                                                        },),
+                                                      ),
+                                                      SizedBox(width: 20,),
+                                                       Expanded(
+                                                        child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                                                          return GestureDetector(
+                                                          onTap: () async {
+                                                            
+                                                             DateTime? pickedDate = await showDatePicker(
+                                                                            context: context,
+                                                                            initialDate: today,
+                                                                            firstDate: DateTime(1950),
+                                                                            //DateTime.now() - not to allow to choose before today.
+                                                                            lastDate: DateTime.now());
+                                                           
+                                                                        if (pickedDate != null) {
+                                                                          
+                                                                            
+                                                                              today = pickedDate;
+                                                                            setState(() {
+                                                                              
+                                                                            });
+                                                                            // Get.back();  
+                                                                            ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          
+                                                                            });
+                                                                         
+                                                                          }
+                                                            
+                                                          },
+                                                          child:  Container(
+                                                            padding: const EdgeInsets.all(8),
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(color: R.colors.black,width: 1),
+                                                              borderRadius: BorderRadius.circular(10)
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Text("${today.day}-${today.month}-${today.year}"),
+                                                                Icon(Icons.arrow_drop_down,color: R.colors.black,),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                        },)
+                                                      ),
+                                                      
+                                                    ],
+                                                  ),
+    //                                               SizedBox(height: 10,),
+                                                  
+    //                                               const SizedBox(height: 10,),
+    //                                               Text("Month".tr), 
+    //                                               const SizedBox(height: 10,),  
+    //                                               Row(
+    //                                                 children: [
+    //                                                   Expanded(
+    //                                                     child: StatefulBuilder(builder: ( BuildContext context, StateSetter setState) {
+    //                                                       return GestureDetector(
+    //                                                       onTap: () async {
+    //                                                      final selected = await showMonthPicker(
+    //                                                         context: context,
+    //                                                         initialDate: month,
+    //                                                         firstDate: DateTime(1970),
+    //                                                         lastDate: DateTime(2050)
+    //                                                       );                                                if(selected != null){
+                                                          
+                                                            
+    //                                                         month = selected;
+    //                                                         setState(() {
+                                                                              
+    //                                                                         });
+    //                                                       }
+    //                                                       // Get.back();  
+    //                                                                         ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                           expenseTypes.clear();
+    //                                                          for (var expanse in ctr.expenseTypes) {
+    //                                                           // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                         if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                           expenseTypes.add(expanse);
+    //                                                         }
+    //                                                       }
+                                                          
+    //                                                                         });
+                                                            
+    //                                                       },
+    //                                                       child:  Container(
+    //                                                         padding: const EdgeInsets.all(8),
+    //                                                         decoration: BoxDecoration(
+    //                                                           border: Border.all(color: R.colors.black,width: 1),
+    //                                                           borderRadius: BorderRadius.circular(10)
+    //                                                         ),
+    //                                                         child: Row(
+    //                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                           children: [
+    //                                                             Text("${month.month}"),
+    //                                                             Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                           ],
+    //                                                         ),
+    //                                                       ),
+    //                                                     );
+    //                                                     },)
+    //                                                   ),
+    //                                                   SizedBox(width: 20,),
+    //                                                   Expanded(
+    //                                                 child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    //                                                   return GestureDetector(
+    //                                                   onTap: () async {
+    //                                                  final selected = await showMonthPicker(
+    //                                                     context: context,
+    //                                                     initialDate: tomonth,
+    //                                                     firstDate: DateTime(1970),
+    //                                                     lastDate: DateTime(2050)
+    //                                                   );                                                if(selected != null){
+                                                      
+                                                        
+    //                                                     tomonth = selected;
+    //                                                     setState(() {
+                                                                              
+    //                                                                         });
+    //                                                   }
+    //                                                   // Get.back();  
+    //                                                                     ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                       expenseTypes.clear();
+    //                                                      for (var expanse in ctr.expenseTypes) {
+    //                                                       // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                     if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                       expenseTypes.add(expanse);
+    //                                                     }
+    //                                                   }
+                                                      
+    //                                                                     });
+                                                        
+    //                                                   },
+    //                                                   child:  Container(
+    //                                                     padding: const EdgeInsets.all(8),
+    //                                                     decoration: BoxDecoration(
+    //                                                       border: Border.all(color: R.colors.black,width: 1),
+    //                                                       borderRadius: BorderRadius.circular(10)
+    //                                                     ),
+    //                                                     child: Row(
+    //                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                       children: [
+    //                                                         Text("${tomonth.month}"),
+    //                                                         Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                       ],
+    //                                                     ),
+    //                                                   ),
+    //                                                 );
+    //                                                 },)
+    //                                               ),
+    //                                                 ],
+    //                                               ),
+    //                                               SizedBox(height: 10,),
+    
+    // //                                              
+    //                                               Text("Year".tr), 
+    //                                               const SizedBox(height: 10,),  
+    //                                               Row(
+    //                                                 children: [
+    //                                                   Expanded(
+    //                                                     child: StatefulBuilder(builder: (BuildContext context,StateSetter setState) {
+    //                                                       return GestureDetector(
+    //                                                       onTap: () async {
+    //                                                        showDialog(
+    //                                                           context: context,
+    //                                                           builder: (BuildContext context) {
+                                                                
+    //                                                             return AlertDialog(
+    //                                                               // title: Text("Select Year"),
+    //                                                               content: Container( // Need to use container to add size constraint.
+    //                                                                 width: 300,
+    //                                                                 height: 300,
+    //                                                                 child: YearPicker(
+    //                                                                   firstDate: DateTime(DateTime.now().year - 100, 1),
+    //                                                                   lastDate: DateTime(DateTime.now().year , 1),
+    //                                                                   initialDate: DateTime.now(),
+    //                                                                   // save the selected date to _selectedDate DateTime variable.
+    //                                                                   // It's used to set the previous selected date when
+    //                                                                   // re-showing the dialog.
+    //                                                                   selectedDate: date,
+    //                                                                   onChanged: (DateTime dateTime) {
+    //                                                                     // close the dialog when year is selected.
+                                                                        
+    //                                                                       date = dateTime;
+    //                                                                     setState(() {
+                                                                              
+    //                                                                         });
+    //                                                                     Navigator.pop(context);
+                                                          
+    //                                                                     // Get.back();  
+    //                                                                         ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                           expenseTypes.clear();
+    //                                                          for (var expanse in ctr.expenseTypes) {
+    //                                                           // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                         if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                           expenseTypes.add(expanse);
+    //                                                         }
+    //                                                       }
+                                                          
+    //                                                                         });
+                                                          
+    //                                                                     // Do something with the dateTime selected.
+    //                                                                     // Remember that you need to use dateTime.year to get the year
+    //                                                                   },
+    //                                                                 ),
+    //                                                               ),
+    //                                                             );
+    //                                                           },
+    //                                                         );
+                                                            
+    //                                                       },
+    //                                                       child:  Container(
+    //                                                         padding: const EdgeInsets.all(8),
+    //                                                         decoration: BoxDecoration(
+    //                                                           border: Border.all(color: R.colors.black,width: 1),
+    //                                                           borderRadius: BorderRadius.circular(10)
+    //                                                         ),
+    //                                                         child: Row(
+    //                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                           children: [
+    //                                                             Text("${date.year}".tr),
+    //                                                             Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                           ],
+    //                                                         ),
+    //                                                       ),
+    //                                                     );
+    //                                                     },)
+    //                                                   ),
+    //                                                   SizedBox(width: 20,),
+    //                                                     Expanded(
+    //                                                 child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    //                                                   return GestureDetector(
+    //                                                   onTap: () async {
+    //                                                    showDialog(
+    //                                                       context: context,
+    //                                                       builder: (BuildContext context) {
+                                                            
+    //                                                         return AlertDialog(
+    //                                                           // title: Text("Select Year"),
+    //                                                           content: Container( // Need to use container to add size constraint.
+    //                                                             width: 300,
+    //                                                             height: 300,
+    //                                                             child: YearPicker(
+    //                                                               firstDate: DateTime(DateTime.now().year - 100, 1),
+    //                                                               lastDate: DateTime(DateTime.now().year , 1),
+    //                                                               initialDate: DateTime.now(),
+    //                                                               // save the selected date to _selectedDate DateTime variable.
+    //                                                               // It's used to set the previous selected date when
+    //                                                               // re-showing the dialog.
+    //                                                               selectedDate: todate,
+    //                                                               onChanged: (DateTime dateTime) {
+    //                                                                 // close the dialog when year is selected.
+                                                                    
+    //                                                                   todate = dateTime;
+    //                                                                 setState(() {
+                                                                              
+    //                                                                         });
+    //                                                                 Navigator.pop(context);
+                                                      
+    //                                                                 // Get.back();  
+    //                                                                     ctr.getHome(ctr.selectedBudgetId.value, day.day == DateTime.now().day ? null : day.day, month.month == DateTime.now().month ? null : month.month, date.year == DateTime.now().year ? null : date.year ,today.day == DateTime.now().day ? null : today.day, tomonth.month == DateTime.now().month ? null : tomonth.month, todate.year == DateTime.now().year ? null : todate.year).then((value){
+    //                                                                       expenseTypes.clear();
+    //                                                      for (var expanse in ctr.expenseTypes) {
+    //                                                       // debugPrint(expanse.invoiceSumAmount.toString());
+    //                                                     if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+    //                                                       expenseTypes.add(expanse);
+    //                                                     }
+    //                                                   }
+                                                      
+    //                                                                     });
+                                                      
+    //                                                                 // Do something with the dateTime selected.
+    //                                                                 // Remember that you need to use dateTime.year to get the year
+    //                                                               },
+    //                                                             ),
+    //                                                           ),
+    //                                                         );
+    //                                                       },
+    //                                                     );
+                                                        
+    //                                                   },
+    //                                                   child:  Container(
+    //                                                     padding: const EdgeInsets.all(8),
+    //                                                     decoration: BoxDecoration(
+    //                                                       border: Border.all(color: R.colors.black,width: 1),
+    //                                                       borderRadius: BorderRadius.circular(10)
+    //                                                     ),
+    //                                                     child: Row(
+    //                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                                                       children: [
+    //                                                         Text("${todate.year}".tr),
+    //                                                         Icon(Icons.arrow_drop_down,color: R.colors.black,),
+    //                                                       ],
+    //                                                     ),
+    //                                                   ),
+    //                                                 );
+    //                                                 },)
+    //                                               ),
+    //                                                 ],
+    //                                               ),
+    
+                                                  SizedBox(height: 20,),
+    
+                                                  Row(
+                                                    children: [
+                                                       GestureDetector(
+                                                        onTap: (){
+                                                          // print(GetStorage().read("user_token"));
+                                                           
+                                                           ctr.getHome(ctr.selectedBudgetId.value,  day == DateTime.now() ? null : day.toIso8601String(),   today == DateTime.now() ? null : today.toIso8601String()).then((value){
+                                                                              expenseTypes.clear();
+                                                             for (var expanse in ctr.expenseTypes) {
+                                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                                            if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+                                                              expenseTypes.add(expanse);
+                                                            }
+                                                          }
+                                                          Get.back();
+                                                          
+                                                                            });
+                                                                             
+                                                         
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                            color: R.colors.blue
+                                                            ),
+                                                            child: Center(child: Text('Show'.tr),),
+                                                        ),
+                                                      ),
+                                                       SizedBox(width: 20,), 
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          // print(GetStorage().read("user_token"));
+                                                          Get.back();  
+                                                          setState(() {
+                                                            date = DateTime.now();
+                                                            todate = DateTime.now();
+                                                            month = DateTime.now();
+                                                            tomonth = DateTime.now();
+                                                            day = DateTime.now();
+                                                            today = DateTime.now();
+                                                            
+                                                          });
+                      ctr.getHome(ctr.selectedBudgetId.value, null, null).then((value){
+                        expenseTypes.clear();
+       for (var expanse in ctr.expenseTypes) {
+        // debugPrint(expanse.invoiceSumAmount.toString());
+      if (expanse.invoiceSumAmount != null && expanse.invoiceSumAmount! > 0 ) {
+        expenseTypes.add(expanse);
+      }
+    }
+    
+                      });  
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                            color: R.colors.blue
+                                                            ),
+                                                            child: Center(child: Text('Reset'.tr),),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  
+                                                ],
+                                              ),))
+                                            ]),
+                                          ),
+                                        );
+                                      },
+                                       child: Container(
+                                        width: 50,
+                                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: R.colors.lightBlue3,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            // Text(ctr.expanse.value,style: TextStyle(color: R.colors.black),),
+                                            Icon(Icons.search,color: R.colors.black,)
+                                          ],
+                                        ),
+                                       ),
+                                     ),
+                                      
+                                    ],
+                                  ),
+                                ),
+    
+    
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        width: Get.width,
+                        child: IntrinsicHeight(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  // width: Get.width * 0.35,
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border:
+                                          Border.all(color: R.colors.grey, width: 1)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Screenshot(controller: screenshotController, child: Column(
+                                        children: [
+                                          SizedBox(
+                                            width: 80,
+                                            height: 80,
+                                            child:  Container(
+                                            color: R.colors.white,
+                                            child: QrImageView(
+                                              data: ctr.qrCode.value,
+                                                      version: QrVersions.auto,
+                                                      size: 100.0,
+                                              ),
+                                            // QrImage(
+                                            //           data: ctr.qrCode.value,
+                                            //           version: QrVersions.auto,
+                                            //           size: 100.0,
+                                            //         ),
+                                          ),
+                                          ),
+                                           const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '${ctr.selectedBudgetName}',
+                                        // textDirection: TextDirection.rtl ,
+                                        // - ${'QR code'.tr
+                                        style: TextStyle(color: R.colors.grey),
+                                      ),
+                                      // const SizedBox(
+                                      //   height: 5,
+                                      // ),
+                                      // Text(
+                                      //   'Username #1',
+                                      //   style: TextStyle(color: R.colors.black),
+                                      // ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                                  
+                                        ],
+                                      )),
+                                      //  SizedBox(
+                                      //   width: 100,
+                                      //   height: 100,
+                                      //   child: Screenshot(
+                                      //     controller: screenshotController,
+                                      //     child: Container(
+                                      //       color: R.colors.white,
+                                      //       child: QrImage(
+                                      //                 data: ctr.qrCode.value,
+                                      //                 version: QrVersions.auto,
+                                      //                 size: 100.0,
+                                      //               ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                     
+                                      Text(
+                                        ctr.qrCode.value,
+                                        textDirection: TextDirection.ltr ,
+                                        style: TextStyle(color: R.colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: SizedBox(
+                                   width: Get.width,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: R.colors.grey, width: 1)),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                // Image.asset(
+                                                //   R.images.icon2,
+                                                //   width: 25,
+                                                //   height: 25,
+                                                // ),
+                                                // const SizedBox(
+                                                //   width: 5,
+                                                // ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("Daily".tr),
+                                                    SizedBox(height: 5,),
+                                                    Row(
+                                                      children: [
+                                                        
+                                                        Text(
+                                                          'Total Invoices'.tr,
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                        Text(
+                                                          " : ${ctr.totalInvoicesDaily.value}",
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          'Total Expenses'.tr,
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                        Text(
+                                                          " : ${ctr.totalExpansesDaily.value}",
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                     Text("Monthly".tr),
+                                                    SizedBox(height: 5,),
+                                                    Row(
+                                                      children: [
+                                                        
+                                                        Text(
+                                                          'Total Invoices'.tr,
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                        Text(
+                                                          " : ${ctr.totalInvoicesMontly.value}",
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          'Total Expenses'.tr,
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                        Text(
+                                                          " : ${ctr.totalExpansesMontly.value}",
+                                                          style: TextStyle(
+                                                              color: R.colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      SizedBox(
+                                        width : Get.width,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    border: Border.all(
+                                                        color: R.colors.grey, width: 1)),
+                                                child: GestureDetector(
+                                                  onTap: (){
+                                                    Get.bottomSheet(
+                                                      Container(
+                                                        padding: const EdgeInsets.all(20),
+                                                        decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                                        color: R.colors.white,
+                                                        ),
+                                                        child: Column(mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Row(children: [
+                                                            GestureDetector(
+                                                              onTap: ()async{
+                                                                // debugPrint("here");
+                                                                await ctr.genrateReport(ctr.selectedBudgetId.value,   day.toIso8601String(),    today.toIso8601String());
+    //                                                              await invCtr.getInvoiceList('').then((value){
+    //   invoices = value;
+    //   return null;
+    // });
+                                                                // debugPrint(invoices?.data.toString());
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // debugPrint(invoices?.data?.length.toString());
+                                                                final xcel.Workbook workbook = xcel.Workbook();
+                                                                    final xcel.Worksheet sheet = workbook.worksheets[0];
+                                                                if(ctr.receivedInvoices!.isNotEmpty){
+                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                            
+                                                                      
+                                                                    sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(1, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(1, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(1, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(1, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < ctr.receivedInvoices!.length; i++) {
+                                                                      final item = ctr.receivedInvoices![i];
+                                                                      var id = (ctr.receivedInvoices!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
+                                                                    }
+                                                                    var total = ctr.receivedInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                      sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 4).setText("Total".tr);
+                                                                      sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 5).setText(total.toString());
+                                                                  
+                                                                  
+                                                                    if (ctr.sendInvoices!.isNotEmpty) {
+                                                                       var ind = ctr.receivedInvoices!.length + 6;
+                                                                      sheet.getRangeByIndex(ind, 1).setText("Inv number".tr);
+                                                                    sheet.getRangeByIndex(ind, 2).setText("Created at".tr);
+                                                                    sheet.getRangeByIndex(ind, 3).setText("Customer".tr);
+                                                                    sheet.getRangeByIndex(ind, 4).setText("Description".tr);
+                                                                    sheet.getRangeByIndex(ind, 5).setText("Amount".tr);
+                                                                    for (var i = 0; i < ctr.sendInvoices!.length; i++) {
+                                                                      final item = ctr.sendInvoices![i];
+                                                                      var id = (ctr.sendInvoices!.length - 1 ) - i;
+                                                                      sheet.getRangeByIndex(i + 2 + ind, 1).setText((id + 1).toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 2).setText(item.createdDate.toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 3).setText(item.customer?.name.toString());
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 4).setText(item.note ?? '');
+                                                                      sheet.getRangeByIndex(i + 2+ ind, 5).setText(item.amount.toString());
+                                                                    }
+                                                                    var total = ctr.sendInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                      sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 4).setText("Total".tr);
+                                                                      sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 5).setText(total.toString());
+                                                                    }  
+                                                                    final List<int> bytes = workbook.saveAsStream();
+                                                                     workbook.dispose();
+                                                                    //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
+                                                                    final directory = (await getApplicationDocumentsDirectory()).path;
+                                                                    String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                    final file = File('$directory/$fileName.xlsx');
+                                                                     await file.writeAsBytes(bytes,flush: true);
+                                                                    try{
+                                                                          Share.shareXFiles([XFile(file.path)]);
+                                                                        } catch (error) {
+                                                                          Get.snackbar("error",error.toString(),backgroundColor: R.colors.blue);
+                                                                          // debugPrint(error.toString());
+                                                                        
+                                                                    }
+                                                                   
+                                                                  Get.back();
+                                                                            
+                                                                }
+                                                               
+                                                              },
+                                                              child: Image.asset(R.images.excelIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                            ),
+                                                            SizedBox(width: 20,),
+                                                             GestureDetector(
+                                                              onTap: () async{
+                                                                // debugPrint("here");
+                                                                await ctr.genrateReport(ctr.selectedBudgetId.value,   day.toIso8601String(),    today.toIso8601String());
+                                                                // print(ctr.receivedInvoices.toString());
+    //                                                              await invCtr.getInvoiceList('').then((value){
+    //   invoices = value;
+    //   return null;
+    // });
+                                                                // debugPrint(invoices?.data.toString());
+                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
+                                                                // A Suls Regular.ttf
+                                                                var total = ctr.receivedInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                var total2 = ctr.sendInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString()) );
+                                                                final  font = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                final  ttf = pw.Font.ttf(font);
+                                                                // final data = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                            
+                                                                //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
+                                                                            
+                                                                //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
+                                                                final pdf = pw.Document();
+                                                                if(ctr.receivedInvoices!.isNotEmpty){
+                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                    
+                                                                      pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < ctr.receivedInvoices!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((ctr.receivedInvoices!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.receivedInvoices![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.receivedInvoices![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(ctr.receivedInvoices![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(ctr.receivedInvoices![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("",
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("", textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("",  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Total".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(total.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      })); // Page
+                                                                         if (ctr.sendInvoices!.isNotEmpty) {
+                                                                           pdf.addPage(pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(
+                                                                              base: ttf,
+                                                                            ),
+                                                                        build: (pw.Context context) {
+                                                                        return <pw.Widget>[
+                                                                          pw.Table(children: [
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("Inv number".tr,
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Created at".tr.toString(), textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("Customer".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Description".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text("Amount".tr.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                             for(var i = 0; i < ctr.sendInvoices!.length; i++)
+                                                                              pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("${((ctr.sendInvoices!.length - 1 ) - i + 1)}"),
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.sendInvoices![i].createdDate.toString()),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text(ctr.sendInvoices![i].customer?.name.toString() ?? '',textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text(ctr.sendInvoices![i].note ?? ''),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(ctr.sendInvoices![i].amount.toString()),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                            pw.TableRow(children: [
+                                                                              pw.Column(children: [
+                                                                                
+                                                                                pw.Text("",
+                                                                                 textDirection: pw.TextDirection.rtl,
+                                                                                )
+                                                                              ]),
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("", textDirection: pw.TextDirection.rtl, ),
+                                                                              ]),
+                                                                            
+                                                                               pw.Column(children: [
+                                                                   
+                                                                                pw.Text("",  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                  
+                                                                                pw.Text("Total".tr.toString(), textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                            
+                                                                            
+                                                                            
+                                                                               pw.Column(children: [
+                                                                    
+                                                                                pw.Text(total2.toString(),  textDirection: pw.TextDirection.rtl,),
+                                                                              ]),
+                                                                              
+                                                                            ]),
+                                                                          ]),
+                                                                        //  pw.Table(children: <>) 
+                                                                        ]; // Center
+                                                                      }));
+                                                                         }     
+                                                                        final output = await getTemporaryDirectory();
+                                                                        String fileName2 = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                        final file = File("${output.path}/$fileName2.pdf");
+                                                                      // final file = File("example.pdf");
+                                                                      await file.writeAsBytes(await pdf.save());
+                                                                            
+                                                                      try{
+                                                                         Share.shareXFiles([XFile(file.path)]);
+                                                                            } catch (error) {
+                                                                              Get.snackbar("error",error.toString(),backgroundColor: R.colors.blue);
+                                                                              // debugPrint(error.toString());
+                                                                            }
+                                                                            
+                                                                      Get.back();                                                                  
+                                                                            
+                                                                }
+                                                                
+                                                                            
+                                                              },
+                                                              child: Image.asset(R.images.pdfIcon,width: 60,height: 60,fit: BoxFit.cover,),
+                                                            ),
+                                                          ],),
+                                                        ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Row(
                                                     children: [
                                                       Expanded(
                                                         child: InkWell(
@@ -1153,6 +4749,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                           ),
                         ),
                       ),
+                      ]
                     ],
                   ),
                 ),

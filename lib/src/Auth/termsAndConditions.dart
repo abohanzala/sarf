@@ -257,7 +257,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
 
   Widget buildBackArrowContainerAndChangeProfileText() {
     return Positioned(
-      top: 50,
+      top: Get.width > 750 ? 10 : 20,
       left: GetStorage().read("lang") == "en" ? 30 : null,
       right: GetStorage().read("lang") != "en" ? 30 : null,
       child: InkWell(
@@ -301,7 +301,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
       // buildOptions(),
       buildBackArrowContainerAndChangeProfileText(),
       Positioned(
-        top: 100,
+        top: Get.width > 750 ? 70 : 50,
         left: 20,
         child: Column(
           children: [

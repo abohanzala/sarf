@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -110,59 +111,62 @@ loadMembers(){
         
             Transform(
             transform: Matrix4.translationValues(0, -20, 0),
-            child: Container(
-              //margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(child: Container(
-                                    height: 40,
-                                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 0),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,
-                                    border: Border.all(color: R.colors.lightBlue,width: 1) ),
-                                    child:
-                                    TextFormField(
-                                      onTap: (){
-                                        searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
-                                      },
-                                      controller: searchValue,
-                                      onChanged: _onChangeHandler,
-                                      decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.only(bottom: 5),
-                                        hintText: 'Search here'.tr,
-                                        hintStyle: TextStyle(color: R.colors.grey),
-                                        focusedBorder: InputBorder.none,
-                                        border: InputBorder.none,
-                    
+            child: Padding(
+              padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+              child: Container(
+                //margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: kIsWeb == true ? 0 : 12, vertical: 8),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: Container(
+                                      height: 40,
+                                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 0),
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,
+                                      border: Border.all(color: R.colors.lightBlue,width: 1) ),
+                                      child:
+                                      TextFormField(
+                                        onTap: (){
+                                          searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
+                                        },
+                                        controller: searchValue,
+                                        onChanged: _onChangeHandler,
+                                        decoration: InputDecoration(
+                                          contentPadding: const EdgeInsets.only(bottom: 5),
+                                          hintText: 'Search here'.tr,
+                                          hintStyle: TextStyle(color: R.colors.grey),
+                                          focusedBorder: InputBorder.none,
+                                          border: InputBorder.none,
+                      
+                                        ),
                                       ),
-                                    ),
-                                  ),),
-                                  const SizedBox(width: 10,),
-                                  GestureDetector(
-                                    onTap: (){
-                                      Get.to(() => const QRScannerScreen(invoice: false,));
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
-                                      child: Center(child: Row(
-                                        children: [
-                                              Icon(
-                                                Icons.qr_code,
-                                                color: R.colors.blue,
-                                                //size: 25.sp,
-                                              ),
-                                              const SizedBox(width: 5,),
-                                              Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
-                                              //fontSize: 25.sp
-                                              ),)
-                                        ],
-                                      ),),
-                                    ),
-                                  )
-                  ],
+                                    ),),
+                                    const SizedBox(width: 10,),
+                                    GestureDetector(
+                                      onTap: (){
+                                        Get.to(() => const QRScannerScreen(invoice: false,));
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: R.colors.lightBlue2,border: Border.all(color: R.colors.lightBlue,width: 1)),
+                                        child: Center(child: Row(
+                                          children: [
+                                                Icon(
+                                                  Icons.qr_code,
+                                                  color: R.colors.blue,
+                                                  //size: 25.sp,
+                                                ),
+                                                const SizedBox(width: 5,),
+                                                Text('SCAN'.tr,style: TextStyle(color: R.colors.blue,
+                                                //fontSize: 25.sp
+                                                ),)
+                                          ],
+                                        ),),
+                                      ),
+                                    )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -172,88 +176,92 @@ loadMembers(){
             Expanded(child: 
             Transform(
               transform: Matrix4.translationValues(0, -15, 0),
-              child: Column(
-                children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: budgetName(),
-            ),
-            const SizedBox(height: 10,),
-                  Expanded(
-                    child: FutureBuilder<MembersList?>(
-                      future: membersList,
-                      builder: (contaxt,snapshot){
-                        if(snapshot.connectionState == ConnectionState.waiting){
-                          return SizedBox(); 
-                          // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
-                        }
-                        if(snapshot.hasData){
-                          
-                          List<SingleMember?> data = snapshot.data!.data!.toList();
-                          if(data.isNotEmpty){
-                           return GridView.builder(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0 ),
+                child: Column(
+                  children: [
+                          Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: budgetName(),
+                          ),
+                          const SizedBox(height: 10,),
+                    Expanded(
+                      child: FutureBuilder<MembersList?>(
+                        future: membersList,
+                        builder: (contaxt,snapshot){
+                          if(snapshot.connectionState == ConnectionState.waiting){
+                            return SizedBox(); 
+                            // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
+                          }
+                          if(snapshot.hasData){
                             
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
-                                childAspectRatio: 1.8,
-                                mainAxisSpacing: 15,
-                                crossAxisSpacing: 10,
-                                
-                              ),
-                              itemCount: data.length,
-                               itemBuilder: (context,index){
-                                var singleData = data[index];
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      ctr.selectExpanseTypeID = singleData.id.toString() ; 
-                                      Get.toNamed(RoutesName.cityList);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                      decoration: BoxDecoration(
-                                       // borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                        border: Border(left: BorderSide(color: R.colors.lightBlue3,width: 5)),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Type'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12),),
-                                          const SizedBox(height: 5,),
-                                          Flexible(child: Text("${GetStorage().read('lang') == 'en' ? singleData?.expenseName ?? '' : singleData?.expenseNameAr ?? ''} " 
-                                          ,overflow: TextOverflow.ellipsis
-                                          ,style: TextStyle(color: R.colors.black,fontSize: 16),)),
-                                          const SizedBox(height: 5,),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Icon(Icons.groups,color: R.colors.themeColor,),
-                                                  const SizedBox(width: 5,),
-                                                  Text(singleData!.membersCount.toString(),style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
-                                                 const SizedBox(width: 2,),
-                                                  Text('Members'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
-                                                ],
-                                              ),
-                                              Icon(Icons.arrow_forward_ios,color: R.colors.black,size: 15,),
-                                            ],
-                                          ),
-                                        ],
+                            List<SingleMember?> data = snapshot.data!.data!.toList();
+                            if(data.isNotEmpty){
+                             return GridView.builder(
+                              
+                                padding: const EdgeInsets.symmetric(horizontal: kIsWeb == true ? 0 : 12),
+                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
+                                  childAspectRatio: kIsWeb == true ?  Get.width > 1150 ? 5 : (MediaQuery.of(context).size.width) /
+                      (MediaQuery.of(context).size.height / 2) : 1.8,
+                                  mainAxisSpacing: 15,
+                                  crossAxisSpacing: 10,
+                                  
+                                ),
+                                itemCount: data.length,
+                                 itemBuilder: (context,index){
+                                  var singleData = data[index];
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        ctr.selectExpanseTypeID = singleData.id.toString() ; 
+                                        Get.toNamed(RoutesName.cityList);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                        decoration: BoxDecoration(
+                                         // borderRadius: BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          border: Border(left: BorderSide(color: R.colors.lightBlue3,width: 5)),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Type'.tr,style: TextStyle(color: R.colors.grey,fontSize: 12),),
+                                            const SizedBox(height: 5,),
+                                            Flexible(child: Text("${GetStorage().read('lang') == 'en' ? singleData?.expenseName ?? '' : singleData?.expenseNameAr ?? ''} " 
+                                            ,overflow: TextOverflow.ellipsis
+                                            ,style: TextStyle(color: R.colors.black,fontSize: 16),)),
+                                            const SizedBox(height: 5,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.groups,color: R.colors.themeColor,),
+                                                    const SizedBox(width: 5,),
+                                                    Text(singleData!.membersCount.toString(),style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
+                                                   const SizedBox(width: 2,),
+                                                    Text('Members'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14),),
+                                                  ],
+                                                ),
+                                                Icon(Icons.arrow_forward_ios,color: R.colors.black,size: 15,),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                        });
+                                  );
+                          });
+                            }
                           }
-                        }
-                        return Center(child:Text('No Data'.tr));
-                      }),
-                  ),
-                ],
+                          return Center(child:Text('No Data'.tr));
+                        }),
+                    ),
+                  ],
+                ),
               ),
             ),
             

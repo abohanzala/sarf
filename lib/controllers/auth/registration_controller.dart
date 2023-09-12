@@ -57,7 +57,7 @@ class RegistrationController extends GetxController {
 
   Future registration(String mob,String country_id,) async {
     openLoader();
-    debugPrint("here");
+    // debugPrint("here");
     ddio.FormData formData = ddio.FormData();
 
     String pass = replaceArabicNumber(registerController.password.text);
@@ -160,7 +160,7 @@ class RegistrationController extends GetxController {
     ));
     // String? result = await PlatformDeviceId.getDeviceId;
     String? result = await notificationServices.getDeviceToken();
-    debugPrint(result);
+    // debugPrint(result);
     if(!kIsWeb){
        formData.fields.add( MapEntry('ios_device_id', Platform.isIOS == true ? result : '',));
     }
@@ -170,7 +170,7 @@ class RegistrationController extends GetxController {
         .add( MapEntry('android_device_id', Platform.isAndroid == true ? result : ''));
     }
    
-    debugPrint(formData.fields.toString());
+    // debugPrint(formData.fields.toString());
 
     // var request = {
     //   'language': GetStorage().read('lang'),
@@ -211,7 +211,7 @@ class RegistrationController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        debugPrint(apiError.toString());
+        // debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
@@ -223,17 +223,17 @@ class RegistrationController extends GetxController {
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
-        debugPrint("This is error==================${error.toString()}");
+        // debugPrint("This is error==================${error.toString()}");
 
         //HandlingErrors().handleError(error);
       }
     });
     //  message = response['message'];
     // if (response == null) return;
-    debugPrint("This is my response================== $response");
+    // debugPrint("This is my response================== $response");
     if(response == null || response =="")return;
     if (response['success'] == true) {
-      debugPrint(response.toString());
+      // debugPrint(response.toString());
       registerController.password.clear();
       registerController.phone.clear();
       fullNameController.clear();
@@ -264,8 +264,8 @@ class RegistrationController extends GetxController {
       await GetStorage().write('user_type', userInfo.user!.userType);
       await GetStorage().write('countryId', userInfo.user!.countryId);
       await GetStorage().write('accountType', userInfo.user!.accountType);
-      debugPrint("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer");
-      debugPrint(GetStorage().read("countryId").toString());
+      // debugPrint("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer");
+      // debugPrint(GetStorage().read("countryId").toString());
       await createFirebaseUser();
        MyBottomNavigationController ctr =
       Get.put<MyBottomNavigationController>(MyBottomNavigationController());
@@ -303,7 +303,7 @@ class RegistrationController extends GetxController {
         });
       }
       // DialogBoxes.showErroDialog(description: error.code);
-      debugPrint('Firebase signin ${error.code}');
+      // debugPrint('Firebase signin ${error.code}');
     });
     
     
