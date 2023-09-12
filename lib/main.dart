@@ -36,16 +36,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await GetStorage.init();
-  if(kIsWeb){
+  if (kIsWeb) {
     await Firebase.initializeApp(
-      options: const FirebaseOptions(apiKey: "AIzaSyDKFFTbmaRWUQZowARirHYS0p8HzKhxz60", appId: "1:651573448048:web:87803a6dfc19537f1c13b5", messagingSenderId: "651573448048", projectId: "sarf-70217")
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyDKFFTbmaRWUQZowARirHYS0p8HzKhxz60",
+            appId: "1:651573448048:web:87803a6dfc19537f1c13b5",
+            messagingSenderId: "651573448048",
+            projectId: "sarf-70217"));
+  } else {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
     );
-  }else{
-    await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   }
-  
+
   Get.put<LoginController>(LoginController());
   Get.put<RegisterController>(RegisterController());
   Get.put<OtpController>(OtpController());
@@ -60,18 +63,17 @@ void main() async {
   Get.put<PrivacyController>(PrivacyController());
   Get.put<AboutController>(AboutController());
   Get.put<SupportController>(SupportController());
-  
-  if( await GetStorage().read('lang') == null){
-    
+
+  if (await GetStorage().read('lang') == null) {
     await GetStorage().write('lang', 'ar');
   }
- 
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
@@ -87,7 +89,6 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
-          
           builder: BotToastInit(),
           // navigatorObservers: [BotToastNavigatorObserver()],
           debugShowCheckedModeBanner: false,
@@ -100,12 +101,14 @@ class MyApp extends StatelessWidget {
               ? RoutesName.LogIn
               : RoutesName.base,
           onGenerateRoute: Routes.generateRoute,
-          locale: GetStorage().read('lang') == 'ar' ? const Locale('ar', 'SA'): const Locale('en', 'US'),
+          locale: GetStorage().read('lang') == 'ar'
+              ? const Locale('ar', 'SA')
+              : const Locale('en', 'US'),
           translations: LocaleString(),
           fallbackLocale: const Locale('en', 'US'),
-  //         localizationsDelegates: const [
-  //               MonthYearPickerLocalizations.delegate,
-  // ],
+          //         localizationsDelegates: const [
+          //               MonthYearPickerLocalizations.delegate,
+          // ],
         );
       },
     );

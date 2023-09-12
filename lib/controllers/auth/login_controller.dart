@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import '../../constant/api_links.dart';
 import '../../model/loginModel.dart';
@@ -19,13 +18,13 @@ class LoginController extends GetxController {
   String id = '';
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
-   var code = "966".obs;
+  var code = "966".obs;
   var flag = "admin/country/sa.png".obs;
   var lenght = 9.obs;
   var selectedCountry = 2.obs;
- NotificationServices notificationServices = NotificationServices();
+  NotificationServices notificationServices = NotificationServices();
 
-String replaceArabicNumber(String input) {
+  String replaceArabicNumber(String input) {
     const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
@@ -44,56 +43,53 @@ String replaceArabicNumber(String input) {
     String pass = replaceArabicNumber(password.text);
 
     debugPrint(pass);
-    
+
     var request = {};
-    if(id == '' && !kIsWeb){
+    if (id == '' && !kIsWeb) {
       print("here22");
       request = {
-      'language': GetStorage().read('lang'),
-      'mobile': mob,
-      'password': pass,
-      'ios_device_id': Platform.isIOS == true ? result : '',
-      'android_device_id': Platform.isAndroid == true ? result : '',
-    };
-    }else{
+        'language': GetStorage().read('lang'),
+        'mobile': mob,
+        'password': pass,
+        'ios_device_id': Platform.isIOS == true ? result : '',
+        'android_device_id': Platform.isAndroid == true ? result : '',
+      };
+    } else {
       print("here21");
       request = {
-      'language': GetStorage().read('lang'),
-      'mobile': mob,
-      'password': pass,
-      
-    };
+        'language': GetStorage().read('lang'),
+        'mobile': mob,
+        'password': pass,
+      };
     }
 
-    if(id != "" && !kIsWeb){
+    if (id != "" && !kIsWeb) {
       print("here25");
-       request = {
-      'language': GetStorage().read('lang'),
-      'mobile': mob,
-      'password': pass,
-      "user_id" : id,
-      'ios_device_id': Platform.isIOS == true ? result : '',
-      'android_device_id': Platform.isAndroid == true ? result : '',
-    };
-    }else{
+      request = {
+        'language': GetStorage().read('lang'),
+        'mobile': mob,
+        'password': pass,
+        "user_id": id,
+        'ios_device_id': Platform.isIOS == true ? result : '',
+        'android_device_id': Platform.isAndroid == true ? result : '',
+      };
+    } else {
       print("here26");
-      if(id != "" && kIsWeb){
+      if (id != "" && kIsWeb) {
         request = {
-      'language': GetStorage().read('lang'),
-      'mobile': mob,
-      'password': pass,
-      "user_id" : id,
-      
-    };
+          'language': GetStorage().read('lang'),
+          'mobile': mob,
+          'password': pass,
+          "user_id": id,
+        };
       }
-      
     }
-     
+
     debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
-          print("hhgg");
-          debugPrint(error.toString());
+      print("hhgg");
+      debugPrint(error.toString());
       if (error is BadRequestException) {
         Get.back();
         var apiError = json.decode(error.message!);

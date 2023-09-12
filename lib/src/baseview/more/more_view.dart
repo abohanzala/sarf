@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import 'package:sarf/src/baseview/more/add_users.dart';
 import 'package:sarf/src/baseview/more/chat_list.dart';
 import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../constant/api_links.dart';
 import '../../../controllers/auth/registration_controller.dart';
 import '../../../controllers/common/change_profile_controller.dart';
@@ -33,31 +33,68 @@ class MoreScreen extends StatefulWidget {
   State<MoreScreen> createState() => _MoreScreenState();
 }
 
-
-class _MoreScreenState extends State<MoreScreen>  with RouteAware {
+class _MoreScreenState extends State<MoreScreen> with RouteAware {
   ProfileController profileController = Get.find<ProfileController>();
-  DeleteAccountController delController =  Get.put<DeleteAccountController>(DeleteAccountController());
-  ChangeProfileController changeProfileController = Get.put<ChangeProfileController>(ChangeProfileController());
-  
- 
-  
+  DeleteAccountController delController =
+      Get.put<DeleteAccountController>(DeleteAccountController());
+  ChangeProfileController changeProfileController =
+      Get.put<ChangeProfileController>(ChangeProfileController());
+
   bool isLoading = true;
 
-  
-Future logout() async {
-  // openLoader();
-  Get.find<LoginController>().id = '';
-  Get.find<RegistrationController>().isGroup = false;
-  var response =
-      await DioClient().get(ApiLinks.logout).catchError((error) async {
-    //debugPrint(error.toString());
+  Future logout() async {
+    // openLoader();
+    Get.find<LoginController>().id = '';
+    Get.find<RegistrationController>().isGroup = false;
+    var response =
+        await DioClient().get(ApiLinks.logout).catchError((error) async {
+      //debugPrint(error.toString());
+      await GetStorage().remove('user_token');
+      await GetStorage().remove('groupId');
+      await GetStorage().remove('userId');
+      await GetStorage().remove('user_type');
+      await GetStorage().remove('accountType');
+      await GetStorage().remove('countryId');
+
+      await GetStorage().remove(
+        'name',
+      );
+      await GetStorage().remove(
+        'username',
+      );
+      await GetStorage().remove(
+        'email',
+      );
+      await GetStorage().remove(
+        'firebase_email',
+      );
+      await GetStorage().remove(
+        'mobile',
+      );
+      await GetStorage().remove(
+        'photo',
+      );
+      await GetStorage().remove(
+        'status',
+      );
+      MyBottomNavigationController ctr =
+          Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      ctr.tabIndex.value = 0;
+      Get.offAllNamed(RoutesName.LogIn)?.then((value) {
+        MyBottomNavigationController ctr =
+            Get.put<MyBottomNavigationController>(
+                MyBottomNavigationController());
+        ctr.tabIndex.value = 0;
+      });
+    });
+    // print(response);
+
     await GetStorage().remove('user_token');
-    await GetStorage().remove('groupId');
     await GetStorage().remove('userId');
+    await GetStorage().remove('groupId');
     await GetStorage().remove('user_type');
     await GetStorage().remove('accountType');
     await GetStorage().remove('countryId');
-    
     await GetStorage().remove(
       'name',
     );
@@ -82,56 +119,15 @@ Future logout() async {
     MyBottomNavigationController ctr =
         Get.put<MyBottomNavigationController>(MyBottomNavigationController());
     ctr.tabIndex.value = 0;
-    Get.offAllNamed(RoutesName.LogIn)?.then((value) {
-      MyBottomNavigationController ctr =
-          Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-      ctr.tabIndex.value = 0;
-    });
-  });
-  // print(response);
-
-  await GetStorage().remove('user_token');
-  await GetStorage().remove('userId');
-  await GetStorage().remove('groupId');
-  await GetStorage().remove('user_type');
-  await GetStorage().remove('accountType');
-  await GetStorage().remove('countryId');
-  await GetStorage().remove(
-    'name',
-  );
-  await GetStorage().remove(
-    'username',
-  );
-  await GetStorage().remove(
-    'email',
-  );
-  await GetStorage().remove(
-    'firebase_email',
-  );
-  await GetStorage().remove(
-    'mobile',
-  );
-  await GetStorage().remove(
-    'photo',
-  );
-  await GetStorage().remove(
-    'status',
-  );
-  MyBottomNavigationController ctr =
-      Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-  ctr.tabIndex.value = 0;
-  Get.offAllNamed(RoutesName.LogIn)?.then((value) {});
-}
-  
+    Get.offAllNamed(RoutesName.LogIn)?.then((value) {});
+  }
 
   @override
-
   initState() {
-    
     // ignore: avoid_print
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
-  });
+      Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    });
     getData();
     super.initState();
     //print("initState Called");
@@ -139,28 +135,25 @@ Future logout() async {
 
   @override
   void didPopNext() {
-    if(mounted){
+    if (mounted) {
       setState(() {
-      isLoading = true;
-    });
-    }
-    
-    profileController.getAlertCount().then((value){
-      if(mounted){
-        setState(() {
-        isLoading = false;
+        isLoading = true;
       });
+    }
+
+    profileController.getAlertCount().then((value) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
       }
-      
     });
     super.didPopNext();
-
-     
   }
 
   Future getData() async {
-    await profileController.getProfile().then((value){
-      if(mounted){
+    await profileController.getProfile().then((value) {
+      if (mounted) {
         setState(() {
           isLoading = false;
         });
@@ -196,53 +189,50 @@ Future logout() async {
     //  Get.offAllNamed(RoutesName.LogIn);
     // });
     // await profileController.getProfile().then((value){
-      
-    // });
 
-    
-        
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         // exit(0);
         //  SystemNavigator.pop();
         SystemNavigator.pop(animated: true);
-          return true;
+        return true;
       },
       child: Scaffold(
         backgroundColor: R.colors.lightGrey,
         body:
-        //  isLoading == true
-        //     ? SizedBox()
-        //     // const Center(child: CircularProgressIndicator())
-        //     : 
+            //  isLoading == true
+            //     ? SizedBox()
+            //     // const Center(child: CircularProgressIndicator())
+            //     :
             Column(
+          children: [
+            buildBackGroundImage(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(0),
                 children: [
-                  buildBackGroundImage(),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.all(0),
-                      children: [
-                         
-            const SizedBox(height: 10,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: budgetName(),
-            ),
-            const SizedBox(height: 10,),
-                        if(GetStorage().read("user_type") != 3)
-                        buildMoreDetails(),
-                        if(GetStorage().read("user_type") == 3)
-                        const SizedBox(),
-                        
-                        ],
-                    ),
-                  )
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: budgetName(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (GetStorage().read("user_type") != 3) buildMoreDetails(),
+                  if (GetStorage().read("user_type") == 3) const SizedBox(),
                 ],
               ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -250,7 +240,7 @@ Future logout() async {
   Widget buildMoreDetails() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
           color: R.colors.white.withOpacity(0.5),
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -259,16 +249,18 @@ Future logout() async {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              buildSubscribeButton(),
-              const SizedBox(height: 10,),
+              // buildSubscribeButton(),
+              const SizedBox(
+                height: 10,
+              ),
               GestureDetector(
-                onTap: () => Get.to(() => const AddUsersScreen() ),
+                onTap: () => Get.to(() => const AddUsersScreen()),
                 child: GestureDetector(
-                  child: Container(
-                    
-                    width: Get.width,
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 16),
-                    decoration: BoxDecoration(
+                    child: Container(
+                  width: Get.width,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                  decoration: BoxDecoration(
                       color: R.colors.white,
                       // boxShadow: [
                       //   BoxShadow(
@@ -279,26 +271,37 @@ Future logout() async {
                       //   )
                       // ],
                       borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-              
-                            Icon(Icons.group,color: R.colors.themeColor,),
-                            const SizedBox(width: 5,),
-                            Text('Users'.tr,style: TextStyle(color: R.colors.themeColor),),
-                        ],),
-                        Icon(Icons.arrow_forward_ios,color: R.colors.themeColor,),
-                      ],
-                    ),
-                  )
-                  
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.group,
+                            color: R.colors.themeColor,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Users'.tr,
+                            style: TextStyle(color: R.colors.themeColor),
+                          ),
+                        ],
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: R.colors.themeColor,
+                      ),
+                    ],
                   ),
+                )),
               ),
-                const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               buildHelpAndSupportOption(),
               buildDivider(),
               buildTermsAndConditionsOption(),
@@ -372,14 +375,20 @@ Future logout() async {
         margin: const EdgeInsets.only(top: 20),
         child: Row(
           children: [
-            Icon(Icons.chat,color: R.colors.blue,size: 20,),
+            Icon(
+              Icons.chat,
+              color: R.colors.blue,
+              size: 20,
+            ),
             Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
-      child: Text(
-        'Chat'.tr,
-        style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
-      ),
-    )
+              margin: EdgeInsets.only(
+                  left: GetStorage().read('lang') == "en" ? 20 : 0,
+                  right: GetStorage().read('lang') != "en" ? 20 : 0),
+              child: Text(
+                'Chat'.tr,
+                style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
+              ),
+            )
           ],
         ),
       ),
@@ -404,13 +413,18 @@ Future logout() async {
   }
 
   Widget buildShareOption() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      child: Row(
-        children: [
-          buildShareImage(),
-          buildShareText(),
-        ],
+    return InkWell(
+      onTap: () {
+        Share.share('Sarf', subject: 'Look what we made!');
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        child: Row(
+          children: [
+            buildShareImage(),
+            buildShareText(),
+          ],
+        ),
       ),
     );
   }
@@ -458,7 +472,9 @@ Future logout() async {
 
   Widget buildRateText() {
     return Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+      margin: EdgeInsets.only(
+          left: GetStorage().read('lang') == "en" ? 20 : 0,
+          right: GetStorage().read('lang') != "en" ? 20 : 0),
       child: Text(
         'Rate'.tr,
         style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -504,7 +520,9 @@ Future logout() async {
         Get.toNamed(RoutesName.deleteAccount);
       },
       child: Container(
-        margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+        margin: EdgeInsets.only(
+            left: GetStorage().read('lang') == "en" ? 20 : 0,
+            right: GetStorage().read('lang') != "en" ? 20 : 0),
         child: Text(
           'Delete Account'.tr,
           style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -523,7 +541,9 @@ Future logout() async {
 
   Widget buildAboutText() {
     return Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+      margin: EdgeInsets.only(
+          left: GetStorage().read('lang') == "en" ? 20 : 0,
+          right: GetStorage().read('lang') != "en" ? 20 : 0),
       child: Text(
         'About'.tr,
         style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -549,7 +569,9 @@ Future logout() async {
 
   Widget buildShareText() {
     return Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+      margin: EdgeInsets.only(
+          left: GetStorage().read('lang') == "en" ? 20 : 0,
+          right: GetStorage().read('lang') != "en" ? 20 : 0),
       child: Text(
         'Share'.tr,
         style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -559,7 +581,9 @@ Future logout() async {
 
   Widget buildPrivacyPolicyText() {
     return Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+      margin: EdgeInsets.only(
+          left: GetStorage().read('lang') == "en" ? 20 : 0,
+          right: GetStorage().read('lang') != "en" ? 20 : 0),
       child: Text(
         'Privacy Policy'.tr,
         style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -569,7 +593,9 @@ Future logout() async {
 
   Widget buildHelpAndSupportText() {
     return Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0),
+      margin: EdgeInsets.only(
+          left: GetStorage().read('lang') == "en" ? 20 : 0,
+          right: GetStorage().read('lang') != "en" ? 20 : 0),
       child: Text(
         'Support'.tr,
         style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -579,7 +605,9 @@ Future logout() async {
 
   Widget buildTermsAndConditionsText() {
     return Container(
-      margin: EdgeInsets.only(left: GetStorage().read('lang') == "en"? 20 : 0,right:GetStorage().read('lang') != "en"? 20 : 0 ),
+      margin: EdgeInsets.only(
+          left: GetStorage().read('lang') == "en" ? 20 : 0,
+          right: GetStorage().read('lang') != "en" ? 20 : 0),
       child: Text(
         'Terms & Conditions'.tr,
         style: const TextStyle(fontSize: 14, fontFamily: 'medium'),
@@ -607,7 +635,7 @@ Future logout() async {
   }
 
   Widget buildBackGroundImage() {
-    return Stack( children: [
+    return Stack(children: [
       Image.asset(
         R.images.backgroundImageChangePassword,
         width: MediaQuery.of(context).size.width,
@@ -617,15 +645,15 @@ Future logout() async {
       buildOptions(),
       Positioned(
         top: 80,
-        right: GetStorage().read('lang') == 'en' ?  30 : null,
+        right: GetStorage().read('lang') == 'en' ? 30 : null,
         //left: GetStorage().read('lang') == 'en' ?  0 : 30 ,
-        left: GetStorage().read('lang') != 'en' ?  30 : null,
-        
+        left: GetStorage().read('lang') != 'en' ? 30 : null,
+
         child: Column(
           children: [
             // if(GetStorage().read("user_type") != 3)
             buildNotificationAndSettingsIcon(),
-            
+
             buildLogoutIconAndText()
           ],
         ),
@@ -636,8 +664,8 @@ Future logout() async {
   Widget buildOptions() {
     return Positioned(
       top: 70,
-      left: GetStorage().read('lang') == 'en' ?  30 : 0 ,
-      right: GetStorage().read('lang') == 'en' ?  0 : 30,
+      left: GetStorage().read('lang') == 'en' ? 30 : 0,
+      right: GetStorage().read('lang') == 'en' ? 0 : 30,
       child: Row(
         children: [
           buildImage(),
@@ -760,32 +788,37 @@ Future logout() async {
     ProfileController homeController = Get.find<ProfileController>();
     return Row(
       children: [
-        if(GetStorage().read("user_type") != 3)
-        Obx(
-          () => GestureDetector(
-            onTap: () => Get.toNamed(RoutesName.alerts),
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Image.asset(
-                  R.images.notificationIcon,
-                  height: 25,
-                  width: 25,
-                ),
-                if(homeController.alertCount.value > 0)
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: R.colors.buttonColor,
+        if (GetStorage().read("user_type") != 3)
+          Obx(
+            () => GestureDetector(
+              onTap: () => Get.toNamed(RoutesName.alerts),
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Image.asset(
+                    R.images.notificationIcon,
+                    height: 25,
+                    width: 25,
                   ),
-                  height: 15,
-                  width: 15,
-                  child: Obx(() => Center(child: Text('${homeController.alertCount.value}',style: TextStyle(color: R.colors.black,fontSize: 8),))),
-                )
-              ],
+                  if (homeController.alertCount.value > 0)
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: R.colors.buttonColor,
+                      ),
+                      height: 15,
+                      width: 15,
+                      child: Obx(() => Center(
+                              child: Text(
+                            '${homeController.alertCount.value}',
+                            style:
+                                TextStyle(color: R.colors.black, fontSize: 8),
+                          ))),
+                    )
+                ],
+              ),
             ),
           ),
-        ),
         const SizedBox(
           width: 20,
         ),
@@ -813,26 +846,29 @@ Future logout() async {
           ),
           color: R.colors.white,
         ),
-        child: profileController.profileModel!.user!.photo != null
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.network(
-                  ApiLinks.assetBasePath +
-                      profileController.profileModel!.user!.photo!,
-                  fit: BoxFit.cover,
-                ),
-              )
-            : Container());
+        child: profileController.profileModel != null
+            ? profileController.profileModel!.user!.photo != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(
+                      ApiLinks.assetBasePath +
+                          profileController.profileModel!.user!.photo!,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Container()
+            : SizedBox());
   }
 
   Widget buildViewProfileLinkButton() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Get.bottomSheet(Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           decoration: BoxDecoration(
             color: R.colors.white,
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
           ),
           child: SingleChildScrollView(
             child: Obx(
@@ -840,68 +876,106 @@ Future logout() async {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     GestureDetector(
-                      onTap: (){
-                        Get.find<RegistrationController>().isGroup = true;
-                        Get.to(() => const Registration());
-                        
-                      },
-                      child: Text('Add new account'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
-                     GestureDetector(
-                      onTap: (){
-                        Get.back();
-                        LoginController loginController = Get.find<LoginController>();
-                        loginController.id = " ${GetStorage().read('userId') ?? '' } ";
-                        Get.toNamed(RoutesName.LogIn);
-                      },
-                      child: Text('Login'.tr,style: TextStyle(color: R.colors.themeColor,fontSize: 14,decoration: TextDecoration.underline),)),
-                   ],
-                 ),
-                 const  SizedBox(height: 10,),
-                Divider(color: R.colors.lightGrey,thickness: 0.5,),
-                const SizedBox(height: 10,),
-                if(profileController.accounts.value.success == true)
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: profileController.accounts.value.accounts?.length,
-                    primary: false,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                    var  singleData = profileController.accounts.value.accounts?[index];
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      width: Get.width,
-                      child: GestureDetector(
-                        onTap: () async{
-                          
-                          profileController.login(singleData!.mobile!.toString(),singleData.swtichPassKey.toString(),singleData.groupId.toString()).then((value)async{
-                            if(value == 'true'){
-                              await GetStorage().write('user_type', singleData.userType);
-                            }
-                          });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 25,
-                              backgroundColor: singleData?.photo == null ? R.colors.grey : null,
-                              backgroundImage: singleData?.photo != null ?NetworkImage("${ApiLinks.assetBasePath}${singleData?.photo}") : null,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Get.find<RegistrationController>().isGroup = true;
+                            Get.to(() => const Registration());
+                          },
+                          child: Text(
+                            'Add new account'.tr,
+                            style: TextStyle(
+                                color: R.colors.themeColor,
+                                fontSize: 14,
+                                decoration: TextDecoration.underline),
+                          )),
+                      GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            LoginController loginController =
+                                Get.find<LoginController>();
+                            loginController.id =
+                                " ${GetStorage().read('userId') ?? ''} ";
+                            Get.toNamed(RoutesName.LogIn);
+                          },
+                          child: Text(
+                            'Login'.tr,
+                            style: TextStyle(
+                                color: R.colors.themeColor,
+                                fontSize: 14,
+                                decoration: TextDecoration.underline),
+                          )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    color: R.colors.lightGrey,
+                    thickness: 0.5,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (profileController.accounts.value.success == true)
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount:
+                            profileController.accounts.value.accounts?.length,
+                        primary: false,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          var singleData =
+                              profileController.accounts.value.accounts?[index];
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            width: Get.width,
+                            child: GestureDetector(
+                              onTap: () async {
+                                profileController
+                                    .login(
+                                        singleData!.mobile!.toString(),
+                                        singleData.swtichPassKey.toString(),
+                                        singleData.groupId.toString())
+                                    .then((value) async {
+                                  if (value == 'true') {
+                                    await GetStorage().write(
+                                        'user_type', singleData.userType);
+                                  }
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: singleData?.photo == null
+                                        ? R.colors.grey
+                                        : null,
+                                    backgroundImage: singleData?.photo != null
+                                        ? NetworkImage(
+                                            "${ApiLinks.assetBasePath}${singleData?.photo}")
+                                        : null,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    singleData?.name ?? '',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: R.colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                ],
+                              ),
                             ),
-                            const SizedBox(width: 10,),
-                            Text(singleData?.name ?? '' ,style: TextStyle(fontSize: 14,color: R.colors.black,fontWeight: FontWeight.w500),)
-                          ],
-                        ),
-                      ),
-                    );
-                    
-                  }),
-                
-                 
-              ],),
+                          );
+                        }),
+                ],
+              ),
             ),
           ),
         ));
@@ -1007,12 +1081,13 @@ Future logout() async {
   Widget buildSubScriptionMessageDetail() {
     return Container(
       // height: 50,
-      margin: const EdgeInsets.only(top: 20, left: 15, right: 15,bottom: 20),
+      margin: const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 20),
       child: Text(
-        DummyData.longText,
+        // DummyData.longText,
+        "",
         textAlign: TextAlign.center,
-        style: TextStyle(
-            fontFamily: 'medium', fontSize: 12, color: R.colors.grey),
+        style:
+            TextStyle(fontFamily: 'medium', fontSize: 12, color: R.colors.grey),
       ),
     );
   }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:sarf/src/Auth/LoginScreen.dart';
-
 import '../../../resources/resources.dart';
 
 class DeleteAccount3 extends StatefulWidget {
