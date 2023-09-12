@@ -10,204 +10,198 @@ import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 
-class AlertsController extends GetxController{
+class AlertsController extends GetxController {
   var isLoadingAlert = false.obs;
   Rx<Notifications> alerts = Notifications().obs;
 
- Future getAlerts() async {
+  Future getAlerts() async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
-   // openLoader();
-   isLoadingAlert.value = true;
-   var request = {
-    "language": GetStorage().read('lang'),
-   };
+    // openLoader();
+    isLoadingAlert.value = true;
+    var request = {
+      "language": GetStorage().read('lang'),
+    };
     var response =
         await DioClient().post(ApiLinks.alerts, request).catchError((error) {
       if (error is BadRequestException) {
         isLoadingAlert.value = false;
-         var apiError = json.decode(error.message!);
+        var apiError = json.decode(error.message!);
+        print("Hello");
         Get.snackbar(
           'Error'.tr,
           apiError["reason"].toString(),
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
-       // print(error.toString());
+        // print(error.toString());
       } else {
         isLoadingAlert.value = false;
-      if (error is BadRequestException) {
-      var message = error.message;
-      Get.snackbar(
-          'Error'.tr,
-          message.toString(),
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
-    } else if (error is FetchDataException) {
-      var message = error.message;
-      Get.snackbar(
-          'Error'.tr,
-          message.toString(),
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
-    } else if (error is ApiNotRespondingException) {
-      
-      Get.snackbar(
-          'Error'.tr,
-          'Oops! It took longer to respond.'.tr,
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
-    }
-
+        if (error is BadRequestException) {
+          var message = error.message;
+          Get.snackbar(
+            'Error'.tr,
+            message.toString(),
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+        } else if (error is FetchDataException) {
+          var message = error.message;
+          Get.snackbar(
+            'Error'.tr,
+            message.toString(),
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+        } else if (error is ApiNotRespondingException) {
+          Get.snackbar(
+            'Error'.tr,
+            'Oops! It took longer to respond.'.tr,
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+        }
       }
     });
     // debugPrint(response.toString());
-    if(response == null) return; 
+    if (response == null) return;
     if (response['success'] == true) {
       isLoadingAlert.value = false;
       // debugPrint(response.toString());
-        var data = Notifications.fromJson(response);
-        alerts.value = data;
-       
+      var data = Notifications.fromJson(response);
+      alerts.value = data;
     } else {
       isLoadingAlert.value = false;
       // debugPrint('here');
     }
     return null;
   }
-
 
   Future clearAlerts() async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
-   // openLoader();
-   isLoadingAlert.value = true;
-   var request = {
-    "language": GetStorage().read('lang'),
-   };
-    var response =
-        await DioClient().post(ApiLinks.alertsClear, request).catchError((error) {
+    // openLoader();
+    isLoadingAlert.value = true;
+    var request = {
+      "language": GetStorage().read('lang'),
+    };
+    var response = await DioClient()
+        .post(ApiLinks.alertsClear, request)
+        .catchError((error) {
       if (error is BadRequestException) {
         isLoadingAlert.value = false;
-         var apiError = json.decode(error.message!);
+        var apiError = json.decode(error.message!);
         Get.snackbar(
           'Error'.tr,
           apiError["reason"].toString(),
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
-       // print(error.toString());
+        // print(error.toString());
       } else {
         isLoadingAlert.value = false;
-      if (error is BadRequestException) {
-      var message = error.message;
-      Get.snackbar(
-          'Error'.tr,
-          message.toString(),
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
-    } else if (error is FetchDataException) {
-      var message = error.message;
-      Get.snackbar(
-          'Error'.tr,
-          message.toString(),
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
-    } else if (error is ApiNotRespondingException) {
-      
-      Get.snackbar(
-          'Error'.tr,
-          'Oops! It took longer to respond.'.tr,
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
-    }
-
+        if (error is BadRequestException) {
+          var message = error.message;
+          Get.snackbar(
+            'Error'.tr,
+            message.toString(),
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+        } else if (error is FetchDataException) {
+          var message = error.message;
+          Get.snackbar(
+            'Error'.tr,
+            message.toString(),
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+        } else if (error is ApiNotRespondingException) {
+          Get.snackbar(
+            'Error'.tr,
+            'Oops! It took longer to respond.'.tr,
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+        }
       }
     });
     // debugPrint(response.toString());
-    if(response == null) return; 
+    if (response == null) return;
     if (response['success'] == true) {
       isLoadingAlert.value = false;
       // debugPrint(response.toString());
-      
-        alerts.value = Notifications();
-       
+
+      alerts.value = Notifications();
     } else {
       isLoadingAlert.value = false;
       Get.snackbar(
-          'Error'.tr,
-          response['message'].toString(),
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: R.colors.themeColor,
-        );
+        'Error'.tr,
+        response['message'].toString(),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: R.colors.themeColor,
+      );
       // debugPrint('here');
     }
     return null;
   }
 
-Future readAlert(String id) async {
+  Future readAlert(String id) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
-   // openLoader();
-  //  isLoadingAlert.value = true;
-   var request = {
-    "language": GetStorage().read('lang'),
-    "id": id,
-   };
+    // openLoader();
+    //  isLoadingAlert.value = true;
+    var request = {
+      "language": GetStorage().read('lang'),
+      "id": id,
+    };
     var response =
         await DioClient().post(ApiLinks.readAlert, request).catchError((error) {
-          // debugPrint(error.toString());
-    //   if (error is BadRequestException) {
-    //     isLoadingAlert.value = false;
-    //      var apiError = json.decode(error.message!);
-    //     Get.snackbar(
-    //       'Error'.tr,
-    //       apiError["reason"].toString(),
-    //       snackPosition: SnackPosition.TOP,
-    //       backgroundColor: R.colors.themeColor,
-    //     );
-    //    // print(error.toString());
-    //   } else {
-    //     isLoadingAlert.value = false;
-    //   if (error is BadRequestException) {
-    //   var message = error.message;
-    //   Get.snackbar(
-    //       'Error'.tr,
-    //       message.toString(),
-    //       snackPosition: SnackPosition.TOP,
-    //       backgroundColor: R.colors.themeColor,
-    //     );
-    // } else if (error is FetchDataException) {
-    //   var message = error.message;
-    //   Get.snackbar(
-    //       'Error'.tr,
-    //       message.toString(),
-    //       snackPosition: SnackPosition.TOP,
-    //       backgroundColor: R.colors.themeColor,
-    //     );
-    // } else if (error is ApiNotRespondingException) {
-      
-    //   Get.snackbar(
-    //       'Error'.tr,
-    //       'Oops! It took longer to respond.'.tr,
-    //       snackPosition: SnackPosition.TOP,
-    //       backgroundColor: R.colors.themeColor,
-    //     );
-    // }
+      // debugPrint(error.toString());
+      //   if (error is BadRequestException) {
+      //     isLoadingAlert.value = false;
+      //      var apiError = json.decode(error.message!);
+      //     Get.snackbar(
+      //       'Error'.tr,
+      //       apiError["reason"].toString(),
+      //       snackPosition: SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      //    // print(error.toString());
+      //   } else {
+      //     isLoadingAlert.value = false;
+      //   if (error is BadRequestException) {
+      //   var message = error.message;
+      //   Get.snackbar(
+      //       'Error'.tr,
+      //       message.toString(),
+      //       snackPosition: SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      // } else if (error is FetchDataException) {
+      //   var message = error.message;
+      //   Get.snackbar(
+      //       'Error'.tr,
+      //       message.toString(),
+      //       snackPosition: SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      // } else if (error is ApiNotRespondingException) {
 
-    //   }
+      //   Get.snackbar(
+      //       'Error'.tr,
+      //       'Oops! It took longer to respond.'.tr,
+      //       snackPosition: SnackPosition.TOP,
+      //       backgroundColor: R.colors.themeColor,
+      //     );
+      // }
+
+      //   }
     });
     // debugPrint(response.toString());
-    if(response == null) return; 
+    if (response == null) return;
     if (response['success'] == true) {
       // isLoadingAlert.value = false;
       // debugPrint(response.toString());
-      
+
       //   alerts.value = Notifications();
-       
     } else {
       // isLoadingAlert.value = false;
       // Get.snackbar(
@@ -220,6 +214,4 @@ Future readAlert(String id) async {
     }
     return null;
   }
-
-
 }
