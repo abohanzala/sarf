@@ -888,6 +888,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  image_downloader_web:
+    dependency: "direct main"
+    description:
+      name: image_downloader_web
+      sha256: cc24ded3317a19d54c759ce6f614e8a3e266ba6c0c8882e1c719763df449937d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   image_picker:
     dependency: "direct main"
     description:

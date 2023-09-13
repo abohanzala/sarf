@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/model/moreModel/account_model.dart';
@@ -29,7 +30,7 @@ class ProfileController extends GetxController {
   TextEditingController websiteController = TextEditingController();
   NotificationServices notificationServices = NotificationServices();
   var alertCount = 0.obs;
-
+  String id = '';
   var location = ''.obs;
   var location_lat = ''.obs;
   var location_lng = ''.obs;
@@ -64,8 +65,9 @@ class ProfileController extends GetxController {
 
     //DialogBoxes.openLoadingDialog();
 
-    var response =
-        await DioClient().post(ApiLinks.profile, request).catchError((error) async {
+    var response = await DioClient()
+        .post(ApiLinks.profile, request)
+        .catchError((error) async {
       if (error is BadRequestException) {
         Get.back();
         Get.snackbar(
@@ -82,30 +84,30 @@ class ProfileController extends GetxController {
         Get.back();
         // debugPrint('Something went Wrong===============${error.toString()}');
         await GetStorage().remove('user_token');
-    await GetStorage().remove('groupId');
-    await GetStorage().remove('userId');
-    await GetStorage().remove(
-      'name',
-    );
-    await GetStorage().remove(
-      'username',
-    );
-    await GetStorage().remove(
-      'email',
-    );
-    await GetStorage().remove(
-      'firebase_email',
-    );
-    await GetStorage().remove(
-      'mobile',
-    );
-    await GetStorage().remove(
-      'photo',
-    );
-    await GetStorage().remove(
-      'status',
-    );
-     Get.offAllNamed(RoutesName.LogIn);
+        await GetStorage().remove('groupId');
+        await GetStorage().remove('userId');
+        await GetStorage().remove(
+          'name',
+        );
+        await GetStorage().remove(
+          'username',
+        );
+        await GetStorage().remove(
+          'email',
+        );
+        await GetStorage().remove(
+          'firebase_email',
+        );
+        await GetStorage().remove(
+          'mobile',
+        );
+        await GetStorage().remove(
+          'photo',
+        );
+        await GetStorage().remove(
+          'status',
+        );
+        Get.offAllNamed(RoutesName.LogIn);
         //HandlingErrors().handleError(error);
       }
     });
@@ -150,12 +152,11 @@ class ProfileController extends GetxController {
       location.value = profileModel!.user!.userDetail?.location == null
           ? ''
           : profileModel!.user!.userDetail?.location ?? '';
-          if (profileModel!.user!.name != null) {
-            
-            await GetStorage().write('name', profileModel!.user!.name);
-            // debugPrint("${GetStorage().read('name')}");  
-          }
-        
+      if (profileModel!.user!.name != null) {
+        await GetStorage().write('name', profileModel!.user!.name);
+        // debugPrint("${GetStorage().read('name')}");
+      }
+
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
@@ -272,15 +273,26 @@ class ProfileController extends GetxController {
   Future login(String phone, String password, String groupId) async {
     openLoader();
     String? result = await notificationServices.getDeviceToken();
-    var request = {
-      'language': GetStorage().read('lang'),
-      'mobile': phone,
-      'password': password,
-      'ios_device_id': Platform.isIOS == true ? result : '',
-      'android_device_id': Platform.isAndroid == true ? result : '',
-      "group_id": groupId
-    };
-    // debugPrint("This is my request====================$request");
+    debugPrint(result);
+    var request = {};
+    if (id == '' && !kIsWeb) {
+      request = {
+        'language': GetStorage().read('lang'),
+        'mobile': phone,
+        'password': password,
+        'ios_device_id': Platform.isIOS == true ? result : '',
+        'android_device_id': Platform.isAndroid == true ? result : '',
+        "group_id": groupId
+      };
+    } else {
+      request = {
+        'language': GetStorage().read('lang'),
+        'mobile': phone,
+        'password': password,
+        "group_id": groupId
+      };
+    }
+    debugPrint("This is my request====================$request");
     var response =
         await DioClient().post(ApiLinks.loginUser, request).catchError((error) {
       if (error is BadRequestException) {
@@ -320,12 +332,12 @@ class ProfileController extends GetxController {
         }
       }
     });
-    // debugPrint("hereeeeeeeeeeeererer");
-    // debugPrint(response.toString());
+    debugPrint("hereeeeeeeeeeeererer");
+    debugPrint(response.toString());
     if (response['success'] == true) {
       result = 'true';
       Get.back();
-      // debugPrint(response.toString());
+      debugPrint(response.toString());
       Get.snackbar(
         'Success'.tr,
         'Login Successfully'.tr,

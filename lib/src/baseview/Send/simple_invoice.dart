@@ -111,15 +111,14 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
 
   @override
   initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+      ctr.mobile1.clear();
+      ctr.amount2.clear();
+      ctr.note3.clear();
+      ctr.uploadImages.clear();
     });
-
-    ctr.mobile1.clear();
-    ctr.amount2.clear();
-    ctr.note3.clear();
-    ctr.uploadImages.clear();
-    super.initState();
   }
 
   @override

@@ -127,12 +127,12 @@ class _MoreScreenState extends State<MoreScreen> with RouteAware {
   @override
   initState() {
     // ignore: avoid_print
+
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+      getData();
     });
-    getData();
-    super.initState();
-    //print("initState Called");
   }
 
   @override
@@ -741,7 +741,9 @@ class _MoreScreenState extends State<MoreScreen> with RouteAware {
                   height: 5,
                 ),
                 // if(GetStorage().read("user_type") != 3)
-                buildViewProfileLinkButton()
+                kIsWeb == true
+                    ? buildViewProfileLinkButton()
+                    : buildViewProfileLinkButton()
               ],
             ),
           ],
@@ -992,6 +994,14 @@ class _MoreScreenState extends State<MoreScreen> with RouteAware {
                             width: Get.width,
                             child: GestureDetector(
                               onTap: () async {
+                                print("Hii");
+                                print(
+                                  singleData!.mobile!.toString(),
+                                );
+                                print(
+                                  singleData.swtichPassKey.toString(),
+                                );
+                                print(singleData.groupId.toString());
                                 profileController
                                     .login(
                                         singleData!.mobile!.toString(),
