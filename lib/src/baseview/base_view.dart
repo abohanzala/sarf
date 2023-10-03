@@ -29,7 +29,8 @@ class _BaseViewState extends State<BaseView> {
         // print("her");
         bNavCon.changeTabIndex(2);
       }
-      if (GetStorage().read("accountType") == 0 &&
+      if ((GetStorage().read("accountType") == 0 ||
+              GetStorage().read("accountType") == 2) &&
           GetStorage().read("user_type") != 3) {
         bNavCon.changeTabIndex(2);
       }

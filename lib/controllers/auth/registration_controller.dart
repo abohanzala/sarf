@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart' as ddio;
 import 'package:flutter/cupertino.dart';
@@ -29,10 +30,11 @@ class RegistrationController extends GetxController {
   TextEditingController twitterController = TextEditingController();
   TextEditingController contactController = TextEditingController();
   TextEditingController whatsappController = TextEditingController();
+  TextEditingController websiteOptionalController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
-  bool accountType = true;
+  int? accountType = 0;
   bool isOnline = false;
-  bool isGroup = false ;
+  bool isGroup = false;
   var cityId;
   var expense_typeId;
   var message;
@@ -42,9 +44,9 @@ class RegistrationController extends GetxController {
   var location_lat = ''.obs;
   var location_lng = ''.obs;
   File? profileImage;
- NotificationServices notificationServices = NotificationServices();
+  NotificationServices notificationServices = NotificationServices();
 
- String replaceArabicNumber(String input) {
+  String replaceArabicNumber(String input) {
     const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
@@ -55,37 +57,37 @@ class RegistrationController extends GetxController {
     return input;
   }
 
-  Future registration(String mob,String country_id,) async {
+  Future registration(
+    String mob,
+    String country_id,
+  ) async {
     openLoader();
     // debugPrint("here");
     ddio.FormData formData = ddio.FormData();
 
     String pass = replaceArabicNumber(registerController.password.text);
 
-    if(profileImage != null){
+    if (profileImage != null) {
       var file = profileImage;
       var xfile = XFile(profileImage!.path);
-    String fileName = file!.path.split('/').last;
-    if (kIsWeb) {
-      // await xFile.readAsBytes().then((value) {
-      //           return value.cast();
-      //         }),
-      formData.files.add(MapEntry("photo",
-        await ddio.MultipartFile.fromBytes(
-          await xfile.readAsBytes().then((value) {
-                return value.cast();
-              }),
-           filename: fileName)));
-    }else{
-         formData.files.add(MapEntry("photo",
-        await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
-    }
-   
+      String fileName = file!.path.split('/').last;
+      if (kIsWeb) {
+        // await xFile.readAsBytes().then((value) {
+        //           return value.cast();
+        //         }),
+        formData.files.add(MapEntry(
+            "photo",
+            await ddio.MultipartFile.fromBytes(
+                await xfile.readAsBytes().then((value) {
+                  return value.cast();
+                }),
+                filename: fileName)));
+      } else {
+        formData.files.add(MapEntry("photo",
+            await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+      }
     }
 
-    
-
-    
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
     formData.fields.add(MapEntry(
@@ -96,15 +98,22 @@ class RegistrationController extends GetxController {
       'country_id',
       country_id,
     ));
+    print(accountType.toString());
     formData.fields.add(MapEntry(
-        'account_type', accountType == true ? 0.toString() : 1.toString()));
+        // 'account_type', accountType == true ? 0.toString() : 1.toString()));
+        'account_type',
+        accountType == 0
+            ? "0"
+            : accountType == 1
+                ? "1"
+                : "2"));
     formData.fields.add(MapEntry(
       'password',
       pass,
     ));
     formData.fields.add(MapEntry(
       'name',
-      accountType == true
+      accountType == 0 || accountType == 2
           ? companyNameController.text
           : fullNameController.text,
     ));
@@ -112,19 +121,20 @@ class RegistrationController extends GetxController {
       'city_id',
       cityId.toString(),
     ));
-    if(accountType == true){
+    if (accountType == 0 || accountType == 2) {
       formData.fields.add(MapEntry(
-      'expense_type_id',
-      expense_typeId.toString(),
-    ));
+        'expense_type_id',
+        expense_typeId.toString(),
+      ));
     }
-    if(isGroup){
-    if(GetStorage().read('groupId') != null && GetStorage().read('groupId') != '' ){
-      formData.fields.add(MapEntry(
-      'group_id',
-      GetStorage().read('groupId').toString(),
-    ));
-    }
+    if (isGroup) {
+      if (GetStorage().read('groupId') != null &&
+          GetStorage().read('groupId') != '') {
+        formData.fields.add(MapEntry(
+          'group_id',
+          GetStorage().read('groupId').toString(),
+        ));
+      }
     }
     formData.fields.add(MapEntry(
       'insta_link',
@@ -161,16 +171,19 @@ class RegistrationController extends GetxController {
     // String? result = await PlatformDeviceId.getDeviceId;
     String? result = await notificationServices.getDeviceToken();
     // debugPrint(result);
-    if(!kIsWeb){
-       formData.fields.add( MapEntry('ios_device_id', Platform.isIOS == true ? result : '',));
+    if (!kIsWeb) {
+      formData.fields.add(MapEntry(
+        'ios_device_id',
+        Platform.isIOS == true ? result : '',
+      ));
     }
-   
-    if(!kIsWeb){
-       formData.fields
-        .add( MapEntry('android_device_id', Platform.isAndroid == true ? result : ''));
+
+    if (!kIsWeb) {
+      formData.fields.add(MapEntry(
+          'android_device_id', Platform.isAndroid == true ? result : ''));
     }
-   
-    // debugPrint(formData.fields.toString());
+
+    debugPrint(formData.fields.toString());
 
     // var request = {
     //   'language': GetStorage().read('lang'),
@@ -196,14 +209,15 @@ class RegistrationController extends GetxController {
     //   'photo': ''
     // };
     // print('This is ${''}');
-   // print("This is our request ==================${formData}");
+    // print("This is our request ==================${formData}");
 
     //DialogBoxes.openLoadingDialog();
-     // print("${ApiLinks.registration}");
+    // print("${ApiLinks.registration}");
     var response = await DioClient()
         .post(ApiLinks.registration, formData, true)
         .catchError((error) {
       if (error is BadRequestException) {
+        log("idhar bad");
         Get.snackbar(
           'Error'.tr,
           error.toString(),
@@ -215,14 +229,15 @@ class RegistrationController extends GetxController {
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
+        log("idhar else");
         Get.back();
         // Get.back();
-      Get.snackbar(
-        'Error'.tr,
-        'Something went wrong'.tr,
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: R.colors.themeColor,
-      );
+        Get.snackbar(
+          'Error'.tr,
+          'Something went wrong'.tr,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
         // debugPrint("This is error==================${error.toString()}");
 
         //HandlingErrors().handleError(error);
@@ -231,9 +246,10 @@ class RegistrationController extends GetxController {
     //  message = response['message'];
     // if (response == null) return;
     // debugPrint("This is my response================== $response");
-    if(response == null || response =="")return;
+    if (response == null || response == "") return;
+    log(response.toString());
     if (response['success'] == true) {
-      // debugPrint(response.toString());
+      debugPrint(response.toString());
       registerController.password.clear();
       registerController.phone.clear();
       fullNameController.clear();
@@ -249,7 +265,7 @@ class RegistrationController extends GetxController {
       location_lng.value = '';
       finalSelectedType.value = 'Select Type'.tr;
       finalSelectedCity.value = 'Select City'.tr;
-      accountType = true;
+      accountType = null;
       var userInfo = LoginModel.fromJson(response);
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);
@@ -264,18 +280,19 @@ class RegistrationController extends GetxController {
       await GetStorage().write('user_type', userInfo.user!.userType);
       await GetStorage().write('countryId', userInfo.user!.countryId);
       await GetStorage().write('accountType', userInfo.user!.accountType);
-      // debugPrint("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer");
+      debugPrint("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer");
       // debugPrint(GetStorage().read("countryId").toString());
       await createFirebaseUser();
-       MyBottomNavigationController ctr =
-      Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-  ctr.tabIndex.value = 0;
+      MyBottomNavigationController ctr =
+          Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      ctr.tabIndex.value = 0;
       Get.offAllNamed(RoutesName.base);
     } else {
       Get.back();
       Get.snackbar(
         'Error'.tr,
-        'Something went wrong'.tr,
+        // 'Something went wrong'.tr,
+        response["validation_errors"],
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
@@ -285,16 +302,19 @@ class RegistrationController extends GetxController {
   }
 
   Future createFirebaseUser() async {
-    
-     await firebase_auth.FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: GetStorage().read('mobile') + '@gmail.com', password: GetStorage().read('mobile'))
+    await firebase_auth.FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: GetStorage().read('mobile') + '@gmail.com',
+            password: GetStorage().read('mobile'))
         .then((value) {
       // SnakeBars.showSuccessSnake(description: "FireBase signin");
       //Get.snackbar('FireBase signin', '');
     }).catchError((error) async {
       if (error.code == 'user-not-found') {
         await firebase_auth.FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: GetStorage().read('mobile') + '@gmail.com', password: GetStorage().read('mobile'))
+            .createUserWithEmailAndPassword(
+                email: GetStorage().read('mobile') + '@gmail.com',
+                password: GetStorage().read('mobile'))
             .then((value) {
           //  SnakeBars.showSuccessSnake(description: "FireBase Created");
           // Get.snackbar('FireBase created', '');
@@ -305,9 +325,7 @@ class RegistrationController extends GetxController {
       // DialogBoxes.showErroDialog(description: error.code);
       // debugPrint('Firebase signin ${error.code}');
     });
-    
-    
-    
+
     // await firebase_auth.FirebaseAuth.instance
     //     .createUserWithEmailAndPassword(
     //         email: GetStorage().read('mobile') + '@gmail.com',

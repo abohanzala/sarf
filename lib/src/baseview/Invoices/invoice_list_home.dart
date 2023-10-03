@@ -19,13 +19,18 @@ class InvoiceListScreenHome extends StatefulWidget {
   final String expanseId;
   final String budgetId;
   final String memberID;
-  const InvoiceListScreenHome({super.key, required this.expanseId, required this.budgetId, required this.memberID});
+  const InvoiceListScreenHome(
+      {super.key,
+      required this.expanseId,
+      required this.budgetId,
+      required this.memberID});
 
   @override
   State<InvoiceListScreenHome> createState() => _InvoiceListScreenHomeState();
 }
 
-class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> with RouteAware {
+class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome>
+    with RouteAware {
   InvoiceController ctr = Get.find<InvoiceController>();
   TextEditingController searchValue = TextEditingController();
   Timer? searchOnStoppedTyping;
@@ -33,94 +38,93 @@ class _InvoiceListScreenHomeState extends State<InvoiceListScreenHome> with Rout
   String membersLenght = '';
   bool isSearch = false;
 
-  _onChangeHandler(value ) {
-        const duration = Duration(milliseconds:1000); // set the duration that you want call search() after that.
-        if (searchOnStoppedTyping != null) {
-            setState(() => searchOnStoppedTyping?.cancel()); // clear timer
-        }
-        setState(() => searchOnStoppedTyping =  Timer(duration, () => search(value)));
+  _onChangeHandler(value) {
+    const duration = Duration(
+        milliseconds:
+            1000); // set the duration that you want call search() after that.
+    if (searchOnStoppedTyping != null) {
+      setState(() => searchOnStoppedTyping?.cancel()); // clear timer
+    }
+    setState(
+        () => searchOnStoppedTyping = Timer(duration, () => search(value)));
+  }
+
+  search(value) {
+    // setState(() {
+    //    membersLenght = '(0)';
+    // });
+    FocusScope.of(context).unfocus();
+    //print('hello world from search . the value is $value');
+    if (value.isEmpty) {
+      membersList = ctr.getInvoiceListHome(
+          '', widget.expanseId, widget.budgetId, widget.memberID);
+      membersList?.then((value) {
+        setState(() {
+          membersLenght = '(${value?.data?.length ?? 0})';
+        });
+      });
     }
 
-    search(value) {
-      // setState(() {
-      //    membersLenght = '(0)';
-      // });
-      FocusScope.of(context).unfocus();
-        //print('hello world from search . the value is $value');
-        if(value.isEmpty){
-          
-            membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId,widget.memberID);
-            membersList?.then((value){
-              setState(() {
-                membersLenght = '(${value?.data?.length ?? 0})';
-              });
-                  
-                });
-          
-        }
+    membersList = ctr.getInvoiceListHome(
+        searchValue.text, widget.expanseId, widget.budgetId, widget.memberID);
+    membersList?.then((value) {
+      setState(() {
+        membersLenght = '(${value?.data?.length ?? 0})';
+      });
+    });
 
-        
-            membersList = ctr.getInvoiceListHome(searchValue.text,widget.expanseId,widget.budgetId,widget.memberID);
-            membersList?.then((value){
-              setState(() {
-                membersLenght = '(${value?.data?.length ?? 0})';
-              });
-                
-              });
-          
-        //print(ctr.mobile1.text);
-        
-    }
-@override
-void initState() {
-  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
-  });
-  searchValue.clear();
+    //print(ctr.mobile1.text);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    });
+    searchValue.clear();
     loadMembers();
     super.initState();
   }
+
   @override
-void dispose(){
-  searchOnStoppedTyping?.cancel();
-  searchValue.dispose();
-  super.dispose();
-}  
-loadMembers(){
-  membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId,widget.memberID);
-  membersList?.then((value){
-    if(mounted){
-      setState(() {
-      membersLenght = '(${value?.data?.length ?? 0})';
+  void dispose() {
+    searchOnStoppedTyping?.cancel();
+    searchValue.dispose();
+    super.dispose();
+  }
+
+  loadMembers() {
+    membersList = ctr.getInvoiceListHome(
+        '', widget.expanseId, widget.budgetId, widget.memberID);
+    membersList?.then((value) {
+      if (mounted) {
+        setState(() {
+          membersLenght = '(${value?.data?.length ?? 0})';
+        });
+      }
     });
-    }
-    
-  });
-}
-@override
+  }
+
+  @override
   void didPopNext() {
-    if(mounted){
+    if (mounted) {
       setState(() {
-      isSearch = true;
-    });
+        isSearch = true;
+      });
     }
-    
-    
-    
+
     super.didPopNext();
 
     loadMembers();
-    if(mounted){
-       Future.delayed(Duration(seconds: 2),(){
-      setState(() {
-        isSearch = false;
+    if (mounted) {
+      Future.delayed(Duration(seconds: 2), () {
+        setState(() {
+          isSearch = false;
+        });
       });
-    });
     }
-   
-
-     
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +133,7 @@ loadMembers(){
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.only(left:  16.w, top: 20.h, right:  16.w),
+            padding: EdgeInsets.only(left: 16.w, top: 20.h, right: 16.w),
             height: 120.h,
             width: double.infinity,
             decoration: BoxDecoration(
@@ -144,7 +148,8 @@ loadMembers(){
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
-              padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Row(
@@ -175,19 +180,26 @@ loadMembers(){
                         Row(
                           children: [
                             GestureDetector(
-                      onTap: () => Get.back() ,
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: R.colors.white,
-                        ),
-                        child: Icon(Icons.arrow_back_ios,color: R.colors.black,size: 20,),
-                      ),
-                    ),
-                    const SizedBox(width: 10,),
+                              onTap: () => Get.back(),
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: R.colors.white,
+                                ),
+                                child: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: R.colors.black,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             Text(
                               'Invoice List 2'.tr,
                               style: TextStyle(
@@ -196,7 +208,9 @@ loadMembers(){
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(width: 5,),
+                            const SizedBox(
+                              width: 5,
+                            ),
                             Text(
                               membersLenght,
                               style: TextStyle(
@@ -222,10 +236,15 @@ loadMembers(){
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.bottomSheet(const InvoiceBottomSheet()).then((value){
-                              if(ctr.filter != 0){
+                            Get.bottomSheet(const InvoiceBottomSheet())
+                                .then((value) {
+                              if (ctr.filter != 0) {
                                 setState(() {
-                                  membersList = ctr.getInvoiceListHome('',widget.expanseId,widget.budgetId,widget.memberID);
+                                  membersList = ctr.getInvoiceListHome(
+                                      '',
+                                      widget.expanseId,
+                                      widget.budgetId,
+                                      widget.memberID);
                                 });
                               }
                             });
@@ -245,18 +264,21 @@ loadMembers(){
           Transform(
             transform: Matrix4.translationValues(0, -40.h, 0),
             child: Padding(
-              padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
               child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  margin: EdgeInsets.symmetric(horizontal:  20.w, vertical:  20.h),
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   child: TextFormField(
                     controller: searchValue,
-                     onTap: (){
-                                          searchValue.selection = TextSelection.collapsed(offset: searchValue.text.length);
-                                        },
+                    onTap: () {
+                      searchValue.selection = TextSelection.collapsed(
+                          offset: searchValue.text.length);
+                    },
                     onChanged: _onChangeHandler,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -283,278 +305,323 @@ loadMembers(){
             fit: FlexFit.loose,
             child: Transform(
               transform: Matrix4.translationValues(0, -50.h, 0),
-              child:  SingleChildScrollView(
-                  child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
-                    child: Column(
-                      children: [
-                         Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: budgetName(),
-                            ),
-                            const SizedBox(height: 10,),
-                            if(isSearch)
-                            SizedBox(),
-                        // Center(child: SizedBox(
-                        //   height: 100,
-                        //   width: 100,
-                        //   child: CircularProgressIndicator(color: R.colors.blue,)),),
-                        if(!isSearch)
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: kIsWeb == true ? Get.width * 0.11 : 0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: budgetName(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      if (isSearch) SizedBox(),
+                      // Center(child: SizedBox(
+                      //   height: 100,
+                      //   width: 100,
+                      //   child: CircularProgressIndicator(color: R.colors.blue,)),),
+                      if (!isSearch)
                         FutureBuilder<InvoiceList?>(
-                                future: membersList,
-                                builder: (contaxt,snapshot){
-                                  if(snapshot.connectionState == ConnectionState.waiting){
-                        return SizedBox(); 
-                        // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
-                                  }
-                                  if(snapshot.hasData){
-                        //ctr.filter != ''
-                        List<Data?> data = [];
-                        if(ctr.filter != 0){
-                          data = snapshot.data!.data!.where((element) => element.expenseTypeId == ctr.filter).toList();
-                        }else{
-                          data = snapshot.data!.data!;
-                        }
-                         
-                        if(data.isNotEmpty){
-                  
-                         return ListView.builder(
-                          shrinkWrap: true,
-                          // reverse: true,
-                          itemCount: data.length,
-                          primary: false,
-                          itemBuilder: (context,index){
-                              var singleData = data[index];
-                              var id = (data.length - 1 ) - index;
-                              // print(index);
-                              // print(id);
-                              return GestureDetector(
-                                onTap: (){
-                                  Get.to(() => InvoiceDetails(id: singleData!.id.toString(),invoiceNum: "${id + 1}",reverse: false,isHome: true) );
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 20.w, right: 20.w, bottom: 20.h),
-                                  child: Container(
-                                    padding: EdgeInsets.all(16.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                if(singleData?.viewed == 0 ) ...[
-                                              Container(
-                                                      width: 10,
-                                                      height: 10,
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.red,
-                                                        shape: BoxShape.circle,
+                            future: membersList,
+                            builder: (contaxt, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return SizedBox();
+                                // Center(child:SizedBox(height: 100,width: 100,child: CircularProgressIndicator(color: R.colors.blue),));
+                              }
+                              if (snapshot.hasData) {
+                                //ctr.filter != ''
+                                List<Data?> data = [];
+                                if (ctr.filter != 0) {
+                                  data = snapshot.data!.data!
+                                      .where((element) =>
+                                          element.expenseTypeId == ctr.filter)
+                                      .toList();
+                                } else {
+                                  data = snapshot.data!.data!;
+                                }
+
+                                if (data.isNotEmpty) {
+                                  return ListView.builder(
+                                      shrinkWrap: true,
+                                      // reverse: true,
+                                      itemCount: data.length,
+                                      primary: false,
+                                      itemBuilder: (context, index) {
+                                        var singleData = data[index];
+                                        var id = (data.length - 1) - index;
+                                        // print(index);
+                                        // print(id);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => InvoiceDetails(
+                                                id: singleData!.id.toString(),
+                                                invoiceNum: "${id + 1}",
+                                                reverse: false,
+                                                isHome: true));
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            margin: EdgeInsets.only(
+                                                left: 20.w,
+                                                right: 20.w,
+                                                bottom: 20.h),
+                                            child: Container(
+                                              padding: EdgeInsets.all(16.w),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          if (singleData
+                                                                  ?.viewed ==
+                                                              0) ...[
+                                                            Container(
+                                                              width: 10,
+                                                              height: 10,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color:
+                                                                    Colors.red,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                          ],
+                                                          Text(
+                                                            'Invoice ID'.tr,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  R.colors.grey,
+                                                              fontSize: 16.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
+                                                      Text(
+                                                        singleData
+                                                                ?.createdDate ??
+                                                            '',
+                                                        style: TextStyle(
+                                                          color: R.colors.grey,
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 5.h),
+                                                  Text(
+                                                    "${id + 1}",
+                                                    //  singleData!.id.toString(),
+                                                    style: TextStyle(
+                                                      color: R.colors.black,
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
-                                                    const SizedBox(width: 10,),
-                                            ],
-                                            Text(
-                                              'Invoice ID'.tr,
-                                              style: TextStyle(
-                                                color: R.colors.grey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w600,
+                                                  ),
+                                                  SizedBox(height: 8.h),
+                                                  Text('Customer Name'.tr,
+                                                      style: TextStyle(
+                                                        color: R.colors.grey,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                  SizedBox(height: 5.h),
+                                                  Text(
+                                                    singleData
+                                                            ?.customer?.name ??
+                                                        '',
+                                                    style: TextStyle(
+                                                      color: R.colors.black,
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 8.h),
+                                                  Text(
+                                                      // 'Receiver Name'.tr,
+                                                      'Receiver'.tr,
+                                                      style: TextStyle(
+                                                        color: R.colors.grey,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                  SizedBox(height: 5.h),
+                                                  Text(
+                                                    //  singleData?.user?.name ?? '',
+                                                    Get.find<HomeController>()
+                                                            .selectedBudgetName
+                                                            .value ??
+                                                        '',
+                                                    style: TextStyle(
+                                                      color: R.colors.black,
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 10.h),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 10.w),
+                                                    width: double.infinity,
+                                                    decoration: BoxDecoration(
+                                                      color: R.colors.lightGrey,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          '${"AMOUNT".tr} ${singleData?.amount}',
+                                                          style: TextStyle(
+                                                            color: R.colors
+                                                                .blueGradient1,
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        )),
+                                                  )
+                                                ],
                                               ),
                                             ),
-                                              ],
-                                            ),
-                                            Text(
-                                              singleData?.createdDate ?? '',
-                                              style: TextStyle(
-                                                color: R.colors.grey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 5.h),
-                                        Text(
-                                           "${id + 1}",
-                                          //  singleData!.id.toString(),
-                                          style: TextStyle(
-                                            color: R.colors.black,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
                                           ),
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        Text('Customer Name'.tr,
-                                            style: TextStyle(
-                                              color: R.colors.grey,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                        SizedBox(height: 5.h),
-                                        Text(
-                                          singleData?.customer?.name ?? '',
-                                          style: TextStyle(
-                                            color: R.colors.black,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                          SizedBox(height: 8.h),
-                                          Text(
-                                            // 'Receiver Name'.tr,
-                                            'Receiver'.tr,
-                                              style: TextStyle(
-                                                color: R.colors.grey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                          SizedBox(height: 5.h),
-                                          Text(
-                                            //  singleData?.user?.name ?? '',
-                                             Get.find<HomeController>().selectedBudgetName.value ?? '',
-                                            style: TextStyle(
-                                              color: R.colors.black,
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10.h),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(vertical: 10.w),
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color: R.colors.lightGrey,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Align(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                '${"AMOUNT".tr} ${singleData?.amount}',
-                                                style: TextStyle(
-                                                  color: R.colors.blueGradient1,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
-                        }
-                                  }
-                                  return  Center(child:Text('No Data'.tr));
-                                }),
-                      ],
-                    ),
+                                        );
+                                      });
+                                }
+                              }
+                              return Center(child: Text('No Data'.tr));
+                            }),
+                    ],
                   ),
-                  // child:  Column(
-                  //     children: List.generate(8, (index) {
-                  //       return Container(
-                  //         decoration: BoxDecoration(
-                  //           color: Colors.white,
-                  //           borderRadius: BorderRadius.circular(10),
-                  //         ),
-                  //         margin: EdgeInsets.only(
-                  //             left: 20.w, right: 20.w, bottom: 20.h),
-                  //         child: Container(
-                  //           padding: EdgeInsets.all(16.w),
-                  //           decoration: BoxDecoration(
-                  //             color: Colors.white,
-                  //             borderRadius: BorderRadius.circular(10),
-                  //           ),
-                  //           child: Column(
-                  //             crossAxisAlignment: CrossAxisAlignment.start,
-                  //             mainAxisAlignment: MainAxisAlignment.start,
-                  //             children: [
-                  //               Row(
-                  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //                 children: [
-                  //                   Text(
-                  //                     'Invoice ID'.tr,
-                  //                     style: TextStyle(
-                  //                       color: R.colors.grey,
-                  //                       fontSize: 16.sp,
-                  //                       fontWeight: FontWeight.w600,
-                  //                     ),
-                  //                   ),
-                  //                   Text(
-                  //                     ' ${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
-                  //                     style: TextStyle(
-                  //                       color: R.colors.grey,
-                  //                       fontSize: 16.sp,
-                  //                       fontWeight: FontWeight.w600,
-                  //                     ),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //               SizedBox(height: 5.h),
-                  //               Text(
-                  //                 '21',
-                  //                 style: TextStyle(
-                  //                   color: R.colors.black,
-                  //                   fontSize: 18.sp,
-                  //                   fontWeight: FontWeight.w600,
-                  //                 ),
-                  //               ),
-                  //               SizedBox(height: 8.h),
-                  //               Text('Customer Name'.tr,
-                  //                   style: TextStyle(
-                  //                     color: R.colors.grey,
-                  //                     fontSize: 16.sp,
-                  //                     fontWeight: FontWeight.w600,
-                  //                   )),
-                  //               SizedBox(height: 5.h),
-                  //               Text(
-                  //                 'John Doe',
-                  //                 style: TextStyle(
-                  //                   color: R.colors.black,
-                  //                   fontSize: 18.sp,
-                  //                   fontWeight: FontWeight.w600,
-                  //                 ),
-                  //               ),
-                  //               SizedBox(height: 10.h),
-                  //               Container(
-                  //                 padding: EdgeInsets.symmetric(vertical: 10.w),
-                  //                 width: double.infinity,
-                  //                 decoration: BoxDecoration(
-                  //                   color: R.colors.lightGrey,
-                  //                   borderRadius: BorderRadius.circular(10),
-                  //                 ),
-                  //                 child: Align(
-                  //                     alignment: Alignment.center,
-                  //                     child: Text(
-                  //                       'Amount'.tr,
-                  //                       style: TextStyle(
-                  //                         color: R.colors.blueGradient1,
-                  //                         fontSize: 16.sp,
-                  //                         fontWeight: FontWeight.bold,
-                  //                       ),
-                  //                     )),
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       );
-                  //     }),
-                  //   ),
-                  
                 ),
-              
+                // child:  Column(
+                //     children: List.generate(8, (index) {
+                //       return Container(
+                //         decoration: BoxDecoration(
+                //           color: Colors.white,
+                //           borderRadius: BorderRadius.circular(10),
+                //         ),
+                //         margin: EdgeInsets.only(
+                //             left: 20.w, right: 20.w, bottom: 20.h),
+                //         child: Container(
+                //           padding: EdgeInsets.all(16.w),
+                //           decoration: BoxDecoration(
+                //             color: Colors.white,
+                //             borderRadius: BorderRadius.circular(10),
+                //           ),
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             children: [
+                //               Row(
+                //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //                 children: [
+                //                   Text(
+                //                     'Invoice ID'.tr,
+                //                     style: TextStyle(
+                //                       color: R.colors.grey,
+                //                       fontSize: 16.sp,
+                //                       fontWeight: FontWeight.w600,
+                //                     ),
+                //                   ),
+                //                   Text(
+                //                     ' ${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
+                //                     style: TextStyle(
+                //                       color: R.colors.grey,
+                //                       fontSize: 16.sp,
+                //                       fontWeight: FontWeight.w600,
+                //                     ),
+                //                   ),
+                //                 ],
+                //               ),
+                //               SizedBox(height: 5.h),
+                //               Text(
+                //                 '21',
+                //                 style: TextStyle(
+                //                   color: R.colors.black,
+                //                   fontSize: 18.sp,
+                //                   fontWeight: FontWeight.w600,
+                //                 ),
+                //               ),
+                //               SizedBox(height: 8.h),
+                //               Text('Customer Name'.tr,
+                //                   style: TextStyle(
+                //                     color: R.colors.grey,
+                //                     fontSize: 16.sp,
+                //                     fontWeight: FontWeight.w600,
+                //                   )),
+                //               SizedBox(height: 5.h),
+                //               Text(
+                //                 'John Doe',
+                //                 style: TextStyle(
+                //                   color: R.colors.black,
+                //                   fontSize: 18.sp,
+                //                   fontWeight: FontWeight.w600,
+                //                 ),
+                //               ),
+                //               SizedBox(height: 10.h),
+                //               Container(
+                //                 padding: EdgeInsets.symmetric(vertical: 10.w),
+                //                 width: double.infinity,
+                //                 decoration: BoxDecoration(
+                //                   color: R.colors.lightGrey,
+                //                   borderRadius: BorderRadius.circular(10),
+                //                 ),
+                //                 child: Align(
+                //                     alignment: Alignment.center,
+                //                     child: Text(
+                //                       'Amount'.tr,
+                //                       style: TextStyle(
+                //                         color: R.colors.blueGradient1,
+                //                         fontSize: 16.sp,
+                //                         fontWeight: FontWeight.bold,
+                //                       ),
+                //                     )),
+                //               )
+                //             ],
+                //           ),
+                //         ),
+                //       );
+                //     }),
+                //   ),
+              ),
             ),
           )
         ],
@@ -597,40 +664,42 @@ class _InvoiceBottomSheetState extends State<InvoiceBottomSheet> {
           SizedBox(height: 20.h),
           Expanded(
             child: ListView.builder(
-              itemCount: dataCtr.types?.length,
-              shrinkWrap: true,
-              itemBuilder: ((context, index) {
-                var singleData = dataCtr.types?[index];
-              return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.w),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                           ctr.filter = singleData!.id!;
-                           Get.back();
-                        },
-                        child: Text(
-                          get_storage.GetStorage().read("lang") == "en" ? singleData?.expenseName ?? "" : singleData?.expenseNameAr ?? "" ,
-                          style: TextStyle(
-                            color: R.colors.black,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
+                itemCount: dataCtr.types?.length,
+                shrinkWrap: true,
+                itemBuilder: ((context, index) {
+                  var singleData = dataCtr.types?[index];
+                  return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20.w),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 10.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              ctr.filter = singleData!.id!;
+                              Get.back();
+                            },
+                            child: Text(
+                              get_storage.GetStorage().read("lang") == "en"
+                                  ? singleData?.expenseName ?? ""
+                                  : singleData?.expenseNameAr ?? "",
+                              style: TextStyle(
+                                color: R.colors.black,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 10.h),
-                      Divider(
-                        color: R.colors.grey,
-                        thickness: 1,
-                      )
-                    ],
-                  ));
-            })),
+                          SizedBox(height: 10.h),
+                          Divider(
+                            color: R.colors.grey,
+                            thickness: 1,
+                          )
+                        ],
+                      ));
+                })),
           ),
         ],
       ),

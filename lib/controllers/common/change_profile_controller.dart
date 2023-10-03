@@ -40,22 +40,23 @@ class ChangeProfileController extends GetxController {
     ddio.FormData formData = ddio.FormData();
 
     if (changeProfileImage != null) {
-      if(kIsWeb){
-          var file = changeProfileImage;
-          var xfile = XFile(changeProfileImage!.path);
-      String fileName = file!.path.split('/').last;
-      formData.files.add(MapEntry("photo",
-          await ddio.MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
-                return value.cast();
-              }), filename: fileName)));
-      
-      }else{
+      if (kIsWeb) {
         var file = changeProfileImage;
-      String fileName = file!.path.split('/').last;
-      formData.files.add(MapEntry("photo",
-          await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
+        var xfile = XFile(changeProfileImage!.path);
+        String fileName = file!.path.split('/').last;
+        formData.files.add(MapEntry(
+            "photo",
+            await ddio.MultipartFile.fromBytes(
+                await xfile.readAsBytes().then((value) {
+                  return value.cast();
+                }),
+                filename: fileName)));
+      } else {
+        var file = changeProfileImage;
+        String fileName = file!.path.split('/').last;
+        formData.files.add(MapEntry("photo",
+            await ddio.MultipartFile.fromFile(file.path, filename: fileName)));
       }
-      
     }
 
     formData.fields
@@ -72,15 +73,19 @@ class ChangeProfileController extends GetxController {
     // ));
     formData.fields
         .add(MapEntry('name', profileController.nameController.text));
-    
+
     formData.fields.add(MapEntry(
       'city_id',
-      finalSelectedCityId == "" ? profileController.profileModel!.user!.userDetail!.cityId!.id.toString() : finalSelectedCityId,
+      finalSelectedCityId == ""
+          ? profileController.profileModel!.user!.userDetail!.cityId!.id
+              .toString()
+          : finalSelectedCityId,
     ));
     formData.fields.add(MapEntry(
       'expense_type_id',
       profileController.profileModel?.user?.userDetail?.expenseTypeId?.id
-          .toString() ?? "",
+              .toString() ??
+          "",
     ));
     formData.fields.add(MapEntry(
       'insta_link',
@@ -141,22 +146,22 @@ class ChangeProfileController extends GetxController {
         );
         var apiError = json.decode(error.message!);
         Get.snackbar(
-        'Error'.tr,
-        apiError['message'],
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: R.colors.themeColor,
-      );
+          'Error'.tr,
+          apiError['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
         // print(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
         Get.back();
         Get.snackbar(
-        'Error'.tr,
-        'Something went wrong'.tr,
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: R.colors.themeColor,
-      );
+          'Error'.tr,
+          'Something went wrong'.tr,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: R.colors.themeColor,
+        );
         // debugPrint('This is error=================${error.toString()}');
         //HandlingErrors().handleError(error);
       }
@@ -168,7 +173,7 @@ class ChangeProfileController extends GetxController {
       finalSelectedCityId = '';
       // debugPrint(response.toString());
       Get.back();
-       Get.snackbar(
+      Get.snackbar(
         'Success'.tr,
         response['message'],
         snackPosition: SnackPosition.TOP,
@@ -195,7 +200,6 @@ class ChangeProfileController extends GetxController {
       //   }).catchError((error){
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
-
     } else {
       Get.back();
       Get.snackbar(

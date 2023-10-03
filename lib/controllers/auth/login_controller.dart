@@ -130,7 +130,7 @@ class LoginController extends GetxController {
     // debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
-      // debugPrint(response.toString());
+      debugPrint(response.toString());
       Get.snackbar(
         'Success'.tr,
         'Login Successfully'.tr,

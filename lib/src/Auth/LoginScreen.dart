@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -31,26 +32,27 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController password = TextEditingController();
   FocusNode searchFieldNode = FocusNode();
   LoginController loginController = Get.find<LoginController>();
-   DataCollectionController ctr = Get.find<DataCollectionController>();
+  DataCollectionController ctr = Get.find<DataCollectionController>();
   var loginFormKey = GlobalKey<FormState>();
   ForgotPasswordController forgotPasswordController =
       Get.find<ForgotPasswordController>();
 
   @override
   void initState() {
-    english = GetStorage().read("lang") == "en" ? true : false ;
-    arabic = GetStorage().read("lang") == "ar" ? true: false;
+    EasyLoading.dismiss();
+    english = GetStorage().read("lang") == "en" ? true : false;
+    arabic = GetStorage().read("lang") == "ar" ? true : false;
     super.initState();
-  }    
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         // exit(0);
         //  SystemNavigator.pop();
         SystemNavigator.pop(animated: true);
-         return true;
+        return true;
       },
       child: Scaffold(
         body: SingleChildScrollView(
@@ -58,19 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Stack(
                 children: [
-                  
-                        buildBackGroundImage(),
-                       
-                      ],
-              ),
-                   buildLoginCard(),
+                  buildBackGroundImage(),
                 ],
               ),
+              buildLoginCard(),
+            ],
+          ),
         ),
-          
-        ),
+      ),
     );
-    
   }
 
   buildBackGroundImage() {
@@ -110,240 +108,355 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      child: kIsWeb == true ? Padding(
-        padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 :  0 ),
-        child: Column(
-          children: [
-            buildLoginTextAndLanguageOptions(),
-            Form(
-              key: loginFormKey,
+      child: kIsWeb == true
+          ? Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Get.width > 750 ? Get.width / 3 : 0),
               child: Column(
                 children: [
-                  //  buildPhoneFieldForLogin(),
-                  Container(
-                margin: EdgeInsets.only(left: 15, right: 15),
-                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Get.dialog(Dialog(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                            width: Get.width * 0.80,
+                  buildLoginTextAndLanguageOptions(),
+                  Form(
+                    key: loginFormKey,
+                    child: Column(
+                      children: [
+                        //  buildPhoneFieldForLogin(),
+                        Container(
+                            margin: EdgeInsets.only(left: 15, right: 15),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              color: R.colors.lightGrey,
-                              borderRadius: BorderRadius.circular(10)
-                            ),
-                            child:  Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Text("data"),
-                                  Expanded(child:
-                                   ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: ctr.countries?.length ?? 0,
-                                    separatorBuilder: (context, index) {
-                                      return Divider(color: R.colors.grey,thickness: 1,);
-                                    },
-                                    itemBuilder: (context,index){
-                                      var singleData = ctr.countries?[index];
-                                    return GestureDetector(
-                                      onTap: (){
-                                        loginController.code.value = singleData.code ?? "966";
-                                        loginController.flag.value = singleData.flag ?? "admin/country/sa.png";
-                                        loginController.lenght.value = singleData.mobileNumberLength ?? 9;
-                                        loginController.selectedCountry.value = singleData.id ?? 2;
-                                        Get.back();
-                                      },
-                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xFFEAEEF2)),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.dialog(Dialog(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        width: Get.width * 0.80,
+                                        decoration: BoxDecoration(
+                                            color: R.colors.lightGrey,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
-                                            SizedBox(width: 5,),
-                                            Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
-        
-        
+                                            // Text("data"),
+                                            Expanded(
+                                                child: ListView.separated(
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        ctr.countries?.length ??
+                                                            0,
+                                                    separatorBuilder:
+                                                        (context, index) {
+                                                      return Divider(
+                                                        color: R.colors.grey,
+                                                        thickness: 1,
+                                                      );
+                                                    },
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      var singleData =
+                                                          ctr.countries?[index];
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          loginController
+                                                                  .code.value =
+                                                              singleData.code ??
+                                                                  "966";
+                                                          loginController.flag
+                                                              .value = singleData
+                                                                  .flag ??
+                                                              "admin/country/sa.png";
+                                                          loginController.lenght
+                                                              .value = singleData
+                                                                  .mobileNumberLength ??
+                                                              9;
+                                                          loginController
+                                                              .selectedCountry
+                                                              .value = singleData
+                                                                  .id ??
+                                                              2;
+                                                          Get.back();
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                Image.network(
+                                                                  "https://sarfapp.com/${singleData!.flag}",
+                                                                  width: 40,
+                                                                  height: 40,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Text(GetStorage().read(
+                                                                            "lang") ==
+                                                                        "en"
+                                                                    ? singleData
+                                                                            .name
+                                                                            ?.en ??
+                                                                        ''
+                                                                    : singleData
+                                                                            .name
+                                                                            ?.ar ??
+                                                                        ''),
+                                                              ],
+                                                            ),
+                                                            Text(singleData
+                                                                    .code ??
+                                                                ''),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    })),
                                           ],
                                         ),
-                                        Text(singleData.code ?? ''),
-                                      ],
                                       ),
-                                    );
-                                  })),
-                                ],
-                                ),
-                            
-                          ),
-                        ));
-                      },
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Obx(() => Image.network("https://sarfapp.com/${loginController.flag.value}",width: 40,height: 40,)), 
-                            SizedBox(width: 5,),
-                            Obx(() => Text(loginController.code.value)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5,),
-                     Expanded(
-              child: TextFormField(
-               // focusNode: searchFieldNode,
-               validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Required Field".tr;
-                  }
-                  
-                  return null;
-                },
-               controller: loginController.phone,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                    hintText: 'Enter Mobile Number'.tr,
-                    hintStyle: TextStyle(
-                        fontSize: 10,
-                        fontFamily: 'medium',
-                        color: Color(0xFF9A9A9A).withOpacity(0.8)),
-                    border: InputBorder.none),
-              ),
-            )
-                  ],
-                )),
-                SizedBox(height: 20,),
-                  buildPasswordField(),
-                ],
-              ),
-            ),
-            buildForgotPassword(),
-            buildNextButton(),
-            buildDontHaveAnAccount(),
-            SizedBox(height: 100,),
-            // Spacer()
-          ],
-        ),
-      )  : Column(
-        children: [
-          buildLoginTextAndLanguageOptions(),
-          Form(
-            key: loginFormKey,
-            child: Column(
-              children: [
-                //  buildPhoneFieldForLogin(),
-                Container(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-      height: 50,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      Get.dialog(Dialog(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          width: Get.width * 0.80,
-                          decoration: BoxDecoration(
-                            color: R.colors.lightGrey,
-                            borderRadius: BorderRadius.circular(10)
-                          ),
-                          child:  Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Text("data"),
-                                Expanded(child:
-                                 ListView.separated(
-                                  shrinkWrap: true,
-                                  itemCount: ctr.countries?.length ?? 0,
-                                  separatorBuilder: (context, index) {
-                                    return Divider(color: R.colors.grey,thickness: 1,);
+                                    ));
                                   },
-                                  itemBuilder: (context,index){
-                                    var singleData = ctr.countries?[index];
-                                  return GestureDetector(
-                                    onTap: (){
-                                      loginController.code.value = singleData.code ?? "966";
-                                      loginController.flag.value = singleData.flag ?? "admin/country/sa.png";
-                                      loginController.lenght.value = singleData.mobileNumberLength ?? 9;
-                                      loginController.selectedCountry.value = singleData.id ?? 2;
-                                      Get.back();
-                                    },
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
-                                          SizedBox(width: 5,),
-                                          Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
-      
-      
-                                        ],
-                                      ),
-                                      Text(singleData.code ?? ''),
-                                    ],
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Obx(() => Image.network(
+                                              "https://sarfapp.com/${loginController.flag.value}",
+                                              width: 40,
+                                              height: 40,
+                                            )),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Obx(() =>
+                                            Text(loginController.code.value)),
+                                      ],
                                     ),
-                                  );
-                                })),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    // focusNode: searchFieldNode,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Required Field".tr;
+                                      }
+
+                                      return null;
+                                    },
+                                    controller: loginController.phone,
+                                    keyboardType: TextInputType.phone,
+                                    decoration: InputDecoration(
+                                        hintText: 'Enter Mobile Number'.tr,
+                                        hintStyle: TextStyle(
+                                            fontSize: 10,
+                                            fontFamily: 'medium',
+                                            color: Color(0xFF9A9A9A)
+                                                .withOpacity(0.8)),
+                                        border: InputBorder.none),
+                                  ),
+                                )
                               ],
-                              ),
-                          
+                            )),
+                        SizedBox(
+                          height: 20,
                         ),
-                      ));
-                    },
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Obx(() => Image.network("https://sarfapp.com/${loginController.flag.value}",width: 40,height: 40,)), 
-                          SizedBox(width: 5,),
-                          Obx(() => Text(loginController.code.value)),
-                        ],
-                      ),
+                        buildPasswordField(),
+                      ],
                     ),
                   ),
-                  SizedBox(width: 5,),
-                   Expanded(
-            child: TextFormField(
-             // focusNode: searchFieldNode,
-             validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Required Field".tr;
-                }
-                
-                return null;
-              },
-             controller: loginController.phone,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                  hintText: 'Enter Mobile Number'.tr,
-                  hintStyle: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'medium',
-                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
-                  border: InputBorder.none),
-            ),
-          )
+                  buildForgotPassword(),
+                  buildNextButton(),
+                  buildDontHaveAnAccount(),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  // Spacer()
                 ],
-              )),
-              SizedBox(height: 20,),
-                buildPasswordField(),
+              ),
+            )
+          : Column(
+              children: [
+                buildLoginTextAndLanguageOptions(),
+                Form(
+                  key: loginFormKey,
+                  child: Column(
+                    children: [
+                      //  buildPhoneFieldForLogin(),
+                      Container(
+                          margin: EdgeInsets.only(left: 15, right: 15),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color(0xFFEAEEF2)),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.dialog(Dialog(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 10),
+                                      width: Get.width * 0.80,
+                                      decoration: BoxDecoration(
+                                          color: R.colors.lightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Text("data"),
+                                          Expanded(
+                                              child: ListView.separated(
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                      ctr.countries?.length ??
+                                                          0,
+                                                  separatorBuilder:
+                                                      (context, index) {
+                                                    return Divider(
+                                                      color: R.colors.grey,
+                                                      thickness: 1,
+                                                    );
+                                                  },
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var singleData =
+                                                        ctr.countries?[index];
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        loginController
+                                                                .code.value =
+                                                            singleData.code ??
+                                                                "966";
+                                                        loginController.flag
+                                                            .value = singleData
+                                                                .flag ??
+                                                            "admin/country/sa.png";
+                                                        loginController.lenght
+                                                            .value = singleData
+                                                                .mobileNumberLength ??
+                                                            9;
+                                                        loginController
+                                                                .selectedCountry
+                                                                .value =
+                                                            singleData.id ?? 2;
+                                                        Get.back();
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Image.network(
+                                                                "https://sarfapp.com/${singleData!.flag}",
+                                                                width: 40,
+                                                                height: 40,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(GetStorage()
+                                                                          .read(
+                                                                              "lang") ==
+                                                                      "en"
+                                                                  ? singleData
+                                                                          .name
+                                                                          ?.en ??
+                                                                      ''
+                                                                  : singleData
+                                                                          .name
+                                                                          ?.ar ??
+                                                                      ''),
+                                                            ],
+                                                          ),
+                                                          Text(
+                                                              singleData.code ??
+                                                                  ''),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  })),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+                                },
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      Obx(() => Image.network(
+                                            "https://sarfapp.com/${loginController.flag.value}",
+                                            width: 40,
+                                            height: 40,
+                                          )),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Obx(() =>
+                                          Text(loginController.code.value)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  // focusNode: searchFieldNode,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Required Field".tr;
+                                    }
+
+                                    return null;
+                                  },
+                                  controller: loginController.phone,
+                                  keyboardType: TextInputType.phone,
+                                  decoration: InputDecoration(
+                                      hintText: 'Enter Mobile Number'.tr,
+                                      hintStyle: TextStyle(
+                                          fontSize: 10,
+                                          fontFamily: 'medium',
+                                          color: Color(0xFF9A9A9A)
+                                              .withOpacity(0.8)),
+                                      border: InputBorder.none),
+                                ),
+                              )
+                            ],
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      buildPasswordField(),
+                    ],
+                  ),
+                ),
+                buildForgotPassword(),
+                buildNextButton(),
+                buildDontHaveAnAccount()
               ],
             ),
-          ),
-          buildForgotPassword(),
-          buildNextButton(),
-          buildDontHaveAnAccount()
-        ],
-      ),
     );
   }
 
@@ -608,16 +721,20 @@ class _LoginScreenState extends State<LoginScreen> {
           //     'This is my phoneNumber before apiCall===============${loginController.phone}');
 
           if (loginFormKey.currentState!.validate()) {
-            if (loginController.phone.text.length < loginController.lenght.value || loginController.phone.text.length > loginController.lenght.value) {
-                   Get.snackbar(
-              'Alert'.tr,
-              "Invalid mobile number".tr,
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: R.colors.themeColor,
-            );
-            return;
-                }
-            loginController.login("${loginController.code}${loginController.phone.text}");
+            if (loginController.phone.text.length <
+                    loginController.lenght.value ||
+                loginController.phone.text.length >
+                    loginController.lenght.value) {
+              Get.snackbar(
+                'Alert'.tr,
+                "Invalid mobile number".tr,
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: R.colors.themeColor,
+              );
+              return;
+            }
+            loginController
+                .login("${loginController.code}${loginController.phone.text}");
           }
         },
         child: Center(
@@ -705,99 +822,158 @@ class _LoginScreenState extends State<LoginScreen> {
                         buildCrossIcon(),
                         buildForgotPasswordText(),
                         //  buildPhonefield(),
-                        SizedBox(height: 10,),
-                        Container(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-      height: 50,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      Get.dialog(Dialog(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          width: Get.width * 0.80,
-                          decoration: BoxDecoration(
-                            color: R.colors.lightGrey,
-                            borderRadius: BorderRadius.circular(10)
-                          ),
-                          child:  Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Text("data"),
-                                Expanded(child:
-                                 ListView.separated(
-                                  shrinkWrap: true,
-                                  itemCount: ctr.countries?.length ?? 0,
-                                  separatorBuilder: (context, index) {
-                                    return Divider(color: R.colors.grey,thickness: 1,);
-                                  },
-                                  itemBuilder: (context,index){
-                                    var singleData = ctr.countries?[index];
-                                  return GestureDetector(
-                                    onTap: (){
-                                      forgotPasswordController.code.value = singleData.code ?? "966";
-                                      forgotPasswordController.flag.value = singleData.flag ?? "admin/country/sa.png";
-                                      forgotPasswordController.lenght.value = singleData.mobileNumberLength ?? 9;
-                                      forgotPasswordController.selectedCountry.value = singleData.id ?? 2;
-                                      Get.back();
-                                    },
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
-                                          SizedBox(width: 5,),
-                                          Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
-
-
-                                        ],
-                                      ),
-                                      Text(singleData.code ?? ''),
-                                    ],
-                                    ),
-                                  );
-                                })),
-                              ],
-                              ),
-                          
+                        SizedBox(
+                          height: 10,
                         ),
-                      ));
-                    },
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Obx(() => Image.network("https://sarfapp.com/${forgotPasswordController.flag.value}",width: 40,height: 40,)), 
-                          SizedBox(width: 5,),
-                          Obx(() => Text(forgotPasswordController.code.value)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 5,),
-                   Expanded(
-            child: TextFormField(
-             // focusNode: searchFieldNode,
-            
-             controller: forgotPasswordController.phone,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                  hintText: 'Enter Mobile Number'.tr,
-                  hintStyle: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'medium',
-                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
-                  border: InputBorder.none),
-            ),
-          )
-                ],
-              )),
-              SizedBox(height: 20,),
+                        Container(
+                            margin: EdgeInsets.only(left: 15, right: 15),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xFFEAEEF2)),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.dialog(Dialog(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        width: Get.width * 0.80,
+                                        decoration: BoxDecoration(
+                                            color: R.colors.lightGrey,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Text("data"),
+                                            Expanded(
+                                                child: ListView.separated(
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        ctr.countries?.length ??
+                                                            0,
+                                                    separatorBuilder:
+                                                        (context, index) {
+                                                      return Divider(
+                                                        color: R.colors.grey,
+                                                        thickness: 1,
+                                                      );
+                                                    },
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      var singleData =
+                                                          ctr.countries?[index];
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          forgotPasswordController
+                                                                  .code.value =
+                                                              singleData.code ??
+                                                                  "966";
+                                                          forgotPasswordController
+                                                              .flag
+                                                              .value = singleData
+                                                                  .flag ??
+                                                              "admin/country/sa.png";
+                                                          forgotPasswordController
+                                                              .lenght
+                                                              .value = singleData
+                                                                  .mobileNumberLength ??
+                                                              9;
+                                                          forgotPasswordController
+                                                              .selectedCountry
+                                                              .value = singleData
+                                                                  .id ??
+                                                              2;
+                                                          Get.back();
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                Image.network(
+                                                                  "https://sarfapp.com/${singleData!.flag}",
+                                                                  width: 40,
+                                                                  height: 40,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Text(GetStorage().read(
+                                                                            "lang") ==
+                                                                        "en"
+                                                                    ? singleData
+                                                                            .name
+                                                                            ?.en ??
+                                                                        ''
+                                                                    : singleData
+                                                                            .name
+                                                                            ?.ar ??
+                                                                        ''),
+                                                              ],
+                                                            ),
+                                                            Text(singleData
+                                                                    .code ??
+                                                                ''),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    })),
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Obx(() => Image.network(
+                                              "https://sarfapp.com/${forgotPasswordController.flag.value}",
+                                              width: 40,
+                                              height: 40,
+                                            )),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Obx(() => Text(forgotPasswordController
+                                            .code.value)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    // focusNode: searchFieldNode,
+
+                                    controller: forgotPasswordController.phone,
+                                    keyboardType: TextInputType.phone,
+                                    decoration: InputDecoration(
+                                        hintText: 'Enter Mobile Number'.tr,
+                                        hintStyle: TextStyle(
+                                            fontSize: 10,
+                                            fontFamily: 'medium',
+                                            color: Color(0xFF9A9A9A)
+                                                .withOpacity(0.8)),
+                                        border: InputBorder.none),
+                                  ),
+                                )
+                              ],
+                            )),
+                        SizedBox(
+                          height: 20,
+                        ),
                         buildGetCodeButton()
                       ],
                     ),
@@ -853,7 +1029,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: () {
           // print(
           //     'This is my phoneNumber===============${forgotPasswordController.phone}');
-          if (forgotPasswordController.phone.text.isEmpty ) {
+          if (forgotPasswordController.phone.text.isEmpty) {
             Get.snackbar(
               'Alert'.tr,
               'Enter Mobile Number'.tr,
@@ -861,7 +1037,7 @@ class _LoginScreenState extends State<LoginScreen> {
               backgroundColor: R.colors.themeColor,
             );
           }
-          if (forgotPasswordController.phone.text.isEmpty ) {
+          if (forgotPasswordController.phone.text.isEmpty) {
             Get.snackbar(
               'Alert'.tr,
               'Enter Mobile Number'.tr,
@@ -870,17 +1046,20 @@ class _LoginScreenState extends State<LoginScreen> {
             );
             return;
           }
-          if (forgotPasswordController.phone.text.length < forgotPasswordController.lenght.value || forgotPasswordController.phone.text.length > forgotPasswordController.lenght.value) {
-                   Get.snackbar(
+          if (forgotPasswordController.phone.text.length <
+                  forgotPasswordController.lenght.value ||
+              forgotPasswordController.phone.text.length >
+                  forgotPasswordController.lenght.value) {
+            Get.snackbar(
               'Alert'.tr,
               "Invalid mobile number".tr,
               snackPosition: SnackPosition.TOP,
               backgroundColor: R.colors.themeColor,
             );
             return;
-                }
-           else {
-            forgotPasswordController.forgotPassword("${forgotPasswordController.code.value}${forgotPasswordController.phone.text}");
+          } else {
+            forgotPasswordController.forgotPassword(
+                "${forgotPasswordController.code.value}${forgotPasswordController.phone.text}");
           }
         },
         child: Center(

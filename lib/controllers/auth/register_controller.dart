@@ -20,8 +20,7 @@ class RegisterController extends GetxController {
   var flag = "admin/country/sa.png".obs;
   var lenght = 9.obs;
   var selectedCountry = 2.obs;
-  
-  
+
   var message;
 
   Future register(String phoneNumber) async {
@@ -33,12 +32,12 @@ class RegisterController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    
+
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phoneNumber,
     };
-    //  debugPrint("This is my request====================$request");
+    debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
 
     var response =
@@ -67,7 +66,7 @@ class RegisterController extends GetxController {
     // debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
-        // debugPrint(response.toString());
+      debugPrint(response.toString());
       Get.offNamed(RoutesName.OtpScreen);
       //   userInfo = UserInfo.fromMap(response);S
       //  await  storage.write('user_token', userInfo.token);
@@ -87,7 +86,6 @@ class RegisterController extends GetxController {
       //   }).catchError((error){
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
-
     } else {
       Get.back();
       Get.snackbar(

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/model/moreModel/account_model.dart';
@@ -48,6 +50,16 @@ class ProfileController extends GetxController {
   }
 
   Future getProfile() async {
+    EasyLoading.instance
+      ..loadingStyle =
+          EasyLoadingStyle.custom //This was missing in earlier code
+      ..backgroundColor = Colors.white
+      ..indicatorColor = R.colors.blue
+      ..maskColor = R.colors.blue
+      ..dismissOnTap = false
+      ..textColor = R.colors.blue
+      ..userInteractions = false;
+    EasyLoading.show(status: 'Sarf');
     //check validation
     // final isValid = loginFormKey.currentState!.validate();
     // if (!isValid) {
@@ -69,6 +81,7 @@ class ProfileController extends GetxController {
         .post(ApiLinks.profile, request)
         .catchError((error) async {
       if (error is BadRequestException) {
+        EasyLoading.dismiss();
         Get.back();
         Get.snackbar(
           'Error'.tr,
@@ -81,6 +94,7 @@ class ProfileController extends GetxController {
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
+        EasyLoading.dismiss();
         Get.back();
         // debugPrint('Something went Wrong===============${error.toString()}');
         await GetStorage().remove('user_token');
@@ -156,7 +170,7 @@ class ProfileController extends GetxController {
         await GetStorage().write('name', profileModel!.user!.name);
         // debugPrint("${GetStorage().read('name')}");
       }
-
+      EasyLoading.dismiss();
       update();
       //   Get.toNamed(RoutesName.RegistrationDetails);
       //   userInfo = UserInfo.fromMap(response);
@@ -178,6 +192,7 @@ class ProfileController extends GetxController {
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
     } else {
+      EasyLoading.dismiss();
       Get.back();
       Get.snackbar(
         'Error'.tr,

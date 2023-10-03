@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -26,7 +27,6 @@ import '../../resources/resources.dart';
 import 'location_view.dart';
 
 class RegistrationDetails extends StatefulWidget {
-  
   const RegistrationDetails({Key? key}) : super(key: key);
 
   @override
@@ -39,13 +39,14 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   RegistrationController registrationController =
       Get.find<RegistrationController>();
-  RegisterController ctr = Get.find<RegisterController>();    
-  List<Cities> cities = [];    
- // FocusNode searchFieldNode = FocusNode();
-  bool business = true;
-  bool personal = false;
-  bool onlineBusiness = true;
-  bool offlineBusiness = false;
+  RegisterController ctr = Get.find<RegisterController>();
+  List<Cities> cities = [];
+  // FocusNode searchFieldNode = FocusNode();
+  int? business;
+  int? personal;
+  int? businessSend = 2;
+  bool onlineBusiness = false;
+  bool offlineBusiness = true;
   bool checkBox = false;
   bool citySelected = false;
   int selectedCityIndex = -1;
@@ -60,8 +61,6 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   final TextEditingController maxWidthController = TextEditingController();
   final TextEditingController maxHeightController = TextEditingController();
   final TextEditingController qualityController = TextEditingController();
-
-
 
   void openGalleryCameraPickDialogs(bool video) {
     showDialog(
@@ -230,7 +229,6 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       //
       // debugPrint(uint8list.toString());
       // //   await _playVideo(file);
-
     } else if (isMultiImage) {
       log('this is my gallery images');
       await _displayPickImageDialog(context!,
@@ -362,15 +360,13 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   getData() async {
     await dataCollectionController.dataCollection();
     for (var city in dataCollectionController.cities!) {
-      if( city.countryId == ctr.selectedCountry.value ){
+      if (city.countryId == ctr.selectedCountry.value) {
         cities.add(city);
       }
     }
     // print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     // print(cities.toString());
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
@@ -392,7 +388,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           'assets/images/backgroundImage.png',
           width: MediaQuery.of(context).size.width,
           height: kIsWeb == true ? 200 : null,
-      fit: BoxFit.fill,
+          fit: BoxFit.fill,
         ),
         buildBackArrowContainer()
       ],
@@ -411,7 +407,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: const Color(0xFFFFFFFF)),
+              borderRadius: BorderRadius.circular(5),
+              color: const Color(0xFFFFFFFF)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('assets/images/arrow.png'),
@@ -430,7 +427,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: kIsWeb == true ? Get.width > 750 ? Get.width/3 : 0 : 0),
+        padding: EdgeInsets.symmetric(
+            horizontal: kIsWeb == true
+                ? Get.width > 750
+                    ? Get.width / 3
+                    : 0
+                : 0),
         child: Column(
           children: [buildRegistrationDetailsText(), buildForm()],
         ),
@@ -457,20 +459,100 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: Column(
         children: [
           buildUserTypeText(),
-          buildUserTypeOptions(),
+          buildUserTypeOptions(), SizedBox(height: 10.h),
+          business == 0
+              ? Text(
+                  "BusinessDescription".tr,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                )
+              : personal == 1
+                  ? Text(
+                      "PersonalDescription".tr,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    )
+                  : Text(
+                      "BusinessSendDescription".tr,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
           // buildPasswordField(),
-          business ? buildCompanyNameField() : buildFullNameField(),
+          business == 0
+              ? buildCompanyNameField()
+              : personal == 1
+                  ? buildFullNameField()
+                  : buildCompanyNameField(),
           buildSelectCityDropDown(),
-          business ? buildTypeDropDown() : Container(),
-          business ? buildInstagramField() : Container(),
-          business ? buildTwitterField() : Container(),
-          business ? buildContactNoField() : Container(),
-          business ? buildWhatsappField() : Container(),
-          business ? buildBusinessTypeText() : Container(),
-          business ? buildBusinessTypeOptions() : Container(),
-          business && onlineBusiness ? buildWebsiteField() : Container(),
-          (offlineBusiness == true && business == true && kIsWeb == false) ? buildLocationButton() : Container(),
-          business ? buildUploadImage() : Container(),
+          business == 0
+              ? buildTypeDropDown()
+              : personal == 1
+                  ? Container()
+                  : buildTypeDropDown(),
+          business == 0
+              ? buildInstagramField()
+              : personal == 1
+                  ? Container()
+                  : buildInstagramField(),
+          business == 0
+              ? buildTwitterField()
+              : personal == 1
+                  ? Container()
+                  : buildTwitterField(),
+
+          business == 0
+              ? buildContactNoField()
+              : personal == 1
+                  ? Container()
+                  : buildContactNoField(),
+          business == 0
+              ? buildWhatsappField()
+              : personal == 1
+                  ? Container()
+                  : buildWhatsappField(),
+          business == 0
+              ? buildWebsiteOptionalField()
+              : personal == 1
+                  ? Container()
+                  : buildWebsiteOptionalField(),
+          //
+          business == 0
+              ? buildBusinessTypeText()
+              : personal == 1
+                  ? Container()
+                  : buildBusinessTypeText(),
+//
+          business == 0
+              ? buildBusinessTypeOptions()
+              : personal == 1
+                  ? Container()
+                  : buildBusinessTypeOptions(),
+          //
+          business == 0 && onlineBusiness
+              ? buildWebsiteField()
+              : personal == 1
+                  ? Container()
+                  : buildWebsiteField(),
+          // business == 0 || businessSend == 2 && onlineBusiness
+          //     ? buildWebsiteField()
+          //     : Container(),
+//////////
+          ///
+          if ((offlineBusiness == true && business == 0 && kIsWeb == false))
+            buildLocationButton()
+          else if ((offlineBusiness == true &&
+              businessSend == 2 &&
+              kIsWeb == false))
+            buildLocationButton()
+          else
+            Container(),
+          // (offlineBusiness == true &&
+          //         (business == 0 || businessSend == 2) &&
+          //         kIsWeb == false)
+          //     ? buildLocationButton()
+          //     : Container(),
+          business == 0
+              ? buildUploadImage()
+              : personal == 1
+                  ? Container()
+                  : buildUploadImage(),
           // buildAgreeToTermsAndConditionsBox(),
           buildSubmitButton()
         ],
@@ -530,7 +612,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: const Color(0xFFEAEEF2)),
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xFFEAEEF2)),
       child: Row(
         children: [
           Container(
@@ -575,21 +658,21 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   margin: const EdgeInsets.only(top: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: kIsWeb == true ? Image.network(
-                      
-                        _imageFile!.path,
-                      
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
-                    ) : Image.file(
-                      File(
-                        _imageFile!.path,
-                      ),
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
-                    ),
+                    child: kIsWeb == true
+                        ? Image.network(
+                            _imageFile!.path,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            File(
+                              _imageFile!.path,
+                            ),
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 )
               : Container(
@@ -645,7 +728,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           //   );
           //   return;
           // }
-          if (registrationController.accountType == true) {
+          if (registrationController.accountType == 0 ||
+              registrationController.accountType == 2) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(
                 'Alert'.tr,
@@ -656,18 +740,17 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               return;
             }
           }
-          if (registrationController.accountType == false && registrationController.fullNameController.text.isEmpty) {
-            
-              // debugPrint(
-              //     "This is fullName =============${registrationController.fullNameController.text}");
-              Get.snackbar(
-                'Alert'.tr,
-                'Please Enter Name'.tr,
-                snackPosition: SnackPosition.TOP,
-                backgroundColor: R.colors.themeColor,
-              );
-              return;
-            
+          if (registrationController.accountType == 1 &&
+              registrationController.fullNameController.text.isEmpty) {
+            // debugPrint(
+            //     "This is fullName =============${registrationController.fullNameController.text}");
+            Get.snackbar(
+              'Alert'.tr,
+              'Please Enter Name'.tr,
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: R.colors.themeColor,
+            );
+            return;
           }
           if (selectedCityIndex == -1) {
             Get.snackbar(
@@ -678,7 +761,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             );
             return;
           }
-          if (selectedTypeIndex == -1 && registrationController.accountType == true) {
+          if (selectedTypeIndex == -1 &&
+              (registrationController.accountType == 0 ||
+                  registrationController.accountType == 2)) {
             Get.snackbar(
               'Alert'.tr,
               'Please Select Type'.tr,
@@ -696,7 +781,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           //   );
           //   return;
           // }
-          if (registrationController.accountType == true) {
+          if (registrationController.accountType == 0 ||
+              registrationController.accountType == 2) {
             if (registrationController.companyNameController.text.isEmpty) {
               Get.snackbar(
                 'Alert'.tr,
@@ -707,7 +793,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               return;
             }
           }
-          if (registrationController.accountType == false) {
+          if (registrationController.accountType == 1) {
             // print(
             //     "This is fullName =============${registrationController.fullNameController.text}");
             if (registrationController.fullNameController.text.isEmpty) {
@@ -722,7 +808,9 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
               return;
             }
           }
-          registrationController.registration("${ctr.code.value}${ctr.phone.text}","${ctr.selectedCountry.value}");
+          registrationController.registration(
+              "${ctr.code.value}${ctr.phone.text}",
+              "${ctr.selectedCountry.value}");
         },
         child: Center(
           child: Text(
@@ -752,7 +840,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildBusinessText() {
     return Container(
-      margin: const EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Row(
         children: [
           Text(
@@ -767,7 +855,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildOnlineBusinessText() {
     return Container(
-      margin: const EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Row(
         children: [
           Text(
@@ -782,7 +870,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildOfflineBusinessText() {
     return Container(
-      margin: const EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Row(
         children: [
           Text(
@@ -801,7 +889,10 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         top: 12,
       ),
       child: Row(
-        children: [buildOnlineBusinessButton(), buildOfflineBusinessButton()],
+        children: [
+          buildOfflineBusinessButton(),
+          buildOnlineBusinessButton(),
+        ],
       ),
     );
   }
@@ -843,39 +934,41 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   }
 
   Widget buildOfflineBusinessButton() {
-    return kIsWeb == true ? Container() : InkWell(
-      onTap: () {
-        onlineBusiness = false;
-        offlineBusiness = true;
-        registrationController.isOnline = false;
-        setState(() {});
-      },
-      child: Container(
-        margin: const EdgeInsets.only(left: 20),
-        child: Row(
-          children: [
-            Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: R.colors.black),
-                    borderRadius: BorderRadius.circular(100),
-                    color: R.colors.transparent),
-                height: 20,
-                width: 20,
-                child: offlineBusiness
-                    ? Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: R.colors.black),
-                        ),
-                      )
-                    : Container()),
-            buildOfflineBusinessText(),
-          ],
-        ),
-      ),
-    );
+    return kIsWeb == true
+        ? Container()
+        : InkWell(
+            onTap: () {
+              onlineBusiness = false;
+              offlineBusiness = true;
+              registrationController.isOnline = false;
+              setState(() {});
+            },
+            child: Container(
+              margin: const EdgeInsets.only(left: 20),
+              child: Row(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: R.colors.black),
+                          borderRadius: BorderRadius.circular(100),
+                          color: R.colors.transparent),
+                      height: 20,
+                      width: 20,
+                      child: offlineBusiness
+                          ? Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: R.colors.black),
+                              ),
+                            )
+                          : Container()),
+                  buildOfflineBusinessText(),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget buildUserTypeOptions() {
@@ -884,7 +977,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         top: 12,
       ),
       child: Row(
-        children: [buildBusinessButton(), buildPersonalButton()],
+        children: [
+          Expanded(child: buildBusinessSendButton()),
+          buildBusinessButton(),
+          buildPersonalButton(),
+        ],
       ),
     );
   }
@@ -892,10 +989,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   Widget buildBusinessButton() {
     return InkWell(
       onTap: () {
-        business = true;
-        personal = false;
-        registrationController.accountType = true;
-        setState(() {});
+        setState(() {
+          business = 0;
+          personal = null;
+          businessSend = null;
+          registrationController.accountType = 0;
+        });
       },
       child: Container(
         //   margin: EdgeInsets.only(left: 10),
@@ -908,7 +1007,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                     color: R.colors.transparent),
                 height: 20,
                 width: 20,
-                child: business
+                child: business == 0
                     ? Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Container(
@@ -927,9 +1026,20 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   Widget buildPersonalText() {
     return Container(
-      margin: const EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Text(
         'Personal'.tr,
+        style: const TextStyle(
+            fontSize: 14, fontFamily: 'regular', color: Color(0xFF9A9A9A)),
+      ),
+    );
+  }
+
+  Widget buildBusinessSendText() {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10),
+      child: Text(
+        'Business (Send)'.tr,
         style: const TextStyle(
             fontSize: 14, fontFamily: 'regular', color: Color(0xFF9A9A9A)),
       ),
@@ -954,13 +1064,15 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
   Widget buildPersonalButton() {
     return InkWell(
       onTap: () {
-        business = false;
-        personal = true;
-        registrationController.accountType = false;
-        registrationController.location.value = "";
-        registrationController.location_lat.value = "";
-        registrationController.location_lng.value = "";
-        setState(() {});
+        setState(() {
+          business = null;
+          businessSend = null;
+          personal = 1;
+          registrationController.accountType = 1;
+          registrationController.location.value = "";
+          registrationController.location_lat.value = "";
+          registrationController.location_lng.value = "";
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(left: 20),
@@ -973,7 +1085,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                     color: R.colors.transparent),
                 height: 20,
                 width: 20,
-                child: personal
+                child: personal == 1
                     ? Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Container(
@@ -990,11 +1102,49 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     );
   }
 
+  Widget buildBusinessSendButton() {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          business = null;
+          personal = null;
+          businessSend = 2;
+          registrationController.accountType = 2;
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 20),
+        child: Row(
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: R.colors.black),
+                    borderRadius: BorderRadius.circular(100),
+                    color: R.colors.transparent),
+                height: 20,
+                width: 20,
+                child: businessSend == 2
+                    ? Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: R.colors.black),
+                        ),
+                      )
+                    : Container()),
+            Expanded(child: buildBusinessSendText()),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget buildCompanyNameField() {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           makeCompulsoryField: true,
           hintTextSize: 12,
           hintText: 'Company Name'.tr,
@@ -1009,7 +1159,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Full Name'.tr,
           controller: registrationController.fullNameController,
@@ -1023,7 +1173,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Instagram Link (Optional)'.tr,
           controller: registrationController.instagramController,
@@ -1037,7 +1187,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Website (Optional)'.tr,
           controller: registrationController.websiteController,
@@ -1051,7 +1201,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Contact No (Optional)'.tr,
           controller: registrationController.contactController,
@@ -1065,10 +1215,24 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Whatsapp (Optional)'.tr,
           controller: registrationController.whatsappController,
+          color: R.colors.lightGrey,
+          height: 45,
+          borderColour: R.colors.transparent),
+    );
+  }
+
+  Widget buildWebsiteOptionalField() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      child: customTextField(
+          isPasswordObscureText: false,
+          hintTextSize: 12,
+          hintText: 'Web (Optional)'.tr,
+          controller: registrationController.websiteOptionalController,
           color: R.colors.lightGrey,
           height: 45,
           borderColour: R.colors.transparent),
@@ -1079,7 +1243,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: customTextField(
-        isPasswordObscureText: false,
+          isPasswordObscureText: false,
           hintTextSize: 12,
           hintText: 'Twitter Link (Optional)'.tr,
           controller: registrationController.twitterController,
@@ -1138,14 +1302,14 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                             ),
                             Expanded(
                               child: Container(
-                                margin: const EdgeInsets.only(top: 10, bottom: 10),
+                                margin:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
                                 //  height: MediaQuery.of(context).size.height / 4,
                                 color: R.colors.lightGrey,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
                                     scrollDirection: Axis.vertical,
-                                    itemCount:
-                                        cities.length,
+                                    itemCount: cities.length,
                                     itemBuilder: (BuildContext, index) {
                                       return InkWell(
                                         onTap: () {
@@ -1154,17 +1318,19 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           setState(() {
                                             registrationController
                                                     .finalSelectedCity.value =
-                                                GetStorage().read("lang") == "ar" ? 
-                                                    cities[index].name!.ar
-                                                    .toString() :
-                                                
-                                                    cities[index].name!.en
-                                                    .toString();
+                                                GetStorage().read("lang") ==
+                                                        "ar"
+                                                    ? cities[index]
+                                                        .name!
+                                                        .ar
+                                                        .toString()
+                                                    : cities[index]
+                                                        .name!
+                                                        .en
+                                                        .toString();
                                           });
                                           var getCityId =
-                                              
-                                                  cities[selectedCityIndex]
-                                                  .id;
+                                              cities[selectedCityIndex].id;
 
                                           // print(
                                           //     "This is my selctedCity Id ============${getCityId}");
@@ -1189,14 +1355,20 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                                     BorderRadius.circular(100),
                                                 border: Border.all(
                                                     color: Colors.grey)),
-                                            margin: const EdgeInsets.only(top: 2),
+                                            margin:
+                                                const EdgeInsets.only(top: 2),
                                             child: Center(
-                                              child: Text( GetStorage().read("lang") == "ar" ? 
-                                                    cities[index].name!.ar
-                                                    .toString() :
-                                                
-                                                    cities[index].name!.en
-                                                    .toString(),
+                                              child: Text(
+                                                GetStorage().read("lang") ==
+                                                        "ar"
+                                                    ? cities[index]
+                                                        .name!
+                                                        .ar
+                                                        .toString()
+                                                    : cities[index]
+                                                        .name!
+                                                        .en
+                                                        .toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     color: R.colors.black),
@@ -1269,7 +1441,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                           ),
                           Expanded(
                             child: Container(
-                              margin: const EdgeInsets.only(top: 10, bottom: 10),
+                              margin:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
                               //  height: MediaQuery.of(context).size.height / 4,
                               color: R.colors.lightGrey,
                               width: MediaQuery.of(context).size.width,
@@ -1284,12 +1457,13 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                         // print(selectedTypeIndex);
                                         registrationController
                                                 .finalSelectedType.value =
-                                            GetStorage().read("lang") == "ar" ?  dataCollectionController
-                                                  .types![index].expenseNameAr
-                                                  .toString() :
-                                              dataCollectionController
-                                                  .types![index].expenseName
-                                                  .toString();
+                                            GetStorage().read("lang") == "ar"
+                                                ? dataCollectionController
+                                                    .types![index].expenseNameAr
+                                                    .toString()
+                                                : dataCollectionController
+                                                    .types![index].expenseName
+                                                    .toString();
 
                                         var getTypeId = dataCollectionController
                                             .types![index].id
@@ -1317,12 +1491,14 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                                           margin: const EdgeInsets.only(top: 2),
                                           child: Center(
                                             child: Text(
-                                              GetStorage().read("lang") == "ar" ?  dataCollectionController
-                                                  .types![index].expenseNameAr
-                                                  .toString() :
-                                              dataCollectionController
-                                                  .types![index].expenseName
-                                                  .toString(),
+                                              GetStorage().read("lang") == "ar"
+                                                  ? dataCollectionController
+                                                      .types![index]
+                                                      .expenseNameAr
+                                                      .toString()
+                                                  : dataCollectionController
+                                                      .types![index].expenseName
+                                                      .toString(),
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: R.colors.black),
@@ -1372,7 +1548,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',
-                            color: registrationController.finalSelectedCity.value != '' ? R.colors.black : R.colors.grey),
+                            color: registrationController
+                                        .finalSelectedCity.value !=
+                                    ''
+                                ? R.colors.black
+                                : R.colors.grey),
                       ))),
               const Icon(Icons.arrow_drop_down),
             ],
@@ -1392,7 +1572,6 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       ),
       child: InkWell(
         onTap: () {
-          
           openPopUpOptionsForTypes();
         },
         child: Container(
@@ -1407,7 +1586,11 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'medium',
-                            color: registrationController.finalSelectedType.value != ''? R.colors.black : R.colors.grey),
+                            color: registrationController
+                                        .finalSelectedType.value !=
+                                    ''
+                                ? R.colors.black
+                                : R.colors.grey),
                       ))),
               const Icon(Icons.arrow_drop_down),
             ],
@@ -1426,54 +1609,54 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () async{
+        onTap: () async {
           bool serviceEnabled;
-  LocationPermission permission;
+          LocationPermission permission;
 
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the 
-    // App to enable the location services.
-    Get.snackbar("Alert".tr, "Location services are disabled.".tr);
-    return; 
-    // Future.error('');
-  }
+          // Test if location services are enabled.
+          serviceEnabled = await Geolocator.isLocationServiceEnabled();
+          if (!serviceEnabled) {
+            // Location services are not enabled don't continue
+            // accessing the position and request users of the
+            // App to enable the location services.
+            Get.snackbar("Alert".tr, "Location services are disabled.".tr);
+            return;
+            // Future.error('');
+          }
 
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale 
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      Get.snackbar("Alert".tr, "Location permissions are denied".tr);
-      return; 
-      // Future.error('Location permissions are denied');
-    }
-  }
-  
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately. 
-    Get.snackbar("Alert".tr, "Location permissions are denied".tr);
-    return;
-    //  Future.error(
-    //   'Location permissions are permanently denied, we cannot request permissions.');
-  } 
-  openLoader();
-  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value){
-    Get.back();
-    Get.to(() => const LocationView(),
-              arguments: {'Screen': 'From Register Screen',
+          permission = await Geolocator.checkPermission();
+          if (permission == LocationPermission.denied) {
+            permission = await Geolocator.requestPermission();
+            if (permission == LocationPermission.denied) {
+              // Permissions are denied, next time you could try
+              // requesting permissions again (this is also where
+              // Android's shouldShowRequestPermissionRationale
+              // returned true. According to Android guidelines
+              // your App should show an explanatory UI now.
+              Get.snackbar("Alert".tr, "Location permissions are denied".tr);
+              return;
+              // Future.error('Location permissions are denied');
+            }
+          }
+
+          if (permission == LocationPermission.deniedForever) {
+            // Permissions are denied forever, handle appropriately.
+            Get.snackbar("Alert".tr, "Location permissions are denied".tr);
+            return;
+            //  Future.error(
+            //   'Location permissions are permanently denied, we cannot request permissions.');
+          }
+          openLoader();
+          await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high)
+              .then((value) {
+            Get.back();
+            Get.to(() => const LocationView(), arguments: {
+              'Screen': 'From Register Screen',
               "lat": value.latitude,
               "lng": value.longitude
-              
-              });
-  });
-          
+            });
+          });
 
           //   Get.toNamed(RoutesName.RegistrationDetails);
         },

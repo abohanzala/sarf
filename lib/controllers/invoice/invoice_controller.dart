@@ -34,30 +34,33 @@ class InvoiceController extends getpackage.GetxController {
   TextEditingController amount22 = TextEditingController();
   TextEditingController note3 = TextEditingController();
   TextEditingController note33 = TextEditingController();
-
+  bool loading = false;
   Future postNewInvoice(String mobile, String amount, String note) async {
     openLoader();
 
     FormData formData = FormData();
     if (kIsWeb) {
-       for (var i = 0; i < uploadImages.length; i++) {
-      var file = uploadImages[i];
-      var xfile = XFile(uploadImages[i].path);
-      String fileName = file.path.split('/').last;
-      formData.files.add(MapEntry("file_attach[$i]",
-          await MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
-                return value.cast();
-              }), filename: fileName)));
+      for (var i = 0; i < uploadImages.length; i++) {
+        var file = uploadImages[i];
+        var xfile = XFile(uploadImages[i].path);
+        String fileName = file.path.split('/').last;
+        formData.files.add(MapEntry(
+            "file_attach[$i]",
+            await MultipartFile.fromBytes(
+                await xfile.readAsBytes().then((value) {
+                  return value.cast();
+                }),
+                filename: fileName)));
+      }
+    } else {
+      for (var i = 0; i < uploadImages.length; i++) {
+        var file = uploadImages[i];
+        String fileName = file.path.split('/').last;
+        formData.files.add(MapEntry("file_attach[$i]",
+            await MultipartFile.fromFile(file.path, filename: fileName)));
+      }
     }
-    }else{
-       for (var i = 0; i < uploadImages.length; i++) {
-      var file = uploadImages[i];
-      String fileName = file.path.split('/').last;
-      formData.files.add(MapEntry("file_attach[$i]",
-          await MultipartFile.fromFile(file.path, filename: fileName)));
-    }
-    }
-   
+
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
     formData.fields.add(MapEntry('mobile', mobile));
@@ -72,7 +75,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.simpleInvoice, formData, true)
         .catchError((error) {
-      checkMobile = false;    
+      checkMobile = false;
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
@@ -96,7 +99,7 @@ class InvoiceController extends getpackage.GetxController {
       checkMobile = false;
       getpackage.Get.back();
       //SnakeBars.showSuccessSnake(description: response['message'].toString());
-      
+
       uploadImages.clear();
       mobile1.clear();
       amount2.clear();
@@ -104,7 +107,6 @@ class InvoiceController extends getpackage.GetxController {
       getpackage.Get.back();
       getpackage.Get.snackbar('Success'.tr, response['message'].toString());
       //files.clear();
-
     } else {
       //uploadImages.clear();
       // debugPrint('here');
@@ -120,7 +122,8 @@ class InvoiceController extends getpackage.GetxController {
     }
   }
 
-  Future postNewCustomInvoice(String bid, String expId ,String amount, String note) async {
+  Future postNewCustomInvoice(
+      String bid, String expId, String amount, String note) async {
     openLoader();
 
     FormData formData = FormData();
@@ -131,23 +134,26 @@ class InvoiceController extends getpackage.GetxController {
     //   formData.files.add(MapEntry("file_attach[$i]",
     //       await MultipartFile.fromFile(file.path, filename: fileName)));
     // }
-     if (kIsWeb) {
-       for (var i = 0; i < uploadImages.length; i++) {
-      var file = uploadImages[i];
-      var xfile = XFile(uploadImages[i].path);
-      String fileName = file.path.split('/').last;
-      formData.files.add(MapEntry("file_attach[$i]",
-          await MultipartFile.fromBytes( await xfile.readAsBytes().then((value) {
-                return value.cast();
-              }), filename: fileName)));
-    }
-    }else{
-       for (var i = 0; i < uploadImages.length; i++) {
-      var file = uploadImages[i];
-      String fileName = file.path.split('/').last;
-      formData.files.add(MapEntry("file_attach[$i]",
-          await MultipartFile.fromFile(file.path, filename: fileName)));
-    }
+    if (kIsWeb) {
+      for (var i = 0; i < uploadImages.length; i++) {
+        var file = uploadImages[i];
+        var xfile = XFile(uploadImages[i].path);
+        String fileName = file.path.split('/').last;
+        formData.files.add(MapEntry(
+            "file_attach[$i]",
+            await MultipartFile.fromBytes(
+                await xfile.readAsBytes().then((value) {
+                  return value.cast();
+                }),
+                filename: fileName)));
+      }
+    } else {
+      for (var i = 0; i < uploadImages.length; i++) {
+        var file = uploadImages[i];
+        String fileName = file.path.split('/').last;
+        formData.files.add(MapEntry("file_attach[$i]",
+            await MultipartFile.fromFile(file.path, filename: fileName)));
+      }
     }
     formData.fields
         .add(MapEntry('language', GetStorage().read('lang').toString()));
@@ -155,7 +161,7 @@ class InvoiceController extends getpackage.GetxController {
     formData.fields.add(MapEntry('expense_type_id', expId));
     formData.fields.add(MapEntry('amount', amount));
     formData.fields.add(MapEntry('note', note));
-    
+
     // debugPrint(formData.fields.toString());
 
     // debugPrint(formData.files.first.toString());
@@ -164,7 +170,7 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.customSimpleInvoice, formData, true)
         .catchError((error) {
-      checkMobile = false;    
+      checkMobile = false;
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
@@ -188,7 +194,7 @@ class InvoiceController extends getpackage.GetxController {
       checkMobile = false;
       getpackage.Get.back();
       //SnakeBars.showSuccessSnake(description: response['message'].toString());
-      
+
       uploadImages.clear();
       selectedBudgetId.value = '';
       selectedExptId.value = '';
@@ -200,7 +206,6 @@ class InvoiceController extends getpackage.GetxController {
       getpackage.Get.back();
       getpackage.Get.snackbar('Success'.tr, response['message'].toString());
       //files.clear();
-
     } else {
       //uploadImages.clear();
       // debugPrint('here');
@@ -216,26 +221,24 @@ class InvoiceController extends getpackage.GetxController {
     }
   }
 
-
   Future<InvoiceMemberListModel?> getInvoiceMemberList(String query) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     //  openLoader();
     var request = {};
-    if(query == ''){
-    request = {
-      "language": GetStorage().read('lang'),
-      
-    };
-   }else{
-    request = {
-      "language": GetStorage().read('lang'),
-      "query_string": query,
-    };
-   }
+    if (query == '') {
+      request = {
+        "language": GetStorage().read('lang'),
+      };
+    } else {
+      request = {
+        "language": GetStorage().read('lang'),
+        "query_string": query,
+      };
+    }
     var response = await DioClient()
-        .post(ApiLinks.invoiceMemList,request)
+        .post(ApiLinks.invoiceMemList, request)
         .catchError((error) {
-          // debugPrint(error.toString());
+      // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -243,16 +246,14 @@ class InvoiceController extends getpackage.GetxController {
 
         if (error is BadRequestException) {
           // print(error.toString());
-
         } else if (error is FetchDataException) {
           // print(error.toString());
-
         } else if (error is ApiNotRespondingException) {
           //print(error.message.toString());
         }
       }
     });
-    if(response == null ) return null;
+    if (response == null) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
       // debugPrint(response.toString());
@@ -266,33 +267,31 @@ class InvoiceController extends getpackage.GetxController {
     return null;
   }
 
-  
-  
-  
-  Future<InvoiceMemberListModelHome?> getInvoiceMemberListHome(String query,String expanseId,String bId) async {
+  Future<InvoiceMemberListModelHome?> getInvoiceMemberListHome(
+      String query, String expanseId, String bId) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
-    //  openLoader();
-   var request = {};
-    if(query == ''){
-    request = {
-      "language": GetStorage().read('lang'),
-      "expense_type_id" : expanseId,
-      "budget_id" : bId,
-      
-    };
-   }else{
-    request = {
-      "language": GetStorage().read('lang'),
-      "query_string": query,
-      "expense_type_id" : expanseId,
-      "budget_id" : bId,
-    };
-   }
-  //  debugPrint(request.toString());
+    loading = true;
+
+    var request = {};
+    if (query == '') {
+      request = {
+        "language": GetStorage().read('lang'),
+        "expense_type_id": expanseId,
+        "budget_id": bId,
+      };
+    } else {
+      request = {
+        "language": GetStorage().read('lang'),
+        "query_string": query,
+        "expense_type_id": expanseId,
+        "budget_id": bId,
+      };
+    }
+    //  debugPrint(request.toString());
     var response = await DioClient()
-        .post(ApiLinks.invoiceMemList,request)
+        .post(ApiLinks.invoiceMemList, request)
         .catchError((error) {
-          // debugPrint(error.toString());
+      // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -300,19 +299,18 @@ class InvoiceController extends getpackage.GetxController {
 
         if (error is BadRequestException) {
           // print(error.toString());
-
         } else if (error is FetchDataException) {
           // print(error.toString());
-
         } else if (error is ApiNotRespondingException) {
           //print(error.message.toString());
         }
       }
     });
-    if(response == null ) return null;
+    if (response == null) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
       // debugPrint(response.toString());
+      loading = false;
       var membersList = InvoiceMemberListModelHome.fromJson(response);
       //print(membersList.data?.first.expenseName);
       return membersList;
@@ -323,29 +321,24 @@ class InvoiceController extends getpackage.GetxController {
     return null;
   }
 
-
-
-   Future<InvoiceList?> getInvoiceListMember(String query,String memberID) async {
+  Future<InvoiceList?> getInvoiceListMember(
+      String query, String memberID) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     //  openLoader();
     var request = {};
-    if(query == ''){
-    request = {
-      "language": GetStorage().read('lang'),
-      "member_id": memberID
-      
-    };
-   }else{
-    request = {
-      "language": GetStorage().read('lang'),
-      "query_string": query,
-      "member_id": memberID
-    };
-   }
+    if (query == '') {
+      request = {"language": GetStorage().read('lang'), "member_id": memberID};
+    } else {
+      request = {
+        "language": GetStorage().read('lang'),
+        "query_string": query,
+        "member_id": memberID
+      };
+    }
     var response = await DioClient()
-        .post("${ApiLinks.invoiceListNew}",request)
+        .post("${ApiLinks.invoiceListNew}", request)
         .catchError((error) {
-          // debugPrint(error.toString());
+      // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -353,16 +346,14 @@ class InvoiceController extends getpackage.GetxController {
 
         if (error is BadRequestException) {
           // print(error.toString());
-
         } else if (error is FetchDataException) {
           // print(error.toString());
-
         } else if (error is ApiNotRespondingException) {
           //print(error.message.toString());
         }
       }
     });
-    if(response == null ) return null;
+    if (response == null) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
       // debugPrint(response.toString());
@@ -376,25 +367,26 @@ class InvoiceController extends getpackage.GetxController {
     return null;
   }
 
-  Future<InvoiceList?> getInvoiceList(String query,) async {
+  Future<InvoiceList?> getInvoiceList(
+    String query,
+  ) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     //  openLoader();
     var request = {};
-    if(query == ''){
-    request = {
-      "language": GetStorage().read('lang'),
-      
-    };
-   }else{
-    request = {
-      "language": GetStorage().read('lang'),
-      "query_string": query,
-    };
-   }
+    if (query == '') {
+      request = {
+        "language": GetStorage().read('lang'),
+      };
+    } else {
+      request = {
+        "language": GetStorage().read('lang'),
+        "query_string": query,
+      };
+    }
     var response = await DioClient()
-        .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
+        .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}", request)
         .catchError((error) {
-          // debugPrint(error.toString());
+      // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -402,16 +394,14 @@ class InvoiceController extends getpackage.GetxController {
 
         if (error is BadRequestException) {
           // print(error.toString());
-
         } else if (error is FetchDataException) {
           // print(error.toString());
-
         } else if (error is ApiNotRespondingException) {
           //print(error.message.toString());
         }
       }
     });
-    if(response == null ) return null;
+    if (response == null) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
       // debugPrint(response.toString());
@@ -434,7 +424,7 @@ class InvoiceController extends getpackage.GetxController {
   //     "language": GetStorage().read('lang'),
   //     "expense_id" : expenseId,
   //     "budget_id" : bId,
-      
+
   //   };
   //  }else{
   //   request = {
@@ -447,7 +437,7 @@ class InvoiceController extends getpackage.GetxController {
   //   var response = await DioClient()
   //       .post("${ApiLinks.invoiceList}${GetStorage().read('lang')}",request)
   //       .catchError((error) {
-          // debugPrint(error.toString());
+  // debugPrint(error.toString());
   //     if (error is BadRequestException) {
   //       // print(error.toString());
   //     } else {
@@ -467,44 +457,44 @@ class InvoiceController extends getpackage.GetxController {
   //   if(response == null ) return null;
   //   if (response['success'] == true) {
   //     // getpackage.Get.back();
-      // debugPrint(response.toString());
+  // debugPrint(response.toString());
   //     var membersList = InvoiceList.fromJson(response);
   //     //print(membersList.data?.first.expenseName);
   //     return membersList;
   //   } else {
   //     // getpackage.Get.back();
-      // debugPrint('here');
+  // debugPrint('here');
   //   }
   //   return null;
   // }
 
-  Future<InvoiceList?> getInvoiceListHome(String query,String expenseId,String bId,String memberID) async {
+  Future<InvoiceList?> getInvoiceListHome(
+      String query, String expenseId, String bId, String memberID) async {
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
     // expense_id
     var request = {};
-    if(query == ''){
-    request = {
-      "language": GetStorage().read('lang'),
-      "expense_type_id" : expenseId,
-      "budget_id" : bId,
-      "member_id": memberID
-      
-    };
-   }else{
-    request = {
-      "language": GetStorage().read('lang'),
-      "query_string": query,
-      "expense_type_id" : expenseId,
-      "budget_id" : bId,
-      "member_id": memberID
-    };
-   }
-  //  debugPrint(request.toString());
+    if (query == '') {
+      request = {
+        "language": GetStorage().read('lang'),
+        "expense_type_id": expenseId,
+        "budget_id": bId,
+        "member_id": memberID
+      };
+    } else {
+      request = {
+        "language": GetStorage().read('lang'),
+        "query_string": query,
+        "expense_type_id": expenseId,
+        "budget_id": bId,
+        "member_id": memberID
+      };
+    }
+    //  debugPrint(request.toString());
     var response = await DioClient()
-        .post("${ApiLinks.invoiceListNew}",request)
+        .post("${ApiLinks.invoiceListNew}", request)
         .catchError((error) {
-          // debugPrint(error.toString());
+      // debugPrint(error.toString());
       if (error is BadRequestException) {
         // print(error.toString());
       } else {
@@ -512,16 +502,14 @@ class InvoiceController extends getpackage.GetxController {
 
         if (error is BadRequestException) {
           // print(error.toString());
-
         } else if (error is FetchDataException) {
           // print(error.toString());
-
         } else if (error is ApiNotRespondingException) {
           //print(error.message.toString());
         }
       }
     });
-    if(response == null ) return null;
+    if (response == null) return null;
     if (response['success'] == true) {
       // debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);
@@ -619,7 +607,6 @@ class InvoiceController extends getpackage.GetxController {
         .post(ApiLinks.getUserList, request)
         .catchError((error) {
       // debugPrint(error.toString());
-     
     });
     // debugPrint(response.toString());
     if (response == null) return;
@@ -628,7 +615,6 @@ class InvoiceController extends getpackage.GetxController {
       var data = SearchedMobileList.fromJson(response);
       searchedUsers.value = data;
       // debugPrint(searchedUsers.value.data.toString());
-      
     } else {
       searchedUsers.value = SearchedMobileList();
       // debugPrint('here error');

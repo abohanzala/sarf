@@ -84,9 +84,11 @@ class _MembersScreenState extends State<MembersScreen> {
   loadMembers() {
     membersList = ctr.getMembersList('');
     membersList?.then((value) {
-      setState(() {
-        membersLenght = '(${value?.data?.length ?? 0})';
-      });
+      if (mounted) {
+        setState(() {
+          membersLenght = '(${value?.data?.length ?? 0})';
+        });
+      }
     });
   }
 

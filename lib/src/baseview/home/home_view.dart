@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -65,9 +66,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       Helper.routeObserver.subscribe(this, ModalRoute.of(context)!);
     });
     day = DateTime(date.year, date.month - 1, date.day);
-    getData();
-    super.initState();
 
+    super.initState();
+    getData();
     notificationServices.requestNotificationPermission();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
@@ -83,7 +84,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   getData() async {
     expenseTypes.clear();
     await ctr.getHome(null, null, null).then((value) async {
-      //print(ctr.budgets.first.id);
       if (ctr.budgets.isNotEmpty) {
         ctr
             .getHome(
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             ctr.selectedBudgetIndex.value = 1;
             ctr.selectedBudgetId.value = ctr.budgets.first.id.toString();
             ctr.selectedBudgetNumbder.value = "";
-            ctr.selectedBudgetName.value = GetStorage().read('name');
+            ctr.selectedBudgetName.value = GetStorage().read('name') ?? "";
             ctr.qrCode.value = "${GetStorage().read('mobile')}";
             expenseTypes.clear();
             for (var expanse in ctr.expenseTypes) {
@@ -105,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                 expenseTypes.add(expanse);
               }
             }
+
             if (mounted) {
               setState(() {});
             }
@@ -560,132 +561,121 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         width: GetStorage().read('lang') == "en" ? 10 : 10,
                       ),
                       Expanded(
-                          child: ctr.budgets.isNotEmpty
-                              ? ListView.builder(
-                                  // physics: NeverScrollableScrollPhysics(),
-                                  reverse: true,
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.only(
-                                      right: GetStorage().read("lang") != "en"
-                                          ? 7
-                                          : 0,
-                                      left: GetStorage().read("lang") == "en"
-                                          ? 7
-                                          : 0),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: ctr.budgets.length,
-                                  itemBuilder: (context, index) {
-                                    var singleData = ctr.budgets[index];
-                                    return Obx(
-                                      () => Container(
-                                        height:
-                                            GetStorage().read("lang") == 'en'
-                                                ? 100
-                                                : 100,
-                                        margin: const EdgeInsets.only(left: 2),
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
+                        child: ctr.budgets.isNotEmpty
+                            ? ListView.builder(
+                                // physics: NeverScrollableScrollPhysics(),
+                                reverse: true,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(
+                                    right: GetStorage().read("lang") != "en"
+                                        ? 7
+                                        : 0,
+                                    left: GetStorage().read("lang") == "en"
+                                        ? 7
+                                        : 0),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: ctr.budgets.length,
+                                itemBuilder: (context, index) {
+                                  var singleData = ctr.budgets[index];
+                                  return Obx(
+                                    () => Container(
+                                      height: GetStorage().read("lang") == 'en'
+                                          ? 100
+                                          : 100,
+                                      margin: const EdgeInsets.only(left: 2),
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: (ctr.selectedBudgetIndex
+                                                          .value -
+                                                      1) ==
+                                                  index
+                                              ? R.colors.blue.withOpacity(0.2)
+                                              : null),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          ctr.selectedBudgetIndex.value =
+                                              (index + 1);
+                                          ctr.selectedBudgetId.value =
+                                              singleData.id.toString();
+                                          ctr.selectedBudgetNumbder.value =
+                                              singleData.number == '#0'
+                                                  ? ''
+                                                  : singleData.number ?? '';
+                                          ctr.selectedBudgetName.value =
+                                              index == 0
+                                                  ? GetStorage().read('name')
+                                                  : singleData.name ?? '';
+                                          // debugPrint(
+                                          //     ctr.selectedBudgetId.value);
+                                          ctr
+                                              .getHome(
+                                                  singleData.id.toString(),
+                                                  day == DateTime.now()
+                                                      ? null
+                                                      : day.toIso8601String(),
+                                                  today == DateTime.now()
+                                                      ? null
+                                                      : today.toIso8601String())
+                                              .then((value) {
+                                            expenseTypes.clear();
+                                            for (var expanse
+                                                in ctr.expenseTypes) {
+                                              // debugPrint(expanse.invoiceSumAmount.toString());
+                                              if (expanse.invoiceSumAmount !=
+                                                      null &&
+                                                  expanse.invoiceSumAmount! >
+                                                      0) {
+                                                expenseTypes.add(expanse);
+                                              }
+                                            }
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          height:
+                                              GetStorage().read("lang") == 'en'
+                                                  ? 80
+                                                  : 80,
+                                          width:
+                                              GetStorage().read("lang") == 'en'
+                                                  ? 80
+                                                  : 80,
+                                          padding: const EdgeInsets.all(5),
+                                          //margin: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: (ctr.selectedBudgetIndex
-                                                            .value -
-                                                        1) ==
-                                                    index
-                                                ? R.colors.blue.withOpacity(0.2)
-                                                : null),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            ctr.selectedBudgetIndex.value =
-                                                (index + 1);
-                                            ctr.selectedBudgetId.value =
-                                                singleData.id.toString();
-                                            ctr.selectedBudgetNumbder.value =
-                                                singleData.number == '#0'
-                                                    ? ''
-                                                    : singleData.number ?? '';
-                                            ctr.selectedBudgetName.value =
-                                                index == 0
-                                                    ? GetStorage().read('name')
-                                                    : singleData.name ?? '';
-                                            // debugPrint(
-                                            //     ctr.selectedBudgetId.value);
-                                            ctr
-                                                .getHome(
-                                                    singleData.id.toString(),
-                                                    day == DateTime.now()
-                                                        ? null
-                                                        : day.toIso8601String(),
-                                                    today == DateTime.now()
-                                                        ? null
-                                                        : today
-                                                            .toIso8601String())
-                                                .then((value) {
-                                              expenseTypes.clear();
-                                              for (var expanse
-                                                  in ctr.expenseTypes) {
-                                                // debugPrint(expanse.invoiceSumAmount.toString());
-                                                if (expanse.invoiceSumAmount !=
-                                                        null &&
-                                                    expanse.invoiceSumAmount! >
-                                                        0) {
-                                                  expenseTypes.add(expanse);
-                                                }
-                                              }
-                                              if (mounted) {
-                                                setState(() {});
-                                              }
-                                            });
-                                          },
-                                          child: Container(
-                                            height: GetStorage().read("lang") ==
-                                                    'en'
-                                                ? 80
-                                                : 80,
-                                            width: GetStorage().read("lang") ==
-                                                    'en'
-                                                ? 80
-                                                : 80,
-                                            padding: const EdgeInsets.all(5),
-                                            //margin: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              //borderRadius: BorderRadius.circular(50),
-                                              border: Border.all(
-                                                  color: R.colors.blue,
-                                                  width: 3),
-                                              color: R.colors.white,
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "${index == 0 ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number == '#0' ? '' : singleData.number ?? ''}",
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
-                                            ),
+                                            //borderRadius: BorderRadius.circular(50),
+                                            border: Border.all(
+                                                color: R.colors.blue, width: 3),
+                                            color: R.colors.white,
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "${index == 0 ? GetStorage().read('name') : singleData.name ?? ''}\n${singleData.number == '#0' ? '' : singleData.number ?? ''}",
+                                                style: const TextStyle(
+                                                    fontSize: 14),
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    );
-                                  })
-                              : SizedBox(
-                                  width: 40,
-                                  height: 45,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 130),
-                                    child: CircularProgressIndicator(
-                                      color: R.colors.blue,
                                     ),
-                                  ),
-                                )),
+                                  );
+                                })
+                            : const SizedBox(
+                                height: 80,
+                              ),
+                      ),
                     ],
                   ),
                 ),
@@ -737,7 +727,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                   width: 1),
                                               color: R.colors.white),
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 2),
+                                              horizontal: 10, vertical: 0),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -788,17 +778,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                   ),
                                 );
                               })
-                          : SizedBox(
-                              width: 45,
-                              height: 45,
+                          : const SizedBox(
+                              width: 60,
+                              height: 50,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 110),
-                                child: CircularProgressIndicator(
-                                  color: R.colors.blue,
-                                ),
-                              ),
-                            )),
+                                padding: EdgeInsets.symmetric(vertical: 69),
+                              ))),
                   const SizedBox(
                     height: 15,
                   ),
@@ -811,100 +796,118 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          GridView.builder(
-                              shrinkWrap: true,
-                              primary: false,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: kIsWeb == true
-                                    ? Get.width > 750
-                                        ? MediaQuery.of(context).size.width / 6
-                                        : MediaQuery.of(context).size.width / 2
-                                    : MediaQuery.of(context).size.width / 2,
-                                childAspectRatio: 3,
-                                mainAxisSpacing: 0,
-                                crossAxisSpacing: 10,
-                              ),
-                              itemCount: expenseTypes.length,
-                              itemBuilder: (context, index) {
-                                var singleExpanse = expenseTypes[index];
-
-                                return Obx(
-                                  () => GestureDetector(
-                                    onTap: () {
-                                      Get.to(() => InvoiceMembersHomeListScreen(
-                                            expanseId:
-                                                singleExpanse.id.toString(),
-                                            budgetId: ctr.selectedBudgetId.value
-                                                .toString(),
-                                          ));
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: Get.width,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              border: Border.all(
-                                                  color: R.colors.blue,
-                                                  width: 1),
-                                              color: R.colors.white),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 5),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              if (singleExpanse.unviewInvoice !=
-                                                      null &&
-                                                  singleExpanse.unviewInvoice! >
-                                                      0) ...[
-                                                Container(
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.red,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                              ],
-                                              Text(
-                                                ctr.currency.value,
-                                                style: TextStyle(
-                                                    color: R.colors.blue),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                "${singleExpanse.invoiceSumAmount ?? 0}",
-                                                style: TextStyle(
-                                                    color: R.colors.blue),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "${GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
-                                          style: TextStyle(
-                                              color: R.colors.blackSecondery),
-                                        )
-                                      ],
-                                    ),
+                          expenseTypes.isNotEmpty
+                              ? GridView.builder(
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: kIsWeb == true
+                                        ? Get.width > 750
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                6
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2
+                                        : MediaQuery.of(context).size.width / 2,
+                                    childAspectRatio: 3,
+                                    mainAxisSpacing: 0,
+                                    crossAxisSpacing: 10,
                                   ),
-                                );
-                              }),
+                                  itemCount: expenseTypes.length,
+                                  itemBuilder: (context, index) {
+                                    var singleExpanse = expenseTypes[index];
+
+                                    return Obx(
+                                      () => GestureDetector(
+                                        onTap: () {
+                                          Get.to(() =>
+                                              InvoiceMembersHomeListScreen(
+                                                expanseId:
+                                                    singleExpanse.id.toString(),
+                                                budgetId: ctr
+                                                    .selectedBudgetId.value
+                                                    .toString(),
+                                              ));
+                                        },
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: Get.width,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: R.colors.blue,
+                                                      width: 1),
+                                                  color: R.colors.white),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  if (singleExpanse
+                                                              .unviewInvoice !=
+                                                          null &&
+                                                      singleExpanse
+                                                              .unviewInvoice! >
+                                                          0) ...[
+                                                    Container(
+                                                      width: 10,
+                                                      height: 10,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                  ],
+                                                  Text(
+                                                    ctr.currency.value,
+                                                    style: TextStyle(
+                                                        color: R.colors.blue),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    "${singleExpanse.invoiceSumAmount ?? 0}",
+                                                    style: TextStyle(
+                                                        color: R.colors.blue),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              "${GetStorage().read("lang") == "en" ? singleExpanse.expenseName : singleExpanse.expenseNameAr}",
+                                              style: TextStyle(
+                                                  color:
+                                                      R.colors.blackSecondery),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  })
+                              : const SizedBox(
+                                  width: 45,
+                                  height: 45,
+                                ),
                           const SizedBox(
                             height: 15,
                           ),
@@ -936,9 +939,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                       const EdgeInsets.all(20),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft: Radius
-                                                                .circular(10),
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
                                                             topRight:
                                                                 Radius.circular(
                                                                     10)),
@@ -1233,7 +1237,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           GestureDetector(
@@ -1593,7 +1597,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Container(
@@ -1698,7 +1702,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                             child:
                                                                 Text("From".tr),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           Expanded(
@@ -1804,7 +1808,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               );
                                                             },
                                                           )),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           Expanded(child:
@@ -2151,7 +2155,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                       //                                                 ],
                                                       //                                               ),
 
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 20,
                                                       ),
 
@@ -2214,7 +2218,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               ),
                                                             ),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             height: 20,
                                                           ),
                                                           GestureDetector(
@@ -2344,9 +2348,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                       const EdgeInsets.all(20),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft: Radius
-                                                                .circular(10),
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
                                                             topRight:
                                                                 Radius.circular(
                                                                     10)),
@@ -2641,7 +2646,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           GestureDetector(
@@ -3001,7 +3006,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Container(
@@ -3104,7 +3109,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                             child:
                                                                 Text("From".tr),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           Expanded(
@@ -3210,7 +3215,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               );
                                                             },
                                                           )),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           Expanded(child:
@@ -3556,7 +3561,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                       //                                                 ],
                                                       //                                               ),
 
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         height: 20,
                                                       ),
 
@@ -3619,7 +3624,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                               ),
                                                             ),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 20,
                                                           ),
                                                           GestureDetector(
@@ -4038,7 +4043,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                             Expanded(
                                               child: Text("From".tr),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             Expanded(
@@ -4139,7 +4144,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                 },
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             Expanded(child: StatefulBuilder(
@@ -4474,7 +4479,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                         //                                                 ],
                                         //                                               ),
 
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
 
@@ -4527,7 +4532,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             GestureDetector(
@@ -4732,7 +4737,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text("Daily".tr),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 5,
                                                 ),
                                                 Row(
@@ -4770,11 +4775,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 5,
                                                 ),
                                                 Text("Monthly".tr),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 5,
                                                 ),
                                                 Row(
@@ -4844,7 +4849,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                             20),
                                                     decoration: BoxDecoration(
                                                       borderRadius:
-                                                          BorderRadius.only(
+                                                          const BorderRadius
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -5154,7 +5160,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                                     .cover,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 20,
                                                             ),
                                                             GestureDetector(

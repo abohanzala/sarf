@@ -28,7 +28,8 @@ class LocationView extends StatefulWidget {
 class _LocationViewState extends State<LocationView> {
   RegistrationController registrationController =
       Get.find<RegistrationController>();
-  ProfileController profileController = Get.put<ProfileController>(ProfileController());
+  ProfileController profileController =
+      Get.put<ProfileController>(ProfileController());
   String label = '';
   String address = '';
   String lat = '';
@@ -36,21 +37,21 @@ class _LocationViewState extends State<LocationView> {
   var locationLatGiven;
   var locationLngGiven;
 
-  var screenDecider =
-      Get.arguments['Screen'] == 'From Profile Screen'
-          ? 'From Profile Screen'
-          : 'From Register Screen';
+  var screenDecider = Get.arguments['Screen'] == 'From Profile Screen'
+      ? 'From Profile Screen'
+      : 'From Register Screen';
 
   CameraPosition? cameraPosition = CameraPosition(
     //innital position in map
-    target: LatLng(Get.arguments['lat'], Get.arguments['lng']), //initial position
+    target:
+        LatLng(Get.arguments['lat'], Get.arguments['lng']), //initial position
     zoom: 20.0, //initial zoom level
   );
 
   List<Marker> marker = [];
   GoogleMapController? mapController; //contrller for Google map
 
-  LatLng startLocation =  LatLng(Get.arguments['lat'], Get.arguments['lng']);
+  LatLng startLocation = LatLng(Get.arguments['lat'], Get.arguments['lng']);
   String location = "Search".tr;
   // BitmapDescriptor? customIcon;
 
@@ -61,9 +62,7 @@ class _LocationViewState extends State<LocationView> {
     //     startLocation = LatLng(value.latitude, value.longitude);
     //   });
     //   locationLatGiven = value.latitude;
-  
-    
-    
+
     //   locationLngGiven = value.longitude;
     // LatLng latLng = LatLng(value.latitude, value.longitude);
     //    handleTap(latLng);
@@ -78,13 +77,11 @@ class _LocationViewState extends State<LocationView> {
     // });
     // print(profileController.location_lng.value);
     // print(profileController.location_lat.value);
-    
-    
+
     //  addMarker();
     super.initState();
   }
 
- 
   // void addMarker() async {
   //   final Uint8List markerIcon =
   //       await getBytesFromAsset('assets/images/location.png', 300);
@@ -108,20 +105,22 @@ class _LocationViewState extends State<LocationView> {
     await placemarkFromCoordinates(argument.latitude, argument.longitude)
         .then((value) {
       List<Placemark> placemarks = value;
-      setState(() {
-        marker = [];
-        marker.add(Marker(
+      if (mounted) {
+        setState(() {
+          marker = [];
+          marker.add(Marker(
             markerId: MarkerId(argument.toString()),
             position: argument,
             // icon: customIcon!
-            ));
-        // print(placemarks.first.toString());    
-        location =
-            "${placemarks.first.administrativeArea},${placemarks.first.subAdministrativeArea},${placemarks.first.subLocality}, ${placemarks.first.thoroughfare}, ${placemarks.first.street}, ${placemarks.first.country}";
-        address = location;
-        lat = argument.latitude.toString();
-        lng = argument.longitude.toString();
-      });
+          ));
+          // print(placemarks.first.toString());
+          location =
+              "${placemarks.first.administrativeArea},${placemarks.first.subAdministrativeArea},${placemarks.first.subLocality}, ${placemarks.first.thoroughfare}, ${placemarks.first.street}, ${placemarks.first.country}";
+          address = location;
+          lat = argument.latitude.toString();
+          lng = argument.longitude.toString();
+        });
+      }
     });
   }
 
@@ -141,7 +140,7 @@ class _LocationViewState extends State<LocationView> {
                 zoomGesturesEnabled: true, //enable Zoom in, out on map
                 initialCameraPosition: cameraPosition!,
                 myLocationButtonEnabled: false,
-                myLocationEnabled: false,  
+                myLocationEnabled: false,
                 zoomControlsEnabled: false,
                 padding: const EdgeInsets.only(top: 130),
                 mapType: MapType.normal, //map type
@@ -149,7 +148,9 @@ class _LocationViewState extends State<LocationView> {
                   //method called when map is created
                   setState(() {
                     mapController = controller;
-                    marker.add(Marker(markerId: const MarkerId('default'),position: startLocation));
+                    marker.add(Marker(
+                        markerId: const MarkerId('default'),
+                        position: startLocation));
                     // handleTap(argument);
                   });
                   handleTap(startLocation);
@@ -231,7 +232,7 @@ class _LocationViewState extends State<LocationView> {
               ),
             ],
           ),
-          customAppBar('Select Location'.tr, true, true, '', false,(){}),
+          customAppBar('Select Location'.tr, true, true, '', false, () {}),
           Container(
             margin: const EdgeInsets.only(top: 75),
             child: InkWell(

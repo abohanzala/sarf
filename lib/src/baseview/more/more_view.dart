@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/login_controller.dart';
@@ -79,14 +80,17 @@ class _MoreScreenState extends State<MoreScreen> with RouteAware {
       await GetStorage().remove(
         'status',
       );
-      MyBottomNavigationController ctr =
-          Get.put<MyBottomNavigationController>(MyBottomNavigationController());
-      ctr.tabIndex.value = 0;
+      // MyBottomNavigationController ctr =
+      //     Get.put<MyBottomNavigationController>(MyBottomNavigationController());
+      // ctr.tabIndex.value = 0;
+      EasyLoading.dismiss();
+
       Get.offAllNamed(RoutesName.LogIn)?.then((value) {
-        MyBottomNavigationController ctr =
-            Get.put<MyBottomNavigationController>(
-                MyBottomNavigationController());
-        ctr.tabIndex.value = 0;
+        // MyBottomNavigationController ctr =
+        //     Get.put<MyBottomNavigationController>(
+        //         MyBottomNavigationController());
+        // ctr.tabIndex.value = 0;
+        EasyLoading.dismiss();
       });
     });
     // print(response);
@@ -118,10 +122,13 @@ class _MoreScreenState extends State<MoreScreen> with RouteAware {
     await GetStorage().remove(
       'status',
     );
+
     MyBottomNavigationController ctr =
         Get.put<MyBottomNavigationController>(MyBottomNavigationController());
     ctr.tabIndex.value = 0;
-    Get.offAllNamed(RoutesName.LogIn)?.then((value) {});
+    Get.offAllNamed(RoutesName.LogIn)?.then((value) {
+      EasyLoading.dismiss();
+    });
   }
 
   @override

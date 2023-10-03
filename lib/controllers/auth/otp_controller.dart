@@ -20,6 +20,7 @@ class OtpController extends GetxController {
     // GetStorage().write('lang', 'en');
     super.onInit();
   }
+
   String replaceArabicNumber(String input) {
     const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -41,15 +42,15 @@ class OtpController extends GetxController {
     // loginFormKey.currentState!.save();
     // validation ends
     // print("sfsf");
-    // print(otps);
-    // var a = replaceArabicNumber(otps);
-    // print(a);
+    print(otps);
+    var a = replaceArabicNumber(otps);
+    print(a);
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': "${registerController.code}${registerController.phone.text}",
       'otp': replaceArabicNumber(otps),
     };
-    //  debugPrint("This is my request====================$request");
+    debugPrint("This is my request====================$request");
 
     //DialogBoxes.openLoadingDialog();
 
@@ -98,7 +99,6 @@ class OtpController extends GetxController {
       //   }).catchError((error){
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
-
     } else {
       Get.back();
       Get.snackbar(
