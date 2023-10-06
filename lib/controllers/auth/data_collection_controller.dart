@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,6 @@ import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
 import '../../services/dio_client.dart';
 
-
 class DataCollectionController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
   List<Cities>? cities = [];
@@ -19,9 +19,9 @@ class DataCollectionController extends GetxController {
   List<Countries>? countries = [];
 
   @override
-  void onInit() async{
-   // GetStorage().write('lang', 'en');
-   await dataCollection();
+  void onInit() async {
+    // GetStorage().write('lang', 'en');
+    await dataCollection();
     super.onInit();
   }
 
@@ -72,7 +72,7 @@ class DataCollectionController extends GetxController {
       cities?.clear();
       types?.clear();
       countries?.clear();
-      // debugPrint(response.toString());
+      log(response.toString());
       var data = DataCollection.fromJson(response);
       cities = data.data!.cities;
       types = data.data!.expenseType!;
