@@ -32,7 +32,7 @@ class RegistrationController extends GetxController {
   TextEditingController whatsappController = TextEditingController();
   TextEditingController websiteOptionalController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
-  int? accountType = 0;
+  int accountType = 2;
   bool isOnline = false;
   bool isGroup = false;
   var cityId;
@@ -117,10 +117,13 @@ class RegistrationController extends GetxController {
           ? companyNameController.text
           : fullNameController.text,
     ));
-    formData.fields.add(MapEntry(
-      'city_id',
-      cityId.toString(),
-    ));
+    if (accountType == 0 || accountType == 2) {
+      formData.fields.add(MapEntry(
+        'city_id',
+        cityId.toString(),
+      ));
+    }
+
     if (accountType == 0 || accountType == 2) {
       formData.fields.add(MapEntry(
         'expense_type_id',
@@ -177,7 +180,14 @@ class RegistrationController extends GetxController {
         Platform.isIOS == true ? result : '',
       ));
     }
-
+    if (!kIsWeb) {
+      formData.fields.add(MapEntry(
+        'name',
+        accountType == 0 || accountType == 2
+            ? companyNameController.text
+            : fullNameController.text,
+      ));
+    }
     if (!kIsWeb) {
       formData.fields.add(MapEntry(
           'android_device_id', Platform.isAndroid == true ? result : ''));
@@ -225,7 +235,7 @@ class RegistrationController extends GetxController {
           backgroundColor: R.colors.themeColor,
         );
         var apiError = json.decode(error.message!);
-        // debugPrint(apiError.toString());
+        debugPrint(apiError.toString());
 
         // DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
@@ -238,14 +248,15 @@ class RegistrationController extends GetxController {
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
-        // debugPrint("This is error==================${error.toString()}");
+        debugPrint("This is error==================${error.toString()}");
 
         //HandlingErrors().handleError(error);
       }
     });
     //  message = response['message'];
     // if (response == null) return;
-    // debugPrint("This is my response================== $response");
+    debugPrint("This is my response================== $response");
+
     if (response == null || response == "") return;
     log(response.toString());
     if (response['success'] == true) {
@@ -265,7 +276,7 @@ class RegistrationController extends GetxController {
       location_lng.value = '';
       finalSelectedType.value = 'Select Type'.tr;
       finalSelectedCity.value = 'Select City'.tr;
-      accountType = null;
+      accountType == 2;
       var userInfo = LoginModel.fromJson(response);
       await GetStorage().write('user_token', userInfo.token);
       await GetStorage().write('userId', userInfo.user!.id);

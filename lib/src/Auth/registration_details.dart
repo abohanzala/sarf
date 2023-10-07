@@ -339,6 +339,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
 
   @override
   void initState() {
+    businessSend = 2;
+    registrationController.accountType = 2;
     registrationController.companyNameController.clear();
     registrationController.fullNameController.clear();
     registrationController.websiteController.clear();
@@ -475,43 +477,49 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
           // buildPasswordField(),
-          business == 0
-              ? buildCompanyNameField()
-              : personal == 1
-                  ? buildFullNameField()
-                  : buildCompanyNameField(),
-          buildSelectCityDropDown(),
+          if (business == 0)
+            buildCompanyNameField()
+          else if (businessSend == 2)
+            buildCompanyNameField()
+          // : personal == 1
+          // ?
+          else
+            buildFullNameField(),
+          // :
+          business == 0 || businessSend == 2
+              ? buildSelectCityDropDown()
+              : Container(),
           business == 0
               ? buildTypeDropDown()
               : personal == 1
                   ? Container()
                   : buildTypeDropDown(),
-          business == 0
-              ? buildInstagramField()
-              : personal == 1
-                  ? Container()
-                  : buildInstagramField(),
-          business == 0
-              ? buildTwitterField()
-              : personal == 1
-                  ? Container()
-                  : buildTwitterField(),
+          // business == 0
+          //     ? buildInstagramField()
+          //     : personal == 1
+          //         ? Container()
+          //         : buildInstagramField(),
+          // business == 0
+          //     ? buildTwitterField()
+          //     : personal == 1
+          //         ? Container()
+          //         : buildTwitterField(),
 
-          business == 0
-              ? buildContactNoField()
-              : personal == 1
-                  ? Container()
-                  : buildContactNoField(),
-          business == 0
-              ? buildWhatsappField()
-              : personal == 1
-                  ? Container()
-                  : buildWhatsappField(),
-          business == 0
-              ? buildWebsiteOptionalField()
-              : personal == 1
-                  ? Container()
-                  : buildWebsiteOptionalField(),
+          // business == 0
+          //     ? buildContactNoField()
+          //     : personal == 1
+          //         ? Container()
+          //         : buildContactNoField(),
+          // business == 0
+          //     ? buildWhatsappField()
+          //     : personal == 1
+          //         ? Container()
+          //         : buildWhatsappField(),
+          // business == 0
+          //     ? buildWebsiteOptionalField()
+          //     : personal == 1
+          //         ? Container()
+          //         : buildWebsiteOptionalField(),
           //
           business == 0
               ? buildBusinessTypeText()
@@ -525,11 +533,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
                   ? Container()
                   : buildBusinessTypeOptions(),
           //
-          business == 0 && onlineBusiness
-              ? buildWebsiteField()
-              : personal == 1
-                  ? Container()
-                  : buildWebsiteField(),
+          // if (business == 0 && onlineBusiness)
+          //   buildWebsiteField()
+          // else if (businessSend == 2 && onlineBusiness)
+          //   buildWebsiteField()
+          // else
+          //   Container(),
           // business == 0 || businessSend == 2 && onlineBusiness
           //     ? buildWebsiteField()
           //     : Container(),
@@ -731,6 +740,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           if (registrationController.accountType == 0 ||
               registrationController.accountType == 2) {
             if (registrationController.companyNameController.text.isEmpty) {
+              print("hello1");
+              log("Hii1");
               Get.snackbar(
                 'Alert'.tr,
                 'Please Enter Name'.tr,
@@ -742,6 +753,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           }
           if (registrationController.accountType == 1 &&
               registrationController.fullNameController.text.isEmpty) {
+            print("hello2");
+            log("Hii2");
             // debugPrint(
             //     "This is fullName =============${registrationController.fullNameController.text}");
             Get.snackbar(
@@ -752,7 +765,12 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             );
             return;
           }
-          if (selectedCityIndex == -1) {
+          if (
+              // selectedCityIndex == -1
+
+              selectedCityIndex == -1 &&
+                  registrationController.accountType != 1) {
+            log("message");
             Get.snackbar(
               'Alert'.tr,
               'Please Select City'.tr,
@@ -764,6 +782,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           if (selectedTypeIndex == -1 &&
               (registrationController.accountType == 0 ||
                   registrationController.accountType == 2)) {
+            print("hello3");
+            log("Hii3");
             Get.snackbar(
               'Alert'.tr,
               'Please Select Type'.tr,
@@ -784,6 +804,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
           if (registrationController.accountType == 0 ||
               registrationController.accountType == 2) {
             if (registrationController.companyNameController.text.isEmpty) {
+              print("hello4");
+              log("Hii4");
               Get.snackbar(
                 'Alert'.tr,
                 'Please Enter Name'.tr,
@@ -797,6 +819,8 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
             // print(
             //     "This is fullName =============${registrationController.fullNameController.text}");
             if (registrationController.fullNameController.text.isEmpty) {
+              print("hello5");
+              log("Hii5");
               // print(
               //     "This is fullName =============${registrationController.fullNameController.text}");
               Get.snackbar(
