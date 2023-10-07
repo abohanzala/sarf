@@ -41,7 +41,7 @@ class _RegistrationState extends State<Registration> {
       body: Stack(
         children: [
           Scaffold(
-            backgroundColor: Color(0xFFF2F2F9),
+            backgroundColor: const Color(0xFFF2F2F9),
             body: Stack(
               children: [
                 buildBackGroundImage(),
@@ -76,7 +76,7 @@ class _RegistrationState extends State<Registration> {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Color(0xFFFFFFFF)),
+              borderRadius: BorderRadius.circular(5), color: const Color(0xFFFFFFFF)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('assets/images/arrow.png'),
@@ -92,7 +92,7 @@ class _RegistrationState extends State<Registration> {
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Color(0xFFFFFFFF),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -106,19 +106,19 @@ class _RegistrationState extends State<Registration> {
                     buildRegisterText(),
                 // buildPhonefield(),
                 Container(
-                  margin: EdgeInsets.only(left: 15, right: 15),
-                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+                          borderRadius: BorderRadius.circular(10), color: const Color(0xFFEAEEF2)),
                   child: Row(
                     children: [
                       GestureDetector(
                         onTap: (){
                           Get.dialog(Dialog(
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                               width: Get.width * 0.80,
                               decoration: BoxDecoration(
                                 color: R.colors.lightGrey,
@@ -151,7 +151,7 @@ class _RegistrationState extends State<Registration> {
                                           Row(
                                             children: [
                                               Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
-                                              SizedBox(width: 5,),
+                                              const SizedBox(width: 5,),
                                               Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
                   
                   
@@ -172,13 +172,13 @@ class _RegistrationState extends State<Registration> {
                           child: Row(
                             children: [
                               Obx(() => Image.network("https://sarfapp.com/${registerController.flag.value}",width: 40,height: 40,)), 
-                              SizedBox(width: 5,),
+                              const SizedBox(width: 5,),
                               Obx(() => Text(registerController.code.value)),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(width: 5,),
+                      const SizedBox(width: 5,),
                        Expanded(
                 child: TextField(
                  // focusNode: searchFieldNode,
@@ -189,13 +189,13 @@ class _RegistrationState extends State<Registration> {
                       hintStyle: TextStyle(
                           fontSize: 10,
                           fontFamily: 'medium',
-                          color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                          color: const Color(0xFF9A9A9A).withOpacity(0.8)),
                       border: InputBorder.none),
                 ),
                           )
                     ],
                   )),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                 buildPasswordField(),
                 buildAgreeToTermsAndConditionsBox(),
                 buildNextButton(),
@@ -209,19 +209,19 @@ class _RegistrationState extends State<Registration> {
             buildRegisterText(),
             // buildPhonefield(),
             Container(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              margin: const EdgeInsets.only(left: 15, right: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+          borderRadius: BorderRadius.circular(10), color: const Color(0xFFEAEEF2)),
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: (){
                       Get.dialog(Dialog(
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                           width: Get.width * 0.80,
                           decoration: BoxDecoration(
                             color: R.colors.lightGrey,
@@ -254,7 +254,7 @@ class _RegistrationState extends State<Registration> {
                                       Row(
                                         children: [
                                           Image.network("https://sarfapp.com/${singleData!.flag}",width: 40,height: 40,),
-                                          SizedBox(width: 5,),
+                                          const SizedBox(width: 5,),
                                           Text(GetStorage().read("lang") == "en" ? singleData.name?.en ?? '' :  singleData.name?.ar ?? ''),
 
 
@@ -275,13 +275,13 @@ class _RegistrationState extends State<Registration> {
                       child: Row(
                         children: [
                           Obx(() => Image.network("https://sarfapp.com/${registerController.flag.value}",width: 40,height: 40,)), 
-                          SizedBox(width: 5,),
+                          const SizedBox(width: 5,),
                           Obx(() => Text(registerController.code.value)),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                    Expanded(
             child: TextField(
              // focusNode: searchFieldNode,
@@ -292,13 +292,13 @@ class _RegistrationState extends State<Registration> {
                   hintStyle: TextStyle(
                       fontSize: 10,
                       fontFamily: 'medium',
-                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                      color: const Color(0xFF9A9A9A).withOpacity(0.8)),
                   border: InputBorder.none),
             ),
           )
                 ],
               )),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
             buildPasswordField(),
             buildAgreeToTermsAndConditionsBox(),
             buildNextButton(),
@@ -310,13 +310,13 @@ class _RegistrationState extends State<Registration> {
 
   buildRegisterText() {
     return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 20),
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Registration'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'bold', fontSize: 18, color: Color(0xFF9A9A9A)),
           )
         ],
@@ -335,7 +335,7 @@ class _RegistrationState extends State<Registration> {
           padding: const EdgeInsets.all(20.0),
           child: IntlPhoneField(
             showDropdownIcon: false,
-            flagsButtonPadding: EdgeInsets.only(left: 10),
+            flagsButtonPadding: const EdgeInsets.only(left: 10),
             onChanged: (number) {
               phone.text = number.completeNumber;
               registerController.phone.text = phone.text;
@@ -352,9 +352,9 @@ class _RegistrationState extends State<Registration> {
               //       const BorderSide(color: Color(0xFF9A9A9A), width: 0.0),
               // ),
               label: Container(
-                margin: EdgeInsets.symmetric(horizontal: 0),
+                margin: const EdgeInsets.symmetric(horizontal: 0),
                 child: Text('Enter Mobile Number'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Color(0xFF707070),
                         fontFamily: 'regular',
                         fontSize: 12)),
@@ -376,17 +376,17 @@ class _RegistrationState extends State<Registration> {
 
   buildPasswordField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15),
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+          borderRadius: BorderRadius.circular(10), color: const Color(0xFFEAEEF2)),
       child: Row(
         children: [
           Container(
-              margin: EdgeInsets.only(left: 20, right: 10, top: 3),
+              margin: const EdgeInsets.only(left: 20, right: 10, top: 3),
               child: Image.asset('assets/images/passwordIcon.png',
-                  height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
+                  height: 15, color: const Color(0xFF9A9A9A).withOpacity(0.8))),
           Expanded(
             child: TextField(
               obscureText: true,
@@ -398,7 +398,7 @@ class _RegistrationState extends State<Registration> {
                   hintStyle: TextStyle(
                       fontSize: 10,
                       fontFamily: 'medium',
-                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                      color: const Color(0xFF9A9A9A).withOpacity(0.8)),
                   border: InputBorder.none),
             ),
           )
@@ -411,10 +411,10 @@ class _RegistrationState extends State<Registration> {
 
   buildNextButton() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 40),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 40),
       height: 50,
       decoration: BoxDecoration(
-        color: Color(0xFFFB7B57),
+        color: const Color(0xFFFB7B57),
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
@@ -468,7 +468,7 @@ class _RegistrationState extends State<Registration> {
         child: Center(
           child: Text(
             'Next'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
         ),
@@ -480,22 +480,22 @@ class _RegistrationState extends State<Registration> {
 
   buildAgreeToTermsAndConditionsBox() {
     return Container(
-      margin: EdgeInsets.only(top: 30,left: kIsWeb == true ? 20: 0,right: kIsWeb == true ? 20: 0 ),
+      margin: const EdgeInsets.only(top: 30,left: kIsWeb == true ? 20: 0,right: kIsWeb == true ? 20: 0 ),
       child: Row(
         children: <Widget>[
           Checkbox(
             checkColor: Colors.white,
-            activeColor: Color(0xFF2C313E),
-            value: this.checkBox,
+            activeColor: const Color(0xFF2C313E),
+            value: checkBox,
             onChanged: (bool? value) {
               setState(() {
-                this.checkBox = value!;
+                checkBox = value!;
               });
             },
           ),
           Text(
             'I Accept'.tr,
-            style: TextStyle(fontSize: 17, color: Colors.grey),
+            style: const TextStyle(fontSize: 17, color: Colors.grey),
           ),
           InkWell(
             onTap: () {
@@ -503,7 +503,7 @@ class _RegistrationState extends State<Registration> {
             },
             child: Text(
               '(Terms & Conditions)'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 17,
               ),

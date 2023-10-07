@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -19,11 +20,20 @@ class ChangePasswordController extends GetxController {
   ForgotPasswordController forgotPasswordController =
       Get.find<ForgotPasswordController>();
   var message;
+  var codeVal = Rx<String>('');
 
   @override
   void onInit() {
     // GetStorage().write('lang', 'en');
     super.onInit();
+    otpListener();
+  }
+
+  void otpListener() async {
+    await SmsAutoFill().unregisterListener();
+    // listenForCode();
+    await SmsAutoFill().listenForCode();
+    print("lestener called");
   }
 
   String replaceArabicNumber(String input) {
@@ -46,7 +56,8 @@ class ChangePasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-    var a = "${forgotPasswordController.code}${forgotPasswordController.phone.text}";
+    var a =
+        "${forgotPasswordController.code}${forgotPasswordController.phone.text}";
     String newPass = replaceArabicNumber(newPassword.text);
     String confirmPass = replaceArabicNumber(confirmNewPassword.text);
 
@@ -112,7 +123,6 @@ class ChangePasswordController extends GetxController {
       //   }).catchError((error){
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
-
     } else {
       Get.back();
       Get.snackbar(

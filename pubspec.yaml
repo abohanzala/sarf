@@ -93,6 +93,7 @@ dependencies:
   device_info_plus: ^8.2.2
   # cunning_document_scanner: ^1.1.2
   universal_html: ^2.2.4
+  sms_autofill: ^2.3.0
  # telephony: ^0.2.0
   
   

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -35,11 +36,11 @@ class ForgotPasswordController extends GetxController {
     // }
     // loginFormKey.currentState!.save();
     // validation ends
-   
 
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': mob,
+      'app_signature_id': await SmsAutoFill().getAppSignature,
     };
 
     //DialogBoxes.openLoadingDialog();
@@ -89,7 +90,6 @@ class ForgotPasswordController extends GetxController {
       //   }).catchError((error){
       //     SnakeBars.showErrorSnake(description: error.toString());
       //   });
-
     } else {
       Get.back();
       Get.snackbar(

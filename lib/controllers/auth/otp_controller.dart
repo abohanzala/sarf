@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -14,11 +15,19 @@ class OtpController extends GetxController {
   var loginFormKey = GlobalKey<FormState>();
   TextEditingController otpControllerGet = TextEditingController();
   RegisterController registerController = Get.find<RegisterController>();
-
+  var codeVal = Rx<String>('');
   @override
   void onInit() {
     // GetStorage().write('lang', 'en');
     super.onInit();
+    otpListener();
+  }
+
+  void otpListener() async {
+    await SmsAutoFill().unregisterListener();
+    // listenForCode();
+    await SmsAutoFill().listenForCode();
+    print("lestener called");
   }
 
   String replaceArabicNumber(String input) {

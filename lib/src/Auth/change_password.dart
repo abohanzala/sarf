@@ -1,13 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/resources/resources.dart';
-import 'package:sarf/src/Auth/otp.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import '../../controllers/auth/change_password_controller.dart';
-import '../../resources/text_style.dart';
-import '../utils/routes_name.dart';
 import '../widgets/custom_textfield.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -17,7 +14,7 @@ class ChangePassword extends StatefulWidget {
   State<ChangePassword> createState() => _ChangePasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePasswordState extends State<ChangePassword> with CodeAutoFill {
   ChangePasswordController changePasswordController =
       Get.find<ChangePasswordController>();
   FocusNode otpFieldNode = FocusNode();
@@ -27,12 +24,23 @@ class _ChangePasswordState extends State<ChangePassword> {
   double bodyHeight = 0.0;
 
   @override
+  void codeUpdated() {
+    // TODO: implement codeUpdated
+  }
+
+  @override
+  void dispose() {
+    SmsAutoFill().unregisterListener();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           Scaffold(
-            backgroundColor: Color(0xFFF2F2F9),
+            backgroundColor: const Color(0xFFF2F2F9),
             body: Stack(
               children: [
                 buildBackGroundImage(),
@@ -72,12 +80,12 @@ class _ChangePasswordState extends State<ChangePassword> {
               height: 30,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFFFFFFF)),
+                  color: const Color(0xFFFFFFFF)),
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(R.images.arrowBlue)),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text(
@@ -106,30 +114,33 @@ class _ChangePasswordState extends State<ChangePassword> {
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
             )),
-        child: kIsWeb == true ? Padding(
-          padding:  EdgeInsets.symmetric(horizontal: Get.width > 750 ? Get.width/3 : 0),
-          child: Column(
-            children: [
-              buildOtpText(),
-              buildOtpField(),
-              buildDivider(),
-              buildNewPasswordField(),
-              buildConfirmNewPasswordField(),
-              buildUpdateButton()
-              //buildUpdateButton()
-            ],
-          ),
-        ) : Column(
-          children: [
-            buildOtpText(),
-            buildOtpField(),
-            buildDivider(),
-            buildNewPasswordField(),
-            buildConfirmNewPasswordField(),
-            buildUpdateButton()
-            //buildUpdateButton()
-          ],
-        ),
+        child: kIsWeb == true
+            ? Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Get.width > 750 ? Get.width / 3 : 0),
+                child: Column(
+                  children: [
+                    buildOtpText(),
+                    buildOtpField(),
+                    buildDivider(),
+                    buildNewPasswordField(),
+                    buildConfirmNewPasswordField(),
+                    buildUpdateButton()
+                    //buildUpdateButton()
+                  ],
+                ),
+              )
+            : Column(
+                children: [
+                  buildOtpText(),
+                  buildOtpField(),
+                  buildDivider(),
+                  buildNewPasswordField(),
+                  buildConfirmNewPasswordField(),
+                  buildUpdateButton()
+                  //buildUpdateButton()
+                ],
+              ),
       ),
     );
   }
@@ -159,17 +170,17 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildOtpText() {
     return Container(
-        margin: EdgeInsets.only(top: 20, bottom: 20),
+        margin: const EdgeInsets.only(top: 20, bottom: 20),
         child: Text(
           'Enter OTP'.tr,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 12, fontFamily: 'medium', color: Color(0xFF9A9A9A)),
         ));
   }
 
   Widget buildDivider() {
     return Container(
-      margin: EdgeInsets.only(top: 20.0, right: 15, left: 15),
+      margin: const EdgeInsets.only(top: 20.0, right: 15, left: 15),
       color: R.colors.lightGrey,
       height: 2.0,
     );
@@ -177,22 +188,49 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildOtpField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
-      child: customTextField(
-        isPasswordObscureText: false,
-          hintTextSize: 12,
-          color: R.colors.lightGrey,
-          height: 45,
-          borderColour: R.colors.transparent,
-          controller: changePasswordController.otp,
-          hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
-          hintStyle: TextStyle(color: R.colors.black)),
+      margin: const EdgeInsets.only(left: 15, right: 15),
+      child: PinFieldAutoFill(
+        decoration: BoxLooseDecoration(
+          strokeColorBuilder:
+              PinListenColorBuilder(Colors.black, Colors.black26),
+          bgColorBuilder: const FixedColorBuilder(Colors.white),
+          strokeWidth: 2,
+        ),
+        autoFocus: true,
+        cursor: Cursor(color: Colors.red, enabled: true, width: 1),
+        currentCode: changePasswordController.codeVal.value,
+        codeLength: 4,
+        controller: changePasswordController.otp,
+        onCodeChanged: (code) {
+          print("onChange $code");
+          changePasswordController.codeVal.value = code.toString();
+        },
+        onCodeSubmitted: (code) {
+          print("onSubmit $code");
+          changePasswordController.codeVal.value = code.toString();
+        },
+      ),
     );
   }
 
+  // Widget buildOtpField() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(left: 15, right: 15),
+  //     child: customTextField(
+  //         isPasswordObscureText: false,
+  //         hintTextSize: 12,
+  //         color: R.colors.lightGrey,
+  //         height: 45,
+  //         borderColour: R.colors.transparent,
+  //         controller: changePasswordController.otp,
+  //         hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
+  //         hintStyle: TextStyle(color: R.colors.black)),
+  //   );
+  // }
+
   Widget buildNewPasswordField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       child: Column(
         children: [
           Container(
@@ -206,7 +244,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ],
           )),
           Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               top: 10,
             ),
             child: customTextField(
@@ -225,7 +263,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildConfirmNewPasswordField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       child: Column(
         children: [
           Container(
@@ -239,7 +277,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ],
           )),
           Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               top: 10,
             ),
             child: customTextField(
@@ -258,7 +296,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   Widget buildUpdateButton() {
     return Container(
-      margin: EdgeInsets.only(top: 30, bottom: 20, left: 15, right: 15),
+      margin: const EdgeInsets.only(top: 30, bottom: 20, left: 15, right: 15),
       child: customButton(
           margin: 20,
           width: MediaQuery.of(context).size.width,
@@ -290,8 +328,12 @@ class _ChangePasswordState extends State<ChangePassword> {
               );
               return;
             }
-            
-            changePasswordController.changePassword(changePasswordController.otp.text == "١٢٣٤" ? "1234" : changePasswordController.otp.text, );
+
+            changePasswordController.changePassword(
+              changePasswordController.otp.text == "١٢٣٤"
+                  ? "1234"
+                  : changePasswordController.otp.text,
+            );
           }),
           title: 'Update'.tr,
           color: R.colors.buttonColor,

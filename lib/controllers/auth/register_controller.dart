@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sarf/controllers/auth/data_collection_controller.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
 import '../../services/app_exceptions.dart';
@@ -36,9 +36,11 @@ class RegisterController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phoneNumber,
+      'app_signature_id': await SmsAutoFill().getAppSignature,
     };
     debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
+    // Get.offNamed(RoutesName.OtpScreen);
 
     var response =
         await DioClient().post(ApiLinks.register, request).catchError((error) {

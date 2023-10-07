@@ -3,13 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:sarf/resources/images.dart';
-import 'package:sarf/src/Auth/registration.dart';
-import 'package:sarf/src/utils/routes_name.dart';
 import 'package:sarf/src/widgets/custom_textfield.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 // import 'package:telephony/telephony.dart';
 import '../../controllers/auth/otp_controller.dart';
 import '../../controllers/auth/otp_forgot_password_controller.dart';
@@ -23,7 +18,7 @@ class OtpScreen extends StatefulWidget {
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends State<OtpScreen> with CodeAutoFill {
   TextEditingController otpControllerText = TextEditingController();
   RegisterController registerController = Get.find<RegisterController>();
   OtpController otpController = Get.find<OtpController>();
@@ -52,8 +47,14 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   @override
+  void codeUpdated() {
+    // TODO: implement codeUpdated
+  }
+
+  @override
   void dispose() {
     timer?.cancel();
+    SmsAutoFill().unregisterListener();
     super.dispose();
   }
 
@@ -61,32 +62,6 @@ class _OtpScreenState extends State<OtpScreen> {
   void initState() {
     otpController.otpControllerGet.clear();
     startTimer();
-//     telephony.listenIncomingSms(
-//     onNewMessage: (SmsMessage message) {
-//         print(message.address); //+977981******67, sender nubmer
-//         print(message.body); //Your OTP code is 34567
-//         print(message.date); //1659690242000, timestamp
-
-//         String sms = message.body.toString(); //get the message
-
-//         if(message.address == "+977981******67"){
-//               //verify SMS is sent for OTP with sender number
-//               String otpcode = sms.replaceAll(new RegExp(r'[^0-9]'),'');
-//               //prase code from the OTP sms
-//               // otpbox.set(otpcode.split(""));
-//               //split otp code to list of number
-//               //and populate to otb boxes
-
-//               setState(() {
-//                   //refresh UI
-//               });
-
-//         }else{
-//             print("Normal message.");
-//         }
-//     },
-//     listenInBackground: false,
-// );
     super.initState();
   }
 
@@ -131,7 +106,8 @@ class _OtpScreenState extends State<OtpScreen> {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Color(0xFFFFFFFF)),
+              borderRadius: BorderRadius.circular(5),
+              color: const Color(0xFFFFFFFF)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('assets/images/arrow.png'),
@@ -174,25 +150,62 @@ class _OtpScreenState extends State<OtpScreen> {
 
   Widget buildOtpTextField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
-      child: Container(
-        margin: EdgeInsets.only(
-          top: 10,
-        ),
-        child: customTextField(
-            isPasswordObscureText: false,
-            hintText: "Enter OTP".tr,
+        margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 10,
+          ),
+          child: PinFieldAutoFill(
+            decoration: BoxLooseDecoration(
+              strokeColorBuilder:
+                  PinListenColorBuilder(Colors.black, Colors.black26),
+              bgColorBuilder: const FixedColorBuilder(Colors.white),
+              strokeWidth: 2,
+            ),
+            autoFocus: true,
+            cursor: Cursor(color: Colors.red, enabled: true, width: 1),
+            currentCode: otpController.codeVal.value,
+            codeLength: 4,
             controller: otpControllerText,
-            color: R.colors.lightGrey,
-            height: 45,
-            borderColour: R.colors.transparent),
-      ),
-    );
+            onCodeChanged: (code) {
+              print("onChange $code");
+              otpController.codeVal.value = code.toString();
+            },
+            onCodeSubmitted: (code) {
+              print("onSubmit $code");
+              otpController.codeVal.value = code.toString();
+            },
+          ),
+        ));
   }
+
+  // PinFieldAutoFill(
+  //                 currentCode: codeVal,
+  //                 codeLength: 4,
+  //                 onCodeChanged: ,
+  //               )
+
+  // Widget buildOtpTextField() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
+  //     child: Container(
+  //       margin: const EdgeInsets.only(
+  //         top: 10,
+  //       ),
+  //       child: customTextField(
+  //           isPasswordObscureText: false,
+  //           hintText: "Enter OTP".tr,
+  //           controller: otpControllerText,
+  //           color: R.colors.lightGrey,
+  //           height: 45,
+  //           borderColour: R.colors.transparent),
+  //     ),
+  //   );
+  // }
 
   buildOtpText() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: customTitle(
         textAlign: TextAlign.center,
         text: 'Enter OTP'.tr,
@@ -206,11 +219,12 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget buildResendLinkButton() {
     return GestureDetector(
       onTap: () {
+        otpController.otpListener();
         registerController.register(
             "${registerController.code}${registerController.phone.text}");
       },
       child: Container(
-        margin: EdgeInsets.only(top: 30, bottom: 10),
+        margin: const EdgeInsets.only(top: 30, bottom: 10),
         child: Center(
           child: Text(
             'Resend'.tr,
@@ -227,7 +241,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   buildTimeText() {
     return Container(
-      margin: EdgeInsets.only(top: 5),
+      margin: const EdgeInsets.only(top: 5),
       child: customTitle(
         textAlign: TextAlign.center,
         text: "00:${start < 10 ? "0$start" : start}",
@@ -240,10 +254,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
   buildNextButton() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       height: 50,
       decoration: BoxDecoration(
-        color: Color(0xFFFB7B57),
+        color: const Color(0xFFFB7B57),
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
@@ -271,7 +285,7 @@ class _OtpScreenState extends State<OtpScreen> {
         child: Center(
           child: Text(
             'Go'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
         ),
