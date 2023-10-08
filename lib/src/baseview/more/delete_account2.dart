@@ -111,7 +111,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                         fillColor: R.colors.lightGrey,
                         filled: true,
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: GetStorage().read("lang") == "ar" ? "١٢٣٤" : '1234',
+                        hintText: 'Enter Password'.tr,
                         hintStyle: TextStyle(
                           color: R.colors.grey,
                           fontSize: 14.sp,
