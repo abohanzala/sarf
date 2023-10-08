@@ -191,8 +191,9 @@ class _ChangePasswordState extends State<ChangePassword> with CodeAutoFill {
       margin: const EdgeInsets.only(left: 15, right: 15),
       child: PinFieldAutoFill(
         decoration: BoxLooseDecoration(
-          strokeColorBuilder:
-              PinListenColorBuilder(Colors.black, Colors.black26),
+          strokeColorBuilder: PinListenColorBuilder(
+              const Color.fromARGB(255, 112, 180, 214),
+              const Color.fromARGB(255, 112, 180, 214)),
           bgColorBuilder: const FixedColorBuilder(Colors.white),
           strokeWidth: 2,
         ),

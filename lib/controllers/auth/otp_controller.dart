@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/auth/register_controller.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import '../../constant/api_links.dart';
 import '../../resources/resources.dart';
@@ -24,10 +25,15 @@ class OtpController extends GetxController {
   }
 
   void otpListener() async {
-    await SmsAutoFill().unregisterListener();
-    // listenForCode();
-    await SmsAutoFill().listenForCode();
-    print("lestener called");
+    var status = await Permission.sms.request();
+    if (status.isGranted) {
+      // Trigger the SMS autofill function here.
+      await SmsAutoFill().unregisterListener();
+      // listenForCode();
+      await SmsAutoFill().listenForCode();
+    } else {
+      print('SMS permission denied');
+    }
   }
 
   String replaceArabicNumber(String input) {

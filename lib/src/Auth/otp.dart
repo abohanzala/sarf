@@ -157,8 +157,9 @@ class _OtpScreenState extends State<OtpScreen> with CodeAutoFill {
           ),
           child: PinFieldAutoFill(
             decoration: BoxLooseDecoration(
-              strokeColorBuilder:
-                  PinListenColorBuilder(Colors.black, Colors.black26),
+              strokeColorBuilder: PinListenColorBuilder(
+                  const Color.fromARGB(255, 112, 180, 214),
+                  const Color.fromARGB(255, 112, 180, 214)),
               bgColorBuilder: const FixedColorBuilder(Colors.white),
               strokeWidth: 2,
             ),
