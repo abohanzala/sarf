@@ -32,7 +32,7 @@ class OtpController extends GetxController {
       // listenForCode();
       await SmsAutoFill().listenForCode();
     } else {
-      print('SMS permission denied');
+      // print('SMS permission denied');
     }
   }
 

@@ -33,14 +33,13 @@ class ChangePasswordController extends GetxController {
   void otpListener() async {
     var status = await Permission.sms.request();
     if (status.isGranted) {
-      // Trigger the SMS autofill function here.
       await SmsAutoFill().unregisterListener();
       // listenForCode();
       await SmsAutoFill().listenForCode();
     } else {
-      print('SMS permission denied');
+      // print('SMS permission denied');
     }
-    print("lestener called");
+    // print("lestener called");
   }
 
   String replaceArabicNumber(String input) {
