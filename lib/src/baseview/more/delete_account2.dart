@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
-import 'package:sarf/src/baseview/more/delete_account3.dart';
 
 import '../../../controllers/common/delete_account_controller.dart';
 import '../../../resources/resources.dart';
@@ -24,7 +21,7 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
   void initState() {
     deleteAccountController.passwordController.clear();
     super.initState();
-  }    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,14 +92,14 @@ class _DeleteAccount2State extends State<DeleteAccount2> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'Enter Password'.tr,
-                      style: TextStyle(
-                        color: R.colors.grey.withOpacity(1),
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    // Text(
+                    //   'Enter Password'.tr,
+                    //   style: TextStyle(
+                    //     color: R.colors.grey.withOpacity(1),
+                    //     fontSize: 14.sp,
+                    //     fontWeight: FontWeight.w400,
+                    //   ),
+                    // ),
                     SizedBox(height: 15.h),
                     TextFormField(
                       controller: deleteAccountController.passwordController,
