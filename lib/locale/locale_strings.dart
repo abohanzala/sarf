@@ -331,7 +331,7 @@ class LocaleString extends Translations {
           "Website (Optional)": "رابط المتجر ( اختياري)",
           "Location": "لوكيشن",
           "In Process Development": "في تطوير العمليات",
-          "Upload Image": "تحميل الصور",
+          "Upload Image": "تحميل الشعار",
           "(Optional)": "(اختياري)",
           "Submit": "إرسال",
           "Full Name": "الاسم الثلاثي",
