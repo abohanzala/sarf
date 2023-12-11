@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -124,6 +125,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
   @override
   void didPopNext() {
     if (ctr.checkMobile) {
+      log("Hello");
       // _onChangeHandler(ctr.mobile1.text);
       ctr.mobileCheck(ctr.mobile1.text).then((value) {
         if (value['message'] == 'User record available') {
@@ -145,7 +147,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
   }
 
   _onChangeHandler(value) {
-    //  print(value.runtimeType);
+    print(value);
 
     const duration = Duration(
         milliseconds:
@@ -167,7 +169,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
 
   search(value) {
     //print('hello world from search . the value is $value');
-    if (value.isEmpty) {
+    if (value == null) {
       // qrCode = false;
       setState(() {
         searching = false;
@@ -177,6 +179,7 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
 
     ctr.getMobileUsers(ctr.mobile1.text).then((value) async {
       if (ctr.searchedUsers.value.data != null) {
+        log(ctr.searchedUsers.value.data![0].username.toString());
         setState(() {
           searching = true;
         });

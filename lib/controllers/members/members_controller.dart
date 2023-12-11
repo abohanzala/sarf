@@ -244,6 +244,16 @@ class MembersController extends GetxController {
   Future getInvoiceDetail(String id) async {
     //  print("${ApiLinks.cityList}${GetStorage().read('lang')}");
     // openLoader();
+    EasyLoading.instance
+      ..loadingStyle =
+          EasyLoadingStyle.custom //This was missing in earlier code
+      ..backgroundColor = Colors.white
+      ..indicatorColor = R.colors.blue
+      ..maskColor = R.colors.blue
+      ..dismissOnTap = false
+      ..textColor = R.colors.blue
+      ..userInteractions = false;
+    EasyLoading.show(status: 'Sarf');
     loadingInvoiceDetails.value = true;
     inVoiceDetails.value = SingleInvoiceDetails();
     var request = {
@@ -254,17 +264,23 @@ class MembersController extends GetxController {
     var response = await DioClient()
         .post(ApiLinks.invoiceDetails, request)
         .catchError((error) {
+      EasyLoading.dismiss();
       loadingMemDetails.value = false;
       if (error is BadRequestException) {
+        EasyLoading.dismiss();
         // debugPrint(error.toString());
       } else {
+        EasyLoading.dismiss();
         // debugPrint(error.toString());
 
         if (error is BadRequestException) {
+          EasyLoading.dismiss();
           // debugPrint(error.toString());
         } else if (error is FetchDataException) {
+          EasyLoading.dismiss();
           // debugPrint(error.toString());
         } else if (error is ApiNotRespondingException) {
+          EasyLoading.dismiss();
           // debugPrint(error.message.toString());
         }
       }
@@ -275,7 +291,11 @@ class MembersController extends GetxController {
       // debugPrint(response.toString());
       var invoice = SingleInvoiceDetails.fromJson(response);
       inVoiceDetails.value = invoice;
+      update();
+      refresh();
+      EasyLoading.dismiss();
     } else {
+      EasyLoading.dismiss();
       loadingInvoiceDetails.value = false;
       // debugPrint('here');
     }

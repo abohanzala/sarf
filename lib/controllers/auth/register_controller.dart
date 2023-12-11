@@ -36,7 +36,7 @@ class RegisterController extends GetxController {
     var request = {
       'language': GetStorage().read('lang'),
       'mobile': phoneNumber,
-      'app_signature_id': await SmsAutoFill().getAppSignature,
+      // 'app_signature_id': await SmsAutoFill().getAppSignature,
     };
     debugPrint("This is my request====================$request");
     //DialogBoxes.openLoadingDialog();
@@ -65,7 +65,7 @@ class RegisterController extends GetxController {
     message = response['message'];
     // if (response == null) return;
     // debugPrint("This is my response==================$response");
-    // debugPrint(response.toString());
+    debugPrint(response.toString());
     if (response['success'] == true) {
       Get.back();
       debugPrint(response.toString());

@@ -848,6 +848,8 @@ PODS:
     - Flutter
   - share_plus (0.0.1):
     - Flutter
+  - sms_autofill (0.0.1):
+    - Flutter
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
@@ -887,6 +889,7 @@ DEPENDENCIES:
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - scan (from `.symlinks/plugins/scan/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -971,6 +974,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/scan/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
+  sms_autofill:
+    :path: ".symlinks/plugins/sms_autofill/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
@@ -1031,12 +1036,13 @@ SPEC CHECKSUMS:
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   scan: aea35bb4aa59ccc8839c576a18cd57c7d492cc86
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
+  sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
-PODFILE CHECKSUM: 141e2d0ce4001b2642044d4d1615c69a41a7990f
+PODFILE CHECKSUM: 0263cea0e260a0392e10afeacbaffa3f80db56e0
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.2

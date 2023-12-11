@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart' as getpackage;
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,7 @@ import '../../constant/api_links.dart';
 import '../../model/invoice/invoice_members_home.dart';
 import '../../model/invoice/invoice_members_model.dart';
 import '../../model/invoice/searched_mobile_model.dart';
+import '../../resources/resources.dart';
 import '../../services/dio_client.dart';
 import '../../src/widgets/loader.dart';
 
@@ -238,31 +240,34 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post(ApiLinks.invoiceMemList, request)
         .catchError((error) {
-      // debugPrint(error.toString());
+      debugPrint(error.toString());
       if (error is BadRequestException) {
-        // print(error.toString());
+        print(error.toString());
       } else {
-        //print(error.toString());
+        print(error.toString());
 
         if (error is BadRequestException) {
-          // print(error.toString());
+          print(error.toString());
         } else if (error is FetchDataException) {
-          // print(error.toString());
+          print(error.toString());
         } else if (error is ApiNotRespondingException) {
-          //print(error.message.toString());
+          print(error.message.toString());
         }
       }
     });
+    debugPrint(response.toString());
     if (response == null) return null;
     if (response['success'] == true) {
       // getpackage.Get.back();
-      // debugPrint(response.toString());
+      debugPrint(response.toString());
       var membersList = InvoiceMemberListModel.fromJson(response);
+      update();
+      refresh();
       //print(membersList.data?.first.expenseName);
       return membersList;
     } else {
       // getpackage.Get.back();
-      // debugPrint('here');
+      debugPrint('else why?');
     }
     return null;
   }
@@ -287,15 +292,15 @@ class InvoiceController extends getpackage.GetxController {
         "budget_id": bId,
       };
     }
-    //  debugPrint(request.toString());
+    debugPrint(request.toString());
     var response = await DioClient()
         .post(ApiLinks.invoiceMemList, request)
         .catchError((error) {
       // debugPrint(error.toString());
       if (error is BadRequestException) {
-        // print(error.toString());
+        print(error.toString());
       } else {
-        //print(error.toString());
+        print(error.toString());
 
         if (error is BadRequestException) {
           // print(error.toString());
@@ -470,6 +475,17 @@ class InvoiceController extends getpackage.GetxController {
 
   Future<InvoiceList?> getInvoiceListHome(
       String query, String expenseId, String bId, String memberID) async {
+    EasyLoading.instance
+      ..loadingStyle =
+          EasyLoadingStyle.custom //This was missing in earlier code
+      ..backgroundColor = Colors.white
+      ..indicatorColor = R.colors.blue
+      ..maskColor = R.colors.blue
+      ..dismissOnTap = false
+      ..textColor = R.colors.blue
+      ..userInteractions = false;
+    EasyLoading.show(status: 'Sarf');
+
     //print("${ApiLinks.membersList}${GetStorage().read('lang')}");
     // openLoader();
     // expense_id
@@ -494,17 +510,23 @@ class InvoiceController extends getpackage.GetxController {
     var response = await DioClient()
         .post("${ApiLinks.invoiceListNew}", request)
         .catchError((error) {
+      EasyLoading.dismiss();
       // debugPrint(error.toString());
       if (error is BadRequestException) {
+        EasyLoading.dismiss();
         // print(error.toString());
       } else {
+        EasyLoading.dismiss();
         //print(error.toString());
 
         if (error is BadRequestException) {
+          EasyLoading.dismiss();
           // print(error.toString());
         } else if (error is FetchDataException) {
+          EasyLoading.dismiss();
           // print(error.toString());
         } else if (error is ApiNotRespondingException) {
+          EasyLoading.dismiss();
           //print(error.message.toString());
         }
       }
@@ -513,9 +535,13 @@ class InvoiceController extends getpackage.GetxController {
     if (response['success'] == true) {
       // debugPrint(response.toString());
       var membersList = InvoiceList.fromJson(response);
+      EasyLoading.dismiss();
       //print(membersList.data?.first.expenseName);
+      update();
+      refresh();
       return membersList;
     } else {
+      EasyLoading.dismiss();
       // debugPrint('here');
     }
     return null;
@@ -611,10 +637,10 @@ class InvoiceController extends getpackage.GetxController {
     // debugPrint(response.toString());
     if (response == null) return;
     if (response['success'] == true) {
-      // debugPrint(response.toString());
+      debugPrint(response.toString());
       var data = SearchedMobileList.fromJson(response);
       searchedUsers.value = data;
-      // debugPrint(searchedUsers.value.data.toString());
+      debugPrint("Searched users${searchedUsers.value.data}");
     } else {
       searchedUsers.value = SearchedMobileList();
       // debugPrint('here error');

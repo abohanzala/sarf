@@ -24,7 +24,7 @@ class _BaseViewState extends State<BaseView> {
     // print("her");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      bNavCon.changeTabIndex(0);
+      bNavCon.changeTabIndex(GetStorage().read("accountType") == 2 ? 2 : 0);
       if (kIsWeb && GetStorage().read("user_type") != 3) {
         // print("her");
         bNavCon.changeTabIndex(2);

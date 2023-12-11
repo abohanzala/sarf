@@ -90,7 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Color(0xFFFFFFFF)),
+              borderRadius: BorderRadius.circular(5),
+              color: const Color(0xFFFFFFFF)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('assets/images/arrow.png'),
@@ -104,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       // height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Color(0xFFFFFFFF),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
@@ -121,21 +122,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         //  buildPhoneFieldForLogin(),
                         Container(
-                            margin: EdgeInsets.only(left: 15, right: 15),
-                            padding: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.only(left: 15, right: 15),
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
                             height: 50,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Color(0xFFEAEEF2)),
+                                color: const Color(0xFFEAEEF2)),
                             child: Row(
                               children: [
                                 GestureDetector(
                                   onTap: () {
                                     Get.dialog(Dialog(
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 10),
                                         width: Get.width * 0.80,
                                         decoration: BoxDecoration(
@@ -198,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                   width: 40,
                                                                   height: 40,
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 5,
                                                                 ),
                                                                 Text(GetStorage().read(
@@ -234,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               width: 40,
                                               height: 40,
                                             )),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 5,
                                         ),
                                         Obx(() =>
@@ -243,7 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Expanded(
@@ -263,14 +264,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         hintStyle: TextStyle(
                                             fontSize: 10,
                                             fontFamily: 'medium',
-                                            color: Color(0xFF9A9A9A)
+                                            color: const Color(0xFF9A9A9A)
                                                 .withOpacity(0.8)),
                                         border: InputBorder.none),
                                   ),
                                 )
                               ],
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         buildPasswordField(),
@@ -280,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   buildForgotPassword(),
                   buildNextButton(),
                   buildDontHaveAnAccount(),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   // Spacer()
@@ -296,21 +297,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       //  buildPhoneFieldForLogin(),
                       Container(
-                          margin: EdgeInsets.only(left: 15, right: 15),
-                          padding: EdgeInsets.symmetric(
+                          margin: const EdgeInsets.only(left: 15, right: 15),
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
                           height: 50,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color(0xFFEAEEF2)),
+                              color: const Color(0xFFEAEEF2)),
                           child: Row(
                             children: [
                               GestureDetector(
                                 onTap: () {
                                   Get.dialog(Dialog(
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 10),
                                       width: Get.width * 0.80,
                                       decoration: BoxDecoration(
@@ -372,9 +373,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                 width: 40,
                                                                 height: 40,
                                                               ),
-                                                              SizedBox(
-                                                                width: 5,
-                                                              ),
+                                                              const SizedBox(
+                                                                  width: 5),
                                                               Text(GetStorage()
                                                                           .read(
                                                                               "lang") ==
@@ -409,7 +409,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             width: 40,
                                             height: 40,
                                           )),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 5,
                                       ),
                                       Obx(() =>
@@ -418,7 +418,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               Expanded(
@@ -438,14 +438,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       hintStyle: TextStyle(
                                           fontSize: 10,
                                           fontFamily: 'medium',
-                                          color: Color(0xFF9A9A9A)
+                                          color: const Color(0xFF9A9A9A)
                                               .withOpacity(0.8)),
                                       border: InputBorder.none),
                                 ),
                               )
                             ],
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       buildPasswordField(),
@@ -462,7 +462,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   buildLoginTextAndLanguageOptions() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
       child: Row(
         children: [buildLoginText(), buildLanguageCard()],
       ),
@@ -473,7 +473,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Expanded(
       child: Text(
         'Login'.tr,
-        style: TextStyle(
+        style: const TextStyle(
             color: Color(0xFF9A9A9A), fontFamily: 'bold', fontSize: 18),
       ),
     );
@@ -505,9 +505,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: english ? Color(0xFFFB7B57) : Colors.transparent,
+          color: english ? const Color(0xFFFB7B57) : Colors.transparent,
         ),
-        margin: EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+        margin: const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
         width: 50,
         height: 30,
         child: Center(
@@ -537,9 +537,9 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: arabic ? Color(0xFFFB7B57) : Colors.transparent,
+            color: arabic ? const Color(0xFFFB7B57) : Colors.transparent,
           ),
-          margin: EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+          margin: const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
           width: 50,
           height: 30,
           child: Center(
@@ -565,7 +565,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: IntlPhoneField(
             // countries: ["SA"],
             showDropdownIcon: false,
-            flagsButtonPadding: EdgeInsets.only(left: 10),
+            flagsButtonPadding: const EdgeInsets.only(left: 10),
             onChanged: (number) {
               phone.text = number.completeNumber;
               loginController.phone.text = phone.text;
@@ -578,9 +578,9 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: InputDecoration(
               border: InputBorder.none,
               label: Container(
-                margin: EdgeInsets.symmetric(horizontal: 0),
+                margin: const EdgeInsets.symmetric(horizontal: 0),
                 child: Text('Enter Mobile Number'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Color(0xFF707070),
                         fontFamily: 'regular',
                         fontSize: 12)),
@@ -609,7 +609,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: IntlPhoneField(
             // countries: ["SA"],
             showDropdownIcon: false,
-            flagsButtonPadding: EdgeInsets.only(left: 10),
+            flagsButtonPadding: const EdgeInsets.only(left: 10),
             onChanged: (number) {
               phone.text = number.completeNumber;
               forgotPasswordController.phone.text = phone.text;
@@ -622,9 +622,9 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: InputDecoration(
               border: InputBorder.none,
               label: Container(
-                margin: EdgeInsets.symmetric(horizontal: 0),
+                margin: const EdgeInsets.symmetric(horizontal: 0),
                 child: Text('Enter Mobile Number'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Color(0xFF707070),
                         fontFamily: 'regular',
                         fontSize: 12)),
@@ -646,17 +646,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   buildPasswordField() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15),
       height: 50,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFFEAEEF2)),
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xFFEAEEF2)),
       child: Row(
         children: [
           Container(
-              margin: EdgeInsets.only(left: 20, right: 10, top: 3),
+              margin: const EdgeInsets.only(left: 20, right: 10, top: 3),
               child: Image.asset('assets/images/passwordIcon.png',
-                  height: 15, color: Color(0xFF9A9A9A).withOpacity(0.8))),
+                  height: 15, color: const Color(0xFF9A9A9A).withOpacity(0.8))),
           Expanded(
             child: TextFormField(
               obscureText: true,
@@ -674,7 +675,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintStyle: TextStyle(
                       fontSize: 10,
                       fontFamily: 'medium',
-                      color: Color(0xFF9A9A9A).withOpacity(0.8)),
+                      color: const Color(0xFF9A9A9A).withOpacity(0.8)),
                   border: InputBorder.none),
             ),
           )
@@ -695,7 +696,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               'Forgot Password?'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 14,
                   fontFamily: 'semibold',
                   color: Color(0xFFFB7B57)),
@@ -708,10 +709,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   buildNextButton() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       height: 50,
       decoration: BoxDecoration(
-        color: Color(0xFFFB7B57),
+        color: const Color(0xFFFB7B57),
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
@@ -740,7 +741,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Text(
             'Next'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
         ),
@@ -750,27 +751,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   buildDontHaveAnAccount() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             child: Text(
               'Dont Have An Account'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black, fontSize: 13, fontFamily: 'medium'),
             ),
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext) => Registration()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext) => const Registration()));
             },
             child: Container(
-              margin: EdgeInsets.only(left: 10),
+              margin: const EdgeInsets.only(left: 10),
               child: Text(
                 'Register'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Color(0xFFFB7B57),
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
@@ -822,25 +825,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         buildCrossIcon(),
                         buildForgotPasswordText(),
                         //  buildPhonefield(),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
-                            margin: EdgeInsets.only(left: 15, right: 15),
-                            padding: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.only(left: 15, right: 15),
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
                             height: 50,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Color(0xFFEAEEF2)),
+                                color: const Color(0xFFEAEEF2)),
                             child: Row(
                               children: [
                                 GestureDetector(
                                   onTap: () {
                                     Get.dialog(Dialog(
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 10),
                                         width: Get.width * 0.80,
                                         decoration: BoxDecoration(
@@ -905,7 +908,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                   width: 40,
                                                                   height: 40,
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 5,
                                                                 ),
                                                                 Text(GetStorage().read(
@@ -941,7 +944,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               width: 40,
                                               height: 40,
                                             )),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 5,
                                         ),
                                         Obx(() => Text(forgotPasswordController
@@ -950,7 +953,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Expanded(
@@ -964,14 +967,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         hintStyle: TextStyle(
                                             fontSize: 10,
                                             fontFamily: 'medium',
-                                            color: Color(0xFF9A9A9A)
+                                            color: const Color(0xFF9A9A9A)
                                                 .withOpacity(0.8)),
                                         border: InputBorder.none),
                                   ),
                                 )
                               ],
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         buildGetCodeButton()
@@ -989,7 +992,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildForgotPasswordText() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Text(
         'Forgot Password'.tr,
         style:
@@ -1006,7 +1009,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Image.asset(
               R.images.cross,
               height: 30,
@@ -1019,7 +1022,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   buildGetCodeButton() {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       height: 50,
       decoration: BoxDecoration(
         color: R.colors.buttonColor,
@@ -1065,7 +1068,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Text(
             'Get Code'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white, fontSize: 13, fontFamily: 'medium'),
           ),
         ),

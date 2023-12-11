@@ -23,10 +23,12 @@ class MyBottomNavigationController extends GetxController {
   // final orderCon = Get.put(OrdersController());
   void changeTabIndex(int index) {
     if (GetStorage().read("user_type") == 3 && (index == 1 || index == 2)) {
+      print("here1");
       Get.snackbar("Error".tr, "You do not have access".tr);
       return;
     }
     if (GetStorage().read("accountType") == 2 && (index == 0)) {
+      print("here2");
       Get.snackbar("Error".tr, "You do not have access".tr);
       return;
     }
