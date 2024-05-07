@@ -1185,7 +1185,7 @@ class _RegistrationDetailsState extends State<RegistrationDetails> {
       child: customTextField(
           isPasswordObscureText: false,
           hintTextSize: 12,
-          hintText: 'Full Name'.tr,
+          hintText: 'PersonalOptionFieldText'.tr,
           controller: registrationController.fullNameController,
           color: R.colors.lightGrey,
           height: 45,

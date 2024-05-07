@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "651573448048",
-    "project_id": "sarf-70217",
-    "storage_bucket": "sarf-70217.appspot.com"
+    "project_number": "560332227952",
+    "project_id": "sarfapp-202c5",
+    "storage_bucket": "sarfapp-202c5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:651573448048:android:aa25f85a1d5d5bae1c13b5",
+        "mobilesdk_app_id": "1:560332227952:android:0237ade99ae07b4413bbb5",
         "android_client_info": {
           "package_name": "com.sarf"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "651573448048-p4ie94r7o9f09bh31qs04abefnbhdi3d.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDElDCUAwVQH60SwwyCpQowaiOKJkOytqE"
+          "current_key": "AIzaSyCrXaZki7E6oN-Ew-LbEHY2_BanJpzZZoA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "651573448048-p4ie94r7o9f09bh31qs04abefnbhdi3d.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

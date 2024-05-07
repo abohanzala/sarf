@@ -46,6 +46,8 @@ class LocaleString extends Translations {
           "(Optional)": "(Optional)",
           "Submit": "Submit",
           "Full Name": "Full Name",
+          "PersonalOptionFieldText":
+              "Enter the full name or the appropriate name for your expense",
           "Delete this budget": "Delete this budget",
           "Reset this budget": "Reset this budget",
           "Office": "Office",
@@ -335,6 +337,8 @@ class LocaleString extends Translations {
           "(Optional)": "(اختياري)",
           "Submit": "إرسال",
           "Full Name": "الاسم الثلاثي",
+          "PersonalOptionFieldText":
+              "ادخل الاسم الثلاثي او الاسم المناسب لمصروفك",
           "Delete this budget": "احذف هذه الميزانية",
           "Reset this budget": "أعد ضبط هذه الميزانية",
           "Office": "مكتب",

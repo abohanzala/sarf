@@ -956,7 +956,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                         children: [
                                                           GestureDetector(
                                                             onTap: () async {
-                                                              // debugPrint("here");
+                                                              debugPrint(
+                                                                  "here");
                                                               await ctr.genrateReport(
                                                                   ctr.selectedBudgetId
                                                                       .value,

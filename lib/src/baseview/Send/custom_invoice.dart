@@ -38,7 +38,7 @@ class _CustomInvoiceState extends State<CustomInvoice> with RouteAware {
   void _startScan(BuildContext context) async {
     try {
       var image =
-          await CunningDocumentScanner.getPictures().catchError((error) {
+          await CunningDocumentScanner.getPictures(false).catchError((error) {
         Get.snackbar("Error".tr, error.toString(),
             backgroundColor: R.colors.blue);
       });
@@ -600,6 +600,8 @@ class _CustomInvoiceState extends State<CustomInvoice> with RouteAware {
                                             openAppSettings();
                                             // Get.snackbar("Error".tr, "Permission not granted");
                                           }
+                                        } else {
+                                          _startScan(context);
                                         }
 
                                         //  pickImage(ImageSource.gallery);

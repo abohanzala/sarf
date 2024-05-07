@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sarf/controllers/invoice/invoice_controller.dart';
 import 'package:sarf/controllers/support/support_controller.dart';
-import 'package:sarf/firebase_options.dart';
 import 'package:sarf/src/utils/navigation_observer.dart';
 import 'controllers/auth/change_password_controller.dart';
 import 'controllers/auth/data_collection_controller.dart';
@@ -40,14 +39,14 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
-            apiKey: "AIzaSyDKFFTbmaRWUQZowARirHYS0p8HzKhxz60",
-            appId: "1:651573448048:web:87803a6dfc19537f1c13b5",
-            messagingSenderId: "651573448048",
-            projectId: "sarf-70217"));
+            apiKey: "AIzaSyAq3hlDIS1Uk2bUaNxAfQqg4JqiKm3m8yo",
+            appId: "1:560332227952:web:620ae66c34ede2cf13bbb5",
+            messagingSenderId: "560332227952",
+            projectId: "sarfapp-202c5"));
   } else {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+        // options: DefaultFirebaseOptions.currentPlatform,
+        );
   }
 
   Get.put<LoginController>(LoginController());

@@ -265,7 +265,7 @@ class _MoreScreenState extends State<MoreScreen> with RouteAware {
                     : 0),
             child: Column(
               children: [
-                buildSubscribeButton(),
+                // buildSubscribeButton(),
                 const SizedBox(
                   height: 10,
                 ),

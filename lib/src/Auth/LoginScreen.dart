@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:new_version/new_version.dart';
 import 'package:sarf/controllers/auth/login_controller.dart';
 import 'package:sarf/resources/images.dart';
 import 'package:sarf/src/Auth/registration.dart';
@@ -16,6 +18,7 @@ import 'package:sarf/src/utils/routes_name.dart';
 import '../../controllers/auth/data_collection_controller.dart';
 import '../../controllers/auth/forgot_password_controller.dart';
 import '../../resources/resources.dart';
+import '../baseview/home/update_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -40,9 +43,39 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     EasyLoading.dismiss();
+    final newVersion = NewVersion(androidId: 'com.sarf', iOSId: "com.sarf");
+
+    Timer(const Duration(milliseconds: 800), () {
+      checkNewVersion(newVersion);
+    });
     english = GetStorage().read("lang") == "en" ? true : false;
     arabic = GetStorage().read("lang") == "ar" ? true : false;
     super.initState();
+  }
+
+  void checkNewVersion(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      if (status.canUpdate) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return UpdateDialog(
+              allowDismissal: true,
+              description: status.releaseNotes!,
+              version: status.storeVersion,
+              appLink: status.appStoreLink,
+            );
+          },
+        );
+        // newVersion.showUpdateDialog(
+        //   context: context,
+        //   versionStatus: status,
+        //   dialogText: 'New Version is available in the store (${status.storeVersion}), update now!',
+        //   dialogTitle: 'Update is Available!',
+        // );
+      } else {}
+    }
   }
 
   @override

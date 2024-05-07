@@ -59,7 +59,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
   void _startScan(BuildContext context) async {
     try {
       var image =
-          await CunningDocumentScanner.getPictures().catchError((error) {
+          await CunningDocumentScanner.getPictures(false).catchError((error) {
         Get.snackbar("Error".tr, error.toString(),
             backgroundColor: R.colors.blue);
         return error;
@@ -423,7 +423,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                 height: 60,
                                                                 margin:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         right:
                                                                             10,
                                                                         top: 5),
@@ -659,7 +659,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                             width: 60,
                                                             margin:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     right: 10,
                                                                     top: 1),
                                                             padding:
@@ -720,6 +720,9 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                   openAppSettings();
                                                                   // Get.snackbar("Error".tr, "Permission not granted");
                                                                 }
+                                                              } else {
+                                                                _startScan(
+                                                                    context);
                                                               }
 
                                                               //  pickImage(ImageSource.gallery);
@@ -729,13 +732,13 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                 width: 60,
                                                                 margin:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         right:
                                                                             10,
                                                                         top: 1),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         18),
                                                                 decoration:
                                                                     BoxDecoration(

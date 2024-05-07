@@ -17,7 +17,7 @@ import flutter_local_notifications
 import geolocator_apple
 import just_audio
 import location
-import package_info_plus
+import package_info_plus_macos
 import path_provider_foundation
 import platform_device_id
 import platform_device_id_macos
