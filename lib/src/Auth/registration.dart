@@ -142,7 +142,7 @@ class _RegistrationState extends State<Registration> {
                                         onTap: (){
                                           registerController.code.value = singleData.code ?? "966";
                                           registerController.flag.value = singleData.flag ?? "admin/country/sa.png";
-                                          registerController.lenght.value = singleData.mobileNumberLength ?? 9;
+                                          registerController.length.value = singleData.mobileNumberLength ?? 9;
                                           registerController.selectedCountry.value = singleData.id ?? 2;
                                           Get.back();
                                         },
@@ -245,7 +245,7 @@ class _RegistrationState extends State<Registration> {
                                     onTap: (){
                                       registerController.code.value = singleData.code ?? "966";
                                       registerController.flag.value = singleData.flag ?? "admin/country/sa.png";
-                                      registerController.lenght.value = singleData.mobileNumberLength ?? 9;
+                                      registerController.length.value = singleData.mobileNumberLength ?? 9;
                                       registerController.selectedCountry.value = singleData.id ?? 2;
                                       Get.back();
                                     },
@@ -432,7 +432,7 @@ class _RegistrationState extends State<Registration> {
             );
             return;
           }
-          if (registerController.phone.text.length < registerController.lenght.value || registerController.phone.text.length > registerController.lenght.value ) {
+          if (registerController.phone.text.length < registerController.length.value || registerController.phone.text.length > registerController.length.value ) {
             Get.snackbar(
               'Alert'.tr,
               "Invalid mobile number".tr,

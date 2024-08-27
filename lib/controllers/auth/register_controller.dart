@@ -19,7 +19,7 @@ class RegisterController extends GetxController {
   TextEditingController password = TextEditingController();
   var code = "966".obs;
   var flag = "admin/country/sa.png".obs;
-  var lenght = 9.obs;
+  var length = 9.obs;
   var selectedCountry = 2.obs;
   String signature = "{{ app signature }}";
 
@@ -27,82 +27,57 @@ class RegisterController extends GetxController {
 
   Future register(String phoneNumber) async {
     openLoader();
-    //check validation
-    // final isValid = loginFormKey.currentState!.validate();
-    // if (!isValid) {
-    //   return;
-    // }
-    // loginFormKey.currentState!.save();
-    // validation ends
-    SmsAutoFill().getAppSignature.then((sign) {
-      signature = sign;
+    try {
+      // Get app signature asynchronously
+      signature = await SmsAutoFill().getAppSignature;
       log(signature);
-    });
-    var request = {
-      'language': GetStorage().read('lang'),
-      'mobile': phoneNumber,
-      'app_signature_id': await SmsAutoFill().getAppSignature,
-    };
-    debugPrint("This is my request====================$request");
-    //DialogBoxes.openLoadingDialog();
-    // Get.offNamed(RoutesName.OtpScreen);
 
-    var response =
-        await DioClient().post(ApiLinks.register, request).catchError((error) {
-      Get.back();
-      if (error is BadRequestException) {
+      var request = {
+        'language': GetStorage().read('lang'),
+        'mobile': phoneNumber,
+        'app_signature_id': signature,
+      };
+
+      var response = await DioClient().post(ApiLinks.register, request).catchError((error) {
+        Get.back();
+        if (error is BadRequestException) {
+          Get.snackbar(
+            'Error'.tr,
+            '$message',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: R.colors.themeColor,
+          );
+          var apiError = json.decode(error.message!);
+        } else {
+          Get.back();
+        }
+      });
+
+      message = response['message'];
+      debugPrint("This is my response==================$response");
+      debugPrint(response.toString());
+
+      if (response['success'] == true) {
+        Get.back();
+        Get.offNamed(RoutesName.RegistrationDetails);
+       // Get.offNamed(RoutesName.OtpScreen);
+      } else {
+        Get.back();
         Get.snackbar(
           'Error'.tr,
-          '$message',
+          message.toString(),
           snackPosition: SnackPosition.TOP,
           backgroundColor: R.colors.themeColor,
         );
-        var apiError = json.decode(error.message!);
-        // debugPrint(apiError.toString());
-
-        // DialogBoxes.showErroDialog(description: apiError["reason"]);
-      } else {
-        Get.back();
-        // debugPrint('Something went Wrong');
-        //HandlingErrors().handleError(error);
       }
-    });
-    message = response['message'];
-    // if (response == null) return;
-    // debugPrint("This is my response==================$response");
-    debugPrint(response.toString());
-    if (response['success'] == true) {
-      Get.back();
-      debugPrint(response.toString());
-      Get.offNamed(RoutesName.OtpScreen);
-      //   userInfo = UserInfo.fromMap(response);S
-      //  await  storage.write('user_token', userInfo.token);
-      //  await storage.write('userId', userInfo.user!.id);
-      //  await storage.write('name', userInfo.user!.name);
-      //  await storage.write('username', userInfo.user!.username);
-      //  await storage.write('email', userInfo.user!.email);
-      //  await storage.write('firebase_email', userInfo.user!.firebaseEmail);
-      //  await storage.write('mobile', userInfo.user!.mobile);
-      //  await storage.write('photo', userInfo.user!.photo);
-      //  await storage.write('status', userInfo.user!.status);
-      //   Navigator.of(Get.context!).pop();
-
-      //  await createFirebaseUser(GetStorage().read('mobile') + '@gmail.com', GetStorage().read('mobile')).then((value){
-      //     SnakeBars.showSuccessSnake(description: userInfo.message);
-      //     Get.offNamed(Routes.BOTTOM_NAVIGATION);
-      //   }).catchError((error){
-      //     SnakeBars.showErrorSnake(description: error.toString());
-      //   });
-    } else {
+    } catch (e) {
       Get.back();
       Get.snackbar(
         'Error'.tr,
-        message.toString(),
+        e.toString(),
         snackPosition: SnackPosition.TOP,
         backgroundColor: R.colors.themeColor,
       );
     }
-    return null;
-    // return null;
   }
 }
