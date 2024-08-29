@@ -38,7 +38,9 @@ class RegisterController extends GetxController {
         'app_signature_id': signature,
       };
 
-      var response = await DioClient().post(ApiLinks.register, request).catchError((error) {
+      var response = await DioClient()
+          .post(ApiLinks.register, request)
+          .catchError((error) {
         Get.back();
         if (error is BadRequestException) {
           Get.snackbar(
@@ -60,7 +62,7 @@ class RegisterController extends GetxController {
       if (response['success'] == true) {
         Get.back();
         Get.offNamed(RoutesName.RegistrationDetails);
-       // Get.offNamed(RoutesName.OtpScreen);
+        // Get.offNamed(RoutesName.OtpScreen);
       } else {
         Get.back();
         Get.snackbar(
