@@ -85,6 +85,7 @@ dependencies:
   mat_month_picker_dialog: ^1.1.0
   pdf: ^3.4.0
   syncfusion_flutter_xlsio: ^21.1.39
+  excel:
   platform_device_id: ^1.0.1
   firebase_messaging: ^14.4.1
   flutter_local_notifications: ^9.0.0

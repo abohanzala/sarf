@@ -4867,290 +4867,94 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                           children: [
                                                             GestureDetector(
                                                               onTap: () async {
-                                                                // debugPrint("here");
+                                                                // Generate report using selected budget ID and dates
                                                                 await ctr.genrateReport(
-                                                                    ctr.selectedBudgetId
-                                                                        .value,
-                                                                    day.toIso8601String(),
-                                                                    today.toIso8601String());
-                                                                //                                                              await invCtr.getInvoiceList('').then((value){
-                                                                //   invoices = value;
-                                                                //   return null;
-                                                                // });
-                                                                // debugPrint(invoices?.data.toString());
-                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
-                                                                // debugPrint(invoices?.data?.length.toString());
-                                                                final xcel
-                                                                        .Workbook
-                                                                    workbook =
-                                                                    xcel.Workbook();
-                                                                final xcel
-                                                                        .Worksheet
-                                                                    sheet =
-                                                                    workbook
-                                                                        .worksheets[0];
-                                                                if (ctr
-                                                                    .receivedInvoices!
-                                                                    .isNotEmpty) {
-                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                  ctr.selectedBudgetId.value,
+                                                                  day.toIso8601String(),
+                                                                  today.toIso8601String(),
+                                                                );
 
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          1, 1)
-                                                                      .setText(
-                                                                          "Inv number"
-                                                                              .tr);
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          1, 2)
-                                                                      .setText(
-                                                                          "Created at"
-                                                                              .tr);
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          1, 3)
-                                                                      .setText(
-                                                                          "Customer"
-                                                                              .tr);
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          1, 4)
-                                                                      .setText(
-                                                                          "Description"
-                                                                              .tr);
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          1, 5)
-                                                                      .setText(
-                                                                          "Amount"
-                                                                              .tr);
-                                                                  for (var i =
-                                                                          0;
-                                                                      i <
-                                                                          ctr.receivedInvoices!
-                                                                              .length;
-                                                                      i++) {
-                                                                    final item =
-                                                                        ctr.receivedInvoices![
-                                                                            i];
-                                                                    var id =
-                                                                        (ctr.receivedInvoices!.length -
-                                                                                1) -
-                                                                            i;
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            i +
-                                                                                2,
-                                                                            1)
-                                                                        .setText((id +
-                                                                                1)
-                                                                            .toString());
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            i +
-                                                                                2,
-                                                                            2)
-                                                                        .setText(item
-                                                                            .createdDate
-                                                                            .toString());
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            i +
-                                                                                2,
-                                                                            3)
-                                                                        .setText(item
-                                                                            .customer
-                                                                            ?.name
-                                                                            .toString());
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            i +
-                                                                                2,
-                                                                            4)
-                                                                        .setText(item.note ??
-                                                                            '');
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            i +
-                                                                                2,
-                                                                            5)
-                                                                        .setText(item
-                                                                            .amount
-                                                                            .toString());
-                                                                  }
-                                                                  var total = ctr
-                                                                      .receivedInvoices!
-                                                                      .fold(
-                                                                          0,
-                                                                          (sum, item) =>
-                                                                              sum +
-                                                                              int.parse(item.amount.toString()));
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          ctr.receivedInvoices!.length +
-                                                                              2,
-                                                                          4)
-                                                                      .setText(
-                                                                          "Total"
-                                                                              .tr);
-                                                                  sheet
-                                                                      .getRangeByIndex(
-                                                                          ctr.receivedInvoices!.length +
-                                                                              2,
-                                                                          5)
-                                                                      .setText(total
-                                                                          .toString());
+                                                                // Create a new Excel workbook
+                                                                final xcel.Workbook workbook = xcel.Workbook();
+                                                                final xcel.Worksheet sheet = workbook.worksheets[0];
 
-                                                                  if (ctr
-                                                                      .sendInvoices!
-                                                                      .isNotEmpty) {
-                                                                    var ind = ctr
-                                                                            .receivedInvoices!
-                                                                            .length +
-                                                                        6;
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ind,
-                                                                            1)
-                                                                        .setText(
-                                                                            "Inv number".tr);
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ind,
-                                                                            2)
-                                                                        .setText(
-                                                                            "Created at".tr);
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ind,
-                                                                            3)
-                                                                        .setText(
-                                                                            "Customer".tr);
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ind,
-                                                                            4)
-                                                                        .setText(
-                                                                            "Description".tr);
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ind,
-                                                                            5)
-                                                                        .setText(
-                                                                            "Amount".tr);
-                                                                    for (var i =
-                                                                            0;
-                                                                        i < ctr.sendInvoices!.length;
-                                                                        i++) {
-                                                                      final item =
-                                                                          ctr.sendInvoices![
-                                                                              i];
-                                                                      var id =
-                                                                          (ctr.sendInvoices!.length - 1) -
-                                                                              i;
-                                                                      sheet
-                                                                          .getRangeByIndex(
-                                                                              i + 2 + ind,
-                                                                              1)
-                                                                          .setText((id + 1).toString());
-                                                                      sheet
-                                                                          .getRangeByIndex(
-                                                                              i +
-                                                                                  2 +
-                                                                                  ind,
-                                                                              2)
-                                                                          .setText(item
-                                                                              .createdDate
-                                                                              .toString());
-                                                                      sheet.getRangeByIndex(i + 2 + ind, 3).setText(item
-                                                                          .customer
-                                                                          ?.name
-                                                                          .toString());
-                                                                      sheet
-                                                                          .getRangeByIndex(
-                                                                              i +
-                                                                                  2 +
-                                                                                  ind,
-                                                                              4)
-                                                                          .setText(item.note ??
-                                                                              '');
-                                                                      sheet
-                                                                          .getRangeByIndex(
-                                                                              i +
-                                                                                  2 +
-                                                                                  ind,
-                                                                              5)
-                                                                          .setText(item
-                                                                              .amount
-                                                                              .toString());
-                                                                    }
-                                                                    var total = ctr
-                                                                        .sendInvoices!
-                                                                        .fold(
-                                                                            0,
-                                                                            (sum, item) =>
-                                                                                sum +
-                                                                                int.parse(item.amount.toString()));
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ctr.sendInvoices!.length +
-                                                                                2 +
-                                                                                ind,
-                                                                            4)
-                                                                        .setText(
-                                                                            "Total".tr);
-                                                                    sheet
-                                                                        .getRangeByIndex(
-                                                                            ctr.sendInvoices!.length +
-                                                                                2 +
-                                                                                ind,
-                                                                            5)
-                                                                        .setText(
-                                                                            total.toString());
-                                                                  }
-                                                                  final List<
-                                                                          int>
-                                                                      bytes =
-                                                                      workbook
-                                                                          .saveAsStream();
-                                                                  workbook
-                                                                      .dispose();
-                                                                  //  FileStorage.writeCounter(bytes, "geeksforgeeks.xlsx", context);
-                                                                  final directory =
-                                                                      (await getApplicationDocumentsDirectory())
-                                                                          .path;
-                                                                  String
-                                                                      fileName =
-                                                                      DateTime.now()
-                                                                          .microsecondsSinceEpoch
-                                                                          .toString();
-                                                                  final file = File(
-                                                                      '$directory/$fileName.xlsx');
-                                                                  await file
-                                                                      .writeAsBytes(
-                                                                          bytes,
-                                                                          flush:
-                                                                              true);
-                                                                  try {
-                                                                    Share
-                                                                        .shareXFiles([
-                                                                      XFile(file
-                                                                          .path)
-                                                                    ]);
-                                                                  } catch (error) {
-                                                                    Get.snackbar(
-                                                                        "error",
-                                                                        error
-                                                                            .toString(),
-                                                                        backgroundColor: R
-                                                                            .colors
-                                                                            .blue);
-                                                                    // debugPrint(error.toString());
+                                                                // Check if there are any received invoices
+                                                                if (ctr.receivedInvoices!.isNotEmpty) {
+                                                                  // Set column headers for received invoices
+                                                                  sheet.getRangeByIndex(1, 1).setText("Inv number".tr);
+                                                                  sheet.getRangeByIndex(1, 2).setText("Created at".tr);
+                                                                  sheet.getRangeByIndex(1, 3).setText("Customer".tr);
+                                                                  sheet.getRangeByIndex(1, 4).setText("Description".tr);
+                                                                  sheet.getRangeByIndex(1, 5).setText("Amount".tr);
+
+                                                                  // Populate received invoices data
+                                                                  for (var i = 0; i < ctr.receivedInvoices!.length; i++) {
+                                                                    final item = ctr.receivedInvoices![i];
+                                                                    var id = (ctr.receivedInvoices!.length - 1) - i;
+                                                                    sheet.getRangeByIndex(i + 2, 1).setText((id + 1).toString());
+                                                                    sheet.getRangeByIndex(i + 2, 2).setText(item.createdDate.toString());
+                                                                    sheet.getRangeByIndex(i + 2, 3).setText(item.customer?.name.toString());
+                                                                    sheet.getRangeByIndex(i + 2, 4).setText(item.note ?? '');
+                                                                    sheet.getRangeByIndex(i + 2, 5).setText(item.amount.toString());
                                                                   }
 
-                                                                  Get.back();
+                                                                  // Calculate the total for received invoices
+                                                                  var total = ctr.receivedInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()));
+                                                                  sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 4).setText("Total".tr);
+                                                                  sheet.getRangeByIndex(ctr.receivedInvoices!.length + 2, 5).setText(total.toString());
                                                                 }
+
+                                                                // Check if there are any sent invoices
+                                                                if (ctr.sendInvoices!.isNotEmpty) {
+                                                                  var ind = ctr.receivedInvoices!.length + 6;
+
+                                                                  // Set column headers for sent invoices
+                                                                  sheet.getRangeByIndex(ind, 1).setText("Inv number".tr);
+                                                                  sheet.getRangeByIndex(ind, 2).setText("Created at".tr);
+                                                                  sheet.getRangeByIndex(ind, 3).setText("Customer".tr);
+                                                                  sheet.getRangeByIndex(ind, 4).setText("Description".tr);
+                                                                  sheet.getRangeByIndex(ind, 5).setText("Amount".tr);
+
+                                                                  // Populate sent invoices data
+                                                                  for (var i = 0; i < ctr.sendInvoices!.length; i++) {
+                                                                    final item = ctr.sendInvoices![i];
+                                                                    var id = (ctr.sendInvoices!.length - 1) - i;
+                                                                    sheet.getRangeByIndex(i + 2 + ind, 1).setText((id + 1).toString());
+                                                                    sheet.getRangeByIndex(i + 2 + ind, 2).setText(item.createdDate.toString());
+                                                                    sheet.getRangeByIndex(i + 2 + ind, 3).setText(item.customer?.name.toString());
+                                                                    sheet.getRangeByIndex(i + 2 + ind, 4).setText(item.note ?? '');
+                                                                    sheet.getRangeByIndex(i + 2 + ind, 5).setText(item.amount.toString());
+                                                                  }
+
+                                                                  // Calculate the total for sent invoices
+                                                                  var total = ctr.sendInvoices!.fold(0, (sum, item) => sum + int.parse(item.amount.toString()));
+                                                                  sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 4).setText("Total".tr);
+                                                                  sheet.getRangeByIndex(ctr.sendInvoices!.length + 2 + ind, 5).setText(total.toString());
+                                                                }
+
+                                                                // Save the Excel file to bytes
+                                                                final List<int> bytes = workbook.saveAsStream();
+
+                                                                // Get the directory to save the file
+                                                                final directory = (await getApplicationDocumentsDirectory()).path;
+                                                                String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+                                                                final file = File('$directory/$fileName.xlsx');
+
+                                                                // Write the Excel data to the file
+                                                                await file.writeAsBytes(bytes, flush: true);
+
+                                                                try {
+                                                                  // Share the file using ShareXFiles
+                                                                  Share.shareXFiles([XFile(file.path)]);
+                                                                } catch (error) {
+                                                                  // Handle sharing error
+                                                                  Get.snackbar("Error", error.toString(), backgroundColor: R.colors.blue);
+                                                                }
+
+                                                                // Go back to the previous screen
+                                                                Get.back();
                                                               },
+
                                                               child:
                                                                   Image.asset(
                                                                 R.images
@@ -5166,284 +4970,105 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                                                             ),
                                                             GestureDetector(
                                                               onTap: () async {
-                                                                // debugPrint("here");
-                                                                await ctr.genrateReport(
-                                                                    ctr.selectedBudgetId
-                                                                        .value,
-                                                                    day.toIso8601String(),
-                                                                    today.toIso8601String());
-                                                                // print(ctr.receivedInvoices.toString());
-                                                                //                                                              await invCtr.getInvoiceList('').then((value){
-                                                                //   invoices = value;
-                                                                //   return null;
-                                                                // });
-                                                                // debugPrint(invoices?.data.toString());
-                                                                // Get.snackbar("enter func","",backgroundColor: R.colors.blue);
-                                                                // A Suls Regular.ttf
-                                                                var total = ctr
-                                                                    .receivedInvoices
-                                                                    ?.fold(
-                                                                        0,
-                                                                        (sum, item) =>
-                                                                            sum +
-                                                                            int.parse(item.amount.toString()));
-                                                                var total2 = ctr
-                                                                    .sendInvoices
-                                                                    ?.fold(
-                                                                        0,
-                                                                        (sum, item) =>
-                                                                            sum +
-                                                                            int.parse(item.amount.toString()));
-                                                                final font =
-                                                                    await rootBundle
-                                                                        .load(
-                                                                            "assets/fonts/arabic.ttf");
-                                                                final ttf =
-                                                                    pw.Font.ttf(
-                                                                        font);
-                                                                // final data = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                try {
+                                                                  await ctr.genrateReport(ctr.selectedBudgetId.value, day.toIso8601String(), today.toIso8601String());
 
-                                                                //   final  dataint = data.buffer.asUint8List(data.offsetInBytes,data.lengthInBytes);
+                                                                  // Calculating totals
+                                                                  var totalReceived = ctr.receivedInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString())) ?? 0;
+                                                                  var totalSent = ctr.sendInvoices?.fold(0, (sum, item) => sum + int.parse(item.amount.toString())) ?? 0;
 
-                                                                //   final  PdfFont  font  =  pw.PdfTrueTypeFont (date,12);
-                                                                final pdf = pw
-                                                                    .Document();
-                                                                if (ctr
-                                                                    .receivedInvoices!
-                                                                    .isNotEmpty) {
-                                                                  // Get.snackbar("enter invoices","",backgroundColor: R.colors.blue);
+                                                                  // Load custom font
+                                                                  final fontData = await rootBundle.load("assets/fonts/arabic.ttf");
+                                                                  final ttf = pw.Font.ttf(fontData);
 
-                                                                  pdf.addPage(pw
-                                                                      .MultiPage(
-                                                                          pageFormat: PdfPageFormat
-                                                                              .a4,
-                                                                          theme: pw.ThemeData
-                                                                              .withFont(
-                                                                            base:
-                                                                                ttf,
-                                                                          ),
-                                                                          build:
-                                                                              (pw.Context context) {
-                                                                            return <pw.Widget>[
-                                                                              pw.Table(children: [
-                                                                                pw.TableRow(children: [
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "Inv number".tr,
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    )
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "Created at".tr.toString(),
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "Customer".tr.toString(),
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "Description".tr.toString(),
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "Amount".tr.toString(),
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                ]),
-                                                                                for (var i = 0; i < ctr.receivedInvoices!.length; i++)
-                                                                                  pw.TableRow(children: [
-                                                                                    pw.Column(children: [
-                                                                                      pw.Text("${((ctr.receivedInvoices!.length - 1) - i + 1)}"),
-                                                                                    ]),
-                                                                                    pw.Column(children: [
-                                                                                      pw.Text(ctr.receivedInvoices![i].createdDate.toString()),
-                                                                                    ]),
-                                                                                    pw.Column(children: [
-                                                                                      pw.Text(ctr.receivedInvoices![i].customer?.name.toString() ?? '', textDirection: pw.TextDirection.rtl),
-                                                                                    ]),
-                                                                                    pw.Column(children: [
-                                                                                      pw.Text(ctr.receivedInvoices![i].note ?? ''),
-                                                                                    ]),
-                                                                                    pw.Column(children: [
-                                                                                      pw.Text(ctr.receivedInvoices![i].amount.toString()),
-                                                                                    ]),
-                                                                                  ]),
-                                                                                pw.TableRow(children: [
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "",
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    )
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "",
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "",
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      "Total".tr.toString(),
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(
-                                                                                      total.toString(),
-                                                                                      textDirection: pw.TextDirection.rtl,
-                                                                                    ),
-                                                                                  ]),
-                                                                                ]),
-                                                                              ]),
-                                                                              //  pw.Table(children: <>)
-                                                                            ]; // Center
-                                                                          })); // Page
-                                                                  if (ctr
-                                                                      .sendInvoices!
-                                                                      .isNotEmpty) {
-                                                                    pdf.addPage(pw.MultiPage(
+                                                                  final pdf = pw.Document();
+
+                                                                  // Generate received invoices page
+                                                                  if (ctr.receivedInvoices != null && ctr.receivedInvoices!.isNotEmpty) {
+                                                                    pdf.addPage(
+                                                                      pw.MultiPage(
                                                                         pageFormat: PdfPageFormat.a4,
-                                                                        theme: pw.ThemeData.withFont(
-                                                                          base:
-                                                                              ttf,
-                                                                        ),
+                                                                        theme: pw.ThemeData.withFont(base: ttf),
                                                                         build: (pw.Context context) {
-                                                                          return <pw
-                                                                              .Widget>[
+                                                                          return <pw.Widget>[
                                                                             pw.Table(children: [
                                                                               pw.TableRow(children: [
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "Inv number".tr,
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  )
+                                                                                pw.Text("Inv number", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Created at", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Customer", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Description", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Amount", textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                              for (var i = 0; i < ctr.receivedInvoices!.length; i++)
+                                                                                pw.TableRow(children: [
+                                                                                  pw.Text("${ctr.receivedInvoices!.length - i}"),
+                                                                                  pw.Text(ctr.receivedInvoices![i].createdDate.toString()),
+                                                                                  pw.Text(ctr.receivedInvoices![i].customer?.name ?? '', textDirection: pw.TextDirection.rtl),
+                                                                                  pw.Text(ctr.receivedInvoices![i].note ?? ''),
+                                                                                  pw.Text(ctr.receivedInvoices![i].amount.toString()),
                                                                                 ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "Created at".tr.toString(),
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "Customer".tr.toString(),
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "Description".tr.toString(),
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "Amount".tr.toString(),
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
+                                                                              pw.TableRow(children: [
+                                                                                pw.Text(""),
+                                                                                pw.Text(""),
+                                                                                pw.Text(""),
+                                                                                pw.Text("Total", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text(totalReceived.toString(), textDirection: pw.TextDirection.rtl),
+                                                                              ]),
+                                                                            ])
+                                                                          ];
+                                                                        },
+                                                                      ),
+                                                                    );
+                                                                  }
+
+                                                                  // Generate sent invoices page
+                                                                  if (ctr.sendInvoices != null && ctr.sendInvoices!.isNotEmpty) {
+                                                                    pdf.addPage(
+                                                                      pw.MultiPage(
+                                                                        pageFormat: PdfPageFormat.a4,
+                                                                        theme: pw.ThemeData.withFont(base: ttf),
+                                                                        build: (pw.Context context) {
+                                                                          return <pw.Widget>[
+                                                                            pw.Table(children: [
+                                                                              pw.TableRow(children: [
+                                                                                pw.Text("Inv number", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Created at", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Customer", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Description", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text("Amount", textDirection: pw.TextDirection.rtl),
                                                                               ]),
                                                                               for (var i = 0; i < ctr.sendInvoices!.length; i++)
                                                                                 pw.TableRow(children: [
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text("${((ctr.sendInvoices!.length - 1) - i + 1)}"),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(ctr.sendInvoices![i].createdDate.toString()),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(ctr.sendInvoices![i].customer?.name.toString() ?? '', textDirection: pw.TextDirection.rtl),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(ctr.sendInvoices![i].note ?? ''),
-                                                                                  ]),
-                                                                                  pw.Column(children: [
-                                                                                    pw.Text(ctr.sendInvoices![i].amount.toString()),
-                                                                                  ]),
+                                                                                  pw.Text("${ctr.sendInvoices!.length - i}"),
+                                                                                  pw.Text(ctr.sendInvoices![i].createdDate.toString()),
+                                                                                  pw.Text(ctr.sendInvoices![i].customer?.name ?? '', textDirection: pw.TextDirection.rtl),
+                                                                                  pw.Text(ctr.sendInvoices![i].note ?? ''),
+                                                                                  pw.Text(ctr.sendInvoices![i].amount.toString()),
                                                                                 ]),
                                                                               pw.TableRow(children: [
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "",
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  )
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "",
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "",
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    "Total".tr.toString(),
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
-                                                                                pw.Column(children: [
-                                                                                  pw.Text(
-                                                                                    total2.toString(),
-                                                                                    textDirection: pw.TextDirection.rtl,
-                                                                                  ),
-                                                                                ]),
+                                                                                pw.Text(""),
+                                                                                pw.Text(""),
+                                                                                pw.Text(""),
+                                                                                pw.Text("Total", textDirection: pw.TextDirection.rtl),
+                                                                                pw.Text(totalSent.toString(), textDirection: pw.TextDirection.rtl),
                                                                               ]),
-                                                                            ]),
-                                                                            //  pw.Table(children: <>)
-                                                                          ]; // Center
-                                                                        }));
-                                                                  }
-                                                                  final output =
-                                                                      await getTemporaryDirectory();
-                                                                  String
-                                                                      fileName2 =
-                                                                      DateTime.now()
-                                                                          .microsecondsSinceEpoch
-                                                                          .toString();
-                                                                  final file = File(
-                                                                      "${output.path}/$fileName2.pdf");
-                                                                  // final file = File("example.pdf");
-                                                                  await file.writeAsBytes(
-                                                                      await pdf
-                                                                          .save());
-
-                                                                  try {
-                                                                    Share
-                                                                        .shareXFiles([
-                                                                      XFile(file
-                                                                          .path)
-                                                                    ]);
-                                                                  } catch (error) {
-                                                                    Get.snackbar(
-                                                                        "error",
-                                                                        error
-                                                                            .toString(),
-                                                                        backgroundColor: R
-                                                                            .colors
-                                                                            .blue);
-                                                                    // debugPrint(error.toString());
+                                                                            ])
+                                                                          ];
+                                                                        },
+                                                                      ),
+                                                                    );
                                                                   }
 
-                                                                  Get.back();
+                                                                  // Save PDF to temporary directory and share
+                                                                  final output = await getTemporaryDirectory();
+                                                                  final fileName = "${DateTime.now().microsecondsSinceEpoch}.pdf";
+                                                                  final file = File("${output.path}/$fileName");
+                                                                  await file.writeAsBytes(await pdf.save());
+
+                                                                  // Sharing the generated PDF
+                                                                  await Share.shareXFiles([XFile(file.path)]);
+                                                                } catch (error) {
+                                                                  Get.snackbar("Error", error.toString(), backgroundColor: Colors.blue);
                                                                 }
                                                               },
                                                               child:

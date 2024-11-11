@@ -39,15 +39,15 @@ class InvoiceController extends getpackage.GetxController {
   bool loading = false;
   Future postNewInvoice(String mobile, String amount, String note) async {
     openLoader();
-
     FormData formData = FormData();
     if (kIsWeb) {
+      print("This is upload length web ${uploadImages.length}");
       for (var i = 0; i < uploadImages.length; i++) {
         var file = uploadImages[i];
         var xfile = XFile(uploadImages[i].path);
         String fileName = file.path.split('/').last;
         formData.files.add(MapEntry(
-            "file_attach[$i]",
+            "file_attach[]",
             await MultipartFile.fromBytes(
                 await xfile.readAsBytes().then((value) {
                   return value.cast();
@@ -55,10 +55,11 @@ class InvoiceController extends getpackage.GetxController {
                 filename: fileName)));
       }
     } else {
+      print("This is upload length mobile ${uploadImages.length}");
       for (var i = 0; i < uploadImages.length; i++) {
         var file = uploadImages[i];
         String fileName = file.path.split('/').last;
-        formData.files.add(MapEntry("file_attach[$i]",
+        formData.files.add(MapEntry("file_attach",
             await MultipartFile.fromFile(file.path, filename: fileName)));
       }
     }
@@ -81,17 +82,22 @@ class InvoiceController extends getpackage.GetxController {
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        // debugPrint("aaaaaaaa${error.toString()}");
+         debugPrint("aaaaaaaa${error.toString()}");
         getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
         //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
+        print("Error status code: ${error.response?.statusCode}");
+        print("Error data: ${error.response?.data}");
+        print("Error message: ${error.message}");
+        print("This is status code $error");
+
         getpackage.Get.snackbar('Error'.tr, "Something wnet wrong".tr);
         // debugPrint("aaaaaaaa${error.toString()}");
         //Navigator.of(getpackage.Get.context!).pop();
         //HandlingErrors().handleError(error);
       }
     });
-
+    print("This is status code ${response}");
     // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
     // debugPrint("aaaaaaaaaaa$response");

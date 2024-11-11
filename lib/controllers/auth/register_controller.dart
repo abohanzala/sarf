@@ -53,11 +53,9 @@ class RegisterController extends GetxController {
           Get.back();
         }
       });
-
       message = response['message'];
       debugPrint("This is my response==================$response");
       debugPrint(response.toString());
-
       if (response['success'] == true) {
         Get.back();
         Get.offNamed(RoutesName.RegistrationDetails);
