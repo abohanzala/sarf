@@ -57,9 +57,11 @@ class InvoiceController extends getpackage.GetxController {
     } else {
       print("This is upload length mobile ${uploadImages.length}");
       for (var i = 0; i < uploadImages.length; i++) {
+        print("check image path ${uploadImages[i].path}");
         var file = uploadImages[i];
         String fileName = file.path.split('/').last;
-        formData.files.add(MapEntry("file_attach",
+        print("File name ${file.path}");
+        formData.files.add(MapEntry("file_attach[]",
             await MultipartFile.fromFile(file.path, filename: fileName)));
       }
     }

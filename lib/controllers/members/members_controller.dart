@@ -291,6 +291,8 @@ class MembersController extends GetxController {
       // debugPrint(response.toString());
       var invoice = SingleInvoiceDetails.fromJson(response);
       inVoiceDetails.value = invoice;
+      print(
+          "Attachment length ${inVoiceDetails.value.data?.attachments?.length}");
       update();
       refresh();
       EasyLoading.dismiss();

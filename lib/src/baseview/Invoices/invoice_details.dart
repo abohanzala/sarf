@@ -405,6 +405,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                                                   .data
                                                                   ?.attachments?[
                                                               index];
+                                                          print("This is single attachment $singleAttach");
                                                           return GestureDetector(
                                                             onTap: () async {
                                                               Get.to(() => FullScreenView(
