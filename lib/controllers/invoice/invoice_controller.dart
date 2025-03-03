@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart' as getpackage;
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,33 +38,29 @@ class InvoiceController extends getpackage.GetxController {
   TextEditingController note3 = TextEditingController();
   TextEditingController note33 = TextEditingController();
   bool loading = false;
-  Future postNewInvoice(String mobile, String amount, String note) async {
+  Future<void> postNewInvoice(String mobile, String amount, String note) async {
     openLoader();
     FormData formData = FormData();
-    if (kIsWeb) {
-      print("This is upload length web ${uploadImages.length}");
-      for (var i = 0; i < uploadImages.length; i++) {
-        var file = uploadImages[i];
-        var xfile = XFile(uploadImages[i].path);
-        String fileName = file.path.split('/').last;
-        formData.files.add(MapEntry(
-            "file_attach[]",
-            await MultipartFile.fromBytes(
-                await xfile.readAsBytes().then((value) {
-                  return value.cast();
-                }),
-                filename: fileName)));
+
+    for (var i = 0; i < uploadImages.length; i++) {
+      var file = uploadImages[i];
+      int fileSizeInBytes = await file.length();
+      double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      print('Original file ${i + 1} size: $fileSizeInMB MB');
+
+      if (fileSizeInMB > 2.0) { // Compress files larger than 2 MB
+        File? compressedFile = await compressImage(file);
+        if (compressedFile != null) {
+          int compressedFileSizeInBytes = await compressedFile.length();
+          double compressedFileSizeInMB = compressedFileSizeInBytes / (1024 * 1024);
+          print('Compressed file ${i + 1} size: $compressedFileSizeInMB MB');
+          file = compressedFile;
+        }
       }
-    } else {
-      print("This is upload length mobile ${uploadImages.length}");
-      for (var i = 0; i < uploadImages.length; i++) {
-        print("check image path ${uploadImages[i].path}");
-        var file = uploadImages[i];
-        String fileName = file.path.split('/').last;
-        print("File name ${file.path}");
-        formData.files.add(MapEntry("file_attach[]",
-            await MultipartFile.fromFile(file.path, filename: fileName)));
-      }
+
+      String fileName = file.path.split('/').last;
+      formData.files.add(MapEntry("file_attach[]",
+          await MultipartFile.fromFile(file.path, filename: fileName)));
     }
 
     formData.fields
@@ -72,11 +69,7 @@ class InvoiceController extends getpackage.GetxController {
     formData.fields.add(MapEntry('amount', amount));
     formData.fields.add(MapEntry('note', note));
     formData.fields.add(const MapEntry('paid_status', "0"));
-    // debugPrint(formData.fields.toString());
 
-    // debugPrint(formData.files.first.toString());
-
-    //Dio http = API.getInstance();
     var response = await DioClient()
         .post(ApiLinks.simpleInvoice, formData, true)
         .catchError((error) {
@@ -84,52 +77,53 @@ class InvoiceController extends getpackage.GetxController {
       getpackage.Get.back();
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-         debugPrint("aaaaaaaa${error.toString()}");
+        print('Server error: ${apiError.toString()}');
         getpackage.Get.snackbar('Error'.tr, apiError["reason"].toString());
-        //DialogBoxes.showErroDialog(description: apiError["reason"]);
       } else {
-        print("Error status code: ${error.response?.statusCode}");
-        print("Error data: ${error.response?.data}");
-        print("Error message: ${error.message}");
-        print("This is status code $error");
-
-        getpackage.Get.snackbar('Error'.tr, "Something wnet wrong".tr);
-        // debugPrint("aaaaaaaa${error.toString()}");
-        //Navigator.of(getpackage.Get.context!).pop();
-        //HandlingErrors().handleError(error);
+        print('Error status code: ${error.response?.statusCode}');
+        print('Error data: ${error.response?.data}');
+        print('Error message: ${error.message}');
+        getpackage.Get.snackbar('Error'.tr, "Something went wrong".tr);
       }
     });
-    print("This is status code ${response}");
-    // final response = await http.post(ApiLinks.addNewAdApi,data: formData );
 
-    // debugPrint("aaaaaaaaaaa$response");
-    // Navigator.of(getpackage.Get.context!).pop();
+    print("This is status code ${response}");
     if (response == null) return;
+
     if (response['success']) {
       checkMobile = false;
       getpackage.Get.back();
-      //SnakeBars.showSuccessSnake(description: response['message'].toString());
-
       uploadImages.clear();
       mobile1.clear();
       amount2.clear();
       note3.clear();
       getpackage.Get.back();
       getpackage.Get.snackbar('Success'.tr, response['message'].toString());
-      //files.clear();
     } else {
-      //uploadImages.clear();
-      // debugPrint('here');
       (response.containsKey('validation_errors'))
           ? getpackage.Get.snackbar(response['message'].toString(),
-              response['validation_errors'].toString())
-          // SnakeBars.showValidationErrorSnake(
-          //     title: response['message'].toString(),
-          //     description: response['validation_errors'].toString())
+          response['validation_errors'].toString())
           : getpackage.Get.snackbar('Error'.tr, response['message'].toString());
-      //SnakeBars.showErrorSnake(description: response['message'].toString());
       Navigator.of(getpackage.Get.context!).pop();
     }
+  }
+
+  Future<File?> compressImage(File file) async {
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      file.absolute.path + '_compressed.jpg',
+      quality: 35, // Adjust quality (0-100)
+    );
+
+    if (result != null) {
+      return File(result.path);
+    } else {
+      return null;
+    }
+  }
+
+  String getFileExtension(String path) {
+    return path.split('.').last.toLowerCase();
   }
 
   Future postNewCustomInvoice(

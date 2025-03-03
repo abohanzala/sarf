@@ -4,14 +4,13 @@ import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:document_scanner_flutter/configs/configs.dart';
-// import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sarf/constant/api_links.dart';
 import 'package:sarf/controllers/home/home_controller.dart';
@@ -78,19 +77,73 @@ class _SimpleInvoiceState extends State<SimpleInvoice> with RouteAware {
     return input;
   }
 
-  Future pickImage(ImageSource source) async {
+
+  Future<void> pickImage(ImageSource source) async {
     try {
-      var pickedFile = await ImagePicker().pickMultiImage();
-      // var pickedFile = await picker.pickImage(source: source, imageQuality: 35);
-      // ignore: unnecessary_null_comparison
-      if (pickedFile == null) return;
-      for (var item in pickedFile) {
-        ctr.uploadImages.add(File(item.path));
+      List<XFile>? pickedFiles;
+
+      if (source == ImageSource.camera) {
+        XFile? pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 35);
+        if (pickedFile != null) {
+          pickedFiles = [pickedFile];
+        }
+      } else {
+        pickedFiles = await ImagePicker().pickMultiImage();
+      }
+
+      if (pickedFiles == null || pickedFiles.isEmpty) return;
+
+      for (var item in pickedFiles) {
+        File file = File(item.path);
+        print('File path: ${file.path}');
+        print('File size: ${await file.length()} bytes');
+
+        if (source == ImageSource.camera) {
+          final compressedFile = await compressImage(file);
+          if (compressedFile != null) {
+            print('Compressed file path: ${compressedFile.path}');
+            print('Compressed file size: ${await compressedFile.length()} bytes');
+            ctr.uploadImages.add(compressedFile);
+          }
+        } else {
+          ctr.uploadImages.add(file);
+        }
       }
     } on PlatformException catch (e) {
-      // debugPrint('Failed to pick image: $e');
+      print('Failed to pick image: $e');
     }
   }
+
+  Future<File?> compressImage(File file) async {
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      file.absolute.path + '_compressed.jpg',
+      quality: 35,
+      format: CompressFormat.jpeg,
+      minWidth: 500,
+      minHeight: 500,
+    );
+
+    if (result != null) {
+      return File(result.path);
+    } else {
+      return null;
+    }
+  }
+
+  // Future<File?> compressImage(File file) async {
+  //   final result = await FlutterImageCompress.compressAndGetFile(
+  //     file.absolute.path,
+  //     file.absolute.path + '_compressed.jpg', // Output file path
+  //     quality: 35, // Compression quality (0-100)
+  //   );
+  //
+  //   if (result != null) {
+  //     return File(result.path);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Future pickImageQr() async {
     try {
